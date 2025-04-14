@@ -5,6 +5,7 @@ import LoginPage from './Pages/Login/LoginPage';
 import AdminPage from './Pages/AdminPage';
 import UserPage from './Pages/UserPage';
 import LegalPage from './Pages/LegalPage';
+import ProtectedRoute from './ProtectedRoute';
 
 
 
@@ -13,9 +14,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/user" element={<UserPage />} />
-        <Route path="/legal" element={<LegalPage />} />
+        <Route path="/admin" element={<ProtectedRoute element={AdminPage} allowedRoles={["Administrator"]} />} />
+        <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
+        <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
       </Routes>
     </Router>
   );

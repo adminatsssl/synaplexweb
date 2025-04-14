@@ -23,6 +23,7 @@ function LoginPage() {
 
       const data = await response.json();
       const role = data.role;
+      localStorage.setItem("role", role);
 
       if (role === "Administrator") {
         navigate("/admin");
@@ -31,7 +32,7 @@ function LoginPage() {
       } else if (role === "Legal") {
         navigate("/legal");
       } else {
-        setError("Unknown role");
+        setError("Invalid Username or Password");
       }
     } catch (err) {
       setError("Invalid username or password");
