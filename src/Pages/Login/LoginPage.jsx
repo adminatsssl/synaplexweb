@@ -20,7 +20,7 @@ function LoginPage() {
       if (!response.ok) {
         throw new Error("Login failed");
       }
-
+      
       const data = await response.json();
       const role = data.role;
       localStorage.setItem("role", role);

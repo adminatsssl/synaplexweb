@@ -1,5 +1,11 @@
-// src/pages/UserPage.js
+import Layout from "./Layout/Layout"
+
 export default function UserPage() {
-    return <h1>Welcome, User!</h1>;
-  }
+  return (
+    <Layout username="User">
+      <h1>Welcome, User!</h1>
+    </Layout>
+  );
+}
+
   

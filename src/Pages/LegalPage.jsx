@@ -1,5 +1,9 @@
-// src/pages/LegalPage.js
+import Layout from "./Layout/Layout"
+
 export default function LegalPage() {
-    return <h1>Welcome, Legal!</h1>;
-  }
-  
+  return (
+    <Layout username="Legal">
+      <h1>Welcome, Legal!</h1>
+    </Layout>
+  );
+}
