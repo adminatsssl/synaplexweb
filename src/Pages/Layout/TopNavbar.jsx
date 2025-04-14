@@ -4,10 +4,9 @@ export default function TopNavbar({ username }) {
     return (
       <div className="top-navbar">
         <h2>
-          Homepage <span className="role">{role}</span>
+          {/* Homepage <span className="role">{role}</span> */}
         </h2>
         <div className="user-info">{username}</div>
       </div>
     );
   }
-  

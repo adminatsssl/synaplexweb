@@ -1,0 +1,41 @@
+.sidebar {
+    background-color: #1f2937; /* dark background */
+    color: white;
+    height: 100vh;
+    transition: width 0.3s;
+    overflow: hidden;
+  }
+  
+  .sidebar.expanded {
+    width: 200px;
+  }
+  
+  .sidebar.collapsed {
+    width: 60px;
+  }
+  
+  .hamburger {
+    padding: 1rem;
+    cursor: pointer;
+    color: white;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .nav-item .icon {
+    font-size: 18px;
+    color: white; /* make icon white */
+  }
+  
+  .sidebar.expanded .nav-item .icon {
+    margin-right: 1rem;
+  }
+  
+  .sidebar.collapsed .text {
+    display: none;
+  }
+  
