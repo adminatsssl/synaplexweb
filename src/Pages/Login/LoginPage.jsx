@@ -20,16 +20,19 @@ function LoginPage() {
       if (!response.ok) {
         throw new Error("Login failed");
       }
-      
+
       const data = await response.json();
       const role = data.role;
       localStorage.setItem("role", role);
 
       if (role === "Administrator") {
+        localStorage.setItem("username", username);
         navigate("/admin");
       } else if (role === "User") {
+        localStorage.setItem("username", username);
         navigate("/user");
       } else if (role === "Legal") {
+        localStorage.setItem("username", username);
         navigate("/legal");
       } else {
         setError("Invalid Username or Password");
