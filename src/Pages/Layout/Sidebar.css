@@ -1,5 +1,5 @@
 .sidebar {
-    background-color: #1f2937; /* dark background */
+    background-color: white; /* dark background */
     color: white;
     height: 100vh;
     transition: width 0.3s;
@@ -17,7 +17,8 @@
   .hamburger {
     padding: 1rem;
     cursor: pointer;
-    color: white;
+    color: black;
+    margin-top: 7px;
   }
   
   .nav-item {
@@ -28,9 +29,10 @@
   
   .nav-item .icon {
     font-size: 18px;
-    color: white; /* make icon white */
+    color: black; /* make icon black */
   }
   
+
   .sidebar.expanded .nav-item .icon {
     margin-right: 1rem;
   }
