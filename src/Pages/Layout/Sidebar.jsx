@@ -27,7 +27,7 @@ export default function Sidebar() {
       { name: "Home", path: "/admin" },
       { name: "Borrower", path: "/borrower" },
       { name: "Accounts", path: "/accounts" },
-      { name: "LegalSetup", path: "/legal-setup" },
+      { name: "LegalSetup", path: "/legalSetup" },
     ],
     User: [
       { name: "Home", path: "/user" },
@@ -46,7 +46,7 @@ export default function Sidebar() {
     ],
   };
 
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className={`sidebar ${isOpen ? "expanded" : "collapsed"}`}>
