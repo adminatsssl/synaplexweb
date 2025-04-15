@@ -1,0 +1,66 @@
+.borrower-modal {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 4px;
+    width: 60%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    height: 40%;
+  }
+  
+  .borrower-header {
+    background-color: #005eb8;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+  
+  .borrower-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .borrower-body input {
+    padding: 8px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .borrower-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 20px;
+    border-top: 1px solid #e0e0e0;
+    gap: 10px;
+  }
+  
+  .borrower-footer button {
+    padding: 8px 16px;
+    border: none;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .borrower-footer .cancel-btn {
+    background-color: white;
+    color: #005eb8;
+    border: 1px solid #005eb8;
+  }
+  
+  .borrower-footer .save-btn {
+    background-color: #005eb8;
+    color: white;
+  }
+  
