@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '../../../Layout/Layout';
 import './LegalSetup.css'; // Import the CSS file
-import CourtSetup from './CourtSetup';
+import CourtSetup from './Court/CourtSetup';
 
 const tabs = [
   "Court",

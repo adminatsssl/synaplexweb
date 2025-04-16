@@ -2,12 +2,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './Pages/Login/LoginPage';
-import AdminPage from './Pages/AdminPage';
-import UserPage from './Pages/UserPage';
-import LegalPage from './Pages/LegalPage';
+import AdminPage from './Pages/Roles/Admin/AdminPage';
+import UserPage from './Pages/Roles/User/UserPage';
+import LegalPage from './Pages/Roles/Legal/LegalPage';
 import ProtectedRoute from './ProtectedRoute';
 import LegalSetup from './Pages/Roles/Admin/LegalSetup/LegalSetup';
-import CourtSetup from './Pages/Roles/Admin/LegalSetup/CourtSetup';
+import CourtSetup from './Pages/Roles/Admin/LegalSetup/Court/CourtSetup';
 
 
 

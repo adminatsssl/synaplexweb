@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AddCourtModal from './AddCourtModal';
 import axios from 'axios';
+import IconButton from '../../../../ReusableComponents/IconButton';
 import './CourtSetup.css';
 
 export default function CourtSetup() {
@@ -79,10 +80,11 @@ export default function CourtSetup() {
                   <td>{court.CourtType}</td>
                   <td>{court.Jurisdiction}</td>
                   <td>{court.CourtCode}</td>
-                  <td>
-                    <button className="edit-btn" onClick={() => handleEdit(court)}>Edit</button>
-                    <button className="delete-btn" onClick={() => handleDelete(court.CourtCode)}>Delete</button>
+                  <td style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <IconButton type="edit" onClick={() => handleEdit(court)} />
+                    <IconButton type="delete" onClick={() => handleDelete(court.CourtCode)} />
                   </td>
+
                 </tr>
               ))
             )}

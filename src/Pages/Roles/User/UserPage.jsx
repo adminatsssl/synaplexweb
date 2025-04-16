@@ -1,10 +1,10 @@
-import Layout from "./Layout/Layout"
+import Layout from "../../Layout/Layout";
 
-export default function AdminPage() {
+export default function UserPage() {
   const username = localStorage.getItem("username");
   return (
     <Layout username={username}>
-      <h1>Welcome, Admin!</h1>
+      <h1>Welcome, User!</h1>
     </Layout>
   );
 }
