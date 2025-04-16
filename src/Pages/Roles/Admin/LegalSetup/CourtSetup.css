@@ -164,3 +164,21 @@
     cursor: pointer;
   }
   
+
+  .edit-btn, .delete-btn {
+    margin-right: 8px;
+    padding: 4px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.edit-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}

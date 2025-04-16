@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CourtSetup.css';
 
-export default function AddCourtModal({ onClose, onSave }) {
+export default function AddCourtModal({ onClose, onSave, initialData = null }) {
     const [formData, setFormData] = useState({
         Name: '',
         Phone: '',
@@ -16,47 +16,71 @@ export default function AddCourtModal({ onClose, onSave }) {
         CourtCode: ''
     });
 
+    useEffect(() => {
+        if (initialData) {
+            const addressParts = initialData.Address?.split(',') || [];
+            setFormData({
+                Name: initialData.Name,
+                Phone: initialData.Phone,
+                Email: initialData.Email,
+                AddressLine: addressParts[0]?.trim() || '',
+                City: addressParts[1]?.trim() || '',
+                State: addressParts[2]?.split('-')[0]?.trim() || '',
+                PinCode: addressParts[2]?.split('-')[1]?.trim() || '',
+                CourtType: initialData.CourtType,
+                Jurisdiction: initialData.Jurisdiction,
+                CourtCode: initialData.CourtCode
+            });
+        }
+    }, [initialData]);
+
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const payload = {
             Name: formData.Name,
             Phone: formData.Phone,
             Email: formData.Email,
             Address: `${formData.AddressLine}, ${formData.City}, ${formData.State} - ${formData.PinCode}`,
-            CourtType: formData.CourtType, // This should exactly match Mendix Enum
+            CourtType: formData.CourtType,
             Jurisdiction: formData.Jurisdiction,
             CourtCode: formData.CourtCode
         };
+        const payloadUpdate = {
+            Name: formData.Name,
+            Phone: formData.Phone,
+            Email: formData.Email,
+            Address: `${formData.AddressLine}, ${formData.City}, ${formData.State} - ${formData.PinCode}`,
+            CourtType: formData.CourtType,
+            Jurisdiction: formData.Jurisdiction,
+            // CourtCode: formData.CourtCode
+        };
 
         try {
-            console.log('Payload:', payload);
-            const response = await axios.post("/court/Courts", payload, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            let response;
+            if (initialData) {
+                console.log("PATCHing to", `/court/Courts('${formData.CourtCode}')`);
+                console.log("Payload:", payload);
 
-            console.log('Response:', response.data);
+                response = await axios.patch(`/court/Courts('${formData.CourtCode}')`, payloadUpdate);
+            } else {
+                response = await axios.post("/court/Courts", payload);
+            }
+
             if (response.status === 200 || response.status === 201) {
                 onSave();
             } else {
                 alert('Failed to save court data.');
             }
         } catch (error) {
-            if (error.response) {
-                console.error("Backend response error:", error.response.data);
-                alert(`Error: ${JSON.stringify(error.response.data)}`);
-            } else {
-                console.error("Error saving court:", error);
-                alert(`Error: ${error.message}`);
-            }
+            alert(`Error: ${error.response?.data || error.message}`);
         }
     };
+
 
     return (
         <div className="modal-overlay">

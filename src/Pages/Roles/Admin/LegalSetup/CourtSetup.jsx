@@ -6,23 +6,13 @@ import './CourtSetup.css';
 export default function CourtSetup() {
   const [showModal, setShowModal] = useState(false);
   const [courts, setCourts] = useState([]);
+  const [selectedCourt, setSelectedCourt] = useState(null); // For Edit
 
   const fetchCourts = async () => {
     try {
       const response = await axios.get("/court/Courts");
-
-      // Log response to inspect structure
-      console.log("API Response:", response.data);
-
-      // Adjust based on actual structure
       const data = response.data?.value || response.data || [];
-
-      if (Array.isArray(data)) {
-        setCourts(data);
-      } else {
-        console.warn("Unexpected response format:", response.data);
-        setCourts([]);
-      }
+      setCourts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch courts:', error);
       setCourts([]);
@@ -33,9 +23,26 @@ export default function CourtSetup() {
     fetchCourts();
   }, []);
 
-  const handleAddCourt = () => {
+  const handleSaveCourt = () => {
     fetchCourts();
     setShowModal(false);
+    setSelectedCourt(null);
+  };
+
+  const handleEdit = (court) => {
+    setSelectedCourt(court);
+    setShowModal(true);
+  };
+
+  const handleDelete = async (courtCode) => {
+    if (!window.confirm("Are you sure you want to delete this court?")) return;
+    try {
+      await axios.delete(`/court/Courts('${courtCode}')`);
+      fetchCourts();
+    } catch (error) {
+      console.error('Failed to delete court:', error);
+      alert('Delete failed.');
+    }
   };
 
   return (
@@ -56,11 +63,12 @@ export default function CourtSetup() {
               <th>Court Type</th>
               <th>Jurisdiction</th>
               <th>Court Code</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {courts.length === 0 ? (
-              <tr><td colSpan="7" style={{ textAlign: 'center' }}>No courts available.</td></tr>
+              <tr><td colSpan="8" style={{ textAlign: 'center' }}>No courts available.</td></tr>
             ) : (
               courts.map((court, index) => (
                 <tr key={court.CourtCode || index}>
@@ -71,6 +79,10 @@ export default function CourtSetup() {
                   <td>{court.CourtType}</td>
                   <td>{court.Jurisdiction}</td>
                   <td>{court.CourtCode}</td>
+                  <td>
+                    <button className="edit-btn" onClick={() => handleEdit(court)}>Edit</button>
+                    <button className="delete-btn" onClick={() => handleDelete(court.CourtCode)}>Delete</button>
+                  </td>
                 </tr>
               ))
             )}
@@ -80,8 +92,12 @@ export default function CourtSetup() {
 
       {showModal && (
         <AddCourtModal
-          onClose={() => setShowModal(false)}
-          onSave={handleAddCourt}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedCourt(null);
+          }}
+          onSave={handleSaveCourt}
+          initialData={selectedCourt}
         />
       )}
     </div>
