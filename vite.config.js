@@ -5,11 +5,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/court': {
-        target: 'http://localhost:8080', // your backend port
+      '/odata': {
+        target: 'http://localhost:8080', 
         changeOrigin: true,
         secure: false,
-      }
-    }
-  }
+      },
+    },
+  },
 });
