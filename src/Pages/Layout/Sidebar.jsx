@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";  // Import Link for navigation
-import { FaTachometerAlt, FaUsers, FaCog, FaBars } from "react-icons/fa";
-import { CgProfile } from "react-icons/cg";
+import {  FaUsers, FaCog, FaBars } from "react-icons/fa";
+import { MdOutlinePhonelinkSetup } from "react-icons/md";
 import { IoBriefcaseSharp } from "react-icons/io5";
 import { TbReportSearch } from "react-icons/tb";
 import { GoHomeFill } from "react-icons/go";
+import { RiHomeOfficeFill } from "react-icons/ri";
+import { MdManageAccounts } from "react-icons/md";
 import './Sidebar.css';
 
 // Icon map for navigation items
 const iconMap = {
   Home: <GoHomeFill />,
   Borrower: <FaUsers />,
-  Accounts: <FaCog />,
-  LegalSetup: <CgProfile />,
+  Accounts: <MdManageAccounts  />,
+  Tenant: <RiHomeOfficeFill  />,
+  LegalSetup: <MdOutlinePhonelinkSetup  />,
   Cases: <IoBriefcaseSharp />,
   Notices: <TbReportSearch />,
   Reports: <TbReportSearch />,
@@ -27,6 +30,7 @@ export default function Sidebar() {
       { name: "Home", path: "/admin" },
       { name: "Borrower", path: "/borrower" },
       { name: "Accounts", path: "/accounts" },
+      { name: "Tenant", path: "/tenant" },
       { name: "LegalSetup", path: "/legalSetup" },
     ],
     User: [
