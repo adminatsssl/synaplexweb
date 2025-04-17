@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddBorrower.css";
+import JSONBig from 'json-bigint';
 
+const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
     Name: "",
@@ -40,53 +42,20 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      Name: formData.Name,
-      Phone: formData.Phone,
-      Email: formData.Email,
-      Address: formData.Address,
-      CreditScore: formData.CreditScore,
-      JobTitle: formData.JobTitle,
-      MonthlyIncome: formData.MonthlyIncome,
-    };
-
+  const handleSave = async () => {
     try {
-      let response;
+      const payload = {
+        ...formData,
+        CreditScore: parseFloat(formData.CreditScore),
+        MonthlyIncome: formData.MonthlyIncome.toString(),
+      };
 
-      const borrowerId = selectedBorrower?.ID || selectedBorrower?.id;
+      await axios.post("/odata/postapiservice/Borrowers", payload, {
+        headers: { "Content-Type": "application/json" },
+      });
 
-      if (borrowerId) {
-        // Update (PATCH)
-        response = await axios.patch(
-          `/odata/postapiservice/Borrowers(${borrowerId})`,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } else {
-        // Create (POST)
-        response = await axios.post(
-          "/odata/postapiservice/Borrowers",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
-
-      if ([200, 201, 204].includes(response.status)) {
-        onSave();
-      } else {
-        alert("Failed to save borrower data.");
-      }
+      alert("Borrower added successfully!");
+      onClose();
     } catch (error) {
       if (error.response) {
         console.error("Backend error:", error.response.data);

@@ -6,15 +6,27 @@ import Layout from "../Layout/Layout";
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
+  const username = localStorage.getItem("username");
   const [borrowers, setBorrowers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBorrower, setSelectedBorrower] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedBorrower, setSelectedBorrower] = useState(null);
 
   const fetchBorrowers = () => {
     setLoading(true);
     axios
-      .get("/odata/postapiservice/Borrowers")
+      .get("/odata/postapiservice/Borrowers", {
+        transformResponse: [function (data) {
+          try {
+            return JSONBig.parse(data).value || JSONBig.parse(data);
+          } catch (err) {
+            console.warn("JSONBig parse error:", err);
+            return [];
+          }
+        }],
+      })
       .then((response) => {
         const data = response?.data?.value || response?.data;
         if (Array.isArray(data)) {
@@ -27,6 +39,7 @@ const BorrowerOverview = () => {
       })
       .catch((error) => {
         console.error("Error fetching borrowers:", error);
+        setBorrowers([]);
         setBorrowers([]);
         setLoading(false);
       });
@@ -57,6 +70,7 @@ const BorrowerOverview = () => {
   }, []);
 
   const handleAddBorrower = () => {
+    setSelectedBorrower(null);
     setSelectedBorrower(null);
     setShowModal(true);
   };
@@ -124,6 +138,22 @@ const BorrowerOverview = () => {
           </table>
         )}
 
+        {showModal && (
+          <AddBorrower
+            onClose={() => {
+              setShowModal(false);
+              setSelectedBorrower(null);
+            }}
+            onSave={() => {
+              fetchBorrowers();
+              setShowModal(false);
+              setSelectedBorrower(null);
+            }}
+            selectedBorrower={selectedBorrower}
+          />
+        )}
+      </div>
+    </Layout>
         {showModal && (
           <AddBorrower
             onClose={() => {
