@@ -1,89 +1,113 @@
 /* Container */
 .borrower-container {
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .borrower-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-  
-  /* Add Borrower Button */
-  .add-borrower-btn {
-    padding: 10px 20px;
-    background-color: #009688;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    float: right;
-    margin-bottom: 15px;
-    transition: 0.3s;
-  }
-  
-  .add-borrower-btn:hover {
-    background-color: #00796b;
-  }
-  
-  /* Table Styling */
-  .borrower-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .borrower-table th,
-  .borrower-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    font-size: 15px;
-  }
-  
-  /* Table Header */
-  .borrower-table th {
-    background-color: #f9f9f9;
-    color: #333;
-    font-weight: 600;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    font-size: 18px;
-  }
-  
-  /* Table Body Rows */
-  .borrower-table tbody tr:nth-child(even) {
-    background-color: #fafafa;
-  }
-  
-  .borrower-table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  /* Action Icons */
-  .action-icon {
-    margin: 0 6px;
-    cursor: pointer;
-    transition: 0.2s ease;
-    font-size: 16px;
-  }
-  
-  .delete-icon {
-    color: #e53935;
-  }
-  
-  .delete-icon:hover {
-    color: #b71c1c;
-  }
-  
-  /* Filter Inputs */
-  .borrower-table thead input {
-    width: 100%;
-    padding: 6px 10px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  padding: 40px;
+  background-color: #f9fafb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+/* Title and Button Row */
+.borrower-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* Title */
+.borrower-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Add Borrower Button */
+.add-borrower-btn {
+  background-color: #059669;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.add-borrower-btn:hover {
+  background-color: #047857;
+}
+
+.add-borrower-btn:focus {
+  outline: 3px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Info Message */
+.info-message {
+  font-size: 16px;
+  color: #6b7280;
+  padding: 20px 0;
+}
+
+/* Table Styling */
+.borrower-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.borrower-table th {
+  background-color: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  padding: 14px 20px;
+  font-size: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.borrower-table td {
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.borrower-table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.borrower-table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Action Icons */
+.action-icon {
+  margin: 0 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-size: 16px;
+}
+
+.delete-icon {
+  color: #e53935;
+}
+
+.delete-icon:hover {
+  color: #b71c1c;
+}
+
+/* Filter Inputs (if using) */
+.borrower-table thead input {
+  width: 100%;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}

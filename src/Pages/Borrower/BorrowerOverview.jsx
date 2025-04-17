@@ -1,25 +1,66 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AddBorrower from "./AddBorrower"; 
+import JSONBig from "json-bigint";
+import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
+import Layout from "../Layout/Layout";
 
 const BorrowerOverview = () => {
+  const username = localStorage.getItem("username");
   const [borrowers, setBorrowers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false); // for popup visibility
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBorrower, setSelectedBorrower] = useState(null);
 
   const fetchBorrowers = () => {
     setLoading(true);
     axios
-      .get("/odata/postapiservice/Borrowers")
+      .get("/odata/postapiservice/Borrowers", {
+        transformResponse: [function (data) {
+          try {
+            return JSONBig.parse(data).value || JSONBig.parse(data);
+          } catch (err) {
+            console.warn("JSONBig parse error:", err);
+            return [];
+          }
+        }],
+      })
       .then((response) => {
-        setBorrowers(response.data.value);
+        if (Array.isArray(response.data)) {
+          setBorrowers(response.data);
+        } else {
+          console.warn("Unexpected response format:", response.data);
+          setBorrowers([]);
+        }
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching borrowers:", error);
+        setBorrowers([]);
         setLoading(false);
       });
+  };
+
+  const handleDelete = async (id) => {
+    const stringId = id.toString(); // Use JSONBig stringified ID
+    console.log("Deleting ID:", stringId);
+    try {
+      const response = await fetch(`/odata/postapiservice/Borrowers(${stringId})`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        console.log(`Borrower ${stringId} deleted successfully.`);
+        fetchBorrowers(); // Refresh list
+      } else {
+        console.error("Failed to delete. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
   };
 
   useEffect(() => {
@@ -27,78 +68,89 @@ const BorrowerOverview = () => {
   }, []);
 
   const handleAddBorrower = () => {
+    setSelectedBorrower(null);
     setShowModal(true);
   };
 
-  const handleCloseModal = (event) => {
-    event.preventDefault();
-    setShowModal(false);
-    fetchBorrowers(); // Refresh data after new borrower added
+  const handleEditBorrower = (borrower) => {
+    setSelectedBorrower(borrower);
+    setShowModal(true);
   };
 
   return (
-    <div className="borrower-container">
-      <h2 className="borrower-title">Borrower Overview</h2>
-
-      <button className="add-borrower-btn" onClick={handleAddBorrower}>
-        ➕ Add Borrower
-      </button>
-
-      {loading ? (
-        <p>Loading...</p>
-      ) : borrowers.length === 0 ? (
-        <p>No data found.</p>
-      ) : (
-        <table className="borrower-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Credit Score</th>
-              <th>Job Title</th>
-              <th>Monthly Income</th>
-              <th>Actions</th>
-            </tr>
-            <tr>
-              <th><input type="text" placeholder="Ab" /></th>
-              <th><input type="text" placeholder="Ab" /></th>
-              <th><input type="text" placeholder="Ab" /></th>
-              <th><input type="text" placeholder="Ab" /></th>
-              <th><input type="text" placeholder="=" /></th>
-              <th><input type="text" placeholder="Ab" /></th>
-              <th><input type="text" placeholder="Ab" /></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {borrowers.map((b, index) => (
-              <tr key={index}>
-                <td>{b.Name}</td>
-                <td>{b.Phone}</td>
-                <td>{b.Email}</td>
-                <td>{b.Address}</td>
-                <td>{b.CreditScore}</td>
-                <td>{b.JobTitle}</td>
-                <td>{b.MonthlyIncome}</td>
-                <td>
-                  <span className="action-icon">✏️</span>
-                  <span className="action-icon delete-icon">🗑️</span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      {/* Optional modal placeholder */}
-      {showModal && (
-        <div>
-          {showModal && <AddBorrower onClose={handleCloseModal} />}
+    <Layout username={username}>
+      <div className="borrower-container">
+        <div className="borrower-title-row">
+          <h2 className="borrower-title">Borrower</h2>
+          <button className="add-borrower-btn" onClick={handleAddBorrower}>
+            + Add Borrower
+          </button>
         </div>
-      )}
-    </div>
+
+        {loading ? (
+          <div className="info-message">Loading...</div>
+        ) : borrowers.length === 0 ? (
+          <div className="info-message">No data found.</div>
+        ) : (
+          <table className="borrower-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Credit Score</th>
+                <th>Job Title</th>
+                <th>Monthly Income</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {borrowers.map((b, index) => (
+                <tr key={index}>
+                  <td>{b.Name}</td>
+                  <td>{b.Phone}</td>
+                  <td>{b.Email}</td>
+                  <td>{b.Address}</td>
+                  <td>{b.CreditScore}</td>
+                  <td>{b.JobTitle}</td>
+                  <td>{b.MonthlyIncome}</td>
+                  <td>
+                    <span
+                      className="action-icon"
+                      onClick={() => handleEditBorrower(b)}
+                    >
+                      ✏️
+                    </span>
+                    <span
+                      className="action-icon delete-icon"
+                      onClick={() => handleDelete(b.ID)}
+                    >
+                      🗑️
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
+        {showModal && (
+          <AddBorrower
+            onClose={() => {
+              setShowModal(false);
+              setSelectedBorrower(null);
+            }}
+            onSave={() => {
+              fetchBorrowers();
+              setShowModal(false);
+              setSelectedBorrower(null);
+            }}
+            selectedBorrower={selectedBorrower}
+          />
+        )}
+      </div>
+    </Layout>
   );
 };
 

@@ -8,7 +8,7 @@ import LegalPage from './Pages/Roles/Legal/LegalPage';
 import ProtectedRoute from './ProtectedRoute';
 import LegalSetup from './Pages/Roles/Admin/LegalSetup/LegalSetup';
 import CourtSetup from './Pages/Roles/Admin/LegalSetup/Court/CourtSetup';
-
+import BorrowerOverview from './Pages/Borrower/BorrowerOverview';
 
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
         <Route path="/legalSetup" element={<ProtectedRoute element={LegalSetup} allowedRoles={["Administrator"]} />} />
         <Route path="/CourtSetup" element={<ProtectedRoute element={CourtSetup} allowedRoles={["Administrator"]} />} />
+        <Route path="/borrower" element={<ProtectedRoute element={BorrowerOverview} allowedRoles={["Administrator"]} />} />
       </Routes>
     </Router>
   );
