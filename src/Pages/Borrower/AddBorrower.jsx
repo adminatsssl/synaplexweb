@@ -4,7 +4,6 @@ import "./AddBorrower.css";
 import JSONBig from 'json-bigint';
 
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
-const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
     Name: "",
     Phone: "",
@@ -42,20 +41,54 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     }));
   };
 
-  const handleSave = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      Name: formData.Name,
+      Phone: formData.Phone,
+      Email: formData.Email,
+      Address: formData.Address,
+      CreditScore: formData.CreditScore,
+      JobTitle: formData.JobTitle,
+      MonthlyIncome: formData.MonthlyIncome, // Leave as string
+    };
+  
     try {
-      const payload = {
-        ...formData,
-        CreditScore: parseFloat(formData.CreditScore),
-        MonthlyIncome: formData.MonthlyIncome.toString(),
-      };
-
-      await axios.post("/odata/postapiservice/Borrowers", payload, {
-        headers: { "Content-Type": "application/json" },
-      });
-
-      alert("Borrower added successfully!");
-      onClose();
+      let response;
+  
+      const borrowerId = selectedBorrower?.ID || selectedBorrower?.id;
+  
+      if (borrowerId) {
+        // Patch using json-bigint for safe stringification
+        response = await axios.patch(
+          `/odata/postapiservice/Borrowers(${borrowerId})`,
+          JSONBig.stringify(payload), // Use json-bigint to stringify
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            transformRequest: [(data) => data], // Prevent axios from auto-stringifying
+          }
+        );
+      } else {
+        // Standard POST, default JSON.stringify is fine
+        response = await axios.post(
+          "/odata/postapiservice/Borrowers",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      }
+  
+      if ([200, 201, 204].includes(response.status)) {
+        onSave();
+      } else {
+        alert("Failed to save borrower data.");
+      }
     } catch (error) {
       if (error.response) {
         console.error("Backend error:", error.response.data);
