@@ -3,6 +3,7 @@ import Layout from '../../../Layout/Layout';
 import './LegalSetup.css'; // Import the CSS file
 import CourtSetup from './Court/CourtSetup';
 import LegalCaseTypeSetup from './LegalCaseType/LegalCaseTypeSetup';
+import DispositionSetup from './Disposition/DispositionSetup';
 
 
 
@@ -27,7 +28,7 @@ export default function LegalSetup() {
       case "Legal Case Type":
         return <div className="tab-content"><LegalCaseTypeSetup/></div>;
       case "Disposition":
-        return <div className="tab-content">Disposition content</div>;
+        return <div className="tab-content"><DispositionSetup/></div>;
       case "Law Firm":
         return <div className="tab-content">Law Firm content</div>;
       case "Law Group":
