@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import JSONBig from "json-bigint";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../Layout/Layout";
@@ -14,11 +15,19 @@ const BorrowerOverview = () => {
   const fetchBorrowers = () => {
     setLoading(true);
     axios
-      .get("/odata/postapiservice/Borrowers")
+      .get("/odata/postapiservice/Borrowers", {
+        transformResponse: [function (data) {
+          try {
+            return JSONBig.parse(data).value || JSONBig.parse(data);
+          } catch (err) {
+            console.warn("JSONBig parse error:", err);
+            return [];
+          }
+        }],
+      })
       .then((response) => {
-        const data = response?.data?.value || response?.data;
-        if (Array.isArray(data)) {
-          setBorrowers(data);
+        if (Array.isArray(response.data)) {
+          setBorrowers(response.data);
         } else {
           console.warn("Unexpected response format:", response.data);
           setBorrowers([]);
@@ -32,25 +41,27 @@ const BorrowerOverview = () => {
       });
   };
 
-  const deleteRecord = (id) => {
-    if (!id) {
-      alert("No borrower ID provided.");
-      return;
-    }
-  
-    const url = `/odata/postapiservice/Borrowers(${id})`;
-  
-    axios.delete(url)
-      .then(() => {
-        alert(`Borrower with ID ${id} has been deleted.`);
-        fetchBorrowers(); // Refresh list after delete
-      })
-      .catch(error => {
-        console.error("Delete failed:", error);
-        alert("Failed to delete borrower.");
+  const handleDelete = async (id) => {
+    const stringId = id.toString(); // Use JSONBig stringified ID
+    console.log("Deleting ID:", stringId);
+    try {
+      const response = await fetch(`/odata/postapiservice/Borrowers(${stringId})`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
+      if (response.ok) {
+        console.log(`Borrower ${stringId} deleted successfully.`);
+        fetchBorrowers(); // Refresh list
+      } else {
+        console.error("Failed to delete. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
   };
-  
 
   useEffect(() => {
     fetchBorrowers();
@@ -62,7 +73,7 @@ const BorrowerOverview = () => {
   };
 
   const handleEditBorrower = (borrower) => {
-    setSelectedBorrower(borrower); // Set the selected borrower for editing
+    setSelectedBorrower(borrower);
     setShowModal(true);
   };
 
@@ -72,7 +83,7 @@ const BorrowerOverview = () => {
         <div className="borrower-title-row">
           <h2 className="borrower-title">Borrower</h2>
           <button className="add-borrower-btn" onClick={handleAddBorrower}>
-          + Add Borrower
+            + Add Borrower
           </button>
         </div>
 
@@ -113,7 +124,7 @@ const BorrowerOverview = () => {
                     </span>
                     <span
                       className="action-icon delete-icon"
-                      onClick={() => deleteRecord(b.ID)}
+                      onClick={() => handleDelete(b.ID)}
                     >
                       🗑️
                     </span>

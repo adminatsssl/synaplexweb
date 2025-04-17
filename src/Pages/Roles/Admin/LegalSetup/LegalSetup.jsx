@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import Layout from '../../../Layout/Layout';
 import './LegalSetup.css'; // Import the CSS file
 import CourtSetup from './Court/CourtSetup';
+import LegalCaseTypeSetup from './LegalCaseType/LegalCaseTypeSetup';
+import DispositionSetup from './Disposition/DispositionSetup';
+
+
 
 const tabs = [
   "Court",
@@ -22,9 +26,9 @@ export default function LegalSetup() {
       case "Court":
         return <div className="tab-content"><CourtSetup/></div>;
       case "Legal Case Type":
-        return <div className="tab-content">Legal Case Type content</div>;
+        return <div className="tab-content"><LegalCaseTypeSetup/></div>;
       case "Disposition":
-        return <div className="tab-content">Disposition content</div>;
+        return <div className="tab-content"><DispositionSetup/></div>;
       case "Law Firm":
         return <div className="tab-content">Law Firm content</div>;
       case "Law Group":

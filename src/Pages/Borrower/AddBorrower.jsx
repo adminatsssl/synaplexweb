@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddBorrower.css";
+import JSONBig from 'json-bigint';
 
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
@@ -50,27 +51,28 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
       Address: formData.Address,
       CreditScore: formData.CreditScore,
       JobTitle: formData.JobTitle,
-      MonthlyIncome: formData.MonthlyIncome,
+      MonthlyIncome: formData.MonthlyIncome, // Leave as string
     };
-
+  
     try {
       let response;
-
+  
       const borrowerId = selectedBorrower?.ID || selectedBorrower?.id;
-
+  
       if (borrowerId) {
-        // Update (PATCH)
+        // Patch using json-bigint for safe stringification
         response = await axios.patch(
           `/odata/postapiservice/Borrowers(${borrowerId})`,
-          payload,
+          JSONBig.stringify(payload), // Use json-bigint to stringify
           {
             headers: {
               "Content-Type": "application/json",
             },
+            transformRequest: [(data) => data], // Prevent axios from auto-stringifying
           }
         );
       } else {
-        // Create (POST)
+        // Standard POST, default JSON.stringify is fine
         response = await axios.post(
           "/odata/postapiservice/Borrowers",
           payload,
@@ -81,7 +83,7 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
           }
         );
       }
-
+  
       if ([200, 201, 204].includes(response.status)) {
         onSave();
       } else {
