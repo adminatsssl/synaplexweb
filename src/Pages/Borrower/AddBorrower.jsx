@@ -4,7 +4,7 @@ import axios from "axios";
 import "./AddBorrower.css";
 import JSONBig from 'json-bigint';
 
-const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
+
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
     Name: "",
