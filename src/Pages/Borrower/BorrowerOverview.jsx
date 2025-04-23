@@ -4,6 +4,7 @@ import JSONBig from "json-bigint";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../Layout/Layout";
+import IconButton from "../ReusableComponents/IconButton.jsx"
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
@@ -115,20 +116,11 @@ const BorrowerOverview = () => {
                   <td>{b.CreditScore}</td>
                   <td>{b.JobTitle}</td>
                   <td>{b.MonthlyIncome}</td>
-                  <td>
-                    <span
-                      className="action-icon"
-                      onClick={() => handleEditBorrower(b)}
-                    >
-                      ✏️
-                    </span>
-                    <span
-                      className="action-icon delete-icon"
-                      onClick={() => handleDelete(b.ID)}
-                    >
-                      🗑️
-                    </span>
+                  <td style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+                    <IconButton type="edit" onClick={() => handleEditBorrower(b)}/>
+                    <IconButton type="delete" onClick={() => handleDelete(b.ID)} />
                   </td>
+                  
                 </tr>
               ))}
             </tbody>

@@ -4,6 +4,8 @@ import './LegalSetup.css'; // Import the CSS file
 import CourtSetup from './Court/CourtSetup';
 import LegalCaseTypeSetup from './LegalCaseType/LegalCaseTypeSetup';
 import DispositionSetup from './Disposition/DispositionSetup';
+import LawFirm from './LawFirm/LawFirmSetup';
+import LawGroup from './LawGroup/LawGroupSetup';
 
 
 
@@ -30,9 +32,9 @@ export default function LegalSetup() {
       case "Disposition":
         return <div className="tab-content"><DispositionSetup/></div>;
       case "Law Firm":
-        return <div className="tab-content">Law Firm content</div>;
+        return <div className="tab-content"><LawFirm/></div>;
       case "Law Group":
-        return <div className="tab-content">Law Group content</div>;
+        return <div className="tab-content"><LawGroup/></div>;
       case "Lawyer":
         return <div className="tab-content">Lawyer content</div>;
       case "Legal Workflow":
