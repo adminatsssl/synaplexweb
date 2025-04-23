@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddBorrower.css";
 import JSONBig from 'json-bigint';
@@ -11,7 +10,6 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     Phone: "",
     Email: "",
     Address: "",
-    CreditScore: "",
     CreditScore: "",
     JobTitle: "",
     MonthlyIncome: "",

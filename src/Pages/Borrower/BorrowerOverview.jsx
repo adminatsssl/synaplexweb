@@ -4,15 +4,11 @@ import JSONBig from "json-bigint";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../Layout/Layout";
-import IconButton from "../ReusableComponents/IconButton.jsx"
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
-  const username = localStorage.getItem("username");
   const [borrowers, setBorrowers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedBorrower, setSelectedBorrower] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedBorrower, setSelectedBorrower] = useState(null);
 
@@ -40,7 +36,6 @@ const BorrowerOverview = () => {
       })
       .catch((error) => {
         console.error("Error fetching borrowers:", error);
-        setBorrowers([]);
         setBorrowers([]);
         setLoading(false);
       });
@@ -73,7 +68,6 @@ const BorrowerOverview = () => {
   }, []);
 
   const handleAddBorrower = () => {
-    setSelectedBorrower(null);
     setSelectedBorrower(null);
     setShowModal(true);
   };
@@ -121,33 +115,26 @@ const BorrowerOverview = () => {
                   <td>{b.CreditScore}</td>
                   <td>{b.JobTitle}</td>
                   <td>{b.MonthlyIncome}</td>
-                  <td style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
-                    <IconButton type="edit" onClick={() => handleEditBorrower(b)}/>
-                    <IconButton type="delete" onClick={() => handleDelete(b.ID)} />
+                  <td>
+                    <span
+                      className="action-icon"
+                      onClick={() => handleEditBorrower(b)}
+                    >
+                      ✏️
+                    </span>
+                    <span
+                      className="action-icon delete-icon"
+                      onClick={() => handleDelete(b.ID)}
+                    >
+                      🗑️
+                    </span>
                   </td>
-                  
                 </tr>
               ))}
             </tbody>
           </table>
         )}
 
-        {showModal && (
-          <AddBorrower
-            onClose={() => {
-              setShowModal(false);
-              setSelectedBorrower(null);
-            }}
-            onSave={() => {
-              fetchBorrowers();
-              setShowModal(false);
-              setSelectedBorrower(null);
-            }}
-            selectedBorrower={selectedBorrower}
-          />
-        )}
-      </div>
-    </Layout>
         {showModal && (
           <AddBorrower
             onClose={() => {
