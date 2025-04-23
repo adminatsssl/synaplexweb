@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddBorrower.css";
 import JSONBig from 'json-bigint';
 
+const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
     Name: "",
     Phone: "",
     Email: "",
     Address: "",
+    CreditScore: "",
     CreditScore: "",
     JobTitle: "",
     MonthlyIncome: "",
@@ -28,10 +31,30 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     }
   }, [selectedBorrower]);
 
+  useEffect(() => {
+    if (selectedBorrower) {
+      setFormData({
+        Name: selectedBorrower.Name || "",
+        Phone: selectedBorrower.Phone || "",
+        Email: selectedBorrower.Email || "",
+        Address: selectedBorrower.Address || "",
+        CreditScore: selectedBorrower.CreditScore || "",
+        JobTitle: selectedBorrower.JobTitle || "",
+        MonthlyIncome: selectedBorrower.MonthlyIncome || "",
+      });
+    }
+  }, [selectedBorrower]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
+      [name]:
+        name === "CreditScore" 
+          ? value === ""
+            ? ""
+            : parseFloat(value)
+          : value,
       [name]:
         name === "CreditScore" 
           ? value === ""
@@ -90,6 +113,13 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
         alert("Failed to save borrower data.");
       }
     } catch (error) {
+      if (error.response) {
+        console.error("Backend error:", error.response.data);
+        alert(`Error: ${JSON.stringify(error.response.data)}`);
+      } else {
+        console.error("Save error:", error);
+        alert(`Error: ${error.message}`);
+      }
       if (error.response) {
         console.error("Backend error:", error.response.data);
         alert(`Error: ${JSON.stringify(error.response.data)}`);

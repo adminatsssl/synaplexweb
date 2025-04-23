@@ -8,8 +8,11 @@ import IconButton from "../ReusableComponents/IconButton.jsx"
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
+  const username = localStorage.getItem("username");
   const [borrowers, setBorrowers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBorrower, setSelectedBorrower] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedBorrower, setSelectedBorrower] = useState(null);
 
@@ -37,6 +40,7 @@ const BorrowerOverview = () => {
       })
       .catch((error) => {
         console.error("Error fetching borrowers:", error);
+        setBorrowers([]);
         setBorrowers([]);
         setLoading(false);
       });
@@ -69,6 +73,7 @@ const BorrowerOverview = () => {
   }, []);
 
   const handleAddBorrower = () => {
+    setSelectedBorrower(null);
     setSelectedBorrower(null);
     setShowModal(true);
   };
@@ -127,6 +132,22 @@ const BorrowerOverview = () => {
           </table>
         )}
 
+        {showModal && (
+          <AddBorrower
+            onClose={() => {
+              setShowModal(false);
+              setSelectedBorrower(null);
+            }}
+            onSave={() => {
+              fetchBorrowers();
+              setShowModal(false);
+              setSelectedBorrower(null);
+            }}
+            selectedBorrower={selectedBorrower}
+          />
+        )}
+      </div>
+    </Layout>
         {showModal && (
           <AddBorrower
             onClose={() => {
