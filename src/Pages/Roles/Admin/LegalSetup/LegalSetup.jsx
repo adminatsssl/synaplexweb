@@ -7,6 +7,7 @@ import DispositionSetup from './Disposition/DispositionSetup';
 import LawyerSetup from './Lawyer/LawyerSetup';
 import LawFirm from './LawFirm/LawFirmSetup';
 import LawGroup from './LawGroup/LawGroupSetup';
+import LegalWorkflow from './LegalWorkflow/LegalWorkflow';
 
 
 
@@ -39,7 +40,7 @@ export default function LegalSetup() {
       case "Lawyer":
         return <div className="tab-content"><LawyerSetup/></div>;
       case "Legal Workflow":
-        return <div className="tab-content">Legal Workflow content</div>;
+        return <div className="tab-content"><LegalWorkflow/></div>;
       default:
         return null;
     }
