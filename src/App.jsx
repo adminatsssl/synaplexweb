@@ -9,19 +9,30 @@ import ProtectedRoute from './ProtectedRoute';
 import LegalSetup from './Pages/Roles/Admin/LegalSetup/LegalSetup';
 import CourtSetup from './Pages/Roles/Admin/LegalSetup/Court/CourtSetup';
 import BorrowerOverview from './Pages/Borrower/BorrowerOverview';
-
+import AdminCases from './Pages/Roles/Admin/ManageData/AdminCases';
+import AdminLoans from './Pages/Roles/Admin/ManageData/AdminLoans';
+import AdminNotices from './Pages/Roles/Admin/ManageData/AdminNotices';
+import TenantManager from './Pages/Roles/Admin/Tenant/Tenant';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        {/* Admin Routes */}
         <Route path="/admin" element={<ProtectedRoute element={AdminPage} allowedRoles={["Administrator"]} />} />
-        <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
-        <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
         <Route path="/legalSetup" element={<ProtectedRoute element={LegalSetup} allowedRoles={["Administrator"]} />} />
         <Route path="/CourtSetup" element={<ProtectedRoute element={CourtSetup} allowedRoles={["Administrator"]} />} />
         <Route path="/borrower" element={<ProtectedRoute element={BorrowerOverview} allowedRoles={["Administrator"]} />} />
+        <Route path="/tenant" element={<ProtectedRoute element={TenantManager} allowedRoles={["Administrator"]} />} />
+        <Route path="/admin-cases" element={<ProtectedRoute element={AdminCases} allowedRoles={["Administrator"]} />} />
+        <Route path="/admin-loans" element={<ProtectedRoute element={AdminLoans} allowedRoles={["Administrator"]} />} />
+        <Route path="/admin-notices" element={<ProtectedRoute element={AdminNotices} allowedRoles={["Administrator"]} />} />
+
+        {/* User Routes */}
+        <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
+        {/* Lawyer Routes */}
+        <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
       </Routes>
     </Router>
   );
