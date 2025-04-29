@@ -13,6 +13,7 @@ import AdminCases from './Pages/Roles/Admin/ManageData/AdminCases';
 import AdminLoans from './Pages/Roles/Admin/ManageData/AdminLoans';
 import AdminNotices from './Pages/Roles/Admin/ManageData/AdminNotices';
 import TenantManager from './Pages/Roles/Admin/Tenant/Tenant';
+import UserCases from './Pages/Roles/User/Cases/UserCases';
 // import UserTable from './Pages/Roles/Admin/Accounts/Users/UserTable';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
 
         {/* User Routes */}
         <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
+        <Route path="/cases" element={<ProtectedRoute element={UserCases} allowedRoles={["User"]} />} />
         {/* Lawyer Routes */}
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
       </Routes>
