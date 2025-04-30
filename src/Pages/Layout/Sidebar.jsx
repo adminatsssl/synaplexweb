@@ -17,8 +17,7 @@ import { FaHandHoldingUsd } from "react-icons/fa";
 import { FaHospitalUser } from "react-icons/fa6";
 import { PiNotepadFill } from "react-icons/pi";
 
-import ReportCases from "../Roles/User/Reports/Reports/ReportCases";
-import ReportNotices from "../Roles/User/Reports/Reports/ReportNotice";
+
 
 const iconMap = {
   Home: <GoHomeFill />,
@@ -80,7 +79,7 @@ export default function Sidebar() {
 
     Legal: [
       { name: "Home", path: "/legal" },
-      { name: "Cases", path: "/cases" },
+      { name: "Cases", path: "/lawyer-cases" },
       { name: "Notices", path: "/notice" },
       { name: "Reports", path: "/reports" },
       { name: "Invoices", path: "/invoices" },

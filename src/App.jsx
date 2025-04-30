@@ -18,6 +18,7 @@ import ReportCases from './Pages/Roles/User/Reports/Reports/ReportCases';
 import ReportNotices from './Pages/Roles/User/Reports/Reports/ReportNotice';
 import UserNotice from './Pages/Roles/User/Reports/Notice/Notice';
 import Loanpage from './Pages/Roles/User/Loan/LoanPage';
+import LawyerCases from './Pages/Roles/Legal/LawyerCases/LawyerCases';
 // import UserTable from './Pages/Roles/Admin/Accounts/Users/UserTable';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         
         {/* Lawyer Routes */}
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
+        <Route path="/lawyer-cases" element={<ProtectedRoute element={LawyerCases} allowedRoles={["Legal"]} />} />
         
       </Routes>
     </Router>
