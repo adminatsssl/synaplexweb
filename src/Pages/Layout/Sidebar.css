@@ -1,43 +1,118 @@
-.sidebar {
-    background-color: white; /* dark background */
-    color: white;
-    height: 100vh;
-    transition: width 0.3s;
-    overflow: hidden;
-  }
-  
-  .sidebar.expanded {
-    width: 200px;
-  }
-  
-  .sidebar.collapsed {
-    width: 60px;
-  }
-  
-  .hamburger {
-    padding: 1rem;
-    cursor: pointer;
-    color: black;
-    margin-top: 7px;
-  }
-  
-  .nav-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-  }
-  
-  .nav-item .icon {
-    font-size: 18px;
-    color: black; /* make icon black */
-  }
-  
+.sidenav-container {
+  background-color: #fff;
+  /* border-right: 1px solid #ddd; */
+  transition: width 0.3s;
+  overflow: hidden;
+  height: 100vh;
+}
 
-  .sidebar.expanded .nav-item .icon {
-    margin-right: 1rem;
-  }
-  
-  .sidebar.collapsed .text {
-    display: none;
-  }
-  
+.sidenav-container.expanded {
+  width: 220px;
+}
+
+.sidenav-container.collapsed {
+  width: 75px;
+}
+
+.nav {
+  padding: 10px 0;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.nav__icon--menu {
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav__brand-logo {
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.nav__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav__item {
+  position: relative;
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  text-decoration: none;
+  color: #333;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.nav__link:hover {
+  background-color: #f0f0f0;
+}
+
+.nav__icon {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+}
+
+.toggle-icon {
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.nav__drop {
+  background-color: #f9f9f9;
+}
+
+.nav__sublink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 32px;
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav__sublink:hover {
+  background-color: #eaeaea;
+}
+
+.nav__name,
+.nav__subname {
+  white-space: nowrap;
+}
+
+/* COLLAPSED STYLE FIXES */
+.sidenav-container.collapsed .nav__link,
+.sidenav-container.collapsed .nav__sublink {
+  justify-content: center;
+  padding: 12px 0;
+  gap: 0;
+}
+
+.sidenav-container.collapsed .nav__name,
+.sidenav-container.collapsed .nav__subname,
+.sidenav-container.collapsed .toggle-icon {
+  display: none;
+}
+
+.sidenav-container.collapsed .nav__icon {
+  margin: 4px auto;
+}
