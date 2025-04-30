@@ -8,7 +8,7 @@ import LegalPage from './Pages/Roles/Legal/LegalPage';
 import ProtectedRoute from './ProtectedRoute';
 import LegalSetup from './Pages/Roles/Admin/LegalSetup/LegalSetup';
 import CourtSetup from './Pages/Roles/Admin/LegalSetup/Court/CourtSetup';
-import BorrowerOverview from './Pages/Borrower/BorrowerOverview';
+import BorrowerOverview from './Pages/Roles/Admin/Borrower/BorrowerOverview';
 import AdminCases from './Pages/Roles/Admin/ManageData/AdminCases';
 import AdminLoans from './Pages/Roles/Admin/ManageData/AdminLoans';
 import AdminNotices from './Pages/Roles/Admin/ManageData/AdminNotices';

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import JSONBig from "json-bigint";
-import IconButton from "../ReusableComponents/IconButton";
+import IconButton from "../../../ReusableComponents/IconButton";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
-import Layout from "../Layout/Layout";
-import AddButton from "../ReusableComponents/AddButton";
+import Layout from "../../../Layout/Layout";
+import AddButton from "../../../ReusableComponents/AddButton";
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
@@ -18,14 +18,16 @@ const BorrowerOverview = () => {
     setLoading(true);
     axios
       .get("/odata/postapiservice/Borrowers", {
-        transformResponse: [function (data) {
-          try {
-            return JSONBig.parse(data).value || JSONBig.parse(data);
-          } catch (err) {
-            console.warn("JSONBig parse error:", err);
-            return [];
-          }
-        }],
+        transformResponse: [
+          function (data) {
+            try {
+              return JSONBig.parse(data).value || JSONBig.parse(data);
+            } catch (err) {
+              console.warn("JSONBig parse error:", err);
+              return [];
+            }
+          },
+        ],
       })
       .then((response) => {
         if (Array.isArray(response.data)) {
@@ -47,12 +49,15 @@ const BorrowerOverview = () => {
     const stringId = id.toString(); // Use JSONBig stringified ID
     console.log("Deleting ID:", stringId);
     try {
-      const response = await fetch(`/odata/postapiservice/Borrowers(${stringId})`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `/odata/postapiservice/Borrowers(${stringId})`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         console.log(`Borrower ${stringId} deleted successfully.`);
@@ -116,8 +121,14 @@ const BorrowerOverview = () => {
                   <td>{b.JobTitle}</td>
                   <td>{b.MonthlyIncome}</td>
                   <td>
-                  <IconButton type="edit" onClick={() => handleEditBorrower(b)} />
-                  <IconButton type="delete" onClick={() => handleDelete(b.ID)} />
+                    <IconButton
+                      type="edit"
+                      onClick={() => handleEditBorrower(b)}
+                    />
+                    <IconButton
+                      type="delete"
+                      onClick={() => handleDelete(b.ID)}
+                    />
                   </td>
                 </tr>
               ))}
