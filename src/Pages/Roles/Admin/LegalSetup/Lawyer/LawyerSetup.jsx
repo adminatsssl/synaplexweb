@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EditLawyerPopup from "./EditLawyerPopup";
+import IconButton from "../../../../ReusableComponents/IconButton";
 import "./EditLawyerPopup.css";
 
 function LawyerSetup() {
@@ -64,12 +65,7 @@ function LawyerSetup() {
                 </td>
                 <td className="border px-4 py-2">{lawyer.Rating ?? "N/A"}</td>
                 <td className="border px-4 py-2">
-                  <button
-                    className="bg-blue-500 text-white px-3 py-1 rounded"
-                    onClick={() => handleEdit(lawyer)}
-                  >
-                    Edit
-                  </button>
+                <IconButton type="edit" onClick={() => handleEdit(lawyer)} />
                 </td>
               </tr>
             ))}

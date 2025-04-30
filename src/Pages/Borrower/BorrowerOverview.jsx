@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import JSONBig from "json-bigint";
+import IconButton from "../ReusableComponents/IconButton";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../Layout/Layout";
@@ -116,18 +117,8 @@ const BorrowerOverview = () => {
                   <td>{b.JobTitle}</td>
                   <td>{b.MonthlyIncome}</td>
                   <td>
-                    <span
-                      className="action-icon"
-                      onClick={() => handleEditBorrower(b)}
-                    >
-                      ✏️
-                    </span>
-                    <span
-                      className="action-icon delete-icon"
-                      onClick={() => handleDelete(b.ID)}
-                    >
-                      🗑️
-                    </span>
+                  <IconButton type="edit" onClick={() => handleEditBorrower(b)} />
+                  <IconButton type="delete" onClick={() => handleDelete(b.ID)} />
                   </td>
                 </tr>
               ))}

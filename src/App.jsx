@@ -17,6 +17,7 @@ import UserCases from './Pages/Roles/User/Cases/UserCases';
 import ReportCases from './Pages/Roles/User/Reports/Reports/ReportCases';
 import ReportNotices from './Pages/Roles/User/Reports/Reports/ReportNotice';
 import UserNotice from './Pages/Roles/User/Reports/Notice/Notice';
+import Loanpage from './Pages/Roles/User/Loan/LoanPage';
 // import UserTable from './Pages/Roles/Admin/Accounts/Users/UserTable';
 
 function App() {
@@ -45,7 +46,8 @@ function App() {
         <Route path="/report-notices" element={<ProtectedRoute element={ReportNotices} allowedRoles={["User"]} />} />
         <Route path="/cases" element={<ProtectedRoute element={UserCases} allowedRoles={["User"]} />} />
         <Route path="/user-notice" element={<ProtectedRoute element={UserNotice} allowedRoles={["User"]} />} />
-
+        <Route path="/loans" element={<ProtectedRoute element={Loanpage} allowedRoles={["User"]} />} />
+        
         {/* Lawyer Routes */}
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
 

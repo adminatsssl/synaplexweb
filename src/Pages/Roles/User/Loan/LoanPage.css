@@ -1,0 +1,308 @@
+/* LoanPage.css */
+
+/* General container */
+.loans-fullpage-container {
+  padding: 2rem; /* Keep the padding for some spacing */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: white;
+  min-height: 100vh;
+  width: 100vw; /* Set the width to 100% of the viewport width */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Header */
+.loans-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  /* No need to change width here, it will adjust within the full-width container */
+}
+
+.loans-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Button styling */
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary, .btn-outline {
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #007f5f;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #006147;
+}
+
+.btn-outline {
+  border: 1px solid #ccc;
+  background-color: white;
+  color: #333;
+}
+
+.btn-outline:hover {
+  background-color: #f0f0f0;
+}
+
+/* Table container */
+.loans-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow-x: auto;
+  /* Width will adjust within the full-width container */
+}
+
+.loans-table {
+  width: 100%; /* Make the table take full width of its container */
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.loans-table thead {
+  background-color: #f4f6f8;
+}
+
+.loans-table th,
+.loans-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ececec;
+  vertical-align: middle;
+}
+
+.loans-table th {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Action buttons in table */
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-btn,
+.delete-btn,
+.edit-btn { /* Style for the edit button */
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.view-btn:hover {
+  color: #007bff;
+}
+
+.delete-btn:hover {
+  color: #dc3545;
+}
+
+.edit-btn:hover {
+  color: #ff9800; /* Example color for edit */
+}
+
+/* Empty message row */
+.empty-message {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 2rem;
+}
+
+/* Popup styles */
+.add-loan-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  overflow: auto;
+}
+
+.popup-content {
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  width: 90%; /* Keep the popup width as a percentage of the viewport */
+  max-width: 800px; /* Keep the maximum width constraint */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.popup-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.close-btn {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.form-sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.form-section {
+  border: 1px solid #ccc; /* Add a border around the section */
+  border-radius: 0.5rem; /* Optional: Add rounded corners */
+  padding: 1rem; /* Add some padding inside the box */
+}
+
+.form-section h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  color: #444;
+  text-align: left;
+  padding-bottom: 0.5rem; /* Add padding below the heading for the line */
+  border-bottom: 1px solid #eee; /* Add a light gray line below the heading */
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Homepage search bar */
+.homepage-search-bar {
+  padding: 0 2rem;
+  margin-bottom: 1.5rem;
+  display: flex; /* To align input and button */
+  align-items: center; /* Vertically align items */
+  gap: 0.5rem; /* Space between input and button */
+}
+
+.homepage-search-bar input[type="text"] {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  width: 400px; /* Adjust width as needed */
+  flex-grow: 1; /* Allow input to take more space */
+}
+
+.homepage-search-bar .search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.homepage-search-bar .search-button:hover {
+  background-color: #0056b3;
+}
+
+.popup-search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem; /* Add some padding inside the box */
+  border: 1px solid #ccc; /* Add a border */
+  border-radius: 0.5rem; /* Optional: Add rounded corners */
+}
+
+.popup-search h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.popup-search input[type="text"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+  font-size: 0.9rem;
+  flex-grow: 1;
+}
+
+.popup-search .search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.popup-search .search-button:hover {
+  background-color: #0056b3;
+}
