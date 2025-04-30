@@ -35,10 +35,7 @@ function App() {
         <Route path="/admin-cases" element={<ProtectedRoute element={AdminCases} allowedRoles={["Administrator"]} />} />
         <Route path="/admin-loans" element={<ProtectedRoute element={AdminLoans} allowedRoles={["Administrator"]} />} />
         <Route path="/admin-notices" element={<ProtectedRoute element={AdminNotices} allowedRoles={["Administrator"]} />} />
-        
         {/* <Route path="/accounts" element={<ProtectedRoute element={UserTable} allowedRoles={["Administrator"]} />} /> */}
-
-
 
         {/* User Routes */}
         <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
@@ -50,13 +47,7 @@ function App() {
         
         {/* Lawyer Routes */}
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
-
         
-        
-
-
-
-
       </Routes>
     </Router>
   );
