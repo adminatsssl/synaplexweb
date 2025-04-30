@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AddCourtModal from './AddCourtModal';
 import axios from 'axios';
 import IconButton from '../../../../ReusableComponents/IconButton';
+import AddButton from '../../../../ReusableComponents/AddButton';
 import './CourtSetup.css';
 
 export default function CourtSetup() {
@@ -50,7 +51,8 @@ export default function CourtSetup() {
     <div className="court-setup-container">
       <div className="court-setup-header">
         <h2 className="court-setup-title">Court</h2>
-        <button className="add-court-btn" onClick={() => setShowModal(true)}>+ Add Court</button>
+        <AddButton text="Add Court" onClick={() => setShowModal(true)} />
+        {/* <button className="add-court-btn" onClick={() => setShowModal(true)}>+ Add Court</button> */}
       </div>
 
       <div className="court-table-container">

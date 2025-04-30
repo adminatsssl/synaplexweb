@@ -101,7 +101,7 @@ export default function Sidebar() {
           <div className="nav__icon nav__icon--menu" onClick={toggleSidebar}>
             <FaBars />
           </div>
-          {isExpanded && <span className="nav__brand-logo">MyApp</span>}
+          {isExpanded && <span className="nav__brand-logo"></span>}
         </div>
 
         <ul className="nav__list">

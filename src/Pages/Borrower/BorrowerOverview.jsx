@@ -5,6 +5,7 @@ import IconButton from "../ReusableComponents/IconButton";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../Layout/Layout";
+import AddButton from "../ReusableComponents/AddButton";
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
@@ -83,9 +84,7 @@ const BorrowerOverview = () => {
       <div className="borrower-container">
         <div className="borrower-title-row">
           <h2 className="borrower-title">Borrower</h2>
-          <button className="add-borrower-btn" onClick={handleAddBorrower}>
-            + Add Borrower
-          </button>
+          <AddButton text="Add Borrower" onClick={handleAddBorrower} />
         </div>
 
         {loading ? (

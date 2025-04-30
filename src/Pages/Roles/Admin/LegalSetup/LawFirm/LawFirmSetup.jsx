@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import AddButton from '../../../../ReusableComponents/AddButton';
 import IconButton from "../../../../ReusableComponents/IconButton";
 import LawFirmPopup from "./LawFirmPopup";
 import "./LawFirm.css";
@@ -69,56 +70,51 @@ const LawFirm = () => {
     }
   };
 
-  if (loading) return <div className="p-4">Loading...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (loading) return <div className="law-firm-loading">Loading...</div>;
+  if (error) return <div className="law-firm-error">{error}</div>;
 
   return (
-    <div className="p-6 relative">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Law Firms</h1>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          onClick={openAddPopup}
-        >
-          Add Law Firm
-        </button>
+    <div className="law-firm-container">
+      <div className="law-firm-header">
+        <h1>Law Firms</h1>
+        <AddButton text="Add Law-Firm" onClick={openAddPopup} />
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
-          <thead className="bg-gray-100">
+      <div className="table-wrapper">
+        <table className="law-firm-table">
+          <thead>
             <tr>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Email</th>
-              <th className="border px-4 py-2">Phone Number</th>
-              <th className="border px-4 py-2">Registration Number</th>
-              <th className="border px-4 py-2">Establishment Year</th>
-              <th className="border px-4 py-2">Total Lawyers</th>
-              <th className="border px-4 py-2">Success Rate</th>
-              <th className="border px-4 py-2">Client Rating</th>
-              <th className="border px-4 py-2">Address Line</th>
-              <th className="border px-4 py-2">City</th>
-              <th className="border px-4 py-2">State</th>
-              <th className="border px-4 py-2">Pin Code</th>
-              <th className="border px-4 py-2">Actions</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Registration Number</th>
+              <th>Establishment Year</th>
+              <th>Total Lawyers</th>
+              <th>Success Rate</th>
+              <th>Client Rating</th>
+              <th>Address Line</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Pin Code</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {lawFirms.map(firm => (
               <tr key={firm.ID}>
-                <td className="border px-4 py-2">{firm.Name || '-'}</td>
-                <td className="border px-4 py-2">{firm.Email || '-'}</td>
-                <td className="border px-4 py-2">{firm.PhoneNumber || '-'}</td>
-                <td className="border px-4 py-2">{firm.RegistrationNumber || '-'}</td>
-                <td className="border px-4 py-2">{firm.EstablishmentYear || '-'}</td>
-                <td className="border px-4 py-2">{firm.TotalLawyers}</td>
-                <td className="border px-4 py-2">{firm.SuccessRate?.toFixed(2)}</td>
-                <td className="border px-4 py-2">{firm.ClientRating?.toFixed(2)}</td>
-                <td className="border px-4 py-2">{firm.Address_LawFirm?.AddressLine || '-'}</td>
-                <td className="border px-4 py-2">{firm.Address_LawFirm?.City || '-'}</td>
-                <td className="border px-4 py-2">{firm.Address_LawFirm?.State || '-'}</td>
-                <td className="border px-4 py-2">{firm.Address_LawFirm?.PinCode || '-'}</td>
-                <td style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+                <td>{firm.Name || '-'}</td>
+                <td>{firm.Email || '-'}</td>
+                <td>{firm.PhoneNumber || '-'}</td>
+                <td>{firm.RegistrationNumber || '-'}</td>
+                <td>{firm.EstablishmentYear || '-'}</td>
+                <td>{firm.TotalLawyers}</td>
+                <td>{firm.SuccessRate?.toFixed(2)}</td>
+                <td>{firm.ClientRating?.toFixed(2)}</td>
+                <td>{firm.Address_LawFirm?.AddressLine || '-'}</td>
+                <td>{firm.Address_LawFirm?.City || '-'}</td>
+                <td>{firm.Address_LawFirm?.State || '-'}</td>
+                <td>{firm.Address_LawFirm?.PinCode || '-'}</td>
+                <td className="law-firm-actions">
                   <IconButton type="edit" onClick={() => openEditPopup(firm)} />
                   <IconButton type="delete" onClick={() => handleDelete(firm.ID)} />
                 </td>

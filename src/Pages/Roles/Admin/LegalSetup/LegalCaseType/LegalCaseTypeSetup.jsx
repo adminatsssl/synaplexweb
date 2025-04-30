@@ -4,7 +4,7 @@ import "./LegalCaseTypeSetup.css";
 import LegalCaseTypePopup from "./LegalCaseTypePopup";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import JSONbig from 'json-bigint';
-
+import AddButton from '../../../../ReusableComponents/AddButton';
 
 const LegalCaseTypeSetup = () => {
   const [legalCaseTypes, setLegalCaseTypes] = useState([]);
@@ -43,9 +43,10 @@ const LegalCaseTypeSetup = () => {
       <div className="card">
         <div className="card-header">
           <h3>Legal Case Type</h3>
-          <button className="add-button" onClick={() => { setSelectedItem(null); setShowPopup(true); }}>
-            + Add Case Type
-          </button>
+          <AddButton
+            text="Add Case-Type"
+            onClick={() => { setSelectedItem(null); setShowPopup(true); }}
+          />
         </div>
 
         <div className="table-container">

@@ -1,9 +1,10 @@
 // DispositionSetup.jsx
 import React, { useEffect, useState } from "react";
 import DispositionPopup from "./DispositionPopup";
+import AddButton from "../../../../ReusableComponents/AddButton";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import JSONbig from "json-bigint";
-import './DispositionSetup.css';
+import "./DispositionSetup.css";
 const DispositionSetup = () => {
   const [dispositions, setDispositions] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -38,15 +39,13 @@ const DispositionSetup = () => {
       <div className="card">
         <div className="card-header">
           <h3>Disposition Stages</h3>
-          <button
-            className="add-button"
+          <AddButton
+            text="Add Disposition"
             onClick={() => {
               setSelectedItem(null);
               setShowPopup(true);
             }}
-          >
-            + Add Disposition
-          </button>
+          />
         </div>
 
         <div className="table-container">
@@ -63,9 +62,18 @@ const DispositionSetup = () => {
                 <tr key={item.ID}>
                   <td>{item.Name}</td>
                   <td>{item.Description}</td>
-                  <td style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+                  <td
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "8px",
+                    }}
+                  >
                     <IconButton type="edit" onClick={() => handleEdit(item)} />
-                    <IconButton type="delete" onClick={() => handleDelete(item.ID)} />
+                    <IconButton
+                      type="delete"
+                      onClick={() => handleDelete(item.ID)}
+                    />
                   </td>
                 </tr>
               ))}

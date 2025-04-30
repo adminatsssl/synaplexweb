@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import IconButton from "../../../../ReusableComponents/IconButton";
-import LawGroupPopup from "./LawGroupPopup";
-
+import AddButton from '../../../../ReusableComponents/AddButton';
+import LawGroupPopup from "./LawGroupPopup"; 
+import './LawGroup.css'; 
+ 
 const LawGroup = () => {
   const [lawGroups, setLawGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,56 +68,53 @@ const LawGroup = () => {
     }
   };
 
-  if (loading) return <div className="p-4">Loading...</div>;
-  if (error) return <div className="p-4 text-red-500">{error}</div>;
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="p-6 relative">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Law Groups</h1>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          onClick={openAddPopup}
-        >
-          Add Law Group
-        </button>
+    <div className="lawgroup-container">
+      <div className="header-row">
+        <h1 className="lawgroup-title">Law Groups</h1>
+        <div className="add-btn-wrapper">
+          <AddButton text="Add Law-Group" onClick={openAddPopup} />
+        </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
-          <thead className="bg-gray-100">
+      <div className="table-wrapper">
+        <table className="lawgroup-table">
+          <thead>
             <tr>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Email</th>
-              <th className="border px-4 py-2">Phone Number</th>
-              <th className="border px-4 py-2">Total Members</th>
-              <th className="border px-4 py-2">Ongoing Cases</th>
-              <th className="border px-4 py-2">Success Rate</th>
-              <th className="border px-4 py-2">Registration Number</th>
-              <th className="border px-4 py-2">Establishment Year</th>
-              <th className="border px-4 py-2">Address Line</th>
-              <th className="border px-4 py-2">City</th>
-              <th className="border px-4 py-2">State</th>
-              <th className="border px-4 py-2">Pin Code</th>
-              <th className="border px-4 py-2">Actions</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Total Members</th>
+              <th>Ongoing Cases</th>
+              <th>Success Rate</th>
+              <th>Registration Number</th>
+              <th>Establishment Year</th>
+              <th>Address Line</th>
+              <th>City</th>
+              <th>State</th>
+              <th>Pin Code</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {lawGroups.map(group => (
               <tr key={group.ID}>
-                <td className="border px-4 py-2">{group.Name || '-'}</td>
-                <td className="border px-4 py-2">{group.Email || '-'}</td>
-                <td className="border px-4 py-2">{group.PhoneNumber || '-'}</td>
-                <td className="border px-4 py-2">{group.TotalMember ?? '-'}</td>
-                <td className="border px-4 py-2">{group.OngoingCases ?? '-'}</td>
-                <td className="border px-4 py-2">{group.SuccessRate?.toFixed(2) ?? '-'}</td>
-                <td className="border px-4 py-2">{group.RegistrationNumber || '-'}</td>
-                <td className="border px-4 py-2">{group.EstablishmentYear || '-'}</td>
-                <td className="border px-4 py-2">{group.Address_Group?.AddressLine || '-'}</td>
-                <td className="border px-4 py-2">{group.Address_Group?.City || '-'}</td>
-                <td className="border px-4 py-2">{group.Address_Group?.State || '-'}</td>
-                <td className="border px-4 py-2">{group.Address_Group?.PinCode || '-'}</td>
-                <td style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+                <td>{group.Name || '-'}</td>
+                <td>{group.Email || '-'}</td>
+                <td>{group.PhoneNumber || '-'}</td>
+                <td>{group.TotalMember ?? '-'}</td>
+                <td>{group.OngoingCases ?? '-'}</td>
+                <td>{group.SuccessRate?.toFixed(2) ?? '-'}</td>
+                <td>{group.RegistrationNumber || '-'}</td>
+                <td>{group.EstablishmentYear || '-'}</td>
+                <td>{group.Address_Group?.AddressLine || '-'}</td>
+                <td>{group.Address_Group?.City || '-'}</td>
+                <td>{group.Address_Group?.State || '-'}</td>
+                <td>{group.Address_Group?.PinCode || '-'}</td>
+                <td className="action-buttons">
                   <IconButton type="edit" onClick={() => openEditPopup(group)} />
                   <IconButton type="delete" onClick={() => handleDelete(group.ID)} />
                 </td>
@@ -128,9 +127,7 @@ const LawGroup = () => {
       {showPopup && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button className="modal-close" onClick={() => setShowPopup(false)}>
-              ✕
-            </button>
+            <button className="modal-close" onClick={() => setShowPopup(false)}>✕</button>
             <LawGroupPopup
               selectedLawGroup={selectedLawGroup}
               onSuccess={handleSuccess}

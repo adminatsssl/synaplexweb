@@ -1,6 +1,7 @@
 // LegalWorkflow.jsx
 import React, { useEffect, useState } from "react";
 import "./LegalWorkflow.css";
+import AddButton from '../../../../ReusableComponents/AddButton';
 import IconButton from "../../../../ReusableComponents/IconButton";
 import WorkflowModal from "./WorkflowModal";
 import JSONbig from "json-bigint";
@@ -45,9 +46,7 @@ const LegalWorkflow = () => {
     <div className="legal-workflow-container">
       <div className="header">
         <h2>Legal Workflows</h2>
-        <button className="add-btn" onClick={() => setModalOpen(true)}>
-          + Add Workflow
-        </button>
+        <AddButton text="Add Workflow" onClick={() => setModalOpen(true)} />
       </div>
 
       <table className="workflow-table">
