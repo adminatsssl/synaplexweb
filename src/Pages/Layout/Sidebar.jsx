@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import "./Sidebar.css";
 import { FaUsers, FaBars } from "react-icons/fa";
 import { MdOutlinePhonelinkSetup, MdManageAccounts } from "react-icons/md";
+import { IoHomeSharp } from "react-icons/io5";
 import { IoBriefcaseSharp } from "react-icons/io5";
-import { GoHomeFill } from "react-icons/go";
 import { RiHomeOfficeFill } from "react-icons/ri";
 import { IoChevronDownOutline } from "react-icons/io5";
 import { FaBookOpen } from "react-icons/fa";
-import "./Sidebar.css";
 import { MdNoteAlt } from "react-icons/md";
 import { BiSolidReport } from "react-icons/bi";
 import { PiNotebookFill } from "react-icons/pi";
@@ -16,11 +16,12 @@ import { BsDatabaseFillGear } from "react-icons/bs";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { FaHospitalUser } from "react-icons/fa6";
 import { PiNotepadFill } from "react-icons/pi";
-
-
-
+import { ImLoop } from "react-icons/im";
+import { IoMailSharp } from "react-icons/io5";
+import { GrDocumentConfig } from "react-icons/gr";
+import { HiTemplate } from "react-icons/hi";
 const iconMap = {
-  Home: <GoHomeFill />,
+  Home: <IoHomeSharp />,
   Borrower: <FaUsers />,
   Accounts: <MdManageAccounts />,
   Tenant: <RiHomeOfficeFill />,
@@ -34,8 +35,13 @@ const iconMap = {
   AdminLoan: <FaHandHoldingUsd />,
   AdminCases: <FaHospitalUser />,
   AdminNotices: <PiNotepadFill />,
-  ReportCases : <IoBriefcaseSharp  />,
-  ReportNotice : <PiNotebookFill/>
+  ReportCases: <IoBriefcaseSharp />,
+  ReportNotice: <PiNotebookFill />,
+  OrgSetup:<ImLoop />,
+  NoticeSetup:<IoMailSharp />,
+  Template:<HiTemplate />,
+  StageConfig:<GrDocumentConfig />,
+  
 };
 
 export default function Sidebar() {
@@ -46,10 +52,19 @@ export default function Sidebar() {
   const navItems = {
     Administrator: [
       { name: "Home", path: "/admin" },
+
       { name: "Borrower", path: "/borrower" },
-      { name: "Accounts", path: "/accounts" },
-      { name: "Tenant", path: "/tenant" },
+
+      {
+        name: "OrgSetup",
+        children: [
+          { name: "Accounts", path: "/accounts" },
+          { name: "Tenant", path: "/tenant" },
+        ],
+      },
+
       { name: "LegalSetup", path: "/legalSetup" },
+
       {
         name: "ManageData",
         children: [
@@ -58,8 +73,15 @@ export default function Sidebar() {
           { name: "AdminNotices", path: "/admin-notices" },
         ],
       },
-    ],
 
+      {
+        name: "NoticeSetup",
+        children: [
+          { name: "Template", path: "/" },
+          { name: "StageConfig", path: "/" },
+        ],
+      },
+    ],
 
     User: [
       { name: "Home", path: "/user" },
@@ -76,12 +98,17 @@ export default function Sidebar() {
       { name: "Invoices", path: "/invoices" },
     ],
 
-
     Legal: [
       { name: "Home", path: "/legal" },
       { name: "Cases", path: "/lawyer-cases" },
       { name: "Notices", path: "/notice" },
-      { name: "Reports", path: "/reports" },
+      {
+        name: "Reports",
+        children: [
+          { name: "ReportCases", path: "" },
+          { name: "ReportNotice", path: "" },
+        ],
+      },
       { name: "Invoices", path: "/invoices" },
     ],
   };
