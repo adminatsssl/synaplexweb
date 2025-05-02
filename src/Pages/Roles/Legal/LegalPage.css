@@ -1,0 +1,61 @@
+.legalpage-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem;
+    background-color: #f5f8fa;
+  }
+  
+  .legalpage-popup {
+    flex: 1 1 45%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 500px;
+    border: 1px solid #e6e6e6;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .legalpage-popup:hover {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  }
+  
+  .legalpage-popup-left {
+    animation: legalpage-slideInLeft 0.5s ease-out;
+  }
+  
+  .legalpage-popup-right {
+    animation: legalpage-slideInRight 0.5s ease-out;
+  }
+  
+  @keyframes legalpage-slideInLeft {
+    from {
+      transform: translateX(-40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes legalpage-slideInRight {
+    from {
+      transform: translateX(40px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .legalpage-popup h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #222;
+  }
+  
