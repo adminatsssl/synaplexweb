@@ -1,13 +1,15 @@
 import React from "react";
 import Layout from "../../Layout/Layout";
 import "./LegalPage.css";
-
-// import CalendarComponent from "./CalendarComponent";
-// import MapComponent from "./MapComponent";
+import { LegalMap } from "./Dashboard/Map/LegalMap";
 
 export default function LegalPage() {
   const username = localStorage.getItem("username");
-
+  const sampleData = JSON.stringify([
+    { state: "Maharashtra", pendingCount: 200, disposedCount: 50 },
+    { state: "Gujarat", pendingCount: 2, disposedCount: 0 },
+    { state: "Haryana", pendingCount: 50, disposedCount: 30 },
+  ]);
   return (
     <Layout username={username}>
       <div className="legalpage-container">
@@ -18,7 +20,7 @@ export default function LegalPage() {
 
         <div className="legalpage-popup legalpage-popup-right">
           <h2>Case Distribution by Geography :</h2>
-          {/* <MapComponent /> */}
+         <LegalMap jsonData={sampleData}/>
         </div>
       </div>
     </Layout>

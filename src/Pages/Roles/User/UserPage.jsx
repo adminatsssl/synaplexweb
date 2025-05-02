@@ -1,13 +1,15 @@
 import React from "react";
 import Layout from "../../Layout/Layout";
 import "./UserPage.css";
-
-// import CalendarComponent from "./CalendarComponent"; // Replace with real component
-// import MapComponent from "./MapComponent";           // Replace with real component
+import { UserMap } from "./Dashboard/Map/UserMap";
 
 export default function UserPage() {
   const username = localStorage.getItem("username");
-
+  const sampleData = JSON.stringify([
+    { state: "Maharashtra", pendingCount: 200, disposedCount: 50 },
+    { state: "Gujarat", pendingCount: 2, disposedCount: 0 },
+    { state: "Haryana", pendingCount: 50, disposedCount: 30 },
+  ]);
   return (
     <Layout username={username}>
       <div className="userpage-container">
@@ -18,7 +20,7 @@ export default function UserPage() {
 
         <div className="userpage-popup userpage-popup-right">
           <h2>Case Distribution by Geography :</h2>
-          {/* <MapComponent /> */}
+          <UserMap jsonData={sampleData} />
         </div>
       </div>
     </Layout>
