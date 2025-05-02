@@ -12,7 +12,7 @@ const dummyData = [
     loanAmount: 50000,
     caseType: 'Civil',
     status: 'Open',
-    borrower: 'John Doe',
+    borrower: 'John Doe', 
     createdDate: '2023-01-15',
     assignedTo: 'Agent A',
     court: 'Court 1',
