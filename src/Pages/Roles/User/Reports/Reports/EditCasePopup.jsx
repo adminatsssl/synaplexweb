@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import './EditCasePopup.css'; // Ensure this file exists
+import React, { useState, useEffect } from "react";
+import "./EditCasePopup.css"; // Ensure this file exists
+import { FaSearch } from "react-icons/fa";
 
 const EditCasePopup = ({ isOpen, onClose, caseData, onSave }) => {
   const [formData, setFormData] = useState(caseData);
@@ -10,9 +11,9 @@ const EditCasePopup = ({ isOpen, onClose, caseData, onSave }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -28,211 +29,230 @@ const EditCasePopup = ({ isOpen, onClose, caseData, onSave }) => {
     <div className="reporteditcase-modal-overlay">
       <div className="reporteditcase-modal-container">
         <div className="reporteditcase-modal-header">
-          <h2>Case Edit</h2>
-          <button className="reporteditcase-close-button" onClick={onClose}>&times;</button>
+          <h3 className="reporteditcase-Heading">Case Edit</h3>
+          <button className="reporteditcase-close-button" onClick={onClose}>
+            &times;
+          </button>
         </div>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="reporteditcase-form-section">
             <h3>Loan and Borrower Detail:</h3>
             <div className="reporteditcase-form-group">
               <label>Loan id</label>
-              <div className="reporteditcase-search-container">
-                <input 
-                  type="text" 
-                  name="loanNumber" 
-                  value={formData.loanNumber} 
-                  onChange={handleChange} 
-                  placeholder="Search Loan By Loan Number"
-                />
-                <button type="button" className="reporteditcase-search-button">Search</button>
+              <div className="reporteditcase-form-loanBorrowerGroup">
+                <div className="reporteditcase-search-container">
+                  <input
+                    type="text"
+                    name="loanNumber"
+                    value={formData.loanNumber}
+                    onChange={handleChange}
+                    placeholder="Search Loan By Loan Number"
+                  />
+                  <button
+                    type="button"
+                    className="reporteditcase-search-button"
+                  >
+                    <FaSearch />
+                  </button>
+                </div>
+                <div className="reporteditcase-form-autoassign">
+                  <p>AutoAssign</p>
+                  <input type="checkbox" />
+                </div>
               </div>
             </div>
-            
-            <div className="reporteditcase-two-column-grid">
+
+            {/*  second part*/}
+            <div className="reporteditcase-secondLB">
               <div>
                 <label>Borrower</label>
-                <input 
-                  type="text" 
-                  name="borrower" 
-                  value={formData.borrower} 
-                  onChange={handleChange} 
+                <input
+                  type="text"
+                  name="borrower"
+                  value={formData.borrower}
+                  onChange={handleChange}
                 />
               </div>
               <div>
                 <label>Loan Type</label>
-                <input 
-                  type="text" 
-                  name="loanType" 
-                  value={formData.loanType} 
-                  onChange={handleChange} 
+                <input
+                  type="text"
+                  name="loanType"
+                  value={formData.loanType}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="">
+                <label>Loan Amount</label>
+                <input
+                  type="number"
+                  name="loanAmount"
+                  value={formData.loanAmount}
+                  onChange={handleChange}
+                  step="0.01"
                 />
               </div>
             </div>
-            
-            <div className="reporteditcase-two-column-grid">
+
+            <div className="reporteditcase-secondLB-date">
               <div>
                 <label>Default Date</label>
-                <input 
-                  type="date" 
-                  name="defaultDate" 
-                  value={formData.defaultDate} 
-                  onChange={handleChange} 
+                <input
+                  type="date"
+                  name="defaultDate"
+                  value={formData.defaultDate}
+                  onChange={handleChange}
                 />
               </div>
               <div>
                 <label>NPA Date</label>
-                <input 
-                  type="date" 
-                  name="npaDate" 
-                  value={formData.npaDate} 
-                  onChange={handleChange} 
+                <input
+                  type="date"
+                  name="npaDate"
+                  value={formData.npaDate}
+                  onChange={handleChange}
                 />
               </div>
             </div>
           </div>
-          
+
           <div className="reporteditcase-form-divider"></div>
-          
-          <div className="reporteditcase-form-section">
-            <h3>AutoAssign</h3>
-            <div className="reporteditcase-form-group">
-              <label>Loan Amount</label>
-              <input 
-                type="number" 
-                name="loanAmount" 
-                value={formData.loanAmount} 
-                onChange={handleChange} 
-                step="0.01" 
-              />
-            </div>
-          </div>
-          
-          <div className="reporteditcase-form-divider"></div>
-          
+
           <div className="reporteditcase-form-section">
             <h3>Court & Case Detail:</h3>
-            <div className="form-group">
-              <label>CRN No.</label>
-              <input 
-                type="text" 
-                name="crnNo" 
-                value={formData.crnNo} 
-                onChange={handleChange} 
-              />
-            </div>
-            
-            <div className="reporteditcase-two-column-grid">
-              <div>
-                <label>Court Type</label>
-                <select 
-                  name="courtType" 
-                  value={formData.courtType} 
-                  onChange={handleChange}
-                >
-                  <option value="Ghaziabad">Ghaziabad</option>
-                  <option value="Delhi">Delhi</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div>
-                <label>Hearing Date</label>
-                <input 
-                  type="date" 
-                  name="hearingDate" 
-                  value={formData.hearingDate} 
-                  onChange={handleChange} 
-                />
+            <div className="reporteditcase-form-group">
+              <div className="reporteditcase-CourtCase">
+                <div className="reporteditcase-CourtCase-Crn">
+                  <label>CRN No.</label>
+                  <input
+                    type="text"
+                    name="crnNo"
+                    value={formData.crnNo}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="reporteditcase-CourtCase-Status">
+                  <label>Status</label>
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                  >
+                    <option value="Open">Open</option>
+                    <option value="Closed">Closed</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                </div>
               </div>
             </div>
-            
-            <div className="reporteditcase-two-column-grid">
-              <div>
-                <label>FI1 No</label>
-                <input 
-                  type="number" 
-                  name="fi1No" 
-                  value={formData.fi1No} 
-                  onChange={handleChange} 
-                />
+
+            {/*  second part*/}
+            <div className="reporteditcase-secondCC">
+              {/* Row 1 - 3 items */}
+              <div className="form-row">
+                <div className="reporteditcase-secondCC-1row">
+                  <label>Court Type</label>
+                  <select
+                    name="courtType"
+                    value={formData.courtType}
+                    onChange={handleChange}
+                  >
+                    <option value="Ghaziabad">Ghaziabad</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="reporteditcase-secondCC-1row">
+                  <label>Hearing Date</label>
+                  <input
+                    type="date"
+                    name="hearingDate"
+                    value={formData.hearingDate}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="reporteditcase-secondCC-1row">
+                  <label>FI1 No</label>
+                  <input
+                    type="number"
+                    name="fi1No"
+                    value={formData.fi1No}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-              <div>
-                <label>FI1 Year</label>
-                <input 
-                  type="number" 
-                  name="fi1Year" 
-                  value={formData.fi1Year} 
-                  onChange={handleChange} 
-                />
+
+              {/* Row 2 - 3 items */}
+              <div className="form-row">
+                <div className="reporteditcase-secondCC-2row">
+                  <label>FI1 Year</label>
+                  <input
+                    type="number"
+                    name="fi1Year"
+                    value={formData.fi1Year}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="reporteditcase-secondCC-2row">
+                  <label>Reg No</label>
+                  <input
+                    type="number"
+                    name="regNo"
+                    value={formData.regNo}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="reporteditcase-secondCC-2row">
+                  <label>Reg Year</label>
+                  <input
+                    type="number"
+                    name="regYear"
+                    value={formData.regYear}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
-            </div>
-            
-            <div className="reporteditcase-two-column-grid">
-              <div>
-                <label>Reg No</label>
-                <input 
-                  type="number" 
-                  name="regNo" 
-                  value={formData.regNo} 
-                  onChange={handleChange} 
-                />
-              </div>
-              <div>
-                <label>Reg Year</label>
-                <input 
-                  type="number" 
-                  name="regYear" 
-                  value={formData.regYear} 
-                  onChange={handleChange} 
-                />
+
+              {/* Row 3 - 2 items */}
+              <div className="form-3row">
+                <div className="reporteditcase-secondCC-3row">
+                  <label>Case Type</label>
+                  <select
+                    name="caseType"
+                    value={formData.caseType}
+                    onChange={handleChange}
+                  >
+                    <option value="Civil">Civil</option>
+                    <option value="Criminal">Criminal</option>
+                    <option value="Cheque Bounce">Cheque Bounce</option>
+                  </select>
+                </div>
+                <div className="reporteditcase-secondCC-3row">
+                  <label>Date of Filing</label>
+                  <input
+                    type="date"
+                    name="dateOfFiling"
+                    value={formData.dateOfFiling}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
             </div>
           </div>
-          
-          <div className="reporteditcase-form-divider"></div>
-          
-          <div className="reporteditcase-form-section">
-            <h3>Status</h3>
-            <div className="reporteditcase-form-group">
-              <label>Status</label>
-              <select 
-                name="status" 
-                value={formData.status} 
-                onChange={handleChange}
-              >
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
-                <option value="Pending">Pending</option>
-              </select>
-            </div>
-            
-            <div className="reporteditcase-form-group">
-              <label>Case Type</label>
-              <select 
-                name="caseType" 
-                value={formData.caseType} 
-                onChange={handleChange}
-              >
-                <option value="Civil">Civil</option>
-                <option value="Criminal">Criminal</option>
-                <option value="Cheque Bounce">Cheque Bounce</option>
-              </select>
-            </div>
-            
-            <div className="reporteditcase-form-group">
-              <label>Date of Filing</label>
-              <input 
-                type="date" 
-                name="dateOfFiling" 
-                value={formData.dateOfFiling} 
-                onChange={handleChange} 
-              />
-            </div>
-          </div>
-          
+
           <div className="reporteditcase-form-actions">
-            <button type="button" className="reporteditcase-cancel-button" onClick={onClose}>Cancel</button>
-            <button type="submit" className="reporteditcase-save-button">SAVE</button>
+            <button
+              type="button"
+              className="reporteditcase-cancel-button"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="reporteditcase-save-button">
+              SAVE
+            </button>
           </div>
         </form>
       </div>

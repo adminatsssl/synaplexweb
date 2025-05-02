@@ -1,71 +1,198 @@
+/* Modal Overlay */
 .reporteditcase-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: scroll; /* This enables scrolling */
+  padding: 40px 0;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 9999;
+}
+
+/* Container */
+.reporteditcase-modal-container {
+  background: white;
+  border-radius: 6px;
+  width: 95%;
+  max-width: 1100px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+.reporteditcase-modal-header {
+  background-color: #004b8d;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px 6px 0 0;
+}
+
+.reporteditcase-Heading {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.reporteditcase-close-button {
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* Section Layout */
+.reporteditcase-form-section {
+  padding: 20px;
+  border: 1px solid #d1d5db;
+  margin: 20px;
+  border-radius: 4px;
+}
+
+.reporteditcase-form-section h3 {
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  margin-bottom: 16px;
+}
+
+/* Loan ID & Search Row */
+.reporteditcase-form-loanBorrowerGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.reporteditcase-search-container {
+  width: 80%;
+  display: flex;
+}
+
+.reporteditcase-search-container input {
+  flex: 1;
+  border: 1px solid #cfcfcf;
+  border-right: none;
+  padding: 8px 12px;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+}
+
+.reporteditcase-search-button {
+  background-color: #004b8d;
+  color: white;
+  border: 1px solid #004b8d;
+  border-radius: 0 4px 4px 0;
+  padding: 0 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.reporteditcase-form-autoassign {
+  display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .reporteditcase-modal-container {
-    background-color: white;
-    padding: 20px;
-    width: 90%;
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 8px;
-    position: relative;
-  }
-  
-  .reporteditcase-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .reporteditcase-close-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .reporteditcase-form-section {
-    margin-bottom: 20px;
-  }
-  
-  .reporteditcase-two-column-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 10px;
-  }
-  
-  .reporteditcase-form-group {
-    margin-top: 10px;
-  }
-  
-  .reporteditcase-form-divider {
-    height: 1px;
-    background-color: #ccc;
-    margin: 20px 0;
-  }
-  
-  .reporteditcase-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .reporteditcase-cancel-button,
-  .reporteditcase-save-button {
-    padding: 8px 16px;
-    cursor: pointer;
-  }
-  
+    gap: 8px;
+    font-size: 14px;
+    width: 30%;
+    justify-content: right;
+}
+.reporteditcase-form-autoassign input{
+  background-color: red;
+  width: 20%;
+}
+
+/* Input Groups (3-column layout) */
+.reporteditcase-secondLB,
+.reporteditcase-secondLB-date,
+.form-row,
+.form-3row {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.reporteditcase-secondLB > div,
+.reporteditcase-secondLB-date > div,
+.reporteditcase-secondCC-1row,
+.reporteditcase-secondCC-2row,
+.reporteditcase-secondCC-3row {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e1e1e;
+}
+
+/* Court & Case Specific Rows */
+.reporteditcase-CourtCase {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.reporteditcase-CourtCase-Crn,
+.reporteditcase-CourtCase-Status {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Divider */
+.reporteditcase-form-divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 24px 20px;
+}
+
+/* Action Buttons */
+.reporteditcase-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.reporteditcase-cancel-button,
+.reporteditcase-save-button {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+}
+
+.reporteditcase-cancel-button {
+  background-color: #fff;
+  color: #004b8d;
+  border: 1px solid #004b8d;
+}
+
+.reporteditcase-save-button {
+  background-color: #004b8d;
+  color: white;
+}

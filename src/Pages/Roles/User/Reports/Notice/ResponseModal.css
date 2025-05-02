@@ -13,8 +13,7 @@
   
   .noticeresponse-modal-box {
     background: white;
-    padding: 20px;
-    width: 400px;
+    width: 35rem;
     border-radius: 6px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   }
@@ -23,21 +22,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #00549E;
+    padding: 10px;
   }
-  
-  .noticeresponse-modal-header h3 {
-    margin: 0;
+  .noticeresponse-modal-header h3{
+    color: white;
   }
-  
   .noticeresponse-close-btn {
     font-size: 20px;
     border: none;
     background: none;
     cursor: pointer;
+    color: white;
   }
   
   .noticeresponse-modal-body {
-    margin-top: 15px;
+    margin-top: 10px;
+    padding:30px;
     display: flex;
     flex-direction: column;
   }
@@ -53,28 +54,49 @@
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;
+    opacity: 1;
+    background-color: #f8f8f8;
   }
   
   .noticeresponse-radio-group {
     display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+    gap: 32px; 
+  }
+  
+  .noticeresponse-radio-group label {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px; 
+    font-size: 13px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+  }
+  
+  .noticeresponse-radio-group input[type="radio"] {
+    margin-right: 4px;
+    cursor: pointer;
+    accent-color: #000; /* Matches default system look */
   }
   
   .noticeresponse-modal-footer {
-    margin-top: 20px;
+    padding: 30px;
     display: flex;
     justify-content: flex-start;
     gap: 10px;
+    margin-bottom: 30px;
   }
   
   .noticeresponse-send-btn {
-    background-color: #28a7df;
+    background-color: #00549E;
     color: white;
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 70px;
+    height: 37px;
+    font-size: 14px;
   }
   
   .noticeresponse-cancel-btn {
@@ -83,5 +105,8 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 70px;
+    height: 37px;
+    font-size: 14px;
   }
   
