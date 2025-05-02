@@ -124,7 +124,7 @@ const Addworkflowstages = ({ onClose, onSave }) => {
           </div>
 
           <div className="full-width">
-            <label>Disposition Stages</label>
+          <label className="required">Disposition Stages</label>
             <select>
               <option>Select...</option>
               <option>Stage A</option>

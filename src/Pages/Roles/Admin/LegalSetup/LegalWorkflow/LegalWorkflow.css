@@ -1,42 +1,131 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  width: 95%;
+  max-width: 1000px;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  max-height: 90vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.modal h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+select,
+textarea,
+input[type="text"],
+.MuiOutlinedInput-root {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
 .add-stage-btn {
-  background-color: #004c97;
+  background-color: #0066cc;
   color: white;
   border: none;
-  padding: 11px 17px;
-  margin: 12px 0;
+  padding: 8px 15px;
+  margin: 15px 0;
   cursor: pointer;
-  border-radius: 9px;
-  font-size: larger;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.add-stage-btn:hover {
+  background-color: #004c97;
+}
+
+.workflow-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+  margin-top: 10px;
 }
 
 .workflow-table th,
 .workflow-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  padding: 5px;
+  border: 1px solid #e0e0e0;
   text-align: center;
 }
 
 .workflow-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+  background-color: #f9f9f9;
+  font-weight: 600;
+  color: #333;
 }
-.modal {
-  width: 90%;
-  max-width: 1100px; /* Adjust as needed */
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  max-height: 90vh;
-}
+
 .table-scroll-container {
   overflow-x: auto;
   margin-top: 10px;
 }
 
-.workflow-table {
-  width: 100%;
-  min-width: 1000px; /* Ensures horizontal scrolling if needed */
-  border-collapse: collapse;
+.modal-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #d32f2f;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #388e3c;
 }

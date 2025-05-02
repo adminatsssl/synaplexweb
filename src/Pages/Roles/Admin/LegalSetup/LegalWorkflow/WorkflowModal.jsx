@@ -198,7 +198,7 @@ const WorkflowModal = ({ onClose, workflow }) => {
               />
             )}
           />
-          <h4>Workflow Stages</h4>
+          <h4 style={{marginTop:'20px'}}>Workflow Stages</h4>
           <button
             type="button"
             className="add-stage-btn"
