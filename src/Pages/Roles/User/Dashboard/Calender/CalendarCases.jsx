@@ -98,7 +98,7 @@ function CalendarCases() {
 
   return (
     <div className="calendar-container">
-      <h2>Cases Calendar</h2>
+      {/* <h2>Cases Calendar</h2> */}
       <div className="filters">
         <label>
           <input

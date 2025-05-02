@@ -1,7 +1,7 @@
 /* CalendarCases.css */
 
 .calendar-container {
-    margin: 40px;
+    margin: 5px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
@@ -26,6 +26,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     background: #fff;
+    height: 552px !important;
   }
   
   .rbc-toolbar {
