@@ -1,0 +1,39 @@
+/* CalendarCases.css */
+
+.calendar-container {
+    margin: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .filters label {
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .filters input[type="checkbox"] {
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  
+  .rbc-calendar {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+  }
+  
+  .rbc-toolbar {
+    margin-bottom: 10px;
+  }
+  
+  .rbc-toolbar-label {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  

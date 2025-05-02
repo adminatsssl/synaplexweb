@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../../Layout/Layout";
 import "./UserPage.css";
 import { UserMap } from "./Dashboard/Map/UserMap";
+import CalendarCases from "./Dashboard/Calender/CalendarCases";
 
 export default function UserPage() {
   const username = localStorage.getItem("username");
@@ -15,7 +16,7 @@ export default function UserPage() {
       <div className="userpage-container">
         <div className="userpage-popup userpage-popup-left">
           <h2>Cases:</h2>
-          {/* <CalendarComponent /> */}
+          <CalendarCases/>
         </div>
 
         <div className="userpage-popup userpage-popup-right">
