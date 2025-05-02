@@ -8,7 +8,7 @@ export function UserMap({ jsonData }) {
 
     useEffect(() => {
         const width = 660;
-        const height = 600;
+        const height = 650;
 
         d3.select(mapRef.current).select("svg").remove();
 

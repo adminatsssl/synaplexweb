@@ -128,3 +128,16 @@ li {
   margin: 4px auto;
 }
 
+
+
+
+/* Style sub-icons in dropdowns */
+.sidenav-container .nav__sublink .nav__icon svg {
+  color: #0056b3;
+}
+
+.sidenav-container .nav__icon svg,
+.sidenav-container .nav__name,
+.sidenav-container .nav__subname {
+  color: #0056b3;
+}
