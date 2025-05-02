@@ -17,9 +17,20 @@ export function UserMap({ jsonData }) {
             .attr("width", width)
             .attr("height", height);
 
-        const color = d3.scaleThreshold()
-            .domain([1, 2, 5, 6, 8, 10, 100])
-            .range(["#e3f2fd", "#bbdefb", "#90caf9", "#64b5f6", "#42a5f5", "#2196f3", "#1e88e5", "#1565c0"]);
+            const color = d3
+      .scaleThreshold()
+      .domain([1, 5, 10, 20, 50, 100, 250, 500, 1000])
+      .range([
+        "#e3f2fd", // 1–4
+        "#bbdefb", // 5–9
+        "#90caf9", // 10–19
+        "#64b5f6", // 20–49
+        "#42a5f5", // 50–99
+        "#2196f3", // 100–249
+        "#1e88e5", // 250–499
+        "#1565c0", // 500–999
+        "#0d47a1", // 1000+
+      ]);
 
         d3.json("https://raw.githubusercontent.com/adarshbiradar/maps-geojson/refs/heads/master/india.json")
             .then(india => {
