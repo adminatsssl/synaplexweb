@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import JSONbig from 'json-bigint';
+import './LawGroup.css'
 
 // Create custom axios instance with json-bigint
 const axiosJson = axios.create({
