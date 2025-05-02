@@ -11,7 +11,7 @@ const dummyData = [
     cnr: 'CNR001',
     loanAmount: 50000,
     caseType: 'Civil',
-    status: 'Open',
+    status: 'Open',   
     borrower: 'John Doe', 
     createdDate: '2023-01-15',
     assignedTo: 'Agent A',
