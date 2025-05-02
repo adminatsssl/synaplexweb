@@ -1,83 +1,16 @@
-.reportCases-container {
-    padding: 20px;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f7f9fc;
-    min-height: 100vh;
-  }
+.reportcasesbtn{
+  background: none;
+  border: none;
+  font-size: 20px;
+}
   
-  .reportCases-title {
-    font-size: 38px;
-    margin-bottom: 20px;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  .reportCasesexport-btn {
-    background-color: #007acc;
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    font-size: 16px;
-  }
-  
-  .reportCasestable-wrapper {
-    overflow-x: auto;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .reportCasescase-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .reportCasescase-table th {
-    background-color: #f1f3f6;
-    color: #333;
-    text-align: left;
-    padding: 12px;
-    font-weight: 600;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .reportCasescase-table td {
-    padding: 12px;
-    background-color: #fff;
-    color: #333;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .reportCasescase-table tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .reportCasescase-table tr:hover td {
-    background-color: #f9f9f9;
-  }
-  
-  .reportCasesfilter-input {
-    margin-top: 6px;
-    width: 100%;
-    padding: 6px 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    font-size: 13px;
-  }
-  
-  .reportCasesno-records {
-    text-align: center;
-    padding: 20px;
-    background-color: #f5f5f5;
-    font-style: italic;
-    color: #666;
-  }
-  
+.reportCasesexport-btn{
+  background-color: #3e3eed;
+    color: #06f706;
+}
 
-  
+.reportnoticebtn{
+  background: none;
+  border: none;
+  font-size: 18px;
+}
