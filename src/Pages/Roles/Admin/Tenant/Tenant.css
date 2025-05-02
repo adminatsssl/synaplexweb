@@ -1,10 +1,10 @@
-/* ========== GLOBAL CONTAINER ========== */
+/* Tenant.css */
 .tenant-manager {
-  font-family: Arial, sans-serif;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 40px;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: white;
+  min-height: 100vh;
+  width: 100vw;
   box-sizing: border-box;
 }
 
@@ -12,273 +12,299 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
-
-.tenant-manager h1 {
-  color: #333;
+.tenant-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
   margin: 0;
 }
 
-/* ========== BUTTONS ========== */
-.add-button {
-  background-color: #4CAF50;
+.tenant-header .add-button {
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  background-color: #007f5f;
   color: white;
   border: none;
-  padding: 10px 25px;
-  border-radius: 50px; /* oval */
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
+  margin-left: 1rem;
 }
 
-.add-button:hover {
-  background-color: #45a049;
+.tenant-header .add-button:hover {
+  background-color: #006147;
 }
 
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  margin: 0 5px;
-}
-
-.icon-button.edit {
-  color: #2196F3;
-}
-
-.icon-button.delete {
-  color: #f44336;
-}
-
-/* ========== TABLE ========== */
-.tenant-container {
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.tenant-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.tenant-table th,
-.tenant-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-}
-
-.tenant-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-.tenant-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.tenant-table tr:hover {
-  background-color: #f1f1f1;
-}
-
-.no-data {
-  text-align: center;
-  color: #666;
-}
-
-/* ========== PAGINATION ========== */
-.pagination-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.pagination-buttons button {
-  background-color: #f2f2f2;
-  border: 1px solid #ddd;
-  padding: 5px 10px;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-.pagination-buttons button:disabled {
-  color: #aaa;
-  cursor: not-allowed;
-}
-
-/* ========== MESSAGE BOX ========== */
 .message-box {
-  padding: 10px;
+  padding: 10px 15px;
   margin-bottom: 15px;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 .message-box.success {
-  background-color: #dff0d8;
-  color: #3c763d;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
 }
 
 .message-box.error {
-  background-color: #f2dede;
-  color: #a94442;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
 
-/* ========== FULLSCREEN POPUP ========== */
-.popup-overlay {
+/* Table Styles */
+.loans-table-container {
+  overflow-x: auto;
+}
+
+.loans-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: white;
+}
+
+.loans-table th, .loans-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.loans-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+}
+
+.loans-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.loans-table tbody tr:hover {
+  background-color: #e0f7fa;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-btn, .edit-btn, .delete-btn {
+  padding: 0.3rem 0.6rem;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-btn {
+  background-color: #a7c957;
+  color: white;
+}
+
+.edit-btn {
+  background-color: #29abe2;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #ef233c;
+  color: white;
+}
+
+/* Popup Styles */
+.add-tenant-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 40px;
-  overflow-y: auto;
+  align-items: center;
   z-index: 1000;
 }
 
-.popup-container {
-  width: 100%;
-  max-width: 1600px;
-  background: white;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  overflow: auto;
-  box-sizing: border-box;
+.add-tenant-popup .popup-content {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 700px;
 }
 
-.popup-title {
-  font-size: 1.8rem;
-  color: #333;
-  font-weight: 600;
-  margin-bottom: 25px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
-/* ========== FORM SECTION ========== */
-.form-section {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.section-title {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #555;
-  margin-bottom: 15px;
-}
-
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  flex: 1 1 45%;
-  min-width: 280px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
-  color: #444;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  background-color: #fff;
-  box-sizing: border-box;
-}
-
-/* ========== FILE UPLOAD ========== */
-.file-upload {
-  margin-top: 10px;
-}
-
-.file-upload input[type="file"] {
-  display: none;
-}
-
-.file-upload label {
-  display: inline-block;
-  padding: 10px 18px;
-  background: #f0f0f0;
-  border: 1px dashed #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.file-upload label:hover {
-  background: #e0e0e0;
-}
-
-/* ========== FOOTER BUTTONS ========== */
-.form-footer {
+.add-tenant-popup .popup-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
+  margin-bottom: 1rem;
 }
 
-.status-info {
-  display: flex;
-  gap: 15px;
-  color: #666;
-  font-style: italic;
+.add-tenant-popup .popup-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
-.button-group {
-  display: flex;
-  gap: 12px;
-}
-
-.cancel-button,
-.save-button {
-  padding: 10px 24px;
-  font-size: 14px;
-  border-radius: 6px;
-}
-
-.save-button {
-  background: #4CAF50;
-  color: white;
+.add-tenant-popup .close-btn {
+  background: none;
   border: none;
-  font-weight: bold;
+  color: #aaa;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
 }
 
-.save-button:hover {
-  background: #45a049;
-}
-
-.cancel-button {
-  background: #f5f5f5;
-  border: 1px solid #ddd;
+.add-tenant-popup .close-btn:hover {
   color: #333;
 }
 
-.cancel-button:hover {
-  background: #e9e9e9;
+.add-tenant-popup .form-sections-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.add-tenant-popup .form-section h3 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.add-tenant-popup .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.add-tenant-popup .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-tenant-popup .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.add-tenant-popup .form-group label {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+}
+
+.add-tenant-popup .form-group input[type="text"],
+.add-tenant-popup .form-group input[type="email"],
+.add-tenant-popup .form-group input[type="text"], /* Repeated, assuming it was for FPR fields */
+.add-tenant-popup .form-group textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+}
+
+.add-tenant-popup .form-group.image-upload-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-tenant-popup .image-upload-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.add-tenant-popup .image-preview {
+  border: 1px solid #ddd;
+  border-radius: 0.3rem;
+  overflow: hidden;
+}
+
+.add-tenant-popup .image-preview img {
+  display: block;
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+}
+
+.add-tenant-popup .file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #555;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.add-tenant-popup .file-input {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.add-tenant-popup .upload-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.add-tenant-popup .popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.add-tenant-popup .popup-actions button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.add-tenant-popup .popup-actions .btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.add-tenant-popup .popup-actions .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.add-tenant-popup .popup-actions .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.add-tenant-popup .popup-actions .btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.add-tenant-popup hr.section-divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 1.5rem 0;
 }
