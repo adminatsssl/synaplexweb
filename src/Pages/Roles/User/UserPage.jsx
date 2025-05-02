@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "../../Layout/Layout";
 import "./UserPage.css";
 import { UserMap } from "./Dashboard/Map/UserMap";
-import CalendarCases from "./Dashboard/Calender/CalendarCases";
+import CalendarCases from "./Dashboard/Calendar/CalendarCases";
 
 export default function UserPage() {
   const username = localStorage.getItem("username");

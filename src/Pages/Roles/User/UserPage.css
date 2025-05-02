@@ -17,6 +17,7 @@
     border: 1px solid #e6e6e6;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
     transition: box-shadow 0.3s ease;
+    
   }
   
   .userpage-popup:hover {
@@ -55,7 +56,10 @@
   
   .userpage-popup h2 {
     font-size: 1.3rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: #222;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 26px;
+
   }
   

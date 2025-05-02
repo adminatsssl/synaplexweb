@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../../Layout/Layout";
 import "./LegalPage.css";
 import { LegalMap } from "./Dashboard/Map/LegalMap";
+import LegalCalendarCases from "./Dashboard/Calendar/LegalCalendar";
 
 export default function LegalPage() {
   const username = localStorage.getItem("username");
@@ -15,7 +16,7 @@ export default function LegalPage() {
       <div className="legalpage-container">
         <div className="legalpage-popup legalpage-popup-left">
           <h2>Cases:</h2>
-          {/* <CalendarComponent /> */}
+          <LegalCalendarCases/>
         </div>
 
         <div className="legalpage-popup legalpage-popup-right">
