@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+// AddTenantPopup.jsx
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Tenant.css";
-
 
 const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
   const [form, setForm] = useState({
@@ -9,10 +9,15 @@ const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
     email: "",
     gstin: "",
     panNo: "",
+    frpName: "",
+    frpEmail: "",
+    frpPhone: "",
     addressLine: "",
     city: "",
     state: "",
-    pinCode: ""
+    pinCode: "",
+    image: null,
+    imagePreview: null,
   });
 
   useEffect(() => {
@@ -22,21 +27,35 @@ const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
         email: selectedTenant.Email || "",
         gstin: selectedTenant.GSTIN || "",
         panNo: selectedTenant.PANNo || "",
+        frpName: selectedTenant.FRPName || "",
+        frpEmail: selectedTenant.FRPEmail || "",
+        frpPhone: selectedTenant.FRPPhone || "",
         addressLine: selectedTenant.Address?.AddressLine || "",
         city: selectedTenant.Address?.City || "",
         state: selectedTenant.Address?.State || "",
-        pinCode: selectedTenant.Address?.PinCode || ""
+        pinCode: selectedTenant.Address?.PinCode || "",
+        image: null,
+        imagePreview: selectedTenant.Image || null,
       });
     }
   }, [selectedTenant]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type, files } = e.target;
+    setForm(prev => {
+      if (type === 'file') {
+        return {
+          ...prev,
+          [name]: files[0],
+          imagePreview: URL.createObjectURL(files[0]),
+        };
+      }
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       if (!form.name || !form.addressLine || !form.city || !form.state || !form.pinCode) {
         alert("Please fill in all required fields.");
@@ -45,7 +64,6 @@ const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
 
       let addressId = null;
 
-      // Update address if it exists
       if (selectedTenant?.Address?.ID) {
         try {
           await axios.get(`/odata/pos_tenant/v1/Addresses(${selectedTenant.Address.ID})`);
@@ -62,7 +80,6 @@ const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
         }
       }
 
-      // Create address if not available
       if (!addressId) {
         const addressRes = await axios.post("/odata/pos_tenant/v1/Addresses", {
           AddressLine: form.addressLine,
@@ -78,19 +95,27 @@ const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
         addressId = addressRes.data.ID;
       }
 
-      const payload = {
-        Name: form.name,
-        Email: form.email,
-        GSTIN: form.gstin,
-        PANNo: form.panNo,
-        "Address@odata.bind": `Addresses(${addressId})`
-      };
+      const payload = new FormData();
+      payload.append('Name', form.name);
+      payload.append('Email', form.email);
+      payload.append('GSTIN', form.gstin);
+      payload.append('PANNo', form.panNo);
+      payload.append('FRPName', form.frpName);
+      payload.append('FRPEmail', form.frpEmail);
+      payload.append('FRPPhone', form.frpPhone);
+      payload.append('Address@odata.bind', `Addresses(${addressId})`);
+      if (form.image) {
+        payload.append('Image', form.image);
+      }
 
-      // Create or update Tenant
       if (selectedTenant?.ID) {
-        await axios.patch(`/odata/pos_tenant/v1/Tenants(${selectedTenant.ID})`, payload);
+        await axios.patch(`/odata/pos_tenant/v1/Tenants(${selectedTenant.ID})`, payload, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       } else {
-        await axios.post("/odata/pos_tenant/v1/Tenants", payload);
+        await axios.post("/odata/pos_tenant/v1/Tenants", payload, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       }
 
       alert(`Tenant ${selectedTenant ? "updated" : "created"} successfully!`);
@@ -102,32 +127,88 @@ const AddTenantPopup = ({ onSuccess, onCancel, selectedTenant }) => {
   };
 
   return (
-    <div className="popup-container">
-      <h2 className="section-title">{selectedTenant ? "Edit Tenant" : "Add New Tenant"}</h2>
+    <div className="borrower-modal">
+      <div className="borrower-content">
+        <div className="borrower-header">
+          {selectedTenant ? "Edit Tenant" : "Add New Tenant"}
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="borrower-body grid-2">
+            {[
+              { label: "Tenant Name", name: "name", type: "text" },
+              { label: "Email", name: "email", type: "email" },
+              { label: "PAN No.", name: "panNo", type: "text" },
+              { label: "GSTIN", name: "gstin", type: "text" },
+              { label: "FRP Name", name: "frpName", type: "text" },
+              { label: "FRP Email", name: "frpEmail", type: "email" },
+              { label: "FRP Phone", name: "frpPhone", type: "tel" },
+              {
+                label: "Upload Image",
+                name: "image",
+                type: "file",
+                render: () => (
+                  <div className="image-upload-group">
+                    {form.imagePreview && (
+                      <div className="image-preview">
+                        <img src={form.imagePreview} alt="Tenant Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                      </div>
+                    )}
+                    <div className="file-input-wrapper">
+                      <input
+                        type="file"
+                        name="image"
+                        onChange={handleChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        id="image-upload"
+                      />
+                      <label htmlFor="image-upload" className="upload-placeholder">
+                        📄 Browse...
+                      </label>
+                    </div>
+                  </div>
+                ),
+              },
+              { label: "Address Line", name: "addressLine", type: "textarea", fullWidth: true },
+              { label: "City", name: "city", type: "text" },
+              { label: "State", name: "state", type: "text" },
+              { label: "Pin Code", name: "pinCode", type: "text" },
+            ].map((field) => (
+              <div className={`form-item ${field.fullWidth ? 'full-width' : ''}`} key={field.name}>
+                <label htmlFor={field.name}>{field.label}</label>
+                {field.type === 'textarea' ? (
+                  <textarea
+                    id={field.name}
+                    name={field.name}
+                    value={form[field.name]}
+                    onChange={handleChange}
+                    placeholder={field.label}
+                  />
+                ) : field.type === 'file' ? (
+                  field.render()
+                ) : (
+                  <input
+                    type={field.type}
+                    id={field.name}
+                    name={field.name}
+                    placeholder={field.label}
+                    value={form[field.name]}
+                    onChange={handleChange}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
 
-      <div className="form-grid">
-        <label><span>Name</span><input name="name" value={form.name} onChange={handleChange} /></label>
-        <label><span>Email</span><input name="email" value={form.email} onChange={handleChange} /></label>
-        <label><span>GSTIN</span><input name="gstin" value={form.gstin} onChange={handleChange} /></label>
-        <label><span>PAN No</span><input name="panNo" value={form.panNo} onChange={handleChange} /></label>
-      </div>
-
-      <h2 className="section-title">Address</h2>
-      <label className="textarea-label">
-        <span>Address Line</span>
-        <textarea name="addressLine" value={form.addressLine} onChange={handleChange} />
-      </label>
-      <div className="address-grid">
-        <label><span>City</span><input name="city" value={form.city} onChange={handleChange} /></label>
-        <label><span>State</span><input name="state" value={form.state} onChange={handleChange} /></label>
-        <label><span>Pin Code</span><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
-      </div>
-
-      <div className="button-row">
-        <button onClick={onCancel} className="cancel-button">Cancel</button>
-        <button onClick={handleSubmit} className="save-button">
-          {selectedTenant ? "Update" : "Save"}
-        </button>
+          <div className="borrower-footer">
+            <button type="button" className="cancel-btn" onClick={onCancel}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              {selectedTenant ? "Update" : "Save"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
