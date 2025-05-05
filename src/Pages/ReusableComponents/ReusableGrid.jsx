@@ -1,11 +1,14 @@
 import React, { useState, useMemo } from "react";
-import "./Styles/ReusableGrid.css"; 
+import "./Styles/ReusableGrid.css";
 
 const ReusableGrid = ({ columns, data }) => {
   const [filters, setFilters] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 20;
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+    setCurrentPage(1); // reset to first page when filtering
   };
 
   const filteredData = useMemo(() => {
@@ -17,6 +20,17 @@ const ReusableGrid = ({ columns, data }) => {
       })
     );
   }, [filters, data, columns]);
+
+  const totalRecords = filteredData.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+  const currentData = filteredData.slice(
+    (currentPage - 1) * recordsPerPage,
+    currentPage * recordsPerPage
+  );
+
+  const goToPage = (page) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
 
   return (
     <div className="reusable-grid">
@@ -45,7 +59,7 @@ const ReusableGrid = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((row, index) => (
+          {currentData.map((row, index) => (
             <tr key={index}>
               {columns.map((col) => (
                 <td key={col.key}>
@@ -56,6 +70,26 @@ const ReusableGrid = ({ columns, data }) => {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="pagination">
+        <button onClick={() => goToPage(1)} disabled={currentPage === 1}>
+          &#xab;
+        </button>
+        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+          &#x2039;
+        </button>
+        <span>
+          {Math.min((currentPage - 1) * recordsPerPage + 1, totalRecords)} to{" "}
+          {Math.min(currentPage * recordsPerPage, totalRecords)} of {totalRecords}
+        </span>
+        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+          &#x203a;
+        </button>
+        <button onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+          &#xbb;
+        </button>
+      </div>
     </div>
   );
 };

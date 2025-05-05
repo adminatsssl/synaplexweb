@@ -6,7 +6,7 @@ import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../../../Layout/Layout";
 import AddButton from "../../../ReusableComponents/AddButton";
-import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; // Make sure the path is correct
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; 
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
