@@ -20,7 +20,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   max-height: 90vh;
-  font-family: "Segoe UI", sans-serif;
 }
 
 .modal h3 {
@@ -128,4 +127,11 @@ textarea {
 
 .save-btn:hover {
   background-color: #388e3c;
+}
+
+.headerWorkflow {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 20px;
 }

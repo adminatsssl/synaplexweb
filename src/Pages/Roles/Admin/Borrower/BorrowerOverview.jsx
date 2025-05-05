@@ -93,7 +93,7 @@ const BorrowerOverview = () => {
     { key: "MonthlyIncome", label: "Monthly Income" },
     {
       key: "actions",
-      label: "Actions",
+      label: "", // we dont want any label
       disableFilter: true,
       render: (row) => (
         <>

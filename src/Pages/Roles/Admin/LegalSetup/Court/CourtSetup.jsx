@@ -50,7 +50,7 @@ export default function CourtSetup() {
   return (
     <div className="court-setup-container">
       <div className="court-setup-header">
-        <h2 className="court-setup-title">Court</h2>
+        {/* <h2 className="court-setup-title">Court</h2> */}
         <AddButton text="Add Court" onClick={() => setShowModal(true)} />
         {/* <button className="add-court-btn" onClick={() => setShowModal(true)}>+ Add Court</button> */}
       </div>

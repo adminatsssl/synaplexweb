@@ -44,8 +44,8 @@ const LegalWorkflow = () => {
 
   return (
     <div className="legal-workflow-container">
-      <div className="header">
-        <h2>Legal Workflows</h2>
+      <div className="headerWorkflow">
+        {/* <h2>Legal Workflows</h2> */}
         <AddButton text="Add Workflow" onClick={() => setModalOpen(true)} />
       </div>
 

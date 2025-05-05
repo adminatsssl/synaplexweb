@@ -35,7 +35,7 @@ function LawyerSetup() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Lawyers</h1>
+      {/* <h1 className="text-2xl font-bold mb-4">Lawyers</h1> */}
       <div className="bg-white border rounded shadow">
         <table className="w-full table-auto border-collapse">
           <thead>

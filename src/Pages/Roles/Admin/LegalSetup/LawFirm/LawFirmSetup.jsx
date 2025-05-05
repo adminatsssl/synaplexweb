@@ -76,7 +76,7 @@ const LawFirm = () => {
   return (
     <div className="law-firm-container">
       <div className="law-firm-header">
-        <h1>Law Firms</h1>
+        {/* <h1>Law Firms</h1> */}
         <AddButton text="Add Law-Firm" onClick={openAddPopup} />
       </div>
 

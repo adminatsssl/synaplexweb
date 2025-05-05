@@ -6,7 +6,7 @@
   .reusable-grid table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 6px; 
+    border-spacing: 0px; 
     padding: 12px;
   }
   
@@ -78,5 +78,25 @@
   .pagination span {
     font-size: 14px;
     color: #333;
+  }
+  
+
+  .FilterSearch{
+    margin-top:0px !important;
+    margin-bottom: 10px;
+  }
+
+
+  .reusable-grid tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* white */
+  }
+  
+  .reusable-grid tbody tr:nth-child(even) {
+    background-color: #f7f7f7; /* light gray */
+  }
+  
+  .reusable-grid tbody tr:hover {
+    background-color: #e0e0e0; /* darker gray on hover */
+    cursor: pointer;
   }
   

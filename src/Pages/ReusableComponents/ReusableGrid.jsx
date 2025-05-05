@@ -47,6 +47,7 @@ const ReusableGrid = ({ columns, data }) => {
                 {!col.disableFilter && (
                   <input
                     type="text"
+                    className="FilterSearch"
                     placeholder={col.label}
                     value={filters[col.key] || ""}
                     onChange={(e) =>

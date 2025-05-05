@@ -42,7 +42,7 @@ const LegalCaseTypeSetup = () => {
     <div className="legal-case-type-container">
       <div className="card">
         <div className="card-header">
-          <h3>Legal Case Type</h3>
+          {/* <h3>Legal Case Type</h3> */}
           <AddButton
             text="Add Case-Type"
             onClick={() => { setSelectedItem(null); setShowPopup(true); }}

@@ -74,7 +74,7 @@ const LawGroup = () => {
   return (
     <div className="lawgroup-container">
       <div className="header-row">
-        <h1 className="lawgroup-title">Law Groups</h1>
+        {/* <h1 className="lawgroup-title">Law Groups</h1> */}
         <div className="add-btn-wrapper">
           <AddButton text="Add Law-Group" onClick={openAddPopup} />
         </div>

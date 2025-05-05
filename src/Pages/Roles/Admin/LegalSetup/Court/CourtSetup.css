@@ -1,13 +1,12 @@
 .court-setup-container {
     padding: 40px;
-    background-color: #f9fafb;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
   }
   
   .court-setup-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     margin-bottom: 24px;
   }
