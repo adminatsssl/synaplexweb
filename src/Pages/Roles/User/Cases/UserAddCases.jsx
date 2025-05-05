@@ -85,7 +85,7 @@ const AddUserCases = () => {
         BorrowerId: borrowerId,
         LoanType: formData.loanType,
         LoanAmount: parseFloat(formData.loanAmount),
-        DefaultDate: formData.defaultDate,
+        DefaultDate: formData.defaultDate, 
         NpaDate: formData.npaDate,
       });
       const loanId = loanResponse.data.id;

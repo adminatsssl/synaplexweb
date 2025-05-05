@@ -11,8 +11,8 @@ const dummyData = [
     cnr: 'CNR001',
     loanAmount: 50000,
     caseType: 'Civil',
-    status: 'Open',   
-    borrower: 'John Doe', 
+    status: 'Open',
+    borrower: 'John Doe',
     createdDate: '2023-01-15',
     assignedTo: 'Agent A',
     court: 'Court 1',
@@ -76,7 +76,7 @@ const ReportCases = () => {
       <div style={{ padding: '20px' }} className="reportCases-container ">
         <h2 className="reportCases-title">Report - Case</h2>
 
-        <button className="reportCasesexport-btn"><FaFileExcel/></button>
+        {/* <button className="reportCasesexport-btn"><FaFileExcel/></button> */}
 
         <div className="reportCasestable-wrapper">
           <table

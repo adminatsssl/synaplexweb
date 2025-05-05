@@ -77,8 +77,8 @@ export default function Sidebar() {
       {
         name: "NoticeSetup",
         children: [
-          { name: "Template", path: "/" },
-          { name: "StageConfig", path: "/" },
+          { name: "Template", path: "/template" },
+          { name: "StageConfig", path: "/stageconfig" },
         ],
       },
     ],

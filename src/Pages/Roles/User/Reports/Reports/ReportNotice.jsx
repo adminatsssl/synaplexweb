@@ -35,9 +35,9 @@ const ReportNotices = () => {
     <Layout>
       <div style={{ padding: "20px" }}>
         <h2>Report - Notice</h2>
-        <button className="reportCasesexport-btn">
+        {/* <button className="reportCasesexport-btn">
           <FaFileExcel />
-        </button>
+        </button> */}
 
         <table
           border="1"

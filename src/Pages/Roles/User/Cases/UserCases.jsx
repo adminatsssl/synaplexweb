@@ -5,6 +5,7 @@ import Layout from "../../../Layout/Layout.jsx";
 import "./UserCases.css"; // 👈 Import the CSS
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
+import AddButton from "../../../ReusableComponents/AddButton";
 
 const UserCases = () => {
   const [cases, setCases] = useState([]);
@@ -39,9 +40,7 @@ const UserCases = () => {
             <h2>Cases</h2>
           </div>
           <div className="usercaseAddbutton">
-            <button onClick={openModal} className="add-case-button">
-              Add Cases
-            </button>
+            <AddButton text="Add Case" onClick={openModal} />
           </div>
         </div>
 
@@ -89,10 +88,10 @@ const UserCases = () => {
 
         {showModal && (
           <div className="modal-overlay-usercase">
-            <div className="modal-content-usercase">
+            <div className="modal-content-usercase-userrole">
               <AddUserCases />
-              <button onClick={closeModal} className="close-button">
-                X
+              <button onClick={closeModal} className="close-button-usercases">
+                X ..
               </button>
             </div>
           </div>
