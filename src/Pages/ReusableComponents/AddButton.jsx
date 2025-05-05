@@ -21,7 +21,7 @@ function AddButton({ text = "Add Court", onClick }) {
             background-color: #17877b;
             color: white;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 300;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
             cursor: pointer;
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
