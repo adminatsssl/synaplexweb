@@ -109,7 +109,7 @@ export default function Sidebar() {
           { name: "ReportNotice", path: "" },
         ],
       },
-      { name: "Invoices", path: "/invoices" },
+      { name: "Invoices", path: "/legalInvoice" },
     ],
   };
 

@@ -21,6 +21,7 @@ import Loanpage from './Pages/Roles/User/Loan/LoanPage';
 import LawyerCases from './Pages/Roles/Legal/LawyerCases/LawyerCases';
 import UserInvoiceManagement from './Pages/Roles/User/InvoiceManagement/UserInvoiceManagement';
 import StageConfig from './Pages/Roles/Admin/NoticeSetup/StageConfig';
+import LegalInvoice from './Pages/Roles/Legal/Invoices/LegalInvoice';
 // import Accounts from './Pages/Roles/Admin/Account/Accounts';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         {/* Lawyer Routes */}
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
         <Route path="/lawyer-cases" element={<ProtectedRoute element={LawyerCases} allowedRoles={["Legal"]} />} />
+        <Route path="/legalInvoice" element={<ProtectedRoute element={LegalInvoice} allowedRoles={["Legal"]} />} />
         
       </Routes>
     </Router>
