@@ -6,6 +6,7 @@ import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../../../Layout/Layout";
 import AddButton from "../../../ReusableComponents/AddButton";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; // Make sure the path is correct
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
@@ -46,8 +47,7 @@ const BorrowerOverview = () => {
   };
 
   const handleDelete = async (id) => {
-    const stringId = id.toString(); // Use JSONBig stringified ID
-    console.log("Deleting ID:", stringId);
+    const stringId = id.toString();
     try {
       const response = await fetch(
         `/odata/postapiservice/Borrowers(${stringId})`,
@@ -60,8 +60,7 @@ const BorrowerOverview = () => {
       );
 
       if (response.ok) {
-        console.log(`Borrower ${stringId} deleted successfully.`);
-        fetchBorrowers(); // Refresh list
+        fetchBorrowers();
       } else {
         console.error("Failed to delete. Status:", response.status);
       }
@@ -84,6 +83,27 @@ const BorrowerOverview = () => {
     setShowModal(true);
   };
 
+  const columns = [
+    { key: "Name", label: "Name" },
+    { key: "Phone", label: "Phone" },
+    { key: "Email", label: "Email" },
+    { key: "Address", label: "Address" },
+    { key: "CreditScore", label: "Credit Score" },
+    { key: "JobTitle", label: "Job Title" },
+    { key: "MonthlyIncome", label: "Monthly Income" },
+    {
+      key: "actions",
+      label: "Actions",
+      disableFilter: true,
+      render: (row) => (
+        <>
+          <IconButton type="edit" onClick={() => handleEditBorrower(row)} />
+          <IconButton type="delete" onClick={() => handleDelete(row.ID)} />
+        </>
+      ),
+    },
+  ];
+
   return (
     <Layout username={username}>
       <div className="borrower-container">
@@ -97,43 +117,7 @@ const BorrowerOverview = () => {
         ) : borrowers.length === 0 ? (
           <div className="info-message">No data found.</div>
         ) : (
-          <table className="borrower-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Credit Score</th>
-                <th>Job Title</th>
-                <th>Monthly Income</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {borrowers.map((b, index) => (
-                <tr key={index}>
-                  <td>{b.Name}</td>
-                  <td>{b.Phone}</td>
-                  <td>{b.Email}</td>
-                  <td>{b.Address}</td>
-                  <td>{b.CreditScore}</td>
-                  <td>{b.JobTitle}</td>
-                  <td>{b.MonthlyIncome}</td>
-                  <td>
-                    <IconButton
-                      type="edit"
-                      onClick={() => handleEditBorrower(b)}
-                    />
-                    <IconButton
-                      type="delete"
-                      onClick={() => handleDelete(b.ID)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ReusableGrid columns={columns} data={borrowers} />
         )}
 
         {showModal && (
