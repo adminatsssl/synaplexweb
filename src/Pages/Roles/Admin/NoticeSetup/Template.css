@@ -1,0 +1,196 @@
+.noticesetuptemplate-topbar{
+    display: flex;
+}
+.noticesetuptemplate-heading{
+    width: 50%;
+}
+
+.noticesetuptemplate-btn{
+    display: flex;
+    justify-content: end;
+    width: 50%;
+    align-items: center;
+    gap: 10px;
+}
+.noticesetuptemplate-importbtn{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    background-color: white;
+    color: #17877b;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/*Template Popup CSS*/
+
+.templatesetup-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .templatesetup-popup-content {
+    background: white;
+    /* padding: 20px; */
+    border-radius: 10px;
+    width: 70%;
+    max-height: 90%;
+    overflow-y: auto;
+  }
+  
+  .templatesetup-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px;
+    background-color: #00549E;
+    color: white;
+  }
+  .templatesetup-close-btn{
+    background:none;
+    color: white;
+    border: none;
+  }
+  .templatesetup-popup-header h4{
+    margin-left: 20px;
+    margin-bottom: 0px;
+  }
+  .templatesetup-middlecontainer{
+    padding: 35px;
+  }
+  .templatesetup-heading h3{
+    text-decoration: underline;
+  } 
+
+  .templatesetup-secondtopbarheading{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  
+  .templatesetup-templateinput{
+    width: 70%;
+  }
+  .templatesetup-templatecheckbox{
+    width: 25%;
+  }
+
+  .templatesetup-midpartheading{
+    margin-top: 6rem;
+  }
+
+  .templatesetup-midpartheading h3{
+    text-decoration: underline;
+  }
+  
+  .templatesetup-tab-section {
+    display: flex;
+    margin: 20px 0;
+  }
+  
+  .templatesetup-tab-btn {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    background: #f0f0f0;
+    cursor: pointer;
+    border-radius: 20px 20px 0 0;
+    width: 9rem;
+  }
+  
+  .templatesetup-tab-btn.active {
+    background:  #00549E;
+    color: white;
+  }
+  
+  .templatesetup-tab-content textarea {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+  }
+  
+  .templatesetup-popup-actions {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .templatesetup-save-btn {
+    padding: 8px 16px;
+    margin-left: 10px;
+    width: 8rem;
+    color: white;
+    background-color:  #00549E;
+    border: 1px solid #00549E;
+    border-radius: 3px;
+  }
+  .templatesetup-cancel-btn{
+    padding: 8px 16px;
+    margin-left: 10px;
+    width: 8rem;
+    color: #00549E;
+    background-color: white ;
+    /* border-color: #00549E; */
+    border: 1px solid #00549E;
+    border-radius: 3px;
+  }
+
+  /*Switch CSS*/
+
+  .templatesetup-switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    margin-left: 10px;
+  }
+  
+  .templatesetup-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .templatesetup-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+  }
+  
+  .templatesetup-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .templatesetup-slider {
+    background-color: #00549E;
+  }
+  
+  input:checked + .templatesetup-slider:before {
+    transform: translateX(22px);
+  }
+  
