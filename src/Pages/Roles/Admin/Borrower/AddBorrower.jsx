@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddBorrower.css";
-import JSONBig from 'json-bigint';
-
+import JSONBig from "json-bigint";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
@@ -48,13 +49,13 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "CreditScore" 
+        name === "CreditScore"
           ? value === ""
             ? ""
             : parseFloat(value)
           : value,
       [name]:
-        name === "CreditScore" 
+        name === "CreditScore"
           ? value === ""
             ? ""
             : parseFloat(value)
@@ -74,12 +75,12 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
       JobTitle: formData.JobTitle,
       MonthlyIncome: formData.MonthlyIncome, // Leave as string
     };
-  
+
     try {
       let response;
-  
+
       const borrowerId = selectedBorrower?.ID || selectedBorrower?.id;
-  
+
       if (borrowerId) {
         // Patch using json-bigint for safe stringification
         response = await axios.patch(
@@ -104,7 +105,7 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
           }
         );
       }
-  
+
       if ([200, 201, 204].includes(response.status)) {
         onSave();
       } else {
@@ -163,13 +164,15 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
             ))}
           </div>
 
-          <div className="borrower-footer">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              {selectedBorrower ? "Update" : "Save"}
-            </button>
+          <div
+            className="borrower-footer"
+            style={{ display: "flex", gap: "10px" }}
+          >
+            <CancelButton onClick={onClose} />
+            <SaveButton
+              onClick={handleSubmit}
+              label={selectedBorrower ? "Update" : "Save"}
+            />
           </div>
         </form>
       </div>

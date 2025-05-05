@@ -21,7 +21,7 @@ import Loanpage from './Pages/Roles/User/Loan/LoanPage';
 import LawyerCases from './Pages/Roles/Legal/LawyerCases/LawyerCases';
 import UserInvoiceManagement from './Pages/Roles/User/InvoiceManagement/UserInvoiceManagement';
 import StageConfig from './Pages/Roles/Admin/NoticeSetup/StageConfig';
-// import UserTable from './Pages/Roles/Admin/Accounts/Users/UserTable';
+import UserTable from './Pages/Roles/Admin/Account/UserTable';
 
 function App() {
   return (
@@ -39,7 +39,7 @@ function App() {
         <Route path="/admin-loans" element={<ProtectedRoute element={AdminLoans} allowedRoles={["Administrator"]} />} />
         <Route path="/admin-notices" element={<ProtectedRoute element={AdminNotices} allowedRoles={["Administrator"]} />} />
         <Route path="/stageconfig" element={<ProtectedRoute element={StageConfig} allowedRoles={["Administrator"]} />} />
-        {/* <Route path="/accounts" element={<ProtectedRoute element={UserTable} allowedRoles={["Administrator"]} />} /> */}
+        <Route path="/accounts" element={<ProtectedRoute element={UserTable} allowedRoles={["Administrator"]} />} />
 
         {/* User Routes */}
         <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
