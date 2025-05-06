@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./StageConfig.css";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const StageTemplateModal = ({ onClose, initialData }) => {
   const [formData, setFormData] = useState({
@@ -84,12 +86,11 @@ const StageTemplateModal = ({ onClose, initialData }) => {
         </div>
         <hr />
         <div className="stageconfig-modal-footer">
-          <button className="stageconfig-cancel-btn" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="stageconfig-save-btn" onClick={handleSave}>
-            SAVE
-          </button>
+        <CancelButton onClick={onClose} className="stageconfig-cancel-btn" />
+        <SaveButton
+          onClick={handleSave} className="stageconfig-save-btn"
+          label={"Save"}
+        />
         </div>
       </div>
     </div>

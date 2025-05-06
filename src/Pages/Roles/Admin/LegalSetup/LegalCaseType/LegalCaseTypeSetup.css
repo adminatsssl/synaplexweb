@@ -1,6 +1,6 @@
-.legal-case-type-container {
+/* .legal-case-type-container {
   padding: 20px;
-}
+} */
 
 .card {
   background-color: #fff;
@@ -105,7 +105,7 @@ button {
 
 
 
-.popup {
+.legalcasetype-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -118,11 +118,9 @@ button {
   z-index: 1000;
 }
 
-.popup-content {
+.legalcasetype-popup-content {
   background: #ffffff;
-  padding: 30px 25px;
-  border-radius: 12px;
-  width: 380px;
+  width: 550px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   animation: slideIn 0.3s ease-out;
 }
@@ -138,16 +136,28 @@ button {
   }
 }
 
-.popup-content h3 {
+.legalcasetype-popup-content h3 {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 1.4rem;
-  text-align: center;
   color: #343a40;
 }
+.legalcasetype-middlecontent{
+  padding: 20px;
+}
+.legalcasetype-header{
+    background-color: #003366;
+    color: white;
+    padding: 12px 20px;
+}
+.legalcasetype-header h3{
+  color: white;
+  font-size: 20px;
+  margin-bottom: 0px;
+}
 
-.popup-content input,
-.popup-content textarea {
+.legalcasetype-popup-content input,
+.legalcasetype-popup-content textarea {
   width: 100%;
   margin-bottom: 15px;
   padding: 10px 12px;
@@ -157,24 +167,24 @@ button {
   transition: border-color 0.2s;
 }
 
-.popup-content input:focus,
-.popup-content textarea:focus {
+.legalcasetype-popup-content input:focus,
+.legalcasetype-popup-content textarea:focus {
   outline: none;
   border-color: #198754;
 }
 
-.popup-content textarea {
+.legalcasetype-popup-content textarea {
   resize: vertical;
   min-height: 80px;
 }
 
-.popup-content .buttons {
+.legalcasetype-popup-content .buttons {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
 }
 
-.popup-content .buttons button {
+.legalcasetype-popup-content .legalcasetype-buttons button {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
@@ -183,20 +193,3 @@ button {
   font-size: 0.95rem;
 }
 
-.popup-content .buttons button[type="submit"] {
-  background-color: #198754;
-  color: white;
-}
-
-.popup-content .buttons button[type="submit"]:hover {
-  background-color: #157347;
-}
-
-.popup-content .buttons button[type="button"] {
-  background-color: #dee2e6;
-  color: #212529;
-}
-
-.popup-content .buttons button[type="button"]:hover {
-  background-color: #cfd4da;
-}

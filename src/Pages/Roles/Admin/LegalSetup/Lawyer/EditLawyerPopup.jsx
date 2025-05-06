@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './EditLawyerPopup.css';
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 function EditLawyerPopup({ isOpen, lawyer, onClose, onSave }) {
   const [formData, setFormData] = useState({});
@@ -77,8 +79,13 @@ function EditLawyerPopup({ isOpen, lawyer, onClose, onSave }) {
           <textarea name="Address" value={formData.Address} onChange={handleChange} />
         </div>
         <div className="edit-lawyer-buttons">
-          <button onClick={onClose} className="cancel-btn">Cancel</button>
-          <button onClick={handleSubmit} className="save-btn">Save</button>
+          
+          <CancelButton onClick={onClose} className="cancel-btn" />
+        <SaveButton
+          onClick={handleSubmit} className="save-btn"
+          label={ "Save"}
+        />
+
         </div>
       </div>
     </div>

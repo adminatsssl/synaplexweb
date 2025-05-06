@@ -4,6 +4,7 @@ import { FaUser, FaEye } from "react-icons/fa";
 import { MdMessage, MdDelete } from "react-icons/md";
 import ResponseModal from "./ResponseModal"; // Import
 import "./Notice.css";
+import IconButton from "../../../../ReusableComponents/IconButton";
 
 const UserNotice = () => {
   const [data] = useState([
@@ -79,7 +80,7 @@ const UserNotice = () => {
                     <button className="userNoticeBtn" onClick={() => setShowModal(true)}><FaUser /></button>
                     <button className="userNoticeBtn"><FaEye /></button><br />
                     <button className="userNoticeBtn"><MdMessage /></button>
-                    <button className="userNoticeBtn"><MdDelete /></button>
+                    <IconButton type="delete" className='userNoticeBtn'  />
                   </td>
                 </tr>
               ))

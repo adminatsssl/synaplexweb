@@ -5,6 +5,8 @@ import EmailTab from './TemplateSetUp/Email/EmailTab.jsx';
 import PDFTab from './TemplateSetUp/PDF/PDFTab.jsx';
 import WhatsAppTab from "./TemplateSetUp/Whatsapp/WhatsappTab.jsx";
 import AttachmentsTab from "./TemplateSetUp/Attachment/AttachmentsTab.jsx";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const tabs = ["Plain text", "Email", "PDF", "WhatsApp", "Attachments"];
 
@@ -96,10 +98,12 @@ const TemplatePopup = ({ onClose, templateData }) => {
           <div className="templatesetup-tab-content">{renderTabContent()}</div>
 
           <div className="templatesetup-popup-actions">
-            <button className="templatesetup-cancel-btn" onClick={onClose}>Cancel</button>
-            <button className="templatesetup-save-btn">
-              {templateData ? "Update" : "Save"}
-            </button>
+
+          <CancelButton onClick={onClose} className="templatesetup-cancel-btn" />
+        <SaveButton
+           className="templatesetup-save-btn"
+          label={templateData ? "Update" : "Save"}
+        />
           </div>
         </div>
       </div>

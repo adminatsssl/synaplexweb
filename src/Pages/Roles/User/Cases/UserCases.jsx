@@ -6,6 +6,8 @@ import "./UserCases.css"; // 👈 Import the CSS
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import { MdEdit } from "react-icons/md";
 import AddButton from "../../../ReusableComponents/AddButton";
+import IconButton from "../../../ReusableComponents/IconButton";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; 
 
 const UserCases = () => {
   const [cases, setCases] = useState([]);
@@ -32,6 +34,34 @@ const UserCases = () => {
   if (loading) return <p>Loading cases...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const columns = [
+    { key: "CaseID", label: "Case ID" },
+    { key: "LoanID", label: "Loan ID" },
+    { key: "CaseType", label: "Case Type" },
+    { key: "Status", label: "Status" },
+    { key: "Borrower", label: "Borrower" },
+    { key: "LoanAmount", label: "Loan Amount" },
+    { key: "NPADate", label: "NPA Date" },
+    { key: "CreateDate", label: "Create Date" },
+    { key: "AssignedTo", label: "Assigned To" },
+    { key: "Court", label: "Court" },
+    {
+      key: "actions",
+      label: "", // we dont want any label
+      disableFilter: true,
+      render: (row) => (
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <button style={{ background: "none", border: "none", padding: 0 }}>
+            <FaHandHoldingDollar />
+          </button>
+          <IconButton type="edit" />
+          
+        </div>
+      ),
+      
+    },
+  ];
+
   return (
     <Layout>
       <div className="user-cases-container">
@@ -44,47 +74,9 @@ const UserCases = () => {
           </div>
         </div>
 
-        <table className="cases-table">
-          <thead>
-            <tr>
-              <th>Case ID</th>
-              <th>Loan ID</th>
-              <th>CaseType</th>
-              <th>Status</th>
-              <th>Borrower</th>
-              <th>Loan Amount</th>
-              <th>NPA Date</th>
-              <th>Create Date</th>
-              <th>Assigned to</th>
-              <th>Court</th>
-              <th> </th>
-            </tr>
-          </thead>
-          <tbody>
-            {cases.map((item) => (
-              <tr key={item.CaseID}>
-                <td>{item.CaseID}</td>
-                <td>{item.CRNNo}</td>
-                <td>{item.CaseType}</td>
-                <td>{item.Status}</td>
-                <td>{item.HearingDate ?? "-"}</td>
-                <td>{item.Date_Of_Filing ?? "-"}</td>
-                <td>{item.Fil_no}</td>
-                <td>{item.Fil_year}</td>
-                <td>{item.Reg_no}</td>
-                <td>{item.Reg_year}</td>
-                <td>
-                  <button className="reportcasesbtn">
-                    <FaHandHoldingDollar />
-                  </button>
-                  <button className="reportcasesbtn">
-                    <MdEdit />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        
+
+    <ReusableGrid columns={columns} data={cases} />
 
         {showModal && (
           <div className="modal-overlay-usercase">

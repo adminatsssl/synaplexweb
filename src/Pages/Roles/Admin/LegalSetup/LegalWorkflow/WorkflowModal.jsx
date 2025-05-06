@@ -4,6 +4,9 @@ import "./LegalWorkflow.css";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import Addworkflowstages from "./Addworkflowstages";
 import JSONbig from "json-bigint";
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const caseTypes = [
   "Arbitration",
@@ -22,10 +25,6 @@ const WorkflowModal = ({ onClose, workflow }) => {
   const [selectedStages, setSelectedStages] = useState([]);
   const [csrfToken, setCsrfToken] = useState("");
   const [showStagePopup, setShowStagePopup] = useState(false);
-
-  const handleAddStage = (newStage) => {
-    setWorkflowStages([...workflowStages, newStage]);
-  };
 
   const isEdit = !!workflow;
   const [workflowStages, setWorkflowStages] = useState([
@@ -50,6 +49,7 @@ const WorkflowModal = ({ onClose, workflow }) => {
       autoValue: 0,
     },
   ]);
+
   const addStage = () => {
     const newStage = {
       name: `New Stage ${workflowStages.length + 1}`,
@@ -68,6 +68,10 @@ const WorkflowModal = ({ onClose, workflow }) => {
     const updated = [...workflowStages];
     updated.splice(index, 1);
     setWorkflowStages(updated);
+  };
+
+  const handleAddStage = (newStage) => {
+    setWorkflowStages([...workflowStages, newStage]);
   };
 
   useEffect(() => {
@@ -119,7 +123,6 @@ const WorkflowModal = ({ onClose, workflow }) => {
       Description: description,
     };
 
-    // Only include associations if stages are selected
     if (selectedStages.length > 0) {
       payload.WorkflowDispositionStages = selectedStages.map((stage) => ({
         _id: `WorkflowDispositionStages(${stage.ID})`,
@@ -156,6 +159,28 @@ const WorkflowModal = ({ onClose, workflow }) => {
       alert("Network error occurred while saving.");
     }
   };
+
+  const stageColumns = [
+    { key: "name", label: "Name" },
+    { key: "order", label: "Stage Order" },
+    { key: "displayName", label: "Display Name" },
+    { key: "mouseOver", label: "Mouse Over" },
+    { key: "isActive", label: "Is Active" },
+    { key: "autoNotice", label: "Auto Notice" },
+    { key: "autoFrequency", label: "Auto Frequency" },
+    { key: "autoValue", label: "Auto Value" },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (row, index) => (
+        <div style={{ display: "flex", gap: "1px", alignItems: "center" }}>
+          <IconButton type="edit" />
+          <IconButton type="delete" onClick={() => deleteStage(index)} />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="modal-overlay">
@@ -198,7 +223,8 @@ const WorkflowModal = ({ onClose, workflow }) => {
               />
             )}
           />
-          <h4 style={{marginTop:'20px'}}>Workflow Stages</h4>
+
+          <h4 style={{ marginTop: "20px" }}>Workflow Stages</h4>
           <button
             type="button"
             className="add-stage-btn"
@@ -208,50 +234,20 @@ const WorkflowModal = ({ onClose, workflow }) => {
           </button>
 
           <div className="table-scroll-container">
-            <table className="workflow-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Stage Order</th>
-                  <th>DisplayName</th>
-                  <th>MouseOver</th>
-                  <th>Is Active</th>
-                  <th>Auto Notice</th>
-                  <th>Auto Frequency</th>
-                  <th>Auto Value</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {workflowStages.map((stage, idx) => (
-                  <tr key={idx}>
-                    <td>{stage.name}</td>
-                    <td>{stage.order}</td>
-                    <td>{stage.displayName}</td>
-                    <td>{stage.mouseOver}</td>
-                    <td>{stage.isActive}</td>
-                    <td>{stage.autoNotice}</td>
-                    <td>{stage.autoFrequency}</td>
-                    <td>{stage.autoValue}</td>
-                    <td>
-                      <IconButton type="edit" />
-                      <IconButton type="delete"  onClick={() => deleteStage(idx)} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <ReusableGrid columns={stageColumns} data={workflowStages} />
           </div>
 
           <div className="modal-actions">
-            <button type="button" onClick={onClose} className="cancel-btn">
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              {isEdit ? "Update" : "Create"}
-            </button>
+          
+            <CancelButton onClick={onClose} className="cancel-btn" />
+        <SaveButton
+          onClick={handleSubmit} className="save-btn"
+          label={isEdit ? "Update" : "Create"}
+        />
+
           </div>
         </form>
+
         {showStagePopup && (
           <Addworkflowstages
             onClose={() => setShowStagePopup(false)}

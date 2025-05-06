@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./UserCases.css";
 import { FaSearch } from "react-icons/fa";
+import SaveButton from "../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const loanTypes = [
   "Personal Loan",
@@ -366,19 +368,15 @@ const AddUserCases = () => {
       </div>
 
       <div className="addusercase-action-buttons">
-        <button
-          onClick={() => setFormData({})}
-          className="addusercase-cancel-button"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleSave}
-          disabled={loading}
-          className="addusercase-save-button"
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
+      <CancelButton onClick={() => setFormData({})} className="addusercase-cancel-button" />
+        <SaveButton
+           onClick={handleSave}
+           disabled={loading}
+           className="addusercase-save-button"
+          label={loading ? "Saving..." : "Save"}
+        />
+
+        
       </div>
 
       {message && (

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./EditCasePopup.css"; // Ensure this file exists
 import { FaSearch } from "react-icons/fa";
+import SaveButton from "../../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
+
 
 const EditCasePopup = ({ isOpen, onClose, caseData, onSave }) => {
   const [formData, setFormData] = useState(caseData);
@@ -243,16 +246,12 @@ const EditCasePopup = ({ isOpen, onClose, caseData, onSave }) => {
           </div>
 
           <div className="reporteditcase-form-actions">
-            <button
-              type="button"
-              className="reporteditcase-cancel-button"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button type="submit" className="reporteditcase-save-button">
-              SAVE
-            </button>
+
+          <CancelButton onClick={onClose} className="reporteditcase-cancel-button" />
+        <SaveButton
+          onClick={handleSubmit} className="reporteditcase-save-button"
+          label={"Save"}
+        />
           </div>
         </form>
       </div>

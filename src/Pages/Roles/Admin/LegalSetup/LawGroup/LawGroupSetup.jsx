@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import IconButton from "../../../../ReusableComponents/IconButton";
 import AddButton from '../../../../ReusableComponents/AddButton';
+import ReusableGrid from '../../../../ReusableComponents/ReusableGrid'; // ✅ Import added
 import LawGroupPopup from "./LawGroupPopup"; 
 import './LawGroup.css'; 
  
@@ -52,13 +53,10 @@ const LawGroup = () => {
     try {
       const response = await fetch(`/odata/lawgroup/Groups(${groupId})`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
       if (response.ok) {
-        console.log(`LawGroup ${groupId} deleted successfully.`);
         setRefreshTrigger(prev => prev + 1);
       } else {
         console.error("Failed to delete. Status:", response.status);
@@ -71,58 +69,46 @@ const LawGroup = () => {
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
+  // ✅ Define columns for ReusableGrid
+  const columns = [
+    { key: "Name", label: "Name" },
+    { key: "Email", label: "Email" },
+    { key: "PhoneNumber", label: "Phone Number" },
+    {
+      key: "AddressLine",
+      label: "Address",
+      render: (item) => item.Address_Group?.AddressLine ?? "-"
+    },
+    { key: "TotalMember", label: "Total Members" },
+    { key: "OngoingCases", label: "Ongoing Cases" },
+    {
+      key: "SuccessRate",
+      label: "Success Rate",
+      render: (item) => item.SuccessRate?.toFixed(2) ?? "-"
+    },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (item) => (
+        <div className="action-buttons">
+          <IconButton type="edit" onClick={() => openEditPopup(item)} />
+          <IconButton type="delete" onClick={() => handleDelete(item.ID)} />
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="lawgroup-container">
       <div className="header-row">
-        {/* <h1 className="lawgroup-title">Law Groups</h1> */}
         <div className="add-btn-wrapper">
           <AddButton text="Add Law-Group" onClick={openAddPopup} />
         </div>
       </div>
 
-      <div className="table-wrapper">
-        <table className="lawgroup-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Total Members</th>
-              <th>Ongoing Cases</th>
-              <th>Success Rate</th>
-              <th>Registration Number</th>
-              <th>Establishment Year</th>
-              <th>Address Line</th>
-              <th>City</th>
-              <th>State</th>
-              <th>Pin Code</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lawGroups.map(group => (
-              <tr key={group.ID}>
-                <td>{group.Name || '-'}</td>
-                <td>{group.Email || '-'}</td>
-                <td>{group.PhoneNumber || '-'}</td>
-                <td>{group.TotalMember ?? '-'}</td>
-                <td>{group.OngoingCases ?? '-'}</td>
-                <td>{group.SuccessRate?.toFixed(2) ?? '-'}</td>
-                <td>{group.RegistrationNumber || '-'}</td>
-                <td>{group.EstablishmentYear || '-'}</td>
-                <td>{group.Address_Group?.AddressLine || '-'}</td>
-                <td>{group.Address_Group?.City || '-'}</td>
-                <td>{group.Address_Group?.State || '-'}</td>
-                <td>{group.Address_Group?.PinCode || '-'}</td>
-                <td className="action-buttons">
-                  <IconButton type="edit" onClick={() => openEditPopup(group)} />
-                  <IconButton type="delete" onClick={() => handleDelete(group.ID)} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* ✅ Use ReusableGrid here */}
+      <ReusableGrid columns={columns} data={lawGroups} />
 
       {showPopup && (
         <div className="modal-overlay">

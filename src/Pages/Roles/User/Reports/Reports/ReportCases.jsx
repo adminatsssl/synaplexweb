@@ -5,6 +5,7 @@ import { MdEdit } from "react-icons/md";
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import { FaFileExcel } from "react-icons/fa";
 import EditCasePopup from './EditCasePopup'; // Import the new component
+import IconButton from "../../../../ReusableComponents/IconButton";
 
 const dummyData = [
   {
@@ -117,7 +118,7 @@ const ReportCases = () => {
                     <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.court}</td>
                     <td>
                       <button className='reportcasesbtn'><FaHandHoldingDollar/></button>
-                      <button className='reportcasesbtn' onClick={() => handleEditClick(row)}><MdEdit/></button>
+                      <IconButton type="edit" className='reportcasesbtn' onClick={() => handleEditClick(row)} />
                     </td>
                   </tr>
                 ))

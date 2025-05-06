@@ -1,4 +1,4 @@
-.borrower-modal {
+.addborrower-modal {
   position: fixed;
   inset: 0;
   display: flex;
@@ -9,9 +9,8 @@
   font-family: Arial, sans-serif;
 }
 
-.borrower-content {
+.addborrower-content {
   background-color: white;
-  padding: 30px;
   width: 800px;
   max-height: 90vh;
   overflow-y: auto;
@@ -22,22 +21,23 @@
 }
 
 /* Header */
-.borrower-header {
+.addborrower-header {
   background-color: #003366;
   color: white;
   padding: 12px 20px;
   font-size: 18px;
   font-weight: bold;
   border-radius: 6px;
-  margin-bottom: 20px;
 }
 
 /* Body */
-.borrower-body {
+.addborrower-body {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(2,1fr);
+  /* margin-bottom: 20px; */
+}
+.addborrower-middlecontent{
+  padding: 20px;
 }
 
 .form-item {
@@ -48,17 +48,17 @@
 .form-item label {
   font-size: 14px;
   color: #374151;
-  margin-bottom: 4px;
+  /* margin-bottom: 4px; */
 }
 
-.form-item input,
+/* .form-item input,
 .form-item select,
 .form-item textarea {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
-}
+} */
 
 /* Textarea customization */
 textarea {
@@ -66,27 +66,10 @@ textarea {
 }
 
 /* Footer / Buttons */
-.borrower-footer {
+.addborrower-footer {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 45px;
 }
 
-.cancel-btn {
-  background-color: #e5e7eb;
-  color: #374151;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.save-btn {
-  background-color: #059669;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}

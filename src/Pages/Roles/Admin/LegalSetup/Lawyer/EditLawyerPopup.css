@@ -63,8 +63,6 @@
     border: none;
   }
   
-
-
   .preview-image {
     width: 100px;
     height: 100px;
@@ -72,4 +70,10 @@
     border-radius: 8px;
     margin-bottom: 10px;
   }
-  
+  .lawyer-setup-container{
+    padding: 20px;
+    position: relative;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

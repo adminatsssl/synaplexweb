@@ -1,10 +1,11 @@
-// DispositionSetup.jsx
 import React, { useEffect, useState } from "react";
 import DispositionPopup from "./DispositionPopup";
 import AddButton from "../../../../ReusableComponents/AddButton";
 import IconButton from "../../../../ReusableComponents/IconButton";
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid"; // ✅ import
 import JSONbig from "json-bigint";
 import "./DispositionSetup.css";
+
 const DispositionSetup = () => {
   const [dispositions, setDispositions] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -34,11 +35,27 @@ const DispositionSetup = () => {
     fetchDispositions();
   }, []);
 
+  // ✅ Define columns
+  const columns = [
+    { key: "Name", label: "Name" },
+    { key: "Description", label: "Description" },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (item) => (
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+          <IconButton type="edit" onClick={() => handleEdit(item)} />
+          <IconButton type="delete" onClick={() => handleDelete(item.ID)} />
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="legal-case-type-container">
       <div className="card">
         <div className="card-header">
-          {/* <h3>Disposition Stages</h3> */}
           <AddButton
             text="Add Disposition"
             onClick={() => {
@@ -48,38 +65,8 @@ const DispositionSetup = () => {
           />
         </div>
 
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dispositions.map((item) => (
-                <tr key={item.ID}>
-                  <td>{item.Name}</td>
-                  <td>{item.Description}</td>
-                  <td
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <IconButton type="edit" onClick={() => handleEdit(item)} />
-                    <IconButton
-                      type="delete"
-                      onClick={() => handleDelete(item.ID)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* ✅ Replace table with reusable grid */}
+        <ReusableGrid columns={columns} data={dispositions} />
       </div>
 
       {showPopup && (

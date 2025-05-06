@@ -3,6 +3,7 @@ import { FaFileExport, FaTrash } from 'react-icons/fa';
 import Layout from '../../../Layout/Layout';
 import AddButton from "../../../ReusableComponents/AddButton";
 import GenerateInvoiceModal from './GenerateInvoiceModal';
+import IconButton from "../../../ReusableComponents/IconButton";
 
 const UserInvoiceManagement = () => {
   const [showModal, setShowModal] = useState(false);
@@ -82,10 +83,8 @@ const UserInvoiceManagement = () => {
                     title="Export"
                     style={{ marginRight: '10px', cursor: 'pointer', color: '#555' }}
                   />
-                  <FaTrash
-                    title="Delete"
-                    style={{ cursor: 'pointer', color: '#555' }}
-                  />
+                  
+                  <IconButton type="delete"  />
                 </td>
               </tr>
             ))}

@@ -1,5 +1,7 @@
 import React from "react";
 import "./ResponseModal.css";
+import SaveButton from "../../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const ResponseModal = ({ show, onClose }) => {
   if (!show) return null;
@@ -28,8 +30,12 @@ const ResponseModal = ({ show, onClose }) => {
           <textarea rows="4"></textarea>
         </div>
         <div className="noticeresponse-modal-footer">
-          <button className="noticeresponse-send-btn">Send</button>
-          <button className="noticeresponse-cancel-btn" onClick={onClose}>Cancel</button>
+        
+
+          <CancelButton onClick={onClose} className="cancel-button" />
+          <SaveButton
+            label={ "Send"}
+          />
         </div>
       </div>
     </div>

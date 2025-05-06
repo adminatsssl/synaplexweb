@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./LegalCaseTypeSetup.css";
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const LegalCaseTypePopup = ({ onClose, onSave, item }) => {
   const [name, setName] = useState("");
@@ -38,9 +40,13 @@ const LegalCaseTypePopup = ({ onClose, onSave, item }) => {
   
 
   return (
-    <div className="popup">
-      <div className="popup-content">
+    <div className="legalcasetype-popup">
+      <div className="legalcasetype-popup-content">
+        <div className="legalcasetype-header">
         <h3>{item ? "Edit" : "Add"} Legal Case Type</h3>
+        </div>
+        
+        <div className="legalcasetype-middlecontent">
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -54,11 +60,19 @@ const LegalCaseTypePopup = ({ onClose, onSave, item }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          <div className="buttons">
-            <button type="submit">{item ? "Update" : "Create"}</button>
-            <button type="button" onClick={onClose}>Cancel</button>
+          <div className="legalcasetype-buttons">
+            <SaveButton
+              onClick={handleSubmit}
+              label={item ? "Update" : "Create"}
+            />
+            <CancelButton onClick={onClose} />
+            
+
+
           </div>
         </form>
+        </div>
+        
       </div>
     </div>
   );

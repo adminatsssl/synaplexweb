@@ -1,5 +1,6 @@
 import React from 'react';
 import Layout from "../../../Layout/Layout.jsx";
+import IconButton from '../../../ReusableComponents/IconButton.jsx';
 
 const dummyLoans = [
   {
@@ -49,7 +50,8 @@ const AdminLoans = () => {
               <th className="px-6 py-4">Default Date</th>
               <th className="px-6 py-4">Borrower</th>
               <th className="px-6 py-4">Tenure</th>
-              <th className="px-6 py-4">Interest Rate</th>
+              <th className="px-6 py-4">Annual Interest Rate</th>
+              <th className="px-6 py-4"></th>
             </tr>
           </thead>
           <tbody>
@@ -62,6 +64,7 @@ const AdminLoans = () => {
                 <td className="px-6 py-4">{loan.BorrowerName}</td>
                 <td className="px-6 py-4">{loan.Tenure}</td>
                 <td className="px-6 py-4">{loan.AnnualInterestRate}%</td>
+                <td className="px-6 py-4"><IconButton type="delete"/></td>
               </tr>
             ))}
           </tbody>

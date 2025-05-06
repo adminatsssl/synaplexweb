@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import JSONbig from 'json-bigint';
 import './LawGroupPopup.css'
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 // Create custom axios instance with json-bigint
 const axiosJson = axios.create({
@@ -156,10 +158,12 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
       </div>
 
       <div className="button-row">
-        <button onClick={onCancel} className="cancel-button">Cancel</button>
-        <button onClick={handleSubmit} className="save-button">
-          {selectedLawGroup ? "Update" : "Save"}
-        </button>
+        <CancelButton onClick={onCancel} className="cancel-button" />
+        <SaveButton
+          onClick={handleSubmit} className="save-button"
+          label={selectedLawGroup ? "Update" : "Save"}
+        />
+
       </div>
     </div>
   );

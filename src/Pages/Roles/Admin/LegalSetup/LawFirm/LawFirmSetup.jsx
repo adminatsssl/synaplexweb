@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddButton from '../../../../ReusableComponents/AddButton';
 import IconButton from "../../../../ReusableComponents/IconButton";
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid"; // ✅ Import added
 import LawFirmPopup from "./LawFirmPopup";
 import "./LawFirm.css";
 
@@ -50,17 +51,13 @@ const LawFirm = () => {
 
   const handleDelete = async (id) => {
     const stringId = id.toString();
-    console.log("Deleting LawFirm ID:", stringId);
     try {
       const response = await fetch(`/odata/LawFirms(${stringId})`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
       if (response.ok) {
-        console.log(`LawFirm ${stringId} deleted successfully.`);
         setRefreshTrigger(prev => prev + 1);
       } else {
         console.error("Failed to delete. Status:", response.status);
@@ -73,56 +70,50 @@ const LawFirm = () => {
   if (loading) return <div className="law-firm-loading">Loading...</div>;
   if (error) return <div className="law-firm-error">{error}</div>;
 
+  // ✅ Define columns for ReusableGrid
+  const columns = [
+    { key: "Name", label: "Name" },
+    { key: "Email", label: "Email" },
+    { key: "PhoneNumber", label: "Phone Number" },
+    {
+      key: "AddressLine",
+      label: "Address",
+      render: (item) => item.Address_LawFirm?.AddressLine ?? "-"
+    },
+    { key: "RegistrationNumber", label: "Registration Number" },
+    { key: "EstablishmentYear", label: "Establishment Year" },
+    { key: "TotalLawyers", label: "Total Lawyers" },
+    {
+      key: "SuccessRate",
+      label: "Success Rate",
+      render: (item) => item.SuccessRate?.toFixed(2) ?? "-"
+    },
+    {
+      key: "ClientRating",
+      label: "Client Rating",
+      render: (item) => item.ClientRating?.toFixed(2) ?? "-"
+    },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (item) => (
+        <div className="law-firm-actions">
+          <IconButton type="edit" onClick={() => openEditPopup(item)} />
+          <IconButton type="delete" onClick={() => handleDelete(item.ID)} />
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="law-firm-container">
       <div className="law-firm-header">
-        {/* <h1>Law Firms</h1> */}
         <AddButton text="Add Law-Firm" onClick={openAddPopup} />
       </div>
 
-      <div className="table-wrapper">
-        <table className="law-firm-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Registration Number</th>
-              <th>Establishment Year</th>
-              <th>Total Lawyers</th>
-              <th>Success Rate</th>
-              <th>Client Rating</th>
-              <th>Address Line</th>
-              <th>City</th>
-              <th>State</th>
-              <th>Pin Code</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lawFirms.map(firm => (
-              <tr key={firm.ID}>
-                <td>{firm.Name || '-'}</td>
-                <td>{firm.Email || '-'}</td>
-                <td>{firm.PhoneNumber || '-'}</td>
-                <td>{firm.RegistrationNumber || '-'}</td>
-                <td>{firm.EstablishmentYear || '-'}</td>
-                <td>{firm.TotalLawyers}</td>
-                <td>{firm.SuccessRate?.toFixed(2)}</td>
-                <td>{firm.ClientRating?.toFixed(2)}</td>
-                <td>{firm.Address_LawFirm?.AddressLine || '-'}</td>
-                <td>{firm.Address_LawFirm?.City || '-'}</td>
-                <td>{firm.Address_LawFirm?.State || '-'}</td>
-                <td>{firm.Address_LawFirm?.PinCode || '-'}</td>
-                <td className="law-firm-actions">
-                  <IconButton type="edit" onClick={() => openEditPopup(firm)} />
-                  <IconButton type="delete" onClick={() => handleDelete(firm.ID)} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* ✅ Use ReusableGrid here */}
+      <ReusableGrid columns={columns} data={lawFirms} />
 
       {showPopup && (
         <div className="modal-overlay">

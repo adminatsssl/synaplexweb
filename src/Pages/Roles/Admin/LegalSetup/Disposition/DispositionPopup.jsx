@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './DispositionSetup.css'; // Make sure this points to the correct file
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const DispositionPopup = ({ onClose, onSave, item }) => {
   const [name, setName] = useState("");
@@ -42,12 +44,13 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <div className="modal-title">{item ? "Edit Disposition" : "Add Disposition"}</div>
+    <div className="Disposition-modal-overlay">
+      <div className="Disposition-modal">
+        <div className="Disposition-modal-title">{item ? "Edit Disposition" : "Add Disposition"}</div>
+        
         <form onSubmit={handleSubmit}>
-        <div className="form-section">
-  <div className="form-item">
+        <div className="Disposition-form-section">
+  <div className="Disposition-form-item">
     <label>Name</label>
     <input
       type="text"
@@ -58,7 +61,7 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
     />
   </div>
 
-  <div className="form-item">
+  <div className="Disposition-form-item">
     <label>Description</label>
     <textarea
       placeholder="Enter description"
@@ -70,14 +73,13 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
 </div>
 
 
-          <div className="modal-buttons">
-            <button type="button" onClick={onClose} className="cancel-btn">
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              {item ? "Update" : "Create"}
-            </button>
-          </div>
+          <div className="Disposition-modal-buttons">
+            <CancelButton onClick={onClose} className="Disposition-cancel-btn" />
+            <SaveButton
+              onClick={handleSubmit} className="Disposition-save-btn"
+              label={item ? "Update" : "Create"}
+            />
+           </div>
         </form>
       </div>
     </div>

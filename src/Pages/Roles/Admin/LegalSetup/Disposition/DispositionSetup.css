@@ -1,7 +1,7 @@
 /* DispositionSetup.css */
-.legal-case-type-container {
+/* .legal-case-type-container {
     padding: 20px;
-  }
+  } */
   
   .card {
     background: #fff;
@@ -55,7 +55,7 @@
 
 
 
-  .modal-overlay {
+  .Disposition-modal-overlay {
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.4);
@@ -66,7 +66,7 @@
     backdrop-filter: blur(3px);
   }
   
-  .modal {
+  .Disposition-modal {
     background-color: #ffffff;
     padding: 30px;
     width: 90%;
@@ -89,7 +89,7 @@
     }
   }
   
-  .modal-title {
+  .Disposition-modal-title {
     font-size: 22px;
     font-weight: 600;
     background-color: #003366;
@@ -100,11 +100,11 @@
     text-align: center;
   }
   
-  .section {
+  .Disposition-section {
     margin-bottom: 30px;
   }
   
-  .section-title {
+  .Disposition-section-title {
     font-size: 16px;
     font-weight: 600;
     text-decoration: underline;
@@ -112,35 +112,35 @@
     color: #111827;
   }
   
-  .grid-2,
-  .grid-3 {
+  .Disposition-grid-2,
+  .Disposition-grid-3 {
     display: grid;
     gap: 18px;
   }
   
-  .grid-2 {
+  .Disposition-grid-2 {
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
   
-  .grid-3 {
+  .Disposition-grid-3 {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
   
-  .form-item {
+  .Disposition-form-item {
     display: flex;
     flex-direction: column;
   }
   
-  .form-item label {
+  .Disposition-form-item label {
     font-size: 14px;
     color: #374151;
     margin-bottom: 6px;
     font-weight: 500;
   }
   
-  .form-item input,
-  .form-item select,
-  .form-item textarea {
+  .Disposition-form-item input,
+  .Disposition-form-item select,
+  .Disposition-form-item textarea {
     padding: 10px 14px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -148,9 +148,9 @@
     transition: border-color 0.2s ease;
   }
   
-  .form-item input:focus,
-  .form-item select:focus,
-  .form-item textarea:focus {
+  .fDisposition-orm-item input:focus,
+  .Disposition-form-item select:focus,
+  .Disposition-form-item textarea:focus {
     outline: none;
     border-color: #3b82f6;
   }
@@ -160,42 +160,15 @@
     min-height: 80px;
   }
   
-  .modal-buttons {
+  .Disposition-modal-buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 12px;
     margin-top: 30px;
   }
   
-  .cancel-btn,
-  .save-btn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
   
-  .cancel-btn {
-    background-color: #f3f4f6;
-    color: #374151;
-  }
-  
-  .cancel-btn:hover {
-    background-color: #e5e7eb;
-  }
-  
-  .save-btn {
-    background-color: #059669;
-    color: white;
-  }
-  
-  .save-btn:hover {
-    background-color: #047857;
-  }
-  .form-section {
+  .Disposition-form-section {
     display: flex;
     flex-direction: column;
     gap: 20px;

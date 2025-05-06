@@ -4,6 +4,7 @@ import { FaFileExcel } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
+import IconButton from "../../../../ReusableComponents/IconButton";
 
 const dummyData = [
   {
@@ -101,9 +102,8 @@ const ReportNotices = () => {
                     <button className="reportnoticebtn">
                       <MdMessage />
                     </button>
-                    <button className="reportnoticebtn">
-                      <MdEdit />
-                    </button>
+                    
+                    <IconButton type="edit" className='reportnoticebtn'  />
                   </td>
                 </tr>
               ))

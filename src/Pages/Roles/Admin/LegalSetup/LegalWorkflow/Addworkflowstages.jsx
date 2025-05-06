@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./Addworkflowstages.css";
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const Addworkflowstages = ({ onClose, onSave }) => {
   const [name, setName] = useState("");
@@ -124,7 +126,7 @@ const Addworkflowstages = ({ onClose, onSave }) => {
           </div>
 
           <div className="full-width">
-          <label className="required">Disposition Stages</label>
+            <label className="required">Disposition Stages</label>
             <select>
               <option>Select...</option>
               <option>Stage A</option>
@@ -134,12 +136,12 @@ const Addworkflowstages = ({ onClose, onSave }) => {
         </div>
 
         <div className="modal-actions">
-          <button type="button" onClick={onClose} className="cancel-btn">
-            Cancel
-          </button>
-          <button type="button" onClick={handleSave} className="save-btn">
-            Save
-          </button>
+          <CancelButton onClick={onClose} className="cancel-btn" />
+          <SaveButton
+            onClick={handleSave} className="save-btn"
+            label={"Save"}
+          />
+
         </div>
       </div>
     </div>

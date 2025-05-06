@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './UserInvoiceManagement.css';
+import SaveButton from "../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const GenerateInvoiceModal = ({ onClose }) => {
   const [lawyer, setLawyer] = useState('');
@@ -41,8 +43,12 @@ const GenerateInvoiceModal = ({ onClose }) => {
         <hr />
 
         <div className="userinvoice-modal-footer">
-          <button className="userinvoice-cancel-button" onClick={onClose}>Cancel</button>
-          <button className="userinvoice-generate-button" onClick={handleGenerate}>GENERATE</button>
+        <CancelButton onClick={onClose} className="userinvoice-cancel-button" />
+        <SaveButton
+          onClick={handleGenerate} className="userinvoice-generate-button"
+          label={"Generate"}
+        />
+
         </div>
       </div>
     </div>

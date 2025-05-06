@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
   const [form, setForm] = useState({
@@ -146,10 +148,14 @@ const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
       </div>
 
       <div className="button-row">
-        <button onClick={onCancel} className="cancel-button">Cancel</button>
-        <button onClick={handleSubmit} className="save-button">
-          {selectedLawFirm ? "Update" : "Save"}
-        </button>
+        
+        <CancelButton onClick={onCancel} className="cancel-button" />
+        <SaveButton
+          onClick={handleSubmit} className="save-button"
+          label={selectedLawFirm ? "Update" : "Save"}
+        />
+        
+
       </div>
     </div>
   );

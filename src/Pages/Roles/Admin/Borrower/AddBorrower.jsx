@@ -130,13 +130,14 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   };
 
   return (
-    <div className="borrower-modal">
-      <div className="borrower-content">
-        <div className="borrower-header">
+    <div className="addborrower-modal">
+      <div className="addborrower-content">
+        <div className="addborrower-header">
           {selectedBorrower ? "Edit Borrower" : "Add Borrower"}
         </div>
+        <div className="addborrower-middlecontent">
         <form onSubmit={handleSubmit}>
-          <div className="borrower-body grid-2">
+          <div className="addborrower-body grid-2">
             {[
               "Name",
               "Phone",
@@ -165,7 +166,7 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
           </div>
 
           <div
-            className="borrower-footer"
+            className="addborrower-footer"
             style={{ display: "flex", gap: "10px" }}
           >
             <CancelButton onClick={onClose} />
@@ -175,6 +176,8 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
             />
           </div>
         </form>
+        </div>
+        
       </div>
     </div>
   );
