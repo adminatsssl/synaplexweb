@@ -5,6 +5,7 @@ import { MdEdit } from "react-icons/md";
 import { FaEye } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 import IconButton from "../../../../ReusableComponents/IconButton";
+import "./Report.css"
 
 const dummyData = [
   {
@@ -96,10 +97,10 @@ const ReportNotices = () => {
                   <td>{row.trackingId}</td>
                   <td>{row.status}</td>
                   <td>
-                    <button className="reportnoticebtn">
+                    <button className="reportnoticebtn1">
                       <FaEye />
                     </button>
-                    <button className="reportnoticebtn">
+                    <button className="reportnoticebtn1">
                       <MdMessage />
                     </button>
                     

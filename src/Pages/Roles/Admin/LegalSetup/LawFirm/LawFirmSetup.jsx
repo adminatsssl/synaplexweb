@@ -116,9 +116,9 @@ const LawFirm = () => {
       <ReusableGrid columns={columns} data={lawFirms} />
 
       {showPopup && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="modal-close" onClick={() => setShowPopup(false)}>
+        <div className="LawFirm-modal-overlay">
+          <div className="LawFirm-modal-content">
+            <button className="LawFirm-modal-close" onClick={() => setShowPopup(false)}>
               ✕
             </button>
             <LawFirmPopup

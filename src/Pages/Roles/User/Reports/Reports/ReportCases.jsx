@@ -117,7 +117,7 @@ const ReportCases = () => {
                     <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.assignedTo}</td>
                     <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.court}</td>
                     <td>
-                      <button className='reportcasesbtn'><FaHandHoldingDollar/></button>
+                      <button className='reportcasesbtn1'><FaHandHoldingDollar/></button>
                       <IconButton type="edit" className='reportcasesbtn' onClick={() => handleEditClick(row)} />
                     </td>
                   </tr>

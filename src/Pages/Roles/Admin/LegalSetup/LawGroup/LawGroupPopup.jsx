@@ -129,38 +129,59 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
   };
 
   return (
-    <div className="popup-container">
-      <h2 className="section-title">{selectedLawGroup ? "Edit Law Group" : "Law Group Detail"} :</h2>
-      <div className="form-grid">
-        <label><span>Group Name</span><input name="name" value={form.name} onChange={handleChange} /></label>
-        <label><span>Registration No</span><input name="registrationNumber" value={form.registrationNumber} onChange={handleChange} /></label>
-        <label><span>Establishment Year</span><input name="year" value={form.year} onChange={handleChange} /></label>
-        <label><span>Total Members</span><input name="totalMember" type="number" value={form.totalMember} onChange={handleChange} /></label>
-        <label><span>Ongoing Cases</span><input name="ongoingCases" type="number" value={form.ongoingCases} onChange={handleChange} /></label>
-        <label><span>Success Rate</span><input name="successRate" type="number" step="0.01" value={form.successRate} onChange={handleChange} /></label>
+    <div className="LawGroup-popup-container">
+      <div className='LawGroup-Heading' >{selectedLawGroup ? "Edit Law Group" : "Law Group"}</div>
+
+      <div className='LawGroup-Middle-Content'>
+
+        <div className='LawGroup-Middle-FieldContent'>
+          {/*Middle Content*/}
+          <h2 className="LawGroup-section-title">Group Detail</h2>
+          <div className="LawGroup-form-grid">
+            <label><span>Group Name</span><input name="name" value={form.name} onChange={handleChange} /></label>
+            <label><span>Registration No</span><input name="registrationNumber" value={form.registrationNumber} onChange={handleChange} /></label>
+            <label><span>Establishment Year</span><input name="year" value={form.year} onChange={handleChange} /></label>
+            <label><span>Total Members</span><input name="totalMember" type="number" value={form.totalMember} onChange={handleChange} /></label>
+            <label><span>Ongoing Cases</span><input name="ongoingCases" type="number" value={form.ongoingCases} onChange={handleChange} /></label>
+            <label><span>Success Rate</span><input name="successRate" type="number" step="0.01" value={form.successRate} onChange={handleChange} /></label>
+          </div>
+        </div>
+
+        <div className='LawGroup-Middle-FieldContent'>
+          {/*Middle Content*/}
+          <h2 className="LawGroup-section-title">Address</h2>
+          <label className="LawGroup-textarea-label">
+            <span>Address Line</span>
+            <textarea className='LawGroup-textarea' name="addressLine" value={form.addressLine} onChange={handleChange} />
+          </label>
+          <div className="LawGroup-address-grid">
+            <label><span>City</span><br/><input name="city" value={form.city} onChange={handleChange} /></label>
+            <label><span>State</span><br/><input name="state" value={form.state} onChange={handleChange} /></label>
+            <label><span>PinCode</span><br/><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
+          </div>
+        </div>
+
+        <div className='LawGroup-Middle-FieldContent'>
+          {/*Middle Content*/}
+        <h2 className="LawGroup-section-title">FPR Details:</h2>
+        <div className="LawGroup-form-grid">
+          <label><span>FPR E-Mail</span><br/><input name="email" value={form.email} onChange={handleChange} /></label>
+          <label><span>Phone No</span><br/><input name="phone" value={form.phone} onChange={handleChange} /></label>
+        </div>
+
+        </div>
+        
       </div>
 
-      <h2 className="section-title">Address</h2>
-      <label className="textarea-label">
-        <span>Address Line</span>
-        <textarea name="addressLine" value={form.addressLine} onChange={handleChange} />
-      </label>
-      <div className="address-grid">
-        <label><span>City</span><input name="city" value={form.city} onChange={handleChange} /></label>
-        <label><span>State</span><input name="state" value={form.state} onChange={handleChange} /></label>
-        <label><span>PinCode</span><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
-      </div>
 
-      <h2 className="section-title">FPR Details:</h2>
-      <div className="form-grid">
-        <label><span>FPR E-Mail</span><input name="email" value={form.email} onChange={handleChange} /></label>
-        <label><span>Phone No</span><input name="phone" value={form.phone} onChange={handleChange} /></label>
-      </div>
 
-      <div className="button-row">
-        <CancelButton onClick={onCancel} className="cancel-button" />
+
+
+
+      <div className="LawGroup-button-row">
+        <CancelButton onClick={onCancel} className="LawGroup-cancel-button" />
         <SaveButton
-          onClick={handleSubmit} className="save-button"
+          onClick={handleSubmit} className="LawGroup-save-button"
           label={selectedLawGroup ? "Update" : "Save"}
         />
 

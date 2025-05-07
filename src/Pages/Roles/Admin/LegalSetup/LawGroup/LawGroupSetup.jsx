@@ -111,9 +111,9 @@ const LawGroup = () => {
       <ReusableGrid columns={columns} data={lawGroups} />
 
       {showPopup && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="modal-close" onClick={() => setShowPopup(false)}>✕</button>
+        <div className="LawGroup-modal-overlay">
+          <div className="LawGroup-modal-content">
+            <button className="LawGroup-modal-close" onClick={() => setShowPopup(false)}>✕</button>
             <LawGroupPopup
               selectedLawGroup={selectedLawGroup}
               onSuccess={handleSuccess}

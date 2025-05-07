@@ -45,20 +45,18 @@
   flex-direction: column;
 }
 
-.form-item label {
+.addborrower-form-item label {
   font-size: 14px;
   color: #374151;
   /* margin-bottom: 4px; */
 }
 
-/* .form-item input,
-.form-item select,
-.form-item textarea {
+.addborrower-form-item input {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
-} */
+}
 
 /* Textarea customization */
 textarea {

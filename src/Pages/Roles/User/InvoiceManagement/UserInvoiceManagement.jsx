@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { FaFileExport, FaTrash } from 'react-icons/fa';
+import { FaFileExport } from 'react-icons/fa';
 import Layout from '../../../Layout/Layout';
 import AddButton from "../../../ReusableComponents/AddButton";
 import GenerateInvoiceModal from './GenerateInvoiceModal';
 import IconButton from "../../../ReusableComponents/IconButton";
+import "./UserInvoiceManagement.css"
 
 const UserInvoiceManagement = () => {
   const [showModal, setShowModal] = useState(false);
@@ -80,7 +81,7 @@ const UserInvoiceManagement = () => {
                 <td style={{ padding: '8px', border: '1px solid #ccc' }}>{invoice.amount}</td>
                 <td style={{ padding: '8px', border: '1px solid #ccc' }}>
                   <FaFileExport
-                    title="Export"
+                    title="Export" className='invoice-Export'
                     style={{ marginRight: '10px', cursor: 'pointer', color: '#555' }}
                   />
                   

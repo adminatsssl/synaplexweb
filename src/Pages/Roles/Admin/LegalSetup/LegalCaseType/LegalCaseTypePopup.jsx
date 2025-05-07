@@ -61,14 +61,11 @@ const LegalCaseTypePopup = ({ onClose, onSave, item }) => {
             onChange={(e) => setDescription(e.target.value)}
           />
           <div className="legalcasetype-buttons">
+          <CancelButton onClick={onClose} />
             <SaveButton
               onClick={handleSubmit}
-              label={item ? "Update" : "Create"}
+              label={item ? "Update" : "Save"}
             />
-            <CancelButton onClick={onClose} />
-            
-
-
           </div>
         </form>
         </div>

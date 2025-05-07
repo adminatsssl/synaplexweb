@@ -183,9 +183,11 @@ const WorkflowModal = ({ onClose, workflow }) => {
   ];
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <h3>{isEdit ? "Edit" : "Add"} Workflow</h3>
+    <div className="LegalWorkFlow-modal-overlay">
+      <div className="LegalWorkFlow-modal">
+        <div className="LegalWorkFlow-Heading"><h3>{isEdit ? "Edit" : "Add"} Workflow</h3></div>
+        
+        <div className="LegalWorkFlow-MiddleContent">
         <form onSubmit={handleSubmit}>
           <label>Case Type</label>
           <select
@@ -227,17 +229,17 @@ const WorkflowModal = ({ onClose, workflow }) => {
           <h4 style={{ marginTop: "20px" }}>Workflow Stages</h4>
           <button
             type="button"
-            className="add-stage-btn"
+            className="LegalWorkFlow-add-stage-btn"
             onClick={() => setShowStagePopup(true)}
           >
             +
           </button>
 
-          <div className="table-scroll-container">
+          <div className="LegalWorkFlow-table-scroll-container">
             <ReusableGrid columns={stageColumns} data={workflowStages} />
           </div>
 
-          <div className="modal-actions">
+          <div className="LegalWorkFlow-modal-actions">
           
             <CancelButton onClick={onClose} className="cancel-btn" />
         <SaveButton
@@ -247,6 +249,9 @@ const WorkflowModal = ({ onClose, workflow }) => {
 
           </div>
         </form>
+
+        </div>
+        
 
         {showStagePopup && (
           <Addworkflowstages

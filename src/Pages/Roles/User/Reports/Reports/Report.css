@@ -9,8 +9,18 @@
     color: #06f706;
 }
 
-.reportnoticebtn{
+.reportcasesbtn1{
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 20px;
+  color:#0056B3;
+  margin-right: 0px;
+}
+
+.reportnoticebtn1{
+  background: none;
+  border: none;
+  font-size: 20px;
+  color:#0056B3;
+  margin-right: 0px;
 }

@@ -46,7 +46,7 @@ function EditLawyerPopup({ isOpen, lawyer, onClose, onSave }) {
   return (
     <div className="edit-lawyer-overlay">
       <div className="edit-lawyer-container">
-        <h2>Lawyer Details</h2>
+        <div className='edit-lawyer-Heading'><h2>Lawyer Details</h2></div>
         <div className="edit-lawyer-grid">
           <label>Full Name</label>
           <input name="FullName" value={formData.FullName} onChange={handleChange} />

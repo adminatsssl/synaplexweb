@@ -51,7 +51,7 @@ const UserCases = () => {
       disableFilter: true,
       render: (row) => (
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <button style={{ background: "none", border: "none", padding: 0 }}>
+          <button style={{ color:"#0056B3",background: "none", border: "none", padding: 0,fontSize:"20px",marginRight:"0px" }}>
             <FaHandHoldingDollar />
           </button>
           <IconButton type="edit" />

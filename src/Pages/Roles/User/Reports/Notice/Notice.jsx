@@ -77,9 +77,9 @@ const UserNotice = () => {
                   <td>{item.trackingId}</td>
                   <td>{item.status}</td>
                   <td>
-                    <button className="userNoticeBtn" onClick={() => setShowModal(true)}><FaUser /></button>
-                    <button className="userNoticeBtn"><FaEye /></button><br />
-                    <button className="userNoticeBtn"><MdMessage /></button>
+                    <button className="userNoticeBtn1" onClick={() => setShowModal(true)}><FaUser /></button>
+                    <button className="userNoticeBtn1"><FaEye /></button><br />
+                    <button className="userNoticeBtn1"><MdMessage /></button>
                     <IconButton type="delete" className='userNoticeBtn'  />
                   </td>
                 </tr>

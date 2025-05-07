@@ -1,4 +1,4 @@
-.modal-overlay {
+.LegalWorkFlow-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,18 +11,20 @@
   z-index: 999;
 }
 
-.modal {
+.LegalWorkFlow-modal {
   width: 95%;
   max-width: 1000px;
   background: white;
-  padding: 30px;
-  border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   max-height: 90vh;
 }
 
-.modal h3 {
+.LegalWorkFlow-MiddleContent{
+  padding: 20px;
+}
+
+.LegalWorkFlow-modal h3 {
   font-size: 24px;
   margin-bottom: 20px;
   color: #333;
@@ -89,45 +91,30 @@ textarea {
   color: #333;
 }
 
-.table-scroll-container {
+.LegalWorkFlow-table-scroll-container {
   overflow-x: auto;
   margin-top: 10px;
 }
 
-.modal-actions {
+.LegalWorkFlow-Heading{
+  background-color: #003366;
+  color: white;
+  padding: 12px 20px;
+}
+.LegalWorkFlow-Heading h3{
+  font-size: 18px;
+  margin-bottom: 0px;
+  color: white;
+}
+
+.LegalWorkFlow-modal-actions {
   margin-top: 30px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
-.cancel-btn,
-.save-btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.cancel-btn {
-  background-color: #f44336;
-  color: white;
-}
-
-.cancel-btn:hover {
-  background-color: #d32f2f;
-}
-
-.save-btn {
-  background-color: #4caf50;
-  color: white;
-}
-
-.save-btn:hover {
-  background-color: #388e3c;
-}
 
 .headerWorkflow {
   display: flex;

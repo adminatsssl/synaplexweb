@@ -68,10 +68,8 @@
   
   .Disposition-modal {
     background-color: #ffffff;
-    padding: 30px;
     width: 90%;
-    max-width: 720px;
-    border-radius: 16px;
+    max-width: 800px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     max-height: 90vh;
     overflow-y: auto;
@@ -95,9 +93,6 @@
     background-color: #003366;
     color: white;
     padding: 12px 20px;
-    border-radius: 8px;
-    margin-bottom: 25px;
-    text-align: center;
   }
   
   .Disposition-section {
@@ -111,7 +106,10 @@
     margin-bottom: 12px;
     color: #111827;
   }
-  
+  .Disposition-middle-content{
+    padding: 20px;
+  }
+
   .Disposition-grid-2,
   .Disposition-grid-3 {
     display: grid;
@@ -171,6 +169,5 @@
   .Disposition-form-section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
       
