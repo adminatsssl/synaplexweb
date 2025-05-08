@@ -1,0 +1,240 @@
+.adminaccount-container {
+    background-color: #f8f8f8;
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+.adminaccount-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 0;
+}
+
+.adminaccount-tab-btn {
+    padding: 10px 16px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    background-color: #f8f8f8;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #2c3e50;
+    position: relative;
+    top: 1px;
+}
+
+.adminaccount-tab-btn.active {
+    background-color: #ffffff;
+    border-color: #ccc;
+    border-bottom: 1px solid #ffffff;
+    font-weight: 500;
+}
+
+.adminaccount-tab-content {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-top: none;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.AdminAccount-Actionbtn {
+    display: flex;
+    justify-content: center;
+}
+
+
+/*-------------------------------POPUP CSS-------------------------------*/
+
+.AdminAccount-Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.AdminAccount-Modal {
+    background: white;
+    border-radius: 6px;
+    width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.AdminAccount-Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #003366;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px 6px 0 0;
+}
+
+.AdminAccount-Header h2 {
+    color: white;
+    font-size: 18px;
+    margin: 0;
+}
+
+.AdminAccount-CloseButton {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.AdminAccount-Form {
+    padding: 20px;
+}
+
+.AdminAccount-FormRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.AdminAccount-FormRow label {
+    flex: 0 0 150px;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.AdminAccount-Input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.AdminAccount-CheckboxLabel {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 8px;
+}
+.AdminAccount-CheckboxLabel label{
+    width: 29%;
+}
+
+.AdminAccount-ButtonGroup {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    padding: 20px;
+}
+
+.AdminAccount-SaveButton {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.AdminAccount-CancelButton {
+    background-color: white;
+    color: #007bff;
+    border: 1px solid #007bff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.AdminAccount-ChangePasswordButton {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    color: #0044cc;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  /*Password POPUP CSS*/
+
+  .PasswordPopup-Account-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .PasswordPopup-Account-container {
+    background: white;
+    width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .PasswordPopup-Account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0056a8;
+    color: white;
+    padding: 10px;
+  }
+  .PasswordPopup-Account-header  h2{
+    margin-bottom: 0px;
+  }
+  
+  .PasswordPopup-Account-body {
+    padding: 10px 20px;
+  }
+  
+  .PasswordPopup-Account-input {
+    width: 90%;
+    margin: 5px 0 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .PasswordPopup-Account-footer {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+  }
+  
+  .PasswordPopup-Account-change {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .PasswordPopup-Account-cancel {
+    background-color: #f8f9fa;
+    color: #0056a8;
+    padding: 8px 16px;
+    border: 1px solid #0056a8;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .PasswordPopup-Account-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
