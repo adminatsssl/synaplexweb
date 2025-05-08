@@ -3,8 +3,10 @@ import { FaFileExport, FaTrash } from 'react-icons/fa';
 import Layout from '../../../Layout/Layout';
 import AddButton from "../../../ReusableComponents/AddButton";
 import GenerateInvoiceModal from './LegalInvoicePopup';
+import ReusableGrid from '../../../ReusableComponents/ReusableGrid';
+import IconButton from '../../../ReusableComponents/IconButton';
 
-const UserInvoiceManagement = () => {
+const LegalInvoice = () => {
   const [showModal, setShowModal] = useState(false);
 
   const dummyInvoices = [
@@ -21,6 +23,28 @@ const UserInvoiceManagement = () => {
       invoiceDate: '5/1/2025',
       lawyer: 'Anita',
       amount: 250,
+    },
+  ];
+
+  const columns = [
+    { key: 'invoiceNo', label: 'Invoice No' },
+    { key: 'invoiceDate', label: 'Invoice Date' },
+    { key: 'lawyer', label: 'Lawyer' },
+    { key: 'amount', label: 'Invoice Amount' },
+    {
+      key: 'actions',
+      label: 'Actions',
+      disableFilter: true,
+      render: (row) => (
+        <div>
+          <FaFileExport
+            title="Export"
+            className='invoice-Export'
+            style={{ marginRight: '10px', cursor: 'pointer', color: '#555' }}
+          />
+          <IconButton type="delete" />
+        </div>
+      ),
     },
   ];
 
@@ -53,44 +77,7 @@ const UserInvoiceManagement = () => {
           />
         </div>
 
-        <table
-          style={{
-            borderCollapse: 'collapse',
-            width: '100%',
-            fontSize: '14px',
-            border: '1px solid #ccc',
-          }}
-        >
-          <thead>
-            <tr style={{ backgroundColor: '#f0f0f0' }}>
-              <th style={{ padding: '8px', border: '1px solid #ccc' }}>Invoice No</th>
-              <th style={{ padding: '8px', border: '1px solid #ccc' }}>Invoice Date</th>
-              <th style={{ padding: '8px', border: '1px solid #ccc' }}>Lawyer</th>
-              <th style={{ padding: '8px', border: '1px solid #ccc' }}>Invoice Amount</th>
-              <th style={{ padding: '8px', border: '1px solid #ccc' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dummyInvoices.map((invoice) => (
-              <tr key={invoice.id}>
-                <td style={{ padding: '8px', border: '1px solid #ccc' }}>{invoice.invoiceNo}</td>
-                <td style={{ padding: '8px', border: '1px solid #ccc' }}>{invoice.invoiceDate}</td>
-                <td style={{ padding: '8px', border: '1px solid #ccc' }}>{invoice.lawyer}</td>
-                <td style={{ padding: '8px', border: '1px solid #ccc' }}>{invoice.amount}</td>
-                <td style={{ padding: '8px', border: '1px solid #ccc' }}>
-                  <FaFileExport
-                    title="Export"
-                    style={{ marginRight: '10px', cursor: 'pointer', color: '#555' }}
-                  />
-                  <FaTrash
-                    title="Delete"
-                    style={{ cursor: 'pointer', color: '#555' }}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ReusableGrid columns={columns} data={dummyInvoices} />
 
         {showModal && <GenerateInvoiceModal onClose={() => setShowModal(false)} />}
       </div>
@@ -98,4 +85,4 @@ const UserInvoiceManagement = () => {
   );
 };
 
-export default UserInvoiceManagement;
+export default LegalInvoice;

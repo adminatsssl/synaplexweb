@@ -1,6 +1,16 @@
-.userNoticeBtn1{
-    background:none;
+.userNotice-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  
+  .userNoticeBtn1,
+  .userNoticeBtn {
+    background: none;
     border: none;
-    font-size: 17px;
+    font-size: 15px;
     color: #0056B3 !important;
-}
+    cursor: pointer;
+  }
+  

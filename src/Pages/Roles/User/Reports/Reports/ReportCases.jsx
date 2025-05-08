@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import './Report.css'; 
+import './Report.css';
 import Layout from "../../../../Layout/Layout";
-import { MdEdit } from "react-icons/md";
 import { FaHandHoldingDollar } from "react-icons/fa6";
-import { FaFileExcel } from "react-icons/fa";
-import EditCasePopup from './EditCasePopup'; // Import the new component
+import EditCasePopup from './EditCasePopup';
 import IconButton from "../../../../ReusableComponents/IconButton";
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 
 const dummyData = [
   {
@@ -17,19 +16,6 @@ const dummyData = [
     createdDate: '2023-01-15',
     assignedTo: 'Agent A',
     court: 'Court 1',
-    loanId: '12345',
-    loanNumber: 'LN20250001',
-    loanType: 'Personal Loan',
-    defaultDate: '2023-01-15',
-    npaDate: '2023-02-20',
-    crnNo: 'MH2025000018',
-    courtType: 'Ghaziabad',
-    hearingDate: '2023-06-10',
-    fi1No: 123,
-    fi1Year: 2023,
-    regNo: 456,
-    regYear: 2023,
-    dateOfFiling: '2023-03-05'
   },
   {
     cnr: 'CNR002',
@@ -40,19 +26,6 @@ const dummyData = [
     createdDate: '2023-02-10',
     assignedTo: 'Agent B',
     court: 'Court 2',
-    loanId: '67890',
-    loanNumber: 'LN20250002',
-    loanType: 'Business Loan',
-    defaultDate: '2023-02-10',
-    npaDate: '2023-03-15',
-    crnNo: 'MH2025000019',
-    courtType: 'Delhi',
-    hearingDate: '2023-07-12',
-    fi1No: 124,
-    fi1Year: 2023,
-    regNo: 457,
-    regYear: 2023,
-    dateOfFiling: '2023-04-08'
   }
 ];
 
@@ -67,69 +40,45 @@ const ReportCases = () => {
   };
 
   const handleSave = (updatedData) => {
-    setData(data.map(item => 
-      item.cnr === updatedData.cnr ? updatedData : item
-    ));
+    setData(data.map(item => item.cnr === updatedData.cnr ? updatedData : item));
   };
+
+  const columns = [
+    { key: 'cnr', label: 'CNR No.' },
+    { key: 'loanAmount', label: 'Loan Amount' },
+    { key: 'caseType', label: 'Case Type' },
+    { key: 'status', label: 'Status' },
+    { key: 'borrower', label: 'Borrower' },
+    { key: 'createdDate', label: 'Created Date' },
+    { key: 'assignedTo', label: 'Assigned To' },
+    { key: 'court', label: 'Court' },
+    {
+      key: 'actions',
+      label: 'Actions',
+      disableFilter: true,
+      render: (row) => (
+        <div className="action-btns">
+          <button className="reportcasesbtn1"><FaHandHoldingDollar /></button>
+          <IconButton
+            type="edit"
+            className="reportcasesbtn"
+            onClick={() => handleEditClick(row)}
+          />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <Layout>
-      <div style={{ padding: '20px' }} className="reportCases-container ">
+      <div style={{ padding: '20px' }} className="reportCases-container">
         <h2 className="reportCases-title">Report - Case</h2>
 
-        {/* <button className="reportCasesexport-btn"><FaFileExcel/></button> */}
-
-        <div className="reportCasestable-wrapper">
-          <table
-            style={{
-              borderCollapse: 'collapse',
-              width: '100%',
-              fontSize: '14px',
-              border: '1px solid #ccc',
-            }}
-            className="reportCasescase-table"
-          >
-            <thead>
-              <tr style={{ backgroundColor: '#f0f0f0' }}>
-                {['CNR No.', 'Loan Amount', 'Case Type', 'Status', 'Borrower', 'Created Date', 'Assigned To', 'Court',''].map((col) => (
-                  <th key={col} style={{ padding: '8px', border: '1px solid #ccc' }}>
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.length === 0 ? (
-                <tr>
-                  <td colSpan="8" className="reportCasesno-records" style={{ textAlign: 'center', padding: '8px', border: '1px solid #ccc' }}>
-                    No records found
-                  </td>
-                </tr>
-              ) : (
-                data.map((row, index) => (
-                  <tr key={index}>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.cnr}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.loanAmount}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.caseType}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.status}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.borrower}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.createdDate}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.assignedTo}</td>
-                    <td style={{ padding: '8px', border: '1px solid #ccc' }}>{row.court}</td>
-                    <td>
-                      <button className='reportcasesbtn1'><FaHandHoldingDollar/></button>
-                      <IconButton type="edit" className='reportcasesbtn' onClick={() => handleEditClick(row)} />
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <ReusableGrid columns={columns} data={data} />
       </div>
 
-      <EditCasePopup 
-        isOpen={isEditPopupOpen} 
+      <EditCasePopup
+        isOpen={isEditPopupOpen}
         onClose={() => setIsEditPopupOpen(false)}
         caseData={selectedCase || dummyData[0]}
         onSave={handleSave}
