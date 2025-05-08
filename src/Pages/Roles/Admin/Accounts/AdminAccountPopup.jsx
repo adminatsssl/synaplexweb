@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AdminAccount.css";
 import PasswordPopup from "./PasswordPopUp.jsx";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const AdminAccountPopup = ({ onClose, onSave, userData }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -191,12 +193,11 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
         </div>
 
         <div className="AdminAccount-ButtonGroup">
-          <button className="AdminAccount-SaveButton" onClick={handleSubmit}>
-            Save
-          </button>
-          <button className="AdminAccount-CancelButton" onClick={onClose}>
-            Cancel
-          </button>
+          <CancelButton onClick={onClose} />
+            <SaveButton
+              onClick={handleSubmit}
+              label={"Save"}
+            />
         </div>
 
         {isPopupOpen && (
