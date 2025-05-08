@@ -93,13 +93,13 @@ const BorrowerOverview = () => {
     { key: "MonthlyIncome", label: "Monthly Income" },
     {
       key: "actions",
-      label: "", // we dont want any label
+      label: "", 
       disableFilter: true,
       render: (row) => (
-        <>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
           <IconButton type="edit" onClick={() => handleEditBorrower(row)} />
           <IconButton type="delete" onClick={() => handleDelete(row.ID)} />
-        </>
+        </div>
       ),
     },
   ];
