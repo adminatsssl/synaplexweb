@@ -1,9 +1,9 @@
 import React from 'react';
-import Layout from "../../../Layout/Layout.jsx"
+import Layout from "../../../Layout/Layout.jsx";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
 const dummyNotices = [
   {
-    ID: 1,
     NoticeDate: '2025-04-10',
     DueDate: '2025-05-01',
     Status: 'Pending',
@@ -18,7 +18,6 @@ const dummyNotices = [
     Stage: 'Initial',
   },
   {
-    ID: 2,
     NoticeDate: '2025-03-28',
     DueDate: '2025-04-20',
     Status: 'Completed',
@@ -34,58 +33,38 @@ const dummyNotices = [
   },
 ];
 
+const columns = [
+  { key: 'NoticeDate', label: 'Notice Date' },
+  { key: 'DueDate', label: 'Due Date' },
+  { key: 'Status', label: 'Status' },
+  {
+    key: 'isgeneratePDF',
+    label: 'Generate PDF',
+    render: (row) => (row.isgeneratePDF ? 'Yes' : 'No'),
+  },
+  { key: 'AuctionDate', label: 'Auction Date' },
+  { key: 'AuctionLocation', label: 'Auction Location' },
+  {
+    key: 'ValuationAmount',
+    label: 'Valuation',
+    render: (row) => `$${row.ValuationAmount.toLocaleString()}`,
+  },
+  { key: 'NoticeTemplate', label: 'Template' },
+  { key: 'NoticeId', label: 'Notice ID' },
+  { key: 'TrackingId', label: 'Tracking ID' },
+  { key: 'NoticeType', label: 'Type' },
+  { key: 'Stage', label: 'Stage' },
+];
+
 const AdminNotices = () => {
   return (
     <Layout>
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-7xl mx-auto">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6">Notice</h2>
-        <div className="overflow-x-auto bg-white rounded-lg shadow">
-          <table className="min-w-full table-auto border border-gray-200">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="px-4 py-3 border-b">ID</th>
-                <th className="px-4 py-3 border-b">Notice Date</th>
-                <th className="px-4 py-3 border-b">Due Date</th>
-                <th className="px-4 py-3 border-b">Status</th>
-                <th className="px-4 py-3 border-b">Generate PDF</th>
-                <th className="px-4 py-3 border-b">Auction Date</th>
-                <th className="px-4 py-3 border-b">Auction Location</th>
-                <th className="px-4 py-3 border-b">Valuation</th>
-                <th className="px-4 py-3 border-b">Template</th>
-                <th className="px-4 py-3 border-b">Notice ID</th>
-                <th className="px-4 py-3 border-b">Tracking ID</th>
-                <th className="px-4 py-3 border-b">Type</th>
-                <th className="px-4 py-3 border-b">Stage</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-800">
-              {dummyNotices.map((notice, idx) => (
-                <tr key={notice.ID} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border-b">{notice.ID}</td>
-                  <td className="px-4 py-2 border-b">{notice.NoticeDate}</td>
-                  <td className="px-4 py-2 border-b">{notice.DueDate}</td>
-                  <td className="px-4 py-2 border-b">{notice.Status}</td>
-                  <td className="px-4 py-2 border-b">
-                    {notice.isgeneratePDF ? 'Yes' : 'No'}
-                  </td>
-                  <td className="px-4 py-2 border-b">{notice.AuctionDate}</td>
-                  <td className="px-4 py-2 border-b">{notice.AuctionLocation}</td>
-                  <td className="px-4 py-2 border-b">
-                    ${notice.ValuationAmount.toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2 border-b">{notice.NoticeTemplate}</td>
-                  <td className="px-4 py-2 border-b">{notice.NoticeId}</td>
-                  <td className="px-4 py-2 border-b">{notice.TrackingId}</td>
-                  <td className="px-4 py-2 border-b">{notice.NoticeType}</td>
-                  <td className="px-4 py-2 border-b">{notice.Stage}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-800 mb-6">Notice</h2>
+          <ReusableGrid columns={columns} data={dummyNotices} />
         </div>
       </div>
-    </div>
     </Layout>
   );
 };

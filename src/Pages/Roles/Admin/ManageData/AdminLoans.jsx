@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from "../../../Layout/Layout.jsx";
 import IconButton from '../../../ReusableComponents/IconButton.jsx';
+import ReusableGrid from '../../../ReusableComponents/ReusableGrid.jsx';
 
 const dummyLoans = [
   {
@@ -35,42 +36,41 @@ const dummyLoans = [
   },
 ];
 
+const columns = [
+  { key: 'LoanID', label: 'Loan ID' },
+  { key: 'LoanType', label: 'Loan Type' },
+  {
+    key: 'Amount',
+    label: 'Amount',
+    render: (row) => `$${row.Amount.toLocaleString()}`,
+  },
+  {
+    key: 'DefaultDate',
+    label: 'Default Date',
+    render: (row) => new Date(row.DefaultDate).toLocaleDateString(),
+  },
+  { key: 'BorrowerName', label: 'Borrower' },
+  { key: 'Tenure', label: 'Tenure' },
+  {
+    key: 'AnnualInterestRate',
+    label: 'Annual Interest Rate',
+    render: (row) => `${row.AnnualInterestRate}%`,
+  },
+  {
+    key: 'actions',
+    label: '',
+    disableFilter: true,
+    render: (row) => <IconButton type="delete" />,
+  },
+];
+
 const AdminLoans = () => {
   return (
     <Layout>
-    <div className="min-h-screen bg-gray-50 px-8 py-12">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6">Loans</h2>
-      <div className="overflow-x-auto rounded-lg shadow-md bg-white">
-        <table className="w-full text-sm text-left text-gray-700 border-collapse">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-100">
-            <tr>
-              <th className="px-6 py-4">Loan ID</th>
-              <th className="px-6 py-4">Loan Type</th>
-              <th className="px-6 py-4">Amount</th>
-              <th className="px-6 py-4">Default Date</th>
-              <th className="px-6 py-4">Borrower</th>
-              <th className="px-6 py-4">Tenure</th>
-              <th className="px-6 py-4">Annual Interest Rate</th>
-              <th className="px-6 py-4"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {dummyLoans.map((loan) => (
-              <tr key={loan.ID} className="border-t">
-                <td className="px-6 py-4">{loan.LoanID}</td>
-                <td className="px-6 py-4">{loan.LoanType}</td>
-                <td className="px-6 py-4">${loan.Amount.toLocaleString()}</td>
-                <td className="px-6 py-4">{new Date(loan.DefaultDate).toLocaleDateString()}</td>
-                <td className="px-6 py-4">{loan.BorrowerName}</td>
-                <td className="px-6 py-4">{loan.Tenure}</td>
-                <td className="px-6 py-4">{loan.AnnualInterestRate}%</td>
-                <td className="px-6 py-4"><IconButton type="delete"/></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="min-h-screen bg-gray-50 px-8 py-12">
+        <h2 className="text-4xl font-bold text-gray-800 mb-6">Loans</h2>
+        <ReusableGrid columns={columns} data={dummyLoans} />
       </div>
-    </div>
     </Layout>
   );
 };
