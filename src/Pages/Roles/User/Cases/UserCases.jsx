@@ -14,6 +14,7 @@ const UserCases = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedCase, setSelectedCase] = useState(null);
 
   useEffect(() => {
     axios
@@ -28,8 +29,17 @@ const UserCases = () => {
       });
   }, []);
 
+  const handleEdit = (caseData) => {
+    setSelectedCase(caseData);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedCase(null);
+  };
+
   const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
 
   if (loading) return <p>Loading cases...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -54,11 +64,11 @@ const UserCases = () => {
           <button style={{ color:"#0056B3",background: "none", border: "none", padding: 0,fontSize:"20px",marginRight:"0px" }}>
             <FaHandHoldingDollar />
           </button>
-          <IconButton type="edit" />
+          <IconButton type="edit" onClick={() => handleEdit(row)} />
+
           
         </div>
       ),
-      
     },
   ];
 
@@ -78,16 +88,18 @@ const UserCases = () => {
 
     <ReusableGrid columns={columns} data={cases} />
 
-        {showModal && (
-          <div className="modal-overlay-usercase">
-            <div className="modal-content-usercase-userrole">
-              <AddUserCases />
-              <button onClick={closeModal} className="close-button-usercases">
-                X ..
-              </button>
-            </div>
-          </div>
-        )}
+    {showModal && (
+  <div className="modal-overlay-usercase">
+    <div className="modal-content-usercase-userrole">
+      <AddUserCases
+        initialData={selectedCase}
+        onClose={closeModal}
+      />
+      <button onClick={closeModal} className="close-button-usercases">X</button>
+    </div>
+  </div>
+)}
+
       </div>
     </Layout>
   );

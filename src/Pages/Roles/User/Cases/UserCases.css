@@ -117,6 +117,13 @@ border-radius: 6px;
 padding: 20px;
 margin: 20px;
 }
+.addusercase-card-SearchC-Case{
+  border: 1px solid #e0e0e0;
+border-radius: 6px;
+padding: 20px;
+margin: 20px;
+background-color: #f7f7f7;
+}
 
 .addusercase-section-header h3,
 .addusercase-search-section h3 {
