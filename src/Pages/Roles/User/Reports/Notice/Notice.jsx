@@ -5,7 +5,10 @@ import { MdMessage, MdDelete } from "react-icons/md";
 import ResponseModal from "./ResponseModal"; // Import
 import "./Notice.css";
 import IconButton from "../../../../ReusableComponents/IconButton";
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 
+
+//sample data
 const UserNotice = () => {
   const [data] = useState([
     {
@@ -35,62 +38,45 @@ const UserNotice = () => {
   ]);
 
   const [showModal, setShowModal] = useState(false);
+  const columns = [
+    { key: "crnNo", label: "CRN No." },
+    { key: "noticeType", label: "Notice Type" },
+    { key: "stage", label: "Stage" },
+    { key: "caseType", label: "Case Type" },
+    { key: "borrowerName", label: "Borrower Name" },
+    { key: "noticeDate", label: "Notice Date" },
+    { key: "dueDate", label: "Due Date" },
+    { key: "loanAmount", label: "Loan Amount" },
+    { key: "trackingId", label: "Tracking Id" },
+    { key: "status", label: "Status" },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (row) => (
+        <div className="userNotice-actions">
+          <button className="userNoticeBtn1" onClick={() => setShowModal(true)}>
+            <FaUser />
+          </button>
+          <button className="userNoticeBtn1">
+            <FaEye />
+          </button>
+          <button className="userNoticeBtn1">
+            <MdMessage />
+          </button>
+          <IconButton type="delete" className="userNoticeBtn" />
+        </div>
+      ),
+      
+    },
+  ];
 
   return (
     <Layout>
       <div style={{ padding: "20px" }}>
         <h2>Notice</h2>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              {[
-                "CRN No.",
-                "Notice Type",
-                "Stage",
-                "CaseType",
-                "Borrower Name",
-                "Notice Date",
-                "Due Date",
-                "Loan Amount",
-                "Tracking Id",
-                "Status",
-                "",
-              ].map((header, index) => (
-                <th key={index} style={{ borderBottom: "1px solid #ccc", padding: "8px", textAlign: "left" }}>
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.length > 0 ? (
-              data.map((item, idx) => (
-                <tr key={idx} style={{ borderBottom: "1px solid #eee" }}>
-                  <td>{item.crnNo}</td>
-                  <td>{item.noticeType}</td>
-                  <td>{item.stage}</td>
-                  <td>{item.caseType}</td>
-                  <td>{item.borrowerName}</td>
-                  <td>{item.noticeDate}</td>
-                  <td>{item.dueDate}</td>
-                  <td>{item.loanAmount}</td>
-                  <td>{item.trackingId}</td>
-                  <td>{item.status}</td>
-                  <td>
-                    <button className="userNoticeBtn1" onClick={() => setShowModal(true)}><FaUser /></button>
-                    <button className="userNoticeBtn1"><FaEye /></button><br />
-                    <button className="userNoticeBtn1"><MdMessage /></button>
-                    <IconButton type="delete" className='userNoticeBtn'  />
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="11" style={{ textAlign: "center" }}>No data available</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <ReusableGrid columns={columns} data={data} />
+
         <ResponseModal show={showModal} onClose={() => setShowModal(false)} />
       </div>
     </Layout>

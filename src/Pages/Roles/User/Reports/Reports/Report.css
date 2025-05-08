@@ -24,3 +24,21 @@
   color:#0056B3;
   margin-right: 0px;
 }
+
+.action-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* spacing between the buttons */
+}
+
+.reportcasesbtn1,
+.reportcasesbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
