@@ -95,6 +95,11 @@ textarea {
   overflow-x: auto;
   margin-top: 10px;
 }
+.LegalWorkFlow-add-stage-btn{
+  background-color: #004c97;
+  color: white;
+  border: none;
+}
 
 .LegalWorkFlow-Heading{
   background-color: #003366;

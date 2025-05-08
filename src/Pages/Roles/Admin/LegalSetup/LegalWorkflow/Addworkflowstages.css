@@ -15,28 +15,27 @@
     width: 95%;
     max-width: 1000px;
     background: white;
-    padding: 35px;
-    border-radius: 12px;
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
     max-height: 90vh;
     overflow-y: auto;
     font-family: 'Segoe UI', sans-serif;
   }
-  
-  .add-workflow-modal h4 {
-    border-bottom: 2px solid #004c97;
-    padding-bottom: 12px;
-    margin-bottom: 30px;
+  .add-workflow-heading{
+    background-color: #003366;
+  color: white;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: bold;
   }
-  
+  .add-workflow-middleContent{
+    padding: 20px 45px;
+  }
   .form-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
     gap: 25px;
   }
-  .form-grid > div {
-    margin-bottom: 10px;
-  }
+
   
   
   .add-workflow-modal label {
@@ -108,30 +107,13 @@
   
   .modal-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 10px;
-    margin-top: 35px;
+    margin-top: 11px;
+    margin-bottom: 17px;
   }
   
-  .cancel-btn,
-  .save-btn {
-    padding: 10px 22px;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .cancel-btn {
-    background: #f3f3f3;
-    color: #333;
-  }
-  
-  .save-btn {
-    background: #004c97;
-    color: white;
-  }
+ 
   .full-width {
     grid-column: span 3;
   }

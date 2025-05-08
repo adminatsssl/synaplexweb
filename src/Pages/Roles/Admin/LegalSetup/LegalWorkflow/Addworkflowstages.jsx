@@ -31,8 +31,11 @@ const Addworkflowstages = ({ onClose, onSave }) => {
   return (
     <div className="add-workflow-overlay">
       <div className="add-workflow-modal">
+        <div className="add-workflow-heading" >
         <h4>Legal Workflow Stages</h4>
-
+        </div>
+    
+        <div className="add-workflow-middleContent">
         <div className="form-grid">
           <div className="one-span">
             <label>Name</label>
@@ -125,6 +128,10 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             />
           </div>
 
+          <div className="section-divider">
+
+          </div>
+
           <div className="full-width">
             <label className="required">Disposition Stages</label>
             <select>
@@ -134,6 +141,9 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             </select>
           </div>
         </div>
+
+        </div>
+        
 
         <div className="modal-actions">
           <CancelButton onClick={onClose} className="cancel-btn" />

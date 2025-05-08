@@ -244,7 +244,7 @@ const WorkflowModal = ({ onClose, workflow }) => {
             <CancelButton onClick={onClose} className="cancel-btn" />
         <SaveButton
           onClick={handleSubmit} className="save-btn"
-          label={isEdit ? "Update" : "Create"}
+          label={isEdit ? "Update" : "Save"}
         />
 
           </div>
