@@ -149,6 +149,14 @@ button {
     background-color: #003366;
     color: white;
     padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.legalcasetype-closebutton{
+  background: transparent;
+  color: white;
+  border: none;
 }
 .legalcasetype-header h3{
   color: white;

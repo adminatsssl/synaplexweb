@@ -44,6 +44,7 @@ const LegalCaseTypePopup = ({ onClose, onSave, item }) => {
       <div className="legalcasetype-popup-content">
         <div className="legalcasetype-header">
         <h3>{item ? "Edit" : "Add"} Legal Case Type</h3>
+        <button className="legalcasetype-closebutton" onClick={onClose}>X</button>
         </div>
         
         <div className="legalcasetype-middlecontent">

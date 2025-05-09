@@ -33,6 +33,7 @@ const Addworkflowstages = ({ onClose, onSave }) => {
       <div className="add-workflow-modal">
         <div className="add-workflow-heading" >
         <h4>Legal Workflow Stages</h4>
+        <button className="add-workflow-closebutton" onClick={onClose}> X</button>
         </div>
     
         <div className="add-workflow-middleContent">

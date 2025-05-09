@@ -93,6 +93,14 @@
     background-color: #003366;
     color: white;
     padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center ;
+  }
+  .Disposition-modal-closebutton{
+    background: transparent;
+    color: white;
+    border: none;
   }
   
   .Disposition-section {

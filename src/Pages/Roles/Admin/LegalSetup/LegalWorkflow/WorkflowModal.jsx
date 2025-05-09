@@ -185,7 +185,11 @@ const WorkflowModal = ({ onClose, workflow }) => {
   return (
     <div className="LegalWorkFlow-modal-overlay">
       <div className="LegalWorkFlow-modal">
-        <div className="LegalWorkFlow-Heading"><h3>{isEdit ? "Edit" : "Add"} Workflow</h3></div>
+        <div className="LegalWorkFlow-Heading">
+          <h3>{isEdit ? "Edit" : "Add"} Workflow</h3>
+          <button className="LegalWorkFlow-closebutton" onClick={onClose}>X</button>
+          
+          </div>
         
         <div className="LegalWorkFlow-MiddleContent">
         <form onSubmit={handleSubmit}>

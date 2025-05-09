@@ -1,11 +1,11 @@
-// Import statements remain the same
 import React, { useState } from "react";
-import Layout from '../../../Layout/Layout.jsx'
-import './Template.css'
+import Layout from "../../../Layout/Layout.jsx";
+import "./Template.css";
 import IconButton from "../../../ReusableComponents/IconButton";
 import AddButton from "../../../ReusableComponents/AddButton";
 import { CiImport } from "react-icons/ci";
-import TemplatePopup from "./TemplatePopup"; // Import the popup component
+import TemplatePopup from "./TemplatePopup";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
 const NoticeSetupTemplate = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -21,9 +21,24 @@ const NoticeSetupTemplate = () => {
     setShowPopup(true);
   };
 
-  // Dummy template data
   const templates = [
     { id: 1, name: "Template", createdOn: "2/2/2025", isDefault: true },
+  ];
+
+  const columns = [
+    { key: "name", label: "Template Name" },
+    { key: "createdOn", label: "Created On" },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (template) => (
+        <div className="text-right space-x-2">
+          <IconButton type="edit" onClick={() => handleEdit(template)} />
+          <IconButton type="delete" />
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -36,34 +51,14 @@ const NoticeSetupTemplate = () => {
 
           <div className="noticesetuptemplate-btn">
             <button className="noticesetuptemplate-importbtn">
-              <CiImport />Import
+              <CiImport /> Import
             </button>
             <AddButton text="Template" onClick={handleAdd} />
           </div>
         </div>
 
         <div className="border rounded shadow bg-white overflow-x-auto">
-          <table className="min-w-full text-left">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="p-4 border-b font-semibold">Template Name</th>
-                <th className="p-4 border-b font-semibold">Created On</th>
-                <th className="p-4 border-b"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {templates.map(template => (
-                <tr key={template.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3">{template.name}</td>
-                  <td className="px-4 py-3">{template.createdOn}</td>
-                  <td className="px-4 py-3 text-right space-x-2">
-                    <IconButton type="edit" onClick={() => handleEdit(template)} />
-                    <IconButton type="delete" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ReusableGrid columns={columns} data={templates} />
         </div>
 
         {showPopup && (

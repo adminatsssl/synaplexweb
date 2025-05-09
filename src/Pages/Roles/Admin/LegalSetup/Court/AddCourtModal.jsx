@@ -87,7 +87,10 @@ export default function AddCourtModal({ onClose, onSave, initialData = null }) {
     return (
         <div className="legalsetup-court-modal-overlay">
             <div className="legalsetup-court-modal">
+                <div className='legalsetup-court-topheading'>
                 <h2 className="legalsetup-court-modal-title">Court</h2>
+                <button className='legalsetup-court-modal-closebutton' onClick={onClose}>X</button>
+                </div>
 
                 <div className='legalsetup-court-middlecontent'>
                 <form onSubmit={handleSubmit}>

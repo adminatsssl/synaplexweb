@@ -1,191 +1,203 @@
 .court-setup-container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .court-setup-header {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    margin-bottom: 24px;
-  }
-  
-  .court-setup-title {
-    font-size: 24px;
-    font-weight: 600;
-    color: #1f2937;
-  }
-  
-  .add-court-btn {
-    background-color: #059669;
-    color: white;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-  }
-  
-  .add-court-btn:hover {
-    background-color: #047857;
-  }
-  
-  .court-table-container {
-    overflow-x: auto;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-  }
-  
-  .court-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .court-table th,
-  .court-table td {
-    padding: 14px 20px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 14px;
-  }
-  
-  .court-table th {
-    background-color: #f3f4f6;
-    color: #374151;
-    font-weight: 600;
-  }
-  
-  .court-table tr:hover {
-    background-color: #f9fafb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.court-setup-header {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.court-setup-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.add-court-btn {
+  background-color: #059669;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.add-court-btn:hover {
+  background-color: #047857;
+}
+
+.court-table-container {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.court-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.court-table th,
+.court-table td {
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.court-table th {
+  background-color: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+}
+
+.court-table tr:hover {
+  background-color: #f9fafb;
+}
+
+.legalsetup-court-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.legalsetup-court-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(3px);
+}
+
+.legalsetup-court-modal {
+  background-color: #ffffff;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
   }
 
-  .legalsetup-court-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
-  .legalsetup-court-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    backdrop-filter: blur(3px);
-  }
-  
-  .legalsetup-court-modal {
-    background-color: #ffffff;
-    width: 90%;
-    max-width: 900px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: scaleIn 0.3s ease-out;
-  }
-  
-  @keyframes scaleIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  .legalsetup-court-modal-title {
-    font-size: 22px;
-    font-weight: 600;
-    background-color: #003366;
-    color: white;
-    padding: 12px 20px;
-  }
-  
-  .legalsetup-court-middlecontent{
-    padding: 20px;
-  }
-  
-  .legalsetup-court-section {
-    margin-bottom: 30px;
-    padding: 15px;
-    border: 1px solid rgb(199, 198, 198);
-  }
-  
-  .legalsetup-court-section-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 10px;
-    text-decoration: underline;
-    margin-bottom: 0px;
-    color: #111827;
-  }
-  
-  .legalsetup-court-grid-2,
-  .legalsetup-court-grid-3 {
-    display: grid;
-    gap: 18px;
-  }
-  
-  .legalsetup-court-grid-2 {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  }
-  
-  .legalsetup-court-grid-3 {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-  
-  .legalsetup-court-form-item {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .legalsetup-court-form-item label {
-    font-size: 14px;
-    color: #374151;
-    margin-bottom: 6px;
-    font-weight: 500;
-  }
-  
-  .legalsetup-court-form-item input,
-  .legalsetup-court-form-item select,
-  .legalsetup-court-form-item textarea {
-    padding: 10px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border-color 0.2s ease;
-  }
-  
-  .legalsetup-court-form-item input:focus,
-  .legalsetup-court-form-item select:focus,
-  .legalsetup-court-form-item textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-  }
-  
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .legalsetup-court-modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 30px;
-  }
-  
-  
+}
+
+.legalsetup-court-topheading {
+  display: flex;
+  font-weight: 600;
+  background-color: #003366;
+  color: white;
+  padding: 5px 11px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legalsetup-court-modal-title{
+  margin-bottom: 1px;
+}
+
+.legalsetup-court-modal-closebutton{
+  background: transparent;
+  border: none;
+  color: white;
+}
+
+.legalsetup-court-middlecontent {
+  padding: 20px;
+}
+
+.legalsetup-court-section {
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px solid rgb(199, 198, 198);
+}
+
+.legalsetup-court-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-decoration: underline;
+  margin-bottom: 0px;
+  color: #111827;
+}
+
+.legalsetup-court-grid-2,
+.legalsetup-court-grid-3 {
+  display: grid;
+  gap: 18px;
+}
+
+.legalsetup-court-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.legalsetup-court-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.legalsetup-court-form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.legalsetup-court-form-item label {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.legalsetup-court-form-item input,
+.legalsetup-court-form-item select,
+.legalsetup-court-form-item textarea {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.legalsetup-court-form-item input:focus,
+.legalsetup-court-form-item select:focus,
+.legalsetup-court-form-item textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.legalsetup-court-modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}

@@ -105,6 +105,14 @@ textarea {
   background-color: #003366;
   color: white;
   padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.LegalWorkFlow-closebutton{
+  background: transparent;
+  color: white;
+  border: none;
 }
 .LegalWorkFlow-Heading h3{
   font-size: 18px;

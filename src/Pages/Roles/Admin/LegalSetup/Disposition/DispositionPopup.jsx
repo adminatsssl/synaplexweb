@@ -46,7 +46,11 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
   return (
     <div className="Disposition-modal-overlay">
       <div className="Disposition-modal">
-        <div className="Disposition-modal-title">{item ? "Edit Disposition" : "Add Disposition"}</div>
+        <div className="Disposition-modal-title">
+          {item ? "Edit Disposition" : "Add Disposition"}
+          <button className="Disposition-modal-closebutton" onClick={onClose}>X</button>
+          
+          </div>
 
         <div className="Disposition-middle-content">
           <form onSubmit={handleSubmit}>
