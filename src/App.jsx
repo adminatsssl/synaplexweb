@@ -21,9 +21,12 @@ import Loanpage from './Pages/Roles/User/Loan/LoanPage';
 import LawyerCases from './Pages/Roles/Legal/LawyerCases/LawyerCases';
 import UserInvoiceManagement from './Pages/Roles/User/InvoiceManagement/UserInvoiceManagement';
 import StageConfig from './Pages/Roles/Admin/NoticeSetup/StageConfig';
-import LegalInvoice from './Pages/Roles/Legal/Invoices/LegalInvoice';
 import NoticeSetupTemplate from './Pages/Roles/Admin/NoticeSetup/Template';
 import AdminAccount from './Pages/Roles/Admin/Accounts/AdminAccount';
+import LawyerInvoiceManagement from './Pages/Roles/Legal/LawyerInvoiceManagement/LawyerInvoiceManagement';
+import LawyerNotice from './Pages/Roles/Legal/LawyerNotice/LawyerNotice';
+import LawyerReportCases from './Pages/Roles/Legal/LawyerReports/LawyerReportCases';
+import LawyerReportNotices from './Pages/Roles/Legal/LawyerReports/LawyerReportNotice';
 
 function App() {
   return (
@@ -56,7 +59,10 @@ function App() {
         {/* Lawyer Routes */}
         <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
         <Route path="/lawyer-cases" element={<ProtectedRoute element={LawyerCases} allowedRoles={["Legal"]} />} />
-        <Route path="/legalInvoice" element={<ProtectedRoute element={LegalInvoice} allowedRoles={["Legal"]} />} />
+        <Route path="/lawyer-invoice" element={<ProtectedRoute element={LawyerInvoiceManagement} allowedRoles={["Legal"]} />} />
+        <Route path="/lawyer-notice" element={<ProtectedRoute element={LawyerNotice} allowedRoles={["Legal"]} />} />
+        <Route path="/lawyer-reportCases" element={<ProtectedRoute element={LawyerReportCases} allowedRoles={["Legal"]} />} />
+        <Route path="/lawyer-reportNotice" element={<ProtectedRoute element={LawyerReportNotices} allowedRoles={["Legal"]} />} />
         
       </Routes>
     </Router>

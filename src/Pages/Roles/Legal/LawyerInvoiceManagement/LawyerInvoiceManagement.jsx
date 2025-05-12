@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { FaFileExport, FaTrash } from 'react-icons/fa';
-import Layout from '../../../Layout/Layout';
-import AddButton from "../../../ReusableComponents/AddButton";
-import GenerateInvoiceModal from './LegalInvoicePopup';
-import ReusableGrid from '../../../ReusableComponents/ReusableGrid';
-import IconButton from '../../../ReusableComponents/IconButton';
+import { FaFileExport } from 'react-icons/fa';
+import Layout from '../../../Layout/Layout.jsx';
+import AddButton from "../../../ReusableComponents/AddButton.jsx";
+import LawyerGenerateInvoice from './LawyerGenerateInvoice.jsx';
+import IconButton from "../../../ReusableComponents/IconButton.jsx";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid.jsx";
+import "./LawyerInvoiceManagement.css";
 
-const LegalInvoice = () => {
+const LawyerInvoiceManagement = () => {
   const [showModal, setShowModal] = useState(false);
 
   const dummyInvoices = [
@@ -79,10 +80,10 @@ const LegalInvoice = () => {
 
         <ReusableGrid columns={columns} data={dummyInvoices} />
 
-        {showModal && <GenerateInvoiceModal onClose={() => setShowModal(false)} />}
+        {showModal && <LawyerGenerateInvoice onClose={() => setShowModal(false)} />}
       </div>
     </Layout>
   );
 };
 
-export default LegalInvoice;
+export default LawyerInvoiceManagement;

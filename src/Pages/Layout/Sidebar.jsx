@@ -101,15 +101,15 @@ export default function Sidebar() {
     Legal: [
       { name: "Home", path: "/legal" },
       { name: "Cases", path: "/lawyer-cases" },
-      { name: "Notices", path: "/notice" },
+      { name: "Notices", path: "/lawyer-notice" },
       {
         name: "Reports",
         children: [
-          { name: "ReportCases", path: "" },
-          { name: "ReportNotice", path: "" },
+          { name: "ReportCases", path: "/lawyer-reportCases" },
+          { name: "ReportNotice", path: "/lawyer-reportNotice" },
         ],
       },
-      { name: "Invoices", path: "/legalInvoice" },
+      { name: "Invoices", path: "/lawyer-invoice" },
     ],
   };
 

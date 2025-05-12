@@ -90,3 +90,8 @@
     cursor: pointer;
   }
   
+  .invoice-Export{
+   color:  #0056B3 !important;
+   font-size: 20px;
+    margin-right: 0px !important;
+  }
