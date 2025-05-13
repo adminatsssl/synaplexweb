@@ -3,6 +3,7 @@ import Layout from "../../Layout/Layout";
 import "./UserPage.css";
 import { UserMap } from "./Dashboard/Map/UserMap";
 import CalendarCases from "./Dashboard/Calendar/CalendarCases";
+import ActivityCaseTabs from "./Dashboard/Activity/ActivityTab";
 
 export default function UserPage() {
   const username = localStorage.getItem("username");
@@ -23,7 +24,17 @@ export default function UserPage() {
           <h2>Case Distribution by Geography :</h2>
           <UserMap jsonData={sampleData} />
         </div>
-      </div>
+
+        </div>
+
+        <div className="userpage-activity-container">
+          <div className="userpage-activity">
+          <h2>Litigation Activity type distribution</h2>
+    <ActivityCaseTabs/>
+          </div>
+          
+
+        </div>
     </Layout>
   );
 }

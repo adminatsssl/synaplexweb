@@ -1,0 +1,21 @@
+.form-wrapper {
+    margin-top: 20px;
+  }
+  .form-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  input {
+    padding: 6px;
+    border: 1px solid #ccc;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  

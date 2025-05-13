@@ -19,6 +19,18 @@
     transition: box-shadow 0.3s ease;
     
   }
+  .userpage-activity-container{
+    padding: 2rem;
+  }
+  .userpage-activity{
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    min-height: 700px;
+    border: 1px solid #e6e6e6;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    transition: box-shadow 0.3s ease;
+  }
   
   .userpage-popup:hover {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
