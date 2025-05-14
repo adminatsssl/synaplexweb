@@ -1,0 +1,63 @@
+.activitytabs-container {
+    padding: 16px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .activitytabs {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .activitytab {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    cursor: pointer;
+    width: 10rem;
+    justify-content: center;
+    color: #000;
+    position: relative;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    height: 32px;
+  }
+  
+  .activitytab.active {
+    background-color: #00549e; /* dark blue */
+    color: white;
+  }
+  
+  .activitybadge {
+    margin-left: 8px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 6px;
+  }
+  
+  .activitybadge.red {
+    background-color: #d93025;
+    color: white;
+  }
+  
+  .activitybadge.grey {
+    background-color: #e0e0e0;
+    color: black;
+  }
+  
+  .activitytab-content {
+    margin-top: 16px;
+    color: #333;
+  }
+  
+  .activity-middle-content{
+    border: 1px solid rgb(209, 209, 209);
+    margin-top: 5px;
+  }
+
+  .activity-stage-bar-middle{
+    padding: 25px;
+  }

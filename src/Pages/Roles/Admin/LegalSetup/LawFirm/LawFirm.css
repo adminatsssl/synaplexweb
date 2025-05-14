@@ -1,0 +1,165 @@
+.law-firm-container {
+  padding: 20px;
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.law-firm-header {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+
+.law-firm-loading,
+.law-firm-error {
+  padding: 16px;
+  font-size: 16px;
+}
+
+.law-firm-error {
+  color: red;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.law-firm-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.law-firm-table th,
+.law-firm-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.law-firm-table thead {
+  background-color: #f0f0f0;
+}
+
+.law-firm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/*--------------------------------Popup CSS---------------------------------*/
+
+/* Overlay background for popup */
+.LawFirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* prevent window scroll */
+}
+
+/* Modal box with internal scroll */
+.LawFirm-modal-content {
+  background-color: #fff;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh; /* constrain height */
+  overflow-y: auto; /* enable scroll inside */
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  margin: 2rem auto;
+}
+
+
+/* Close button */
+.LawFirm-modal-close {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+}
+.LawFirm-popup-heading{
+    background-color: #003366;
+    color: white;
+    padding: 12px 20px;
+}
+.LawFirm-popup-heading h2{
+  font-size: 18px;
+  margin-bottom: 0px;
+}
+/* Section titles */
+.LawFirm-section-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem;
+  text-decoration: underline;
+}
+.LawFirm-Middle-Content{
+  padding: 20px;
+}
+.LawFirm-popup-middle-field{
+  margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid rgb(199, 198, 198);
+}
+
+/* Grid for form fields */
+.LawFirm-form-grid,
+.LawFirm-address-grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.LawFirm-form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.LawFirm-address-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Input and label styling */
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+}
+
+input, textarea {
+  padding: 0.5rem;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline-color: #003e87;
+}
+
+textarea.LawFirm-textarea {
+  resize: vertical;
+  min-height: 80px;
+  max-height: 200px;
+}
+
+/* Button row */
+.LawFirm-button-row {
+  display: flex;
+  justify-content:center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+

@@ -1,0 +1,25 @@
+.case-detailpage-container{
+    padding: 10px;
+}
+
+.case-detailpage-topbar-heading{
+    display: flex;
+    justify-content: space-between;
+}
+.case-detailpage-borrowerContainer{
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.case-detailpage-borrowerContainer-topheading{
+    display: flex;
+    justify-content: space-between;
+    background-color: #00549e;
+    color: white;
+    padding: 0px 20px;
+    border-radius: 15px 15px 0px 0px;
+}
+.case-detailpage-borrowerContainer-content{
+    display: flex;
+    justify-content: space-between;
+}

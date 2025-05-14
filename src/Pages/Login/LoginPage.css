@@ -1,223 +1,182 @@
-/* Reset Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    margin: 0;
-  }
-  
+/* DO NOT USE GLOBAL RESET HERE */
+
+/* Scoped styles for login page only */
+.loginpage {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.loginpage-left {
+  flex: 1;
+  position: relative;
+}
+
+.loginpage .left-image {
+  width: 190%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 100;
+}
+
+.loginpage-right {
+  flex: 1;
+  /* padding: 50px 30px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  z-index: 300;
+  min-height: 100vh;
+}
+
+.loginpage .logo-container {
+  position: absolute;
+  top: 4px;
+  right: 21px;
+  width: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loginpage .logo {
+  width: 60%;
+  margin-bottom: 5px;
+}
+
+.loginpage .logo-text {
+  width: 80%;
+}
+
+.loginpage h2 {
+  font-size: 3vw;
+  margin-bottom: 20px;
+  color: #333;
+  user-select: none;
+}
+
+.loginpage .highlight {
+  color: #0056b3;
+  font-size: xxx-large;
+}
+
+.loginpage-formwrapper {
+  width: 100%;
+  max-width: 330px;
+  background: white;
+  padding: 30px 40px;
+  border-radius: 10px;
+  border: 1px solid #d3d3d3;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.loginpage .form-group {
+  margin-bottom: 15px;
+}
+
+.loginpage input.form-control {
+  /* width: 100%; */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.loginpage .btn {
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  background-color: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.loginpage .btn:hover {
+  background-color: #004494;
+}
+
+/* Responsive Design for Tablets */
+@media (max-width: 1024px) {
   .loginpage {
-    display: flex;
-    width: 100%;
-    height: 100vh;
+    flex-direction: column;
   }
-  
+
   .loginpage-left {
-    flex: 1;
-    position: relative;
+    height: 20%;
   }
-  
-  .left-image {
-    width: 190%;
+
+  .loginpage .left-image {
+    width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 100;
   }
-  
+
   .loginpage-right {
-    flex: 1;
-    padding: 50px 30px;
-    display: flex;
-    flex-direction: column;
+    height: 80%;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    z-index: 300;
-    min-height: 100vh;
   }
-  
-  .logo-container {
-    position: absolute;
-    top: 4px;
-    right: 21px;
-    width: 150px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+
+  .loginpage .logo-container {
+    width: 120px;
   }
-  
-  .logo {
-    width: 60%;
-    margin-bottom: 5px;
+
+  .loginpage .logo {
+    width: 50%;
   }
-  
-  .logo-text {
-    width: 80%;
+
+  .loginpage .logo-text {
+    width: 70%;
   }
-  
-  h2 {
-    font-size: 3vw;
-    margin-bottom: 20px;
-    color: #333;
+
+  .loginpage h2 {
+    font-size: 4vw;
   }
-  
-  h2,
-  .highlight,
-  .loginpage-right {
-    user-select: none;
-  }
-  
-  h2:focus {
-    outline: none;
-  }
-  
-  .highlight {
-    color: #0056b3;
-  }
-  
+
   .loginpage-formwrapper {
-    width: 100%;
-    max-width: 400px;
-    background: white;
-    padding: 30px 40px;
-    border-radius: 10px;
-    border: 1px solid #d3d3d3;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
   }
-  
-  .form-group {
-    margin-bottom: 15px;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .loginpage h2 {
+    font-size: 5vw;
+    text-align: center;
   }
-  
-  input.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+
+  .loginpage-formwrapper {
+    max-width: 300px;
+  }
+
+  .loginpage .btn {
     font-size: 14px;
+    padding: 8px;
   }
-  
-  .btn {
-    display: inline-block;
-    width: 100%;
-    padding: 10px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+}
+
+/* Additional Styling for Small Mobile Devices */
+@media (max-width: 480px) {
+  .loginpage h2 {
+    font-size: 6vw;
   }
-  
-  .btn:hover {
-    background-color: #004494;
+
+  .loginpage .form-control {
+    font-size: 12px;
+    padding: 8px;
   }
-  
-  /* Responsive Design for Tablets */
-  @media (max-width: 1024px) {
-    .loginpage {
-      flex-direction: column;
-    }
-  
-    .loginpage-left {
-      height: 20%;
-    }
-  
-    .left-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  
-    .loginpage-right {
-      flex: 0 0 auto;
-      height: 80%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  
-    .logo-container {
-      width: 120px;
-    }
-  
-    .logo {
-      width: 50%;
-    }
-  
-    .logo-text {
-      width: 70%;
-    }
-  
-    h2 {
-      font-size: 4vw;
-    }
-  
-    .loginpage-formwrapper {
-      max-width: 300px;
-    }
+
+  .loginpage .btn {
+    font-size: 12px;
   }
-  
-  /* Responsive Design for Mobile */
-  @media (max-width: 768px) {
-    .loginpage-right {
-      flex: 0 0 auto;
-      height: 80%;
-      justify-content: center;
-      align-items: center;
-    }
-  
-    h2 {
-      font-size: 5vw;
-      text-align: center;
-    }
-  
-    .loginpage-formwrapper {
-      max-width: 300px;
-    }
-  
-    .btn {
-      font-size: 14px;
-      padding: 8px;
-    }
-  }
-  
-  /* Additional Styling for Small Mobile Devices */
-  @media (max-width: 480px) {
-    .loginpage-left {
-      height: 20%;
-    }
-  
-    .loginpage-right {
-      flex: 0 0 auto;
-      height: 80%;
-      justify-content: center;
-      align-items: center;
-    }
-  
-    h2 {
-      font-size: 6vw;
-    }
-  
-    .form-control {
-      font-size: 12px;
-      padding: 8px;
-    }
-  
-    .btn {
-      font-size: 12px;
-    }
-  }
-  
+}

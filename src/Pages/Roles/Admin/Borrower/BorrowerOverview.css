@@ -1,6 +1,5 @@
 /* Container */
 .borrower-container {
-  padding: 40px;
   background-color: #f9fafb;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
@@ -16,7 +15,7 @@
 
 /* Title */
 .borrower-title {
-  font-size: 24px;
+  /* font-size: 24px; */
   font-weight: 600;
   color: #1f2937;
 }

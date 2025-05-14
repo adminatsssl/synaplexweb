@@ -1,0 +1,99 @@
+.reusable-grid {
+    width: 100%;
+    background-color: #f9f9f9;
+  }
+  
+  .reusable-grid table {
+    width: 100%;
+  }
+  
+  .reusable-grid thead th {
+    background-color: #ffffff;
+    padding-top: 0 !important;
+    padding-bottom: 0px !important;
+    font-weight: 600;
+    text-align: left;
+    border: none;
+  }
+  .headerTable tr{
+    margin: 0;
+    padding: 0;
+  }
+
+  .headerTable {
+    margin-top: 20px;
+  }
+  .reusable-grid thead th:first-child{
+    padding-top: 0;
+    padding-bottom: 0;
+
+  }
+
+  .reusable-grid tbody tr {
+    background-color: #fff;
+  }
+  
+  .reusable-grid tbody tr td {
+    padding: 12px;  
+    border: none !important;
+  }
+  
+  .reusable-grid input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+  
+
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-right: 20px;
+  }
+  
+  .pagination button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333333;
+    padding: 5px 10px;
+  }
+  
+  .pagination button:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination span {
+    font-size: 14px;
+    color: #333;
+  }
+  
+
+  .FilterSearch{
+    margin-top:0px !important;
+    margin-bottom: 10px;
+  }
+
+
+  .reusable-grid tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* white */
+  }
+  
+  .reusable-grid tbody tr:nth-child(even) {
+    background-color: #f7f7f7; /* light gray */
+  }
+  
+  .reusable-grid tbody tr:hover {
+    background-color: #e0e0e0; /* darker gray on hover */
+    cursor: pointer;
+  }
+  

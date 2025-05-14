@@ -1,0 +1,29 @@
+.map-container {
+    position: relative;
+    width: 660px;
+    height: 600px;
+}
+
+.tooltip {
+    position: fixed;
+    background-color: white;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-size: 13px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 1000;
+    pointer-events: none;
+    line-height: 1.5;
+}
+
+.tooltip .label.pending {
+    color: blue;
+    font-weight: bold;
+}
+
+.tooltip .label.disposed {
+    color: green;
+    font-weight: bold;
+}

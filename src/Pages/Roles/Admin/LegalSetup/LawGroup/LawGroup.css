@@ -1,0 +1,57 @@
+.lawgroup-container {
+  padding: 20px;
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.header-row {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.lawgroup-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.lawgroup-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.lawgroup-table th,
+.lawgroup-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.lawgroup-table thead {
+  background-color: #f3f3f3;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.loading {
+  padding: 16px;
+}
+
+.error {
+  padding: 16px;
+  color: red;
+}
+
+

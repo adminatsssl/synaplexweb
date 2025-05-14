@@ -1,0 +1,73 @@
+.edit-lawyer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .edit-lawyer-container {
+    background: white;
+    width: 80%;
+    max-width: 900px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .edit-lawyer-Heading{
+    background-color: #003366;
+  color: white;
+  padding: 12px 20px;
+  }
+  .edit-lawyer-Heading h2{
+    font-size: 18px;
+    margin-bottom: 0px;
+  }
+  
+  .edit-lawyer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 20px;
+  }
+  
+  .edit-lawyer-grid label {
+    font-weight: bold;
+  }
+  
+  .edit-lawyer-grid input,
+  .edit-lawyer-grid textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .edit-lawyer-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    gap: 1rem;
+    margin-bottom: 20px;
+  }
+ 
+  .preview-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .lawyer-setup-container{
+    padding: 20px;
+    position: relative;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

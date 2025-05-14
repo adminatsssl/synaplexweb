@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import AddCourtModal from './AddCourtModal';
 import axios from 'axios';
 import IconButton from '../../../../ReusableComponents/IconButton';
+import AddButton from '../../../../ReusableComponents/AddButton';
+import ReusableGrid from '../../../../ReusableComponents/ReusableGrid'; // ✅ Add this
 import './CourtSetup.css';
 
 export default function CourtSetup() {
@@ -46,51 +48,34 @@ export default function CourtSetup() {
     }
   };
 
+  const columns = [
+    { key: "Name", label: "Name" },
+    { key: "Phone", label: "Phone" },
+    { key: "Email", label: "Email" },
+    { key: "Address", label: "Address" },
+    { key: "CourtType", label: "Court Type" },
+    { key: "Jurisdiction", label: "Jurisdiction" },
+    { key: "CourtCode", label: "Court Code" },
+    {
+      key: "actions",
+      label: "",
+      disableFilter: true,
+      render: (court) => (
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+          <IconButton type="edit" onClick={() => handleEdit(court)} />
+          <IconButton type="delete" onClick={() => handleDelete(court.CourtCode)} />
+        </div>
+      )
+    }
+  ];
+
   return (
     <div className="court-setup-container">
       <div className="court-setup-header">
-        <h2 className="court-setup-title">Court</h2>
-        <button className="add-court-btn" onClick={() => setShowModal(true)}>+ Add Court</button>
+        <AddButton text="Add Court" onClick={() => setShowModal(true)} />
       </div>
 
-      <div className="court-table-container">
-        <table className="court-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Court Type</th>
-              <th>Jurisdiction</th>
-              <th>Court Code</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courts.length === 0 ? (
-              <tr><td colSpan="8" style={{ textAlign: 'center' }}>No courts available.</td></tr>
-            ) : (
-              courts.map((court, index) => (
-                <tr key={court.CourtCode || index}>
-                  <td>{court.Name}</td>
-                  <td>{court.Phone}</td>
-                  <td>{court.Email}</td>
-                  <td>{court.Address}</td>
-                  <td>{court.CourtType}</td>
-                  <td>{court.Jurisdiction}</td>
-                  <td>{court.CourtCode}</td>
-                  <td style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                    <IconButton type="edit" onClick={() => handleEdit(court)} />
-                    <IconButton type="delete" onClick={() => handleDelete(court.CourtCode)} />
-                  </td>
-
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <ReusableGrid columns={columns} data={courts} />
 
       {showModal && (
         <AddCourtModal

@@ -1,0 +1,11 @@
+.PlainTextTopbar{
+    border: 1px solid rgb(206, 205, 205);
+}
+
+.PlainText-checkbox{
+    padding-left: 10px;
+}
+
+.PlainText-textarea{
+    padding: 0px 36px 14px;
+}

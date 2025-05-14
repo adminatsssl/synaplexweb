@@ -1,0 +1,181 @@
+/* DispositionSetup.css */
+/* .legal-case-type-container {
+    padding: 20px;
+  } */
+  
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .add-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .add-button:hover {
+    background-color: #45a049;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+
+
+
+
+  .Disposition-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    backdrop-filter: blur(3px);
+  }
+  
+  .Disposition-modal {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  @keyframes scaleIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .Disposition-modal-title {
+    font-size: 22px;
+    font-weight: 600;
+    background-color: #003366;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center ;
+  }
+  .Disposition-modal-closebutton{
+    background: transparent;
+    color: white;
+    border: none;
+  }
+  
+  .Disposition-section {
+    margin-bottom: 30px;
+  }
+  
+  .Disposition-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin-bottom: 12px;
+    color: #111827;
+  }
+  .Disposition-middle-content{
+    padding: 20px;
+  }
+
+  .Disposition-grid-2,
+  .Disposition-grid-3 {
+    display: grid;
+    gap: 18px;
+  }
+  
+  .Disposition-grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  
+  .Disposition-grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  
+  .Disposition-form-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Disposition-form-item label {
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  
+  .Disposition-form-item input,
+  .Disposition-form-item select,
+  .Disposition-form-item textarea {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .fDisposition-orm-item input:focus,
+  .Disposition-form-item select:focus,
+  .Disposition-form-item textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .Disposition-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  
+  
+  .Disposition-form-section {
+    display: flex;
+    flex-direction: column;
+  }
+      

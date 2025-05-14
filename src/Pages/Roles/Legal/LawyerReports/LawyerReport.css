@@ -1,0 +1,44 @@
+.reportcasesbtn{
+  background: none;
+  border: none;
+  font-size: 20px;
+}
+  
+.reportCasesexport-btn{
+  background-color: #3e3eed;
+    color: #06f706;
+}
+
+.reportcasesbtn1{
+  background: none;
+  border: none;
+  font-size: 20px;
+  color:#0056B3;
+  margin-right: 0px;
+}
+
+.reportnoticebtn1{
+  background: none;
+  border: none;
+  font-size: 20px;
+  color:#0056B3;
+  margin-right: 0px;
+}
+
+.action-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* spacing between the buttons */
+}
+
+.reportcasesbtn1,
+.reportcasesbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

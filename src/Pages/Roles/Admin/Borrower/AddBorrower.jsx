@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./AddBorrower.css";
+import JSONBig from "json-bigint";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
@@ -27,12 +30,32 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     }
   }, [selectedBorrower]);
 
+  useEffect(() => {
+    if (selectedBorrower) {
+      setFormData({
+        Name: selectedBorrower.Name || "",
+        Phone: selectedBorrower.Phone || "",
+        Email: selectedBorrower.Email || "",
+        Address: selectedBorrower.Address || "",
+        CreditScore: selectedBorrower.CreditScore || "",
+        JobTitle: selectedBorrower.JobTitle || "",
+        MonthlyIncome: selectedBorrower.MonthlyIncome || "",
+      });
+    }
+  }, [selectedBorrower]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "CreditScore" 
+        name === "CreditScore"
+          ? value === ""
+            ? ""
+            : parseFloat(value)
+          : value,
+      [name]:
+        name === "CreditScore"
           ? value === ""
             ? ""
             : parseFloat(value)
@@ -50,7 +73,7 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
       Address: formData.Address,
       CreditScore: formData.CreditScore,
       JobTitle: formData.JobTitle,
-      MonthlyIncome: formData.MonthlyIncome,
+      MonthlyIncome: formData.MonthlyIncome, // Leave as string
     };
 
     try {
@@ -59,18 +82,19 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
       const borrowerId = selectedBorrower?.ID || selectedBorrower?.id;
 
       if (borrowerId) {
-        // Update (PATCH)
+        // Patch using json-bigint for safe stringification
         response = await axios.patch(
           `/odata/postapiservice/Borrowers(${borrowerId})`,
-          payload,
+          JSONBig.stringify(payload), // Use json-bigint to stringify
           {
             headers: {
               "Content-Type": "application/json",
             },
+            transformRequest: [(data) => data], // Prevent axios from auto-stringifying
           }
         );
       } else {
-        // Create (POST)
+        // Standard POST, default JSON.stringify is fine
         response = await axios.post(
           "/odata/postapiservice/Borrowers",
           payload,
@@ -95,17 +119,25 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
         console.error("Save error:", error);
         alert(`Error: ${error.message}`);
       }
+      if (error.response) {
+        console.error("Backend error:", error.response.data);
+        alert(`Error: ${JSON.stringify(error.response.data)}`);
+      } else {
+        console.error("Save error:", error);
+        alert(`Error: ${error.message}`);
+      }
     }
   };
 
   return (
-    <div className="borrower-modal">
-      <div className="borrower-content">
-        <div className="borrower-header">
+    <div className="addborrower-modal">
+      <div className="addborrower-content">
+        <div className="addborrower-header">
           {selectedBorrower ? "Edit Borrower" : "Add Borrower"}
         </div>
+        <div className="addborrower-middlecontent">
         <form onSubmit={handleSubmit}>
-          <div className="borrower-body grid-2">
+          <div className="addborrower-body grid-2">
             {[
               "Name",
               "Phone",
@@ -133,15 +165,19 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
             ))}
           </div>
 
-          <div className="borrower-footer">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              {selectedBorrower ? "Update" : "Save"}
-            </button>
+          <div
+            className="addborrower-footer"
+            style={{ display: "flex", gap: "10px" }}
+          >
+            <CancelButton onClick={onClose} />
+            <SaveButton
+              onClick={handleSubmit}
+              label={selectedBorrower ? "Update" : "Save"}
+            />
           </div>
         </form>
+        </div>
+        
       </div>
     </div>
   );

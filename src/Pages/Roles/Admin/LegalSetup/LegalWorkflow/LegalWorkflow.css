@@ -1,0 +1,145 @@
+.LegalWorkFlow-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.LegalWorkFlow-modal {
+  width: 95%;
+  max-width: 1000px;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.LegalWorkFlow-MiddleContent{
+  padding: 20px;
+}
+
+.LegalWorkFlow-modal h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+select,
+textarea,
+input[type="text"],
+.MuiOutlinedInput-root {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.add-stage-btn {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin: 15px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.add-stage-btn:hover {
+  background-color: #004c97;
+}
+
+.workflow-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+  margin-top: 10px;
+}
+
+.workflow-table th,
+.workflow-table td {
+  padding: 5px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.workflow-table th {
+  background-color: #f9f9f9;
+  font-weight: 600;
+  color: #333;
+}
+
+.LegalWorkFlow-table-scroll-container {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+.LegalWorkFlow-add-stage-btn{
+  background-color: #004c97;
+  color: white;
+  border: none;
+}
+
+.LegalWorkFlow-Heading{
+  background-color: #003366;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.LegalWorkFlow-closebutton{
+  background: transparent;
+  color: white;
+  border: none;
+}
+.LegalWorkFlow-Heading h3{
+  font-size: 18px;
+  margin-bottom: 0px;
+  color: white;
+}
+
+.LegalWorkFlow-modal-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+
+.headerWorkflow {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.legal-workflow-container{
+  padding: 20px;
+    position: relative;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

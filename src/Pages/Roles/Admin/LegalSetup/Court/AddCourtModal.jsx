@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CourtSetup.css';
+import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 export default function AddCourtModal({ onClose, onSave, initialData = null }) {
     const [formData, setFormData] = useState({
@@ -83,17 +85,24 @@ export default function AddCourtModal({ onClose, onSave, initialData = null }) {
 
 
     return (
-        <div className="modal-overlay">
-            <div className="modal">
-                <h2 className="modal-title">Court Details</h2>
+        <div className="legalsetup-court-modal-overlay">
+            <div className="legalsetup-court-modal">
+                <div className='legalsetup-court-topheading'>
+                <h2 className="legalsetup-court-modal-title">Court</h2>
+                <button className='legalsetup-court-modal-closebutton' onClick={onClose}>X</button>
+                </div>
+
+                <div className='legalsetup-court-middlecontent'>
                 <form onSubmit={handleSubmit}>
-                    <div className="section">
-                        <div className="grid-2">
-                            <div className="form-item">
+                    <div className="legalsetup-court-section">
+                    <h3 className="legalsetup-court-section-title">Court Details</h3> 
+                        <div className="legalsetup-court-grid-2">
+                       
+                            <div className="legalsetup-court-form-item">
                                 <label>Court Name</label>
                                 <input name="Name" value={formData.Name} onChange={handleChange} required />
                             </div>
-                            <div className="form-item">
+                            <div className="legalsetup-court-form-item">
                                 <label>Court Type</label>
                                 <select name="CourtType" value={formData.CourtType} onChange={handleChange} required>
                                     <option value="">Select</option>
@@ -102,58 +111,64 @@ export default function AddCourtModal({ onClose, onSave, initialData = null }) {
                                     <option value="Supreme_Court">Supreme Court</option>
                                 </select>
                             </div>
-                            <div className="form-item">
+                            <div className="legalsetup-court-form-item">
                                 <label>Jurisdiction</label>
                                 <input name="Jurisdiction" value={formData.Jurisdiction} onChange={handleChange} required />
                             </div>
-                            <div className="form-item">
+                            <div className="legalsetup-court-form-item">
                                 <label>Court Code</label>
                                 <input name="CourtCode" value={formData.CourtCode} onChange={handleChange} required />
                             </div>
                         </div>
                     </div>
 
-                    <div className="section">
-                        <h3 className="section-title">Address</h3>
-                        <div className="form-item">
+                    <div className="legalsetup-court-section">
+                        <h3 className="legalsetup-court-section-title">Address</h3>
+                        <div className="legalsetup-court-form-item">
                             <label>Address Line</label>
                             <textarea name="AddressLine" value={formData.AddressLine} onChange={handleChange} required />
                         </div>
-                        <div className="grid-3">
-                            <div className="form-item">
+                        <div className="legalsetup-court-grid-3">
+                            <div className="legalsetup-court-form-item">
                                 <label>City</label>
                                 <input name="City" value={formData.City} onChange={handleChange} required />
                             </div>
-                            <div className="form-item">
+                            <div className="legalsetup-court-form-item">
                                 <label>State</label>
                                 <input name="State" value={formData.State} onChange={handleChange} required />
                             </div>
-                            <div className="form-item">
+                            <div className="legalsetup-court-form-item">
                                 <label>PinCode</label>
                                 <input name="PinCode" value={formData.PinCode} onChange={handleChange} required />
                             </div>
                         </div>
                     </div>
 
-                    <div className="section">
-                        <h3 className="section-title">Contact Detail</h3>
-                        <div className="grid-2">
-                            <div className="form-item">
+                    <div className="legalsetup-court-section">
+                        <h3 className="legalsetup-court-section-title">Contact Detail</h3>
+                        <div className="legalsetup-court-grid-2">
+                            <div className="legalsetup-court-form-item">
                                 <label>Phone No</label>
                                 <input name="Phone" value={formData.Phone} onChange={handleChange} required />
                             </div>
-                            <div className="form-item">
+                            <div className="legalsetup-court-form-item">
                                 <label>Email</label>
                                 <input type="email" name="Email" value={formData.Email} onChange={handleChange} required />
                             </div>
                         </div>
                     </div>
 
-                    <div className="modal-buttons">
-                        <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
-                        <button type="submit" className="save-btn">Save</button>
+                    <div className="legalsetup-court-modal-buttons">
+                        {/* <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
+                        <button type="submit" className="save-btn">Save</button> */}
+                        <CancelButton className="cancel-btn" onClick={onClose} />
+                        <SaveButton className="save-btn"
+                            onClick={handleSubmit}
+                            label={"Save"}
+                        />
                     </div>
                 </form>
+                </div>
             </div>
         </div>
     );

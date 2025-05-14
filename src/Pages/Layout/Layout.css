@@ -49,17 +49,18 @@
   /* Top Navbar */
   .top-navbar {
     background-color: #ffffff;
-    padding: 20px 30px;
+    padding: 15px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e0e0e0;
+    /* border-bottom: 1px solid #e0e0e0; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
   
   .top-navbar h2 {
-    font-size: 24px;
+    font-size: 21px;
     font-weight: 600;
+    color: #264AE5;
     margin: 0;
   }
   
@@ -73,6 +74,8 @@
   .user-info {
     font-weight: 500;
     font-size: 16px;
+    padding-right: 10px;
+    color: #264ae5;
   }
   
 /* Make sure .main-content and .page-content are taking full space */
@@ -85,7 +88,7 @@
   }
   
   .page-content {
-    padding: 32px;
+    padding: 20px;
     flex-grow: 1;
     overflow-y: auto;
   }
