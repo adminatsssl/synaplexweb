@@ -27,6 +27,7 @@ import LawyerInvoiceManagement from './Pages/Roles/Legal/LawyerInvoiceManagement
 import LawyerNotice from './Pages/Roles/Legal/LawyerNotice/LawyerNotice';
 import LawyerReportCases from './Pages/Roles/Legal/LawyerReports/LawyerReportCases';
 import LawyerReportNotices from './Pages/Roles/Legal/LawyerReports/LawyerReportNotice';
+import KeyConfig from './Pages/Roles/Admin/KeyConfig/KeyConfig';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
         <Route path="/stageconfig" element={<ProtectedRoute element={StageConfig} allowedRoles={["Administrator"]} />} />
         <Route path="/template" element={<ProtectedRoute element={NoticeSetupTemplate} allowedRoles={["Administrator"]} />} />
         <Route path="/accounts" element={<ProtectedRoute element={AdminAccount} allowedRoles={["Administrator"]} />} />
+        <Route path="/KeyConfig" element={<ProtectedRoute element={KeyConfig} allowedRoles={["Administrator"]} />} />
        
 
         {/* User Routes */}

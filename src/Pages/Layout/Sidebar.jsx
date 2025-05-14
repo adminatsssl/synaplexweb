@@ -20,6 +20,10 @@ import { ImLoop } from "react-icons/im";
 import { IoMailSharp } from "react-icons/io5";
 import { GrDocumentConfig } from "react-icons/gr";
 import { HiTemplate } from "react-icons/hi";
+import { RiSettings4Fill } from "react-icons/ri";
+import { MdOutlineKey } from "react-icons/md";
+
+
 const iconMap = {
   Home: <IoHomeSharp />,
   Borrower: <FaUsers />,
@@ -41,6 +45,8 @@ const iconMap = {
   NoticeSetup:<IoMailSharp />,
   Template:<HiTemplate />,
   StageConfig:<GrDocumentConfig />,
+  Settings:<RiSettings4Fill />,
+  KeyConfig:<MdOutlineKey />,
   
 };
 
@@ -81,6 +87,12 @@ export default function Sidebar() {
           { name: "StageConfig", path: "/stageconfig" },
         ],
       },
+      {
+        name:"Settings",
+        children:[
+          {name:"KeyConfig", path:"/KeyConfig"}
+        ]
+      }
     ],
 
     User: [
@@ -173,6 +185,13 @@ export default function Sidebar() {
             </li>
           ))}
         </ul>
+        <div className="nav__footer">
+    <img
+      src="/logo-collekto.png"
+      alt="Logo"
+      className="nav__footer-logo"
+    />
+  </div>
       </nav>
     </div>
   );
