@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import "./Styles/ReusableGrid.css";
 
-const ReusableGrid = ({ columns, data }) => {
+const ReusableGrid = ({ columns, data, onRowClick }) => {
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 20;
@@ -61,7 +61,10 @@ const ReusableGrid = ({ columns, data }) => {
         </thead>
         <tbody>
           {currentData.map((row, index) => (
-            <tr key={index}>
+            <tr
+              key={index}
+              onClick={() => onRowClick?.(row)}
+            >
               {columns.map((col) => (
                 <td key={col.key}>
                   {col.render ? col.render(row) : row[col.key]}

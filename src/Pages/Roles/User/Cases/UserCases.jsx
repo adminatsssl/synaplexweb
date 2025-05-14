@@ -1,37 +1,55 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import AddUserCases from "./UserAddCases.jsx";
 import Layout from "../../../Layout/Layout.jsx";
-import "./UserCases.css"; // 👈 Import the CSS
+import "./UserCases.css";
 import { FaHandHoldingDollar } from "react-icons/fa6";
-import { MdEdit } from "react-icons/md";
 import AddButton from "../../../ReusableComponents/AddButton";
 import IconButton from "../../../ReusableComponents/IconButton";
-import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; 
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
+import { useNavigate } from "react-router-dom";
+
+// ✅ Dummy case data
+const dummyCases = [
+  {
+    CaseID: "101",
+    LoanID: "L-0001",
+    CaseType: "Civil",
+    Status: "Open",
+    Borrower: "John Doe",
+    LoanAmount: "$100,000",
+    NPADate: "2023-01-01",
+    CreateDate: "2023-02-01",
+    AssignedTo: "Agent A",
+    Court: "High Court",
+  },
+  {
+    CaseID: "102",
+    LoanID: "L-0002",
+    CaseType: "Criminal",
+    Status: "Closed",
+    Borrower: "Jane Smith",
+    LoanAmount: "$200,000",
+    NPADate: "2023-03-01",
+    CreateDate: "2023-04-01",
+    AssignedTo: "Agent B",
+    Court: "District Court",
+  },
+];
 
 const UserCases = () => {
-  const [cases, setCases] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [cases, setCases] = useState(dummyCases); // ✅ using dummy data
   const [showModal, setShowModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get("/odata/usercases/LexCases")
-      .then((response) => {
-        setCases(response.data.value || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
-  }, []);
+  const navigate = useNavigate();
 
   const handleEdit = (caseData) => {
     setSelectedCase(caseData);
     setShowModal(true);
+  };
+
+  const handleRowClick = (caseData) => {
+    navigate(`/case/${caseData.CaseID}`);
   };
 
   const closeModal = () => {
@@ -40,9 +58,6 @@ const UserCases = () => {
   };
 
   const openModal = () => setShowModal(true);
-
-  if (loading) return <p>Loading cases...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   const columns = [
     { key: "CaseID", label: "Case ID" },
@@ -57,16 +72,33 @@ const UserCases = () => {
     { key: "Court", label: "Court" },
     {
       key: "actions",
-      label: "", // we dont want any label
+      label: "",
       disableFilter: true,
       render: (row) => (
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <button style={{ color:"#0056B3",background: "none", border: "none", padding: 0,fontSize:"20px",marginRight:"0px" }}>
+          <button
+            style={{
+              color: "#0056B3",
+              background: "none",
+              border: "none",
+              padding: 0,
+              fontSize: "20px",
+              marginRight: "0px",
+            }}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent row click
+              console.log("FaHandHoldingDollar clicked");
+            }}
+          >
             <FaHandHoldingDollar />
           </button>
-          <IconButton type="edit" onClick={() => handleEdit(row)} />
-
-          
+          <IconButton
+            type="edit"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent row click
+              handleEdit(row); // Trigger the edit functionality
+            }}
+          />
         </div>
       ),
     },
@@ -84,22 +116,22 @@ const UserCases = () => {
           </div>
         </div>
 
-        
+        <ReusableGrid
+          columns={columns}
+          data={cases}
+          onRowClick={handleRowClick}
+        />
 
-    <ReusableGrid columns={columns} data={cases} />
-
-    {showModal && (
-  <div className="modal-overlay-usercase">
-    <div className="modal-content-usercase-userrole">
-      <AddUserCases
-        initialData={selectedCase}
-        onClose={closeModal}
-      />
-      <button onClick={closeModal} className="close-button-usercases">X</button>
-    </div>
-  </div>
-)}
-
+        {showModal && (
+          <div className="modal-overlay-usercase">
+            <div className="modal-content-usercase-userrole">
+              <AddUserCases initialData={selectedCase} onClose={closeModal} />
+              <button onClick={closeModal} className="close-button-usercases">
+                X
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );
