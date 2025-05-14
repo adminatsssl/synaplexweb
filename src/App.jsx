@@ -28,6 +28,8 @@ import LawyerNotice from './Pages/Roles/Legal/LawyerNotice/LawyerNotice';
 import LawyerReportCases from './Pages/Roles/Legal/LawyerReports/LawyerReportCases';
 import LawyerReportNotices from './Pages/Roles/Legal/LawyerReports/LawyerReportNotice';
 import KeyConfig from './Pages/Roles/Admin/KeyConfig/KeyConfig';
+import CaseDetailPage from './Pages/Roles/User/Cases/CasesDetail/CaseDetailPage';
+
 
 function App() {
   return (
@@ -55,6 +57,7 @@ function App() {
         <Route path="/report-cases" element={<ProtectedRoute element={ReportCases} allowedRoles={["User"]} />} />
         <Route path="/report-notices" element={<ProtectedRoute element={ReportNotices} allowedRoles={["User"]} />} />
         <Route path="/cases" element={<ProtectedRoute element={UserCases} allowedRoles={["User"]} />} />
+        <Route path="/case/:id" element={<ProtectedRoute element={CaseDetailPage} allowedRoles={["User"]} />} />
         <Route path="/user-notice" element={<ProtectedRoute element={UserNotice} allowedRoles={["User"]} />} />
         <Route path="/loans" element={<ProtectedRoute element={Loanpage} allowedRoles={["User"]} />} />
         <Route path="/invoices" element={<ProtectedRoute element={UserInvoiceManagement} allowedRoles={["User"]} />} />
