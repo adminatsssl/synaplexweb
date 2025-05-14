@@ -40,7 +40,7 @@ const allEvents = [
     status: 'Pending',
   },
   {
-    title: 'Neha Singh Disposed',
+    title: 'Neha Singh',
     start: new Date('2025-05-16'),
     end: new Date('2025-05-16'),
     status: 'Disposed',

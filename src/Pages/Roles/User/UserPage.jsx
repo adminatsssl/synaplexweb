@@ -17,7 +17,7 @@ export default function UserPage() {
       <div className="userpage-container">
         <div className="userpage-popup userpage-popup-left">
           <h2>Cases:</h2>
-          <CalendarCases/>
+          <CalendarCases />
         </div>
 
         <div className="userpage-popup userpage-popup-right">
@@ -25,16 +25,16 @@ export default function UserPage() {
           <UserMap jsonData={sampleData} />
         </div>
 
-        </div>
+      </div>
 
-        <div className="userpage-activity-container">
-          <div className="userpage-activity">
+      <div className="userpage-activity-container">
+        <div className="userpage-activity">
           <h2>Litigation Activity type distribution</h2>
-    <ActivityCaseTabs/>
-          </div>
-          
-
+          <ActivityCaseTabs />
         </div>
+
+
+      </div>
     </Layout>
   );
 }
