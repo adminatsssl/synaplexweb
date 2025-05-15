@@ -1,0 +1,19 @@
+.demandNotice-Sarfasei-topcontent-container{
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.demandNotice-Sarfasei-topcontent{
+    display: flex;
+    padding: 20px;
+    align-items: start;
+}
+.demandNotice-Sarfasei-topcontent-leftside{
+    padding: 20px;
+    border: 1px solid black;
+    width: 70%;
+}
+.Sarfasei-notice-form-row{
+    display: flex;
+    justify-content: space-between;
+}

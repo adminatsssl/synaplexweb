@@ -4,9 +4,9 @@
 .loans-fullpage-container {
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9fafb; /* Updated for consistency */
+  background-color: #f9fafb;
   min-height: 100vh;
-  width: 90vw;
+  /* width: 90vw; */ /* Consider making this 100% or adjusting based on Layout */
   box-sizing: border-box;
 }
 
@@ -41,13 +41,13 @@
 }
 
 .btn-primary {
-  background-color: #037652;
+  background-color: #037652; /* A nice green */
   color: white;
   border: none;
 }
 
 .btn-primary:hover {
-  background-color: #047857;
+  background-color: #025d40; /* Darker green */
 }
 
 .btn-outline {
@@ -63,16 +63,17 @@
 /* Table container */
 .loans-table-container {
   overflow-x: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
 }
 
 .loans-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: white;
+  /* Removed margin-bottom from here as it's on container */
+  /* Removed redundant overflow:hidden, border-radius, background-color as it's on container */
 }
 
 .loans-table thead {
@@ -93,15 +94,16 @@
   font-weight: 600;
   position: sticky;
   top: 0;
+  background-color: #f3f4f6; /* Ensure sticky header has background */
   z-index: 1;
 }
 
 .loans-table tbody tr:nth-child(even) {
-  background-color: #f9fafb;
+  background-color: #fdfdfe; /* Slightly different for even rows if desired */
 }
 
 .loans-table tbody tr:hover {
-  background-color: #f3f4f6;
+  background-color: #e9eff5; /* Slightly different hover */
 }
 
 /* Action buttons in table */
@@ -125,17 +127,9 @@
   background: none;
 }
 
-.view-btn {
-  color: #a7c957;
-}
-
-.edit-btn {
-  color: #29abe2;
-}
-
-.delete-btn {
-  color: #ef233c;
-}
+.view-btn { color: #000000; }
+.edit-btn { color: #29abe2; }
+.delete-btn { color: #ef233c; }
 
 .view-btn:hover,
 .edit-btn:hover,
@@ -151,196 +145,287 @@
   padding: 2rem;
 }
 
-/* Popup styles */
-.add-loan-popup {
+/* Lawyer Modal Styles */
+.lawyer-modal {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
-  overflow: auto;
+  padding: 20px; /* Add padding for smaller screens so modal doesn't touch edges */
+  box-sizing: border-box;
 }
 
-.popup-content {
+.lawyer-content {
   background-color: white;
-  border-radius: 10px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 700px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  max-height: 80vh;
-  overflow-y: auto;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 1000px; /* Adjusted max-width */
+  max-height: 90vh;
+  display: flex; /* Use flex for header-body-footer structure */
+  flex-direction: column;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.popup-header {
+.lawyer-header {
+  padding: 2px 24px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  border-bottom: 1px solid #dee2e6; /* Slightly adjusted color */
+  background-color: #084885; /* Header color from btn-primary */
+  border-radius: 8px 8px 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.popup-header h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .close-btn {
-  font-size: 1.5rem;
   background: none;
   border: none;
+  font-size: 24px;
   cursor: pointer;
-  color: #6b7280;
-  padding: 0;
-  transition: color 0.2s ease;
+  color: #ffffff;
+  padding: 0; /* Remove default padding */
+  line-height: 1; /* Adjust line height for better centering */
 }
 
-.close-btn:hover {
-  color: #1f2937;
+.lawyer-body {
+  padding: 20px 24px; /* Consistent padding */
+  overflow-y: auto;
+  flex-grow: 1; /* Allow body to take available space */
 }
 
-.form-sections-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+.modal-search-bar {
+  display: flex; /* Arrange input and icon in a row */
+  align-items: center; /* Vertically center items */
+  position: relative; /* Needed for absolute positioning of the icon */
+  width: 40%; /* Or adjust as needed */
+  margin-bottom: 20px; /* Space below the search bar */
+  border: 1px solid #ccc; /* Add border to the container to look like one input */
+  border-radius: 4px; /* Match input border radius */
+  padding: 5px 10px; /* Add some padding inside the search bar */
 }
 
-.form-section {
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  padding: 1rem;
+.modal-search-bar input[type="text"] {
+  flex-grow: 1; /* Allow the input to take up available space */
+  border: none; /* Remove individual input border */
+  outline: none; /* Remove outline on focus */
+  padding: 0 30px 0 0; /* Add right padding to make space for the icon */
+  margin-right: -25px; /* Pull the icon back into the padding area */
 }
 
-.form-section h3 {
-  font-size: 16px;
-  font-weight: 500;
-  color: #374151;
+.modal-search-bar .search-icon {
+  position: absolute; /* Position the icon absolutely within the container */
+  right: 10px; /* Position from the right edge of the container */
+  top: 50%; /* Align the top edge to the vertical center */
+  transform: translateY(-50%); /* Shift the icon up by half its height to truly center it */
+  color: #555; /* Adjust icon color */
+  pointer-events: none; /* Prevents the icon from blocking clicks on the input */
+  cursor: pointer; /* Keep pointer cursor style if desired, though pointer-events: none makes it non-interactive for clicks */
+  font-size: 16px; /* Adjust icon size */
+}
+
+/* General section styling within modal */
+.bordered-section {
+  border: 1px solid #e0e0e0;
+  padding: 20px; /* Increased padding */
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.bordered-section h3 {
   margin-top: 0;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
+  margin-bottom: 18px; /* Increased margin */
+  font-size: 1.1em; /* Adjusted font size */
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  font-weight: 600; /* Make section titles bolder */
 }
 
+/* Form grid for two-column layout (primarily for Loan Details) */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 25px; /* row-gap column-gap */
 }
 
-.form-group {
+.form-column {
   display: flex;
   flex-direction: column;
+  gap: 18px; /* Space between form items within a column */
 }
 
-.form-group label {
-  margin-bottom: 0.3rem;
-  font-weight: 500;
-  font-size: 0.85rem;
+/* Form row for side-by-side items (Borrower, Tenant, FPR details) */
+.form-row {
+  display: flex;
+  gap: 25px; /* Space between items in a row */
+  margin-bottom: 18px; /* Add margin to separate rows of fields */
+}
+.form-row:last-child {
+  margin-bottom: 0; /* Remove margin from the last form-row in a section */
 }
 
-.form-group input,
-.form-group select {
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+ /* flex: 1; */ /* Removed from here, apply inline or via specific class if needed per row */
 }
 
-/* Actions at the bottom of popup */
-.popup-actions {
+.form-item label {
+  display: block;
+  margin-bottom: 6px; /* Adjusted margin */
+  font-weight: 500; /* User's original weight */
+  color: #495057;
+  font-size: 14px;
+}
+
+/* Global input, select, textarea styling from user */
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 9px 12px; /* Slightly adjusted padding */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box; /* Ensure padding and border are inside width */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #034876; /* Highlight with theme color */
+  box-shadow: 0 0 0 0.2rem rgba(3, 118, 82, 0.25); /* Subtle glow */
+}
+
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.fields-column { /* Used as a container for subsequent bordered-sections */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Gap between bordered-sections like Borrower, Tenant, FPR */
+}
+
+
+.lawyer-footer {
+  padding: 16px 350px; /* Consistent padding */
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 12px;
+  border-top: 1px solid #dee2e6; /* Slightly adjusted color */
+  background-color: #f8f9fa;
+  border-radius: 0 0 8px 8px;
+  flex-shrink: 0; /* Prevent footer from shrinking */
 }
 
-.btn-secondary {
-  background-color: #f3f4f6;
-  color: #374151;
+.cancel-btn, .save-btn {
+  padding: 10px 20px;
   border: none;
-  padding: 0.5rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
-.btn-secondary:hover {
-  background-color: #e0e0e0;
+.cancel-btn {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
 }
 
-/* Homepage search bar */
-.homepage-search-bar {
-  padding: 0 2rem;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.cancel-btn:hover {
+  background-color: #e2e6ea;
 }
 
-.homepage-search-bar input[type="text"] {
-  padding: 0.7rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  font-size: 0.95rem;
-  width: 400px;
-  flex-grow: 1;
-}
-
-.homepage-search-bar .search-button {
-  background-color: #059669;
+.save-btn {
+  background-color: #037652; /* Theme color for save */
   color: white;
-  border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.5rem;
-  font-size: 0.95rem;
-  cursor: pointer;
 }
 
-.homepage-search-bar .search-button:hover {
-  background-color: #047857;
+.save-btn:hover {
+  background-color: #025d40; /* Darker theme color */
 }
 
-/* Search inside popup */
-.popup-search {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lawyer-content {
+    width: 95%;
+    max-width: none;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    gap: 0 25px; /* Remove column gap, keep row gap if any direct children */
+  }
+   .form-column { /* Stack items in form-column as well if needed, though they are already column */
+    gap: 18px;
+   }
+  .form-column:not(:last-child) {
+    margin-bottom:18px; /* Add margin between stacked columns if they were part of form-grid*/
+  }
+
+
+  .form-row {
+    flex-direction: column; /* Stack items in a form-row */
+    gap: 18px; /* Gap between stacked items */
+    margin-bottom: 0; /* Reset margin as items are stacked */
+  }
+  .form-row .form-item {
+    margin-bottom: 18px; /* Ensure gap between stacked form items */
+  }
+  .form-row .form-item:last-child {
+    margin-bottom: 0;
+  }
+
+
+  .lawyer-footer {
+    flex-direction: column;
+  }
+  .lawyer-footer .btn-primary,
+  .lawyer-footer .btn-outline,
+  .lawyer-footer .cancel-btn,
+  .lawyer-footer .save-btn {
+    width: 100%;
+  }
 }
 
-.popup-search h3 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.popup-search input[type="text"] {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.3rem;
-  font-size: 0.9rem;
-  flex-grow: 1;
-}
-
-.popup-search .search-button {
-  background-color: #059669;
-  color: white;
-  border: none;
-  padding: 0.5rem 0.8rem;
-  border-radius: 0.3rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.popup-search .search-button:hover {
-  background-color: #047857;
+@media (max-width: 480px) {
+  .loans-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .actions .btn-primary, .actions .btn-outline {
+    width: 100%;
+    text-align: center;
+  }
 }
