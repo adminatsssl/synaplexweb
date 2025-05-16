@@ -3,7 +3,7 @@ import { FaLaptop } from "react-icons/fa6";
 import { FaFilePdf } from "react-icons/fa6";
 import Layout from "../../../../Layout/Layout.jsx";
 import './CaseDetail.css';
-import SarfaseiContent from "./Sarfasei/SarfaseiContent.jsx";
+import SarfaseiContent from "./Sarfasei/SarfaesiContent.jsx";
 
 
 const CasesDetail = ({ caseData }) => {

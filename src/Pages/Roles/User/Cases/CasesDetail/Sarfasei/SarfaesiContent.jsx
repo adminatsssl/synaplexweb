@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import ReusableCaseStage from "../ReusableCaseStage";
-import './SarfaseiContent.css';
-import DemandNoticeSarfasei from "./Tabs/DemandNoticeSarfaseo";
+import './SarfaesiContent.css';
+import DemandNoticeSarfasei from "./Tabs/DemandNoticeSarfasei";
+import SarfaesiTrackingResponse from "./Tabs/TrackingResponse/SarfaesiTrackingResponse.jsx";
+import SarfaesiPossessionNotice from "./Tabs/PossessionNotice/SarfaesiPossessionNotice.jsx";
+import SarfaesiAssetValuation from "./Tabs/AssetValuation/SarfaesiAssetValuation.jsx";
+import SarfaesiAuctionRecovery from "./Tabs/AuctionRecovery/SarfaesiAuctionRecovery.jsx";
+import CaseDetailClose from "./Tabs/Close/CaseDetailClose.jsx";
+
+
 
 const steps = [
   { label: "Initiation" },
@@ -34,6 +41,11 @@ const SarfaseiContent = () => {
 
       {/* Conditionally render the DemandNoticeSarfasei component */}
       {activeStep === 2 && <DemandNoticeSarfasei />}
+      {activeStep === 3 && <SarfaesiTrackingResponse />}
+      {activeStep === 4 && <SarfaesiPossessionNotice />}
+      {activeStep === 5 && <SarfaesiAssetValuation />}
+      {activeStep === 6 && <SarfaesiAuctionRecovery />}
+      {activeStep === 7 && <CaseDetailClose />}
     </div>
   );
 };

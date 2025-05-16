@@ -1,0 +1,72 @@
+.possessionNotice-Sarfasei-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.possessionNotice-Sarfasei-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.possessionNotice-Sarfasei-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.possessionNotice-Sarfasei-topcontent {
+    display: flex;
+    padding: 30px;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.possessionNotice-Sarfasei-topcontent-leftside {
+    padding: 15px 20px;
+    border: 1px solid #c3c2c2;
+    width: 75%;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.Sarfasei-possessionnotice-form-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.possessionNotice-Sarfasei-middle-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.possessionNotice-Sarfasei-middle-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.possessionNotice-Sarfasei-middle-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.possessionNotice-Sarfasei-middle-content-formdata{
+    padding: 20px 30px;
+}
+
+.possessionNotice-Sarfasei-Bottom-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.possessionNotice-Sarfasei-Bottom-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.possessionNotice-Sarfasei-Bottom-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.possessionNotice-Sarfasei-Bottom-content-formdata{
+    padding: 20px 30px;
+}
+.possessionNotice-Sarfasei-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}
