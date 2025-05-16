@@ -6,9 +6,16 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 20;
 
+  const [columnWidths, setColumnWidths] = useState(
+    columns.reduce((acc, col) => {
+      acc[col.key] = col.width || 150;
+      return acc;
+    }, {})
+  );
+
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-    setCurrentPage(1); // reset to first page when filtering
+    setCurrentPage(1);
   };
 
   const filteredData = useMemo(() => {
@@ -32,18 +39,54 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
+  // Resizing Logic
+  let startX, startWidth, currentColKey;
+
+  const initResize = (e, colKey) => {
+    startX = e.clientX;
+    startWidth = columnWidths[colKey];
+    currentColKey = colKey;
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", stopResize);
+  };
+
+  const onMouseMove = (e) => {
+    const diffX = e.clientX - startX;
+    setColumnWidths((prev) => ({
+      ...prev,
+      [currentColKey]: Math.max(startWidth + diffX, 50),
+    }));
+  };
+
+  const stopResize = () => {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", stopResize);
+  };
+
   return (
     <div className="reusable-grid">
       <table className="styled-table">
         <thead className="headerTable">
           <tr>
             {columns.map((col) => (
-              <th key={col.key}>{col.label}</th>
+              <th
+                key={col.key}
+                className="resizable-header"
+                style={{ width: columnWidths[col.key] }}
+              >
+                <div className="header-content">
+                  {col.label}
+                  <div
+                    className="resizer"
+                    onMouseDown={(e) => initResize(e, col.key)}
+                  />
+                </div>
+              </th>
             ))}
           </tr>
           <tr>
             {columns.map((col) => (
-              <th key={col.key}>
+              <th key={col.key} style={{ width: columnWidths[col.key] }}>
                 {!col.disableFilter && (
                   <input
                     type="text"
@@ -61,12 +104,9 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
         </thead>
         <tbody>
           {currentData.map((row, index) => (
-            <tr
-              key={index}
-              onClick={() => onRowClick?.(row)}
-            >
+            <tr key={index} onClick={() => onRowClick?.(row)}>
               {columns.map((col) => (
-                <td key={col.key}>
+                <td key={col.key} style={{ width: columnWidths[col.key] }}>
                   {col.render ? col.render(row) : row[col.key]}
                 </td>
               ))}
