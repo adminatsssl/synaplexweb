@@ -7,6 +7,7 @@ import SarfaesiPossessionNotice from "./Tabs/PossessionNotice/SarfaesiPossession
 import SarfaesiAssetValuation from "./Tabs/AssetValuation/SarfaesiAssetValuation.jsx";
 import SarfaesiAuctionRecovery from "./Tabs/AuctionRecovery/SarfaesiAuctionRecovery.jsx";
 import CaseDetailClose from "./Tabs/Close/CaseDetailClose.jsx";
+import CaseHistoryAccordion from "../CaseHistory.jsx";
 
 
 
@@ -20,6 +21,18 @@ const steps = [
   { label: "Closure" },
 ];
 
+const dummyData = [
+  {
+    auditDate: "2025-01-01",
+    actionType: "Update",
+    changedDate: "2025-01-01",
+    performedBy: "John Doe",
+    fieldChanged: "Status",
+    oldValue: "Pending",
+    newValue: "Approved",
+  },
+];
+
 const SarfaseiContent = () => {
   const [activeStep, setActiveStep] = useState(2); // Default to "Demand Notice Generation" step
 
@@ -29,8 +42,11 @@ const SarfaseiContent = () => {
   };
 
   return (
-    <div className="Sarfasei-content-container">
-      <h4>CASE PROGRESS</h4>
+    
+    <div className="Sarfasei-content-container-topbar">
+      <div className="Sarfasei-content-container">
+
+        <h4>CASE PROGRESS</h4>
       <div className="Sarfasei-resuable-content">
         <ReusableCaseStage
           steps={steps}
@@ -46,6 +62,14 @@ const SarfaseiContent = () => {
       {activeStep === 5 && <SarfaesiAssetValuation />}
       {activeStep === 6 && <SarfaesiAuctionRecovery />}
       {activeStep === 7 && <CaseDetailClose />}
+
+
+      </div>
+      
+
+      <>
+      <CaseHistoryAccordion data={dummyData} />
+      </>
     </div>
   );
 };

@@ -1,0 +1,72 @@
+.chequeBounce-complaintFilling-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-complaintFilling-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-complaintFilling-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.chequeBounce-complaintFilling-topcontent {
+    padding: 30px;
+
+}
+
+.chequeBounce-complaintFilling-topcontent-leftside {
+    padding: 15px 20px;
+    border: 1px solid #c3c2c2;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.chequeBounce-complaintFilling-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+.chequeBounce-complaintFilling-form-row-content{
+    width: 50%;
+}
+
+.chequeBounce-complaintFilling-middle-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-complaintFilling-middle-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-complaintFilling-middle-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-complaintFilling-middle-content-formdata{
+    padding: 20px 30px;
+}
+
+.chequeBounce-complaintFilling-Bottom-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-complaintFilling-Bottom-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-complaintFilling-Bottom-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-complaintFilling-Bottom-content-formdata{
+    padding: 20px 30px;
+}
+.chequeBounce-complaintFilling-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

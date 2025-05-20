@@ -1,0 +1,94 @@
+.chequeBounce-demandNotice-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-demandNotice-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-demandNotice-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.chequeBounce-demandNotice-topcontent {
+    display: flex;
+    padding: 30px;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.chequeBounce-demandNotice-topcontent-leftside {
+    padding: 15px 20px;
+    border: 1px solid #c3c2c2;
+    width: 75%;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.chequeBounce-demandNotice-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.chequeBounce-demandNotice-form-row-content{
+    width: 50%;
+}
+
+.chequeBounce-demandNotice-topcontent-rightside {
+    width: 19%;
+    text-align: center;
+}
+
+.chequeBounce-demandNotice-topcontent-rightside-icon {
+    border: 1px solid #c3c2c2;
+    padding: 40px 20px;
+    border-radius: 10px;
+     background-color: #fafafa;
+}
+
+.chequeBounce-demandNotice-icon {
+    font-size: 32px;
+    display: flex;
+    gap: 5rem;
+    justify-content: center;
+}
+
+.chequeBounce-demandNotice-middle-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-demandNotice-middle-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-demandNotice-middle-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-demandNotice-middle-content-formdata{
+    padding: 20px 30px;
+}
+
+.chequeBounce-demandNotice-Bottom-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-demandNotice-Bottom-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-demandNotice-Bottom-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-demandNotice-Bottom-content-formdata{
+    padding: 20px 30px;
+}
+.chequeBounce-demandNotice-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

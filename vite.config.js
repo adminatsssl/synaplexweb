@@ -10,6 +10,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/api':{
+        target:'http://192.168.29.232:8080',
+        changeOrigin:true,
+        secure: false,
+      },
       '/odata': {
         target: 'http://localhost:8080',
         changeOrigin: true,

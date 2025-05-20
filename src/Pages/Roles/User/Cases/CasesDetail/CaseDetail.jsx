@@ -3,7 +3,9 @@ import { FaLaptop } from "react-icons/fa6";
 import { FaFilePdf } from "react-icons/fa6";
 import Layout from "../../../../Layout/Layout.jsx";
 import './CaseDetail.css';
+import ArbitrationContent from "./Arbitration/ArbitrationContent.jsx";
 import SarfaseiContent from "./Sarfasei/SarfaesiContent.jsx";
+import ChequeBounceContent from "./ChequeBounce/ChequeBounceContent.jsx";
 
 
 const CasesDetail = ({ caseData }) => {
@@ -40,10 +42,10 @@ const CasesDetail = ({ caseData }) => {
                 </div>
 
                 <div className="case-detailpage-loanContainer">
-                <div className="case-detailpage-loanContainer-topheading">
+                    <div className="case-detailpage-loanContainer-topheading">
                         <p><strong>Loan Details</strong></p>
                     </div>
-                    <hr className="case-detailpage-loanContainer-hrline"/>
+                    <hr className="case-detailpage-loanContainer-hrline" />
                     <div className="case-detailpage-loanContainer-content">
                         <p>Loan ID<br /><strong>{caseData.LoanID}</strong></p>
                         <p>Amount<br /><strong>{caseData.LoanAmount}</strong> </p>
@@ -56,10 +58,10 @@ const CasesDetail = ({ caseData }) => {
 
                 </div>
                 <div className="Sarfasei-container">
-                    <SarfaseiContent/>
+                    {caseData.CaseType?.toLowerCase() === "cheque bounce" && <ChequeBounceContent />}
+                    {caseData.CaseType?.toLowerCase() === "sarfaesi" && <SarfaseiContent />}
+                    {caseData.CaseType?.toLowerCase() === "arbitration" && <ArbitrationContent />}
                 </div>
-
-                
 
 
             </div>

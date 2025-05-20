@@ -7,7 +7,7 @@ const dummyCases = [
   {
     CaseID: "101",
     LoanID: "L-0001",
-    CaseType: "Civil",
+    CaseType: "Cheque Bounce",
     Status: "Open",
     Borrower: "John Doe",
     LoanAmount: "$100,000",
@@ -19,7 +19,7 @@ const dummyCases = [
   {
     CaseID: "102",
     LoanID: "L-0002",
-    CaseType: "Criminal",
+    CaseType: "Sarfaesi",
     Status: "Closed",
     Borrower: "Jane Smith",
     LoanAmount: "$200,000",

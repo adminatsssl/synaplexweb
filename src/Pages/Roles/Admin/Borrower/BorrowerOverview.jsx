@@ -16,58 +16,58 @@ const BorrowerOverview = () => {
   const [selectedBorrower, setSelectedBorrower] = useState(null);
 
   const fetchBorrowers = () => {
-    setLoading(true);
-    axios
-      .get("/odata/postapiservice/Borrowers", {
-        transformResponse: [
-          function (data) {
-            try {
-              return JSONBig.parse(data).value || JSONBig.parse(data);
-            } catch (err) {
-              console.warn("JSONBig parse error:", err);
-              return [];
-            }
-          },
-        ],
-      })
-      .then((response) => {
-        if (Array.isArray(response.data)) {
-          setBorrowers(response.data);
-        } else {
-          console.warn("Unexpected response format:", response.data);
-          setBorrowers([]);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching borrowers:", error);
-        setBorrowers([]);
-        setLoading(false);
-      });
-  };
-
-  const handleDelete = async (id) => {
-    const stringId = id.toString();
-    try {
-      const response = await fetch(
-        `/odata/postapiservice/Borrowers(${stringId})`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.ok) {
-        fetchBorrowers();
+  setLoading(true);
+  axios
+    .get("/api/borrowers")
+    .then((response) => {
+      const responseData = response.data;
+      if (responseData.status === "SUCCESS" && Array.isArray(responseData.data)) {
+        const transformedData = responseData.data.map((item) => ({
+          ID: item.id,
+          Name: item.name,
+          Phone: item.contactNumber ?? "N/A",
+          Email: item.email,
+          Address: item.address
+            ? `${item.address.city}, ${item.address.state}, ${item.address.pincode}`
+            : "N/A",
+          CreditScore: "N/A", // Placeholder if not available in response
+          JobTitle: "N/A",     // Placeholder
+          MonthlyIncome: "N/A", // Placeholder
+        }));
+        setBorrowers(transformedData);
       } else {
-        console.error("Failed to delete. Status:", response.status);
+        console.warn("Unexpected response format:", responseData);
+        setBorrowers([]);
       }
-    } catch (error) {
-      console.error("Error during delete:", error);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching borrowers:", error);
+      setBorrowers([]);
+      setLoading(false);
+    });
+};
+
+
+const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`/api/borrowers/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      fetchBorrowers();
+    } else {
+      console.error("Failed to delete. Status:", response.status);
     }
-  };
+  } catch (error) {
+    console.error("Error during delete:", error);
+  }
+};
+
 
   useEffect(() => {
     fetchBorrowers();

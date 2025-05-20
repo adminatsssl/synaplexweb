@@ -1,5 +1,6 @@
 import React from 'react';
-import './WhatsAppTab.css'
+import './WhatsappTab.css';
+
 
 const WhatsAppTab = ()=>{
     return(
