@@ -12,47 +12,52 @@ const LegalWorkflow = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editWorkflow, setEditWorkflow] = useState(null);
 
-  const fetchWorkflows = async () => {
-    try {
-      const res = await fetch("/odata/legal/LegalWorkflows?$expand=LegalWorkflowStages");
-      const text = await res.text();
-      const data = JSONbig.parse(text);
-      setWorkflows(data.value);
-    } catch (err) {
-      console.error("Error fetching workflows:", err);
+const fetchWorkflows = async () => {
+  try {
+    const res = await fetch("/api/api/workflowType");
+    const json = await res.json();
+    if (json.status === "SUCCESS") {
+      setWorkflows(json.data); // Extract the actual data array
+    } else {
+      console.error("Failed to fetch workflows:", json.message);
     }
-  };
+  } catch (err) {
+    console.error("Error fetching workflows:", err);
+  }
+};
+
 
   useEffect(() => {
     fetchWorkflows();
   }, []);
 
-  const handleDelete = async (id) => {
-    const stringId = id.toString();
-    if (!window.confirm("Are you sure you want to delete this workflow?")) return;
-    try {
-      await fetch(`/odata/legal/LegalWorkflows(${stringId})`, { method: "DELETE" });
-      fetchWorkflows();
-    } catch (err) {
-      console.error("Error deleting workflow:", err);
-    }
-  };
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this workflow?")) return;
+  try {
+    await fetch(`/api/api/workflowType/${id}`, { method: "DELETE" });
+    fetchWorkflows();
+  } catch (err) {
+    console.error("Error deleting workflow:", err);
+  }
+};
+
 
   const columns = [
-    { key: "CaseType", label: "Case Type", render: (row) => row.CaseType.replace(/_/g, " ") },
-    { key: "Description", label: "Description" },
-    {
-      key: "actions",
-      label: "",
-      disableFilter: true,
-      render: (row) => (
-        <>
-          <IconButton type="edit" onClick={() => { setEditWorkflow(row); setModalOpen(true); }} />
-          <IconButton type="delete" onClick={() => handleDelete(row.ID)} />
-        </>
-      ),
-    },
-  ];
+  { key: "name", label: "Workflow Name" },
+  { key: "description", label: "Description" },
+  {
+    key: "actions",
+    label: "",
+    disableFilter: true,
+    render: (row) => (
+      <>
+        <IconButton type="edit" onClick={() => { setEditWorkflow(row); setModalOpen(true); }} />
+        <IconButton type="delete" onClick={() => handleDelete(row.id)} />
+      </>
+    ),
+  },
+];
+
 
   return (
     <div className="legal-workflow-container">

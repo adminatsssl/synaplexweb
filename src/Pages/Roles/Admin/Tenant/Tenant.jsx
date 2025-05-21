@@ -23,18 +23,22 @@ const TenantManager = () => {
   };
 
   // Function to fetch tenants data
-  const fetchTenants = async () => {
-    try {
-      const res = await axios.get("/odata/pos_tenant/v1/Tenants?$expand=Address", {
-        transformResponse: data => JSONbig.parse(data) // Use JSONbig for large integers like IDs
-      });
-      // Assuming the data is in res.data.value
-      setTenants(res.data.value || []);
-    } catch (error) {
-      console.error("Error fetching tenants:", error);
-      showMessage("Failed to fetch tenants", "error");
+const fetchTenants = async () => {
+  try {
+    const res = await axios.get("/api/api/tenants", {
+      transformResponse: data => JSONbig.parse(data)
+    });
+    if (res.data.status === "SUCCESS" && Array.isArray(res.data.data)) {
+      setTenants(res.data.data);
+    } else {
+      throw new Error("Invalid response format");
     }
-  };
+  } catch (error) {
+    console.error("Error fetching tenants:", error);
+    showMessage("Failed to fetch tenants", "error");
+  }
+};
+
 
   // Fetch tenants on component mount
   useEffect(() => {
@@ -57,7 +61,7 @@ const TenantManager = () => {
   const handleDeleteClick = async (tenantId) => {
     try {
       if (window.confirm("Are you sure you want to delete this tenant?")) {
-        await axios.delete(`/odata/pos_tenant/v1/Tenants(${tenantId})`);
+        await axios.delete(`/api/api/tenants/${tenantId}`);
         showMessage("Tenant deleted successfully!", "success");
         fetchTenants(); // Refresh the list after deletion
       }
@@ -79,60 +83,46 @@ const TenantManager = () => {
     setShowPopup(false); // Close the popup
   };
 
-  // Define the columns for the ReusableGrid component
-  // Using 'key' and 'label' as per your ReusableGrid example
   const columns = [
-    {
-      key: "Name",
-      label: "Name",
-      // If your ReusableGrid doesn't automatically render text for a 'key',
-      // you might explicitly add a render function like this:
-      // render: (row) => row.Name
-    },
-    {
-      key: "GSTIN",
-      label: "GSTIN",
-      // render: (row) => row.GSTIN // Optional explicit render
-    },
-    {
-      key: "PANNo",
-      label: "PAN No",
-      // render: (row) => row.PANNo // Optional explicit render
-    },
-    {
-      key: "City", // Using a key, but will render using the function
-      label: "City",
-      // Using a render function for nested Address data
-      render: (row) => row.Address?.City || "N/A", // Use row instead of tenant
-    },
-    {
-      key: "State", // Using a key, but will render using the function
-      label: "State",
-      // Using a render function for nested Address data
-      render: (row) => row.Address?.State || "N/A", // Use row instead of tenant
-    },
-    {
-      key: "PinCode", // Using a key, but will render using the function
-      label: "Pin Code",
-      // Using a render function for nested Address data
-      render: (row) => row.Address?.PinCode || "N/A", // Use row instead of tenant
-    },
-    {
-      key: "actions", // A unique key for the actions column
-      label: "Actions",
-      // Custom render function for the actions column
-      render: (row) => ( // Use row instead of tenant
-        <div className="actions-cell"> {/* Apply styling to the container div */}
-          {/* Pass the row object (which is the tenant) to the edit handler */}
-          <IconButton type="edit" onClick={() => handleEditClick(row)} />
-          {/* Pass the row ID (tenant.ID) to the delete handler */}
-          <IconButton type="delete" onClick={() => handleDeleteClick(row.ID)} />
-        </div>
-      ),
-      // Add disableFilter if your grid supports it and you don't want filtering on actions
-      // disableFilter: true,
-    },
-  ];
+  {
+    key: "name",
+    label: "Name"
+  },
+  {
+    key: "gstin",
+    label: "GSTIN"
+  },
+  {
+    key: "panNo",
+    label: "PAN No"
+  },
+  {
+    key: "city",
+    label: "City",
+    render: (row) => row.address?.city || "N/A"
+  },
+  {
+    key: "state",
+    label: "State",
+    render: (row) => row.address?.state || "N/A"
+  },
+  {
+    key: "pincode",
+    label: "Pin Code",
+    render: (row) => row.address?.pincode || "N/A"
+  },
+  {
+    key: "actions",
+    label: "Actions",
+    render: (row) => (
+      <div className="actions-cell">
+        <IconButton type="edit" onClick={() => handleEditClick(row)} />
+        <IconButton type="delete" onClick={() => handleDeleteClick(row.id)} />
+      </div>
+    )
+  }
+];
+
 
   return (
     <Layout>
