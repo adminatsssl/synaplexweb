@@ -18,7 +18,7 @@ const BorrowerOverview = () => {
   const fetchBorrowers = () => {
   setLoading(true);
   axios
-    .get("/api/borrowers")
+    .get("/api/api/borrowers")
     .then((response) => {
       const responseData = response.data;
       if (responseData.status === "SUCCESS" && Array.isArray(responseData.data)) {

@@ -51,12 +51,12 @@ const iconMap = {
 };
 
 export default function Sidebar() {
-  const role = localStorage.getItem("role") || "Administrator";
+  const role = localStorage.getItem("role");
   const [isExpanded, setIsExpanded] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState(null);
 
   const navItems = {
-    Administrator: [
+    ROLE_ADMIN: [
       { name: "Home", path: "/admin" },
 
       { name: "Borrower", path: "/borrower" },
@@ -95,7 +95,7 @@ export default function Sidebar() {
       }
     ],
 
-    User: [
+    ROLE_USER: [
       { name: "Home", path: "/user" },
       { name: "Cases", path: "/cases" },
       { name: "Notices", path: "/user-notice" },
@@ -110,7 +110,7 @@ export default function Sidebar() {
       { name: "Invoices", path: "/invoices" },
     ],
 
-    Legal: [
+    ROLE_LEGAL: [
       { name: "Home", path: "/legal" },
       { name: "Cases", path: "/lawyer-cases" },
       { name: "Notices", path: "/lawyer-notice" },

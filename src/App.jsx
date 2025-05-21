@@ -37,36 +37,36 @@ function App() {
         <Route path="/" element={<LoginPage />} />
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<ProtectedRoute element={AdminPage} allowedRoles={["Administrator"]} />} />
-        <Route path="/legalSetup" element={<ProtectedRoute element={LegalSetup} allowedRoles={["Administrator"]} />} />
-        <Route path="/CourtSetup" element={<ProtectedRoute element={CourtSetup} allowedRoles={["Administrator"]} />} />
-        <Route path="/borrower" element={<ProtectedRoute element={BorrowerOverview} allowedRoles={["Administrator"]} />} />
-        <Route path="/tenant" element={<ProtectedRoute element={TenantManager} allowedRoles={["Administrator"]} />} />
-        <Route path="/admin-cases" element={<ProtectedRoute element={AdminCases} allowedRoles={["Administrator"]} />} />
-        <Route path="/admin-loans" element={<ProtectedRoute element={AdminLoans} allowedRoles={["Administrator"]} />} />
-        <Route path="/admin-notices" element={<ProtectedRoute element={AdminNotices} allowedRoles={["Administrator"]} />} />
-        <Route path="/stageconfig" element={<ProtectedRoute element={StageConfig} allowedRoles={["Administrator"]} />} />
-        <Route path="/template" element={<ProtectedRoute element={NoticeSetupTemplate} allowedRoles={["Administrator"]} />} />
-        <Route path="/accounts" element={<ProtectedRoute element={AdminAccount} allowedRoles={["Administrator"]} />} />
-        <Route path="/KeyConfig" element={<ProtectedRoute element={KeyConfig} allowedRoles={["Administrator"]} />} />
+        <Route path="/admin" element={<ProtectedRoute element={AdminPage} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/legalSetup" element={<ProtectedRoute element={LegalSetup} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/CourtSetup" element={<ProtectedRoute element={CourtSetup} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/borrower" element={<ProtectedRoute element={BorrowerOverview} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/tenant" element={<ProtectedRoute element={TenantManager} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/admin-cases" element={<ProtectedRoute element={AdminCases} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/admin-loans" element={<ProtectedRoute element={AdminLoans} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/admin-notices" element={<ProtectedRoute element={AdminNotices} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/stageconfig" element={<ProtectedRoute element={StageConfig} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/template" element={<ProtectedRoute element={NoticeSetupTemplate} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/accounts" element={<ProtectedRoute element={AdminAccount} allowedRoles={["ROLE_ADMIN"]} />} />
+        <Route path="/KeyConfig" element={<ProtectedRoute element={KeyConfig} allowedRoles={["ROLE_ADMIN"]} />} />
        
 
         {/* User Routes */}
-        <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["User"]} />} />
-        <Route path="/report-cases" element={<ProtectedRoute element={ReportCases} allowedRoles={["User"]} />} />
-        <Route path="/report-notices" element={<ProtectedRoute element={ReportNotices} allowedRoles={["User"]} />} />
-        <Route path="/cases" element={<ProtectedRoute element={UserCases} allowedRoles={["User"]} />} />
-        <Route path="/case/:id" element={<ProtectedRoute element={CaseDetailPage} allowedRoles={["User"]} />} />
-        <Route path="/user-notice" element={<ProtectedRoute element={UserNotice} allowedRoles={["User"]} />} />
-        <Route path="/loans" element={<ProtectedRoute element={Loanpage} allowedRoles={["User"]} />} />
-        <Route path="/invoices" element={<ProtectedRoute element={UserInvoiceManagement} allowedRoles={["User"]} />} />
+        <Route path="/user" element={<ProtectedRoute element={UserPage} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/report-cases" element={<ProtectedRoute element={ReportCases} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/report-notices" element={<ProtectedRoute element={ReportNotices} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/cases" element={<ProtectedRoute element={UserCases} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/case/:id" element={<ProtectedRoute element={CaseDetailPage} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/user-notice" element={<ProtectedRoute element={UserNotice} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/loans" element={<ProtectedRoute element={Loanpage} allowedRoles={["ROLE_USER"]} />} />
+        <Route path="/invoices" element={<ProtectedRoute element={UserInvoiceManagement} allowedRoles={["ROLE_USER"]} />} />
         {/* Lawyer Routes */}
-        <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["Legal"]} />} />
-        <Route path="/lawyer-cases" element={<ProtectedRoute element={LawyerCases} allowedRoles={["Legal"]} />} />
-        <Route path="/lawyer-invoice" element={<ProtectedRoute element={LawyerInvoiceManagement} allowedRoles={["Legal"]} />} />
-        <Route path="/lawyer-notice" element={<ProtectedRoute element={LawyerNotice} allowedRoles={["Legal"]} />} />
-        <Route path="/lawyer-reportCases" element={<ProtectedRoute element={LawyerReportCases} allowedRoles={["Legal"]} />} />
-        <Route path="/lawyer-reportNotice" element={<ProtectedRoute element={LawyerReportNotices} allowedRoles={["Legal"]} />} />
+        <Route path="/legal" element={<ProtectedRoute element={LegalPage} allowedRoles={["ROLE_LEGAL"]} />} />
+        <Route path="/lawyer-cases" element={<ProtectedRoute element={LawyerCases} allowedRoles={["ROLE_LEGAL"]} />} />
+        <Route path="/lawyer-invoice" element={<ProtectedRoute element={LawyerInvoiceManagement} allowedRoles={["ROLE_LEGAL"]} />} />
+        <Route path="/lawyer-notice" element={<ProtectedRoute element={LawyerNotice} allowedRoles={["ROLE_LEGAL"]} />} />
+        <Route path="/lawyer-reportCases" element={<ProtectedRoute element={LawyerReportCases} allowedRoles={["ROLE_LEGAL"]} />} />
+        <Route path="/lawyer-reportNotice" element={<ProtectedRoute element={LawyerReportNotices} allowedRoles={["ROLE_LEGAL"]} />} />
         
       </Routes>
     </Router>

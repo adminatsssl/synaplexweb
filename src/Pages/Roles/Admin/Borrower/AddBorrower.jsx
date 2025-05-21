@@ -134,52 +134,164 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
       <div className="addborrower-content">
         <div className="addborrower-header">
           {selectedBorrower ? "Edit Borrower" : "Add Borrower"}
+          <div className="addborrower-closebtn" onClick={onClose} >X</div>
         </div>
+        
         <div className="addborrower-middlecontent">
-        <form onSubmit={handleSubmit}>
-          <div className="addborrower-body grid-2">
-            {[
-              "Name",
-              "Phone",
-              "Email",
-              "Address",
-              "CreditScore",
-              "JobTitle",
-              "MonthlyIncome",
-            ].map((field) => (
-              <div className="form-item" key={field}>
-                <label htmlFor={field}>{field}</label>
+          <form onSubmit={handleSubmit}>
+            <div className="addborrower-body grid-2">
+              <div className="addborrower-form-item">
+                <label htmlFor="Name">Name</label>
                 <input
-                  id={field}
-                  name={field}
-                  type={
-                    field === "CreditScore" || field === "MonthlyIncome"
-                      ? "number"
-                      : "text"
-                  }
-                  placeholder={field}
-                  value={formData[field]}
+                  id="Name"
+                  name="Name"
+                  type="text"
+                  placeholder="Name"
+                  value={formData.Name}
                   onChange={handleChange}
                 />
               </div>
-            ))}
-          </div>
 
-          <div
-            className="addborrower-footer"
-            style={{ display: "flex", gap: "10px" }}
-          >
-            <CancelButton onClick={onClose} />
-            <SaveButton
-              onClick={handleSubmit}
-              label={selectedBorrower ? "Update" : "Save"}
-            />
-          </div>
-        </form>
+              <div className="addborrower-form-item">
+                <label htmlFor="Phone">Phone</label>
+                <input
+                  id="Phone"
+                  name="Phone"
+                  type="text"
+                  placeholder="Phone"
+                  value={formData.Phone}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="addborrower-form-item">
+                <label htmlFor="Email">Email</label>
+                <input
+                  id="Email"
+                  name="Email"
+                  type="text"
+                  placeholder="Email"
+                  value={formData.Email}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="addborrower-form-item">
+                <label htmlFor="CreditScore">Credit Score</label>
+                <input
+                  id="CreditScore"
+                  name="CreditScore"
+                  type="number"
+                  placeholder="Credit Score"
+                  value={formData.CreditScore}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="addborrower-address-container">
+                <div className="addborrower-addressline">
+                  <div className="addborrower-form-item">
+                    <label htmlFor="Address">Address Line</label>
+                    <input
+                      id="Address"
+                      name="Address"
+                      type="text"
+                      placeholder="Address"
+                      value={formData.Address}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                </div>
+
+                <div className="addborrower-pincode-city-state">
+                  <div className="addborrower-form-item">
+                    <label htmlFor="City">City</label>
+                    <input
+                      id="City"
+                      name="City"
+                      type="text"
+                      placeholder="City"
+                      value={formData.City}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="addborrower-form-item">
+                    <label htmlFor="State">State</label>
+                    <input
+                      id="State"
+                      name="State"
+                      type="text"
+                      placeholder="State"
+                      value={formData.State}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="addborrower-form-item">
+                    <label htmlFor="Pincode">Pincode</label>
+                    <input
+                      id="Pincode"
+                      name="Pincode"
+                      type="text"
+                      placeholder="Pincode"
+                      value={formData.Pincode}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+
+                </div>
+
+
+
+
+              </div>
+
+
+
+
+
+              <div className="addborrower-form-item">
+                <label htmlFor="JobTitle">Job Title</label>
+                <input
+                  id="JobTitle"
+                  name="JobTitle"
+                  type="text"
+                  placeholder="Job Title"
+                  value={formData.JobTitle}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="addborrower-form-item">
+                <label htmlFor="MonthlyIncome">Monthly Income</label>
+                <input
+                  id="MonthlyIncome"
+                  name="MonthlyIncome"
+                  type="number"
+                  placeholder="Monthly Income"
+                  value={formData.MonthlyIncome}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div
+              className="addborrower-footer"
+              style={{ display: "flex", gap: "10px" }}
+            >
+              <CancelButton onClick={onClose} />
+              <SaveButton
+                onClick={handleSubmit}
+                label={selectedBorrower ? "Update" : "Save"}
+              />
+            </div>
+          </form>
         </div>
-        
       </div>
     </div>
+
   );
 };
 

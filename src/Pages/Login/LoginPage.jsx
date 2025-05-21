@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './LoginPage.css'; // Make sure to create and add the CSS from below
 import collektoText from "/collektotext.png";
-import LoginLeft from "/loginleft-desgin.jpeg";
 import LogoColleckto from "/logo-collekto.png";
+import LoginLeft from "/loginleftdesign.jpeg";
+import './LoginPage.css';
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -11,65 +11,76 @@ function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const decodeJWT = (token) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/rest/login/${username}/${password}`
-      );
-
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      const data = await response.json();
-      const role = data.role;
-      localStorage.setItem("role", role);
-
-      if (role === "Administrator") {
-        localStorage.setItem("username", username);
-        navigate("/admin");
-      } else if (role === "User") {
-        localStorage.setItem("username", username);
-        navigate("/user");
-      } else if (role === "Legal") {
-        localStorage.setItem("username", username);
-        navigate("/legal");
-      } else {
-        setError("Invalid Username or Password");
-      }
-    } catch (err) {
-      setError("Invalid username or password");
+      const payload = token.split('.')[1];
+      const decoded = atob(payload); // base64 decode
+      return JSON.parse(decoded);
+    } catch (e) {
+      console.error("Failed to decode JWT", e);
+      return null;
     }
   };
 
+  const handleLogin = async (e) => {
+  try {
+    e.preventDefault();
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Login failed");
+    }
+
+    const data = await response.json();
+    console.log('Login successful:', data);
+    const token = data.token;
+    console.log(token);
+
+    // Decode the JWT payload to get the role
+    const base64Payload = token.split('.')[1];
+    const decodedPayload = JSON.parse(atob(base64Payload));
+    console.log(decodedPayload);
+    const role = decodedPayload.role;
+    console.log(role);
+
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("username", username);
+    localStorage.setItem("role", role);
+
+    if (role == "ROLE_ADMIN") {
+      navigate("/admin");
+    } else if (role == "ROLE_USER") {
+      navigate("/user");
+    } else if (role == "ROLE_LEGAL") {
+      navigate("/legal");
+    } else {
+      setError("Invalid role in token");
+    }
+  } catch (err) {
+    console.error('Error:', error.message);
+    setError("Invalid username or password");
+  }
+};
+
+
   return (
     <div className="loginpage">
-      {/* Left Side with Full-Screen Image */}
       <div className="loginpage-left">
-        <img
-          src={LoginLeft} // Update with your actual asset path
-          alt="Login Left Design"
-          className="left-image"
-        />
+        <img src={LoginLeft} alt="Login Left Design" className="left-image" />
       </div>
-
-      {/* Right Side with Form */}
       <div className="loginpage-right">
         <div className="logo-container">
-          <img
-            src={collektoText} // Update with your actual asset path
-            alt="Collekto Logo"
-            className="logo"
-          />
-          <img
-            src={LogoColleckto} // Update with your actual asset path
-            alt="Collekto Text"
-            className="logo-text"
-          />
+          <img src={collektoText} alt="Collekto Logo" className="logo" />
+          <img src={LogoColleckto} alt="Collekto Text" className="logo-text" />
         </div>
-        <h2>
-          <span className="highlight">Login</span>
-        </h2>
+        <h2><span className="highlight">Login</span></h2>
         <div className="loginpage-formwrapper">
           <div className="form-group">
             <input
@@ -89,11 +100,7 @@ function LoginPage() {
               className="form-control"
             />
           </div>
-          <button
-            type="button"
-            className="btn"
-            onClick={handleLogin}
-          >
+          <button type="button" className="btn" onClick={handleLogin}>
             Sign in
           </button>
           {error && <p style={{ color: "red" }}>{error}</p>}
