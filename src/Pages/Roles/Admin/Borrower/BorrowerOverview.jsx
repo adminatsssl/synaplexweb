@@ -6,7 +6,7 @@ import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
 import Layout from "../../../Layout/Layout";
 import AddButton from "../../../ReusableComponents/AddButton";
-import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; 
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
@@ -16,58 +16,56 @@ const BorrowerOverview = () => {
   const [selectedBorrower, setSelectedBorrower] = useState(null);
 
   const fetchBorrowers = () => {
-  setLoading(true);
-  axios
-    .get("/api/api/borrowers")
-    .then((response) => {
-      const responseData = response.data;
-      if (responseData.status === "SUCCESS" && Array.isArray(responseData.data)) {
-        const transformedData = responseData.data.map((item) => ({
-          ID: item.id,
-          Name: item.name,
-          Phone: item.contactNumber ?? "N/A",
-          Email: item.email,
-          Address: item.address
-            ? `${item.address.city}, ${item.address.state}, ${item.address.pincode}`
-            : "N/A",
-          CreditScore: "N/A", // Placeholder if not available in response
-          JobTitle: "N/A",     // Placeholder
-          MonthlyIncome: "N/A", // Placeholder
-        }));
-        setBorrowers(transformedData);
-      } else {
-        console.warn("Unexpected response format:", responseData);
+    setLoading(true);
+    axios
+      .get("/api/api/borrowers")
+      .then((response) => {
+        const responseData = response.data;
+        if (responseData.status === "SUCCESS" && Array.isArray(responseData.data)) {
+          const transformedData = responseData.data.map((item) => ({
+            ID: item.id,
+            Name: item.name,
+            Phone: item.contactNumber ?? "N/A",
+            Email: item.email,
+            Address: item.address
+              ? `${item.address.city}, ${item.address.state}, ${item.address.pincode}`
+              : "N/A",
+            CreditScore: item.creditScore ?? "N/A",
+            JobTitle: item.jobTitle ?? "N/A",
+            MonthlyIncome: item.monthlyIncome ?? "N/A",
+          }));
+          setBorrowers(transformedData);
+        } else {
+          console.warn("Unexpected response format:", responseData);
+          setBorrowers([]);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching borrowers:", error);
         setBorrowers([]);
+        setLoading(false);
+      });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`/api/borrowers/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        fetchBorrowers();
+      } else {
+        console.error("Failed to delete. Status:", response.status);
       }
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching borrowers:", error);
-      setBorrowers([]);
-      setLoading(false);
-    });
-};
-
-
-const handleDelete = async (id) => {
-  try {
-    const response = await fetch(`/api/borrowers/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.ok) {
-      fetchBorrowers();
-    } else {
-      console.error("Failed to delete. Status:", response.status);
+    } catch (error) {
+      console.error("Error during delete:", error);
     }
-  } catch (error) {
-    console.error("Error during delete:", error);
-  }
-};
-
+  };
 
   useEffect(() => {
     fetchBorrowers();
@@ -93,7 +91,7 @@ const handleDelete = async (id) => {
     { key: "MonthlyIncome", label: "Monthly Income" },
     {
       key: "actions",
-      label: "", 
+      label: "",
       disableFilter: true,
       render: (row) => (
         <div style={{ display: "flex", gap: "0.5rem" }}>

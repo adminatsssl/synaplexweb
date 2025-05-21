@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddButton from '../../../../ReusableComponents/AddButton';
 import IconButton from "../../../../ReusableComponents/IconButton";
-import ReusableGrid from "../../../../ReusableComponents/ReusableGrid"; // ✅ Import added
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import LawFirmPopup from "./LawFirmPopup";
 import "./LawFirm.css";
 
@@ -17,9 +17,9 @@ const LawFirm = () => {
   const fetchLawFirms = () => {
     setLoading(true);
     axios
-      .get("/odata/LawFirms?$expand=Address_LawFirm")
+      .get("/api/api/lawfirms")
       .then(response => {
-        setLawFirms(response.data.value || []);
+        setLawFirms(response.data.data || []);
         setLoading(false);
       })
       .catch(error => {
@@ -50,9 +50,8 @@ const LawFirm = () => {
   };
 
   const handleDelete = async (id) => {
-    const stringId = id.toString();
     try {
-      const response = await fetch(`/odata/LawFirms(${stringId})`, {
+      const response = await fetch(`/api/api/lawfirms/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -70,28 +69,27 @@ const LawFirm = () => {
   if (loading) return <div className="law-firm-loading">Loading...</div>;
   if (error) return <div className="law-firm-error">{error}</div>;
 
-  // ✅ Define columns for ReusableGrid
   const columns = [
-    { key: "Name", label: "Name" },
-    { key: "Email", label: "Email" },
-    { key: "PhoneNumber", label: "Phone Number" },
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone Number" },
     {
-      key: "AddressLine",
-      label: "Address",
-      render: (item) => item.Address_LawFirm?.AddressLine ?? "-"
+      key: "address",
+      label: "City",
+      render: (item) => item.address?.city ?? "-"
     },
-    { key: "RegistrationNumber", label: "Registration Number" },
-    { key: "EstablishmentYear", label: "Establishment Year" },
-    { key: "TotalLawyers", label: "Total Lawyers" },
+    { key: "registrationNumber", label: "Registration Number" },
+    { key: "establishmentYear", label: "Establishment Year" },
+    { key: "totalLawyer", label: "Total Lawyers" },
     {
-      key: "SuccessRate",
+      key: "successRate",
       label: "Success Rate",
-      render: (item) => item.SuccessRate?.toFixed(2) ?? "-"
+      render: (item) => item.successRate?.toFixed(2) ?? "-"
     },
     {
-      key: "ClientRating",
+      key: "clientRating",
       label: "Client Rating",
-      render: (item) => item.ClientRating?.toFixed(2) ?? "-"
+      render: (item) => item.clientRating?.toFixed(2) ?? "-"
     },
     {
       key: "actions",
@@ -100,7 +98,7 @@ const LawFirm = () => {
       render: (item) => (
         <div className="law-firm-actions">
           <IconButton type="edit" onClick={() => openEditPopup(item)} />
-          <IconButton type="delete" onClick={() => handleDelete(item.ID)} />
+          <IconButton type="delete" onClick={() => handleDelete(item.id)} />
         </div>
       )
     }
@@ -112,7 +110,6 @@ const LawFirm = () => {
         <AddButton text="Add Law-Firm" onClick={openAddPopup} />
       </div>
 
-      {/* ✅ Use ReusableGrid here */}
       <ReusableGrid columns={columns} data={lawFirms} />
 
       {showPopup && (

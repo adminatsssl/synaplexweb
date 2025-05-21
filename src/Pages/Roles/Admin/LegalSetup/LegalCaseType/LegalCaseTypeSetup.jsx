@@ -4,7 +4,7 @@ import LegalCaseTypePopup from "./LegalCaseTypePopup";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import JSONbig from 'json-bigint';
 import AddButton from '../../../../ReusableComponents/AddButton';
-import ReusableGrid from '../../../../ReusableComponents/ReusableGrid'; // ✅ Import it
+import ReusableGrid from '../../../../ReusableComponents/ReusableGrid';
 
 const LegalCaseTypeSetup = () => {
   const [legalCaseTypes, setLegalCaseTypes] = useState([]);
@@ -12,10 +12,20 @@ const LegalCaseTypeSetup = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const fetchLegalCaseTypes = async () => {
-    const res = await fetch("/legalcasetype/LegalCaseTypes");
-    const text = await res.text();
-    const data = JSONbig.parse(text);
-    setLegalCaseTypes(data.value);
+    try {
+      const res = await fetch("/api/api/legalCaseTypes");
+      const text = await res.text();
+      const parsed = JSONbig.parse(text);
+      console.log(parsed);
+
+      if (parsed.status === "SUCCESS") {
+        setLegalCaseTypes(parsed.data);
+      } else {
+        console.error("Failed to fetch case types:", parsed.message);
+      }
+    } catch (error) {
+      console.error("Error fetching legal case types:", error);
+    }
   };
 
   const handleEdit = (item) => {
@@ -24,22 +34,25 @@ const LegalCaseTypeSetup = () => {
   };
 
   const handleDelete = async (id) => {
-    const stringId = id.toString();
-    console.log("Deleting ID: " + stringId);
-    await fetch(`/legalcasetype/LegalCaseTypes(${stringId})`, {
-      method: "DELETE",
-    });
-    fetchLegalCaseTypes();
+    try {
+      const stringId = id.toString();
+      console.log("Deleting ID: " + stringId);
+      await fetch(`/api/api/legalCaseType/${stringId}`, {
+        method: "DELETE",
+      });
+      fetchLegalCaseTypes();
+    } catch (error) {
+      console.error("Error deleting legal case type:", error);
+    }
   };
 
   useEffect(() => {
     fetchLegalCaseTypes();
   }, []);
 
-  // ✅ Define columns
   const columns = [
-    { key: "Name", label: "Name" },
-    { key: "Description", label: "Description" },
+    { key: "name", label: "Name" },
+    { key: "description", label: "Description" },
     {
       key: "actions",
       label: "",
@@ -47,7 +60,7 @@ const LegalCaseTypeSetup = () => {
       render: (item) => (
         <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
           <IconButton type="edit" onClick={() => handleEdit(item)} />
-          <IconButton type="delete" onClick={() => handleDelete(item.ID)} />
+          <IconButton type="delete" onClick={() => handleDelete(item.id)} />
         </div>
       )
     }
@@ -65,8 +78,6 @@ const LegalCaseTypeSetup = () => {
             }}
           />
         </div>
-
-        {/* ✅ Use ReusableGrid instead of table */}
         <ReusableGrid columns={columns} data={legalCaseTypes} />
       </div>
 

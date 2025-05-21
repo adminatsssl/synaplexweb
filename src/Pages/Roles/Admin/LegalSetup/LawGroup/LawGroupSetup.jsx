@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import IconButton from "../../../../ReusableComponents/IconButton";
 import AddButton from '../../../../ReusableComponents/AddButton';
-import ReusableGrid from '../../../../ReusableComponents/ReusableGrid'; // ✅ Import added
-import LawGroupPopup from "./LawGroupPopup"; 
-import './LawGroup.css'; 
- 
+import ReusableGrid from '../../../../ReusableComponents/ReusableGrid';
+import LawGroupPopup from "./LawGroupPopup";
+import './LawGroup.css';
+
 const LawGroup = () => {
   const [lawGroups, setLawGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,19 +14,31 @@ const LawGroup = () => {
   const [selectedLawGroup, setSelectedLawGroup] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const fetchLawGroups = () => {
+  const fetchLawGroups = async () => {
     setLoading(true);
-    axios
-      .get("/odata/lawgroup/Groups?$expand=Address_Group")
-      .then(response => {
-        setLawGroups(response.data.value || []);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error("Error fetching law groups:", error);
-        setError("Failed to load data");
-        setLoading(false);
-      });
+    try {
+      const response = await axios.get("/api/api/lawgroups");
+      const rawData = response.data.data || [];
+
+      // Transform API response to match expected structure
+      const transformedData = rawData.map(group => ({
+        ID: group.id,
+        Name: group.name,
+        Email: group.email,
+        PhoneNumber: group.phone,
+        AddressLine: group.address?.addressLine || `${group.address.city}, ${group.address.state} ${group.address.pincode}`,
+        TotalMember: group.totalLawyer,
+        OngoingCases: "N/A", // or add if available
+        SuccessRate: group.successRate,
+      }));
+
+      setLawGroups(transformedData);
+    } catch (error) {
+      console.error("Error fetching law groups:", error);
+      setError("Failed to load data");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +63,7 @@ const LawGroup = () => {
 
   const handleDelete = async (groupId) => {
     try {
-      const response = await fetch(`/odata/lawgroup/Groups(${groupId})`, {
+      const response = await fetch(`/api/api/lawgroups/${groupId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
@@ -69,7 +81,6 @@ const LawGroup = () => {
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
-  // ✅ Define columns for ReusableGrid
   const columns = [
     { key: "Name", label: "Name" },
     { key: "Email", label: "Email" },
@@ -77,7 +88,6 @@ const LawGroup = () => {
     {
       key: "AddressLine",
       label: "Address",
-      render: (item) => item.Address_Group?.AddressLine ?? "-"
     },
     { key: "TotalMember", label: "Total Members" },
     { key: "OngoingCases", label: "Ongoing Cases" },
@@ -107,7 +117,6 @@ const LawGroup = () => {
         </div>
       </div>
 
-      {/* ✅ Use ReusableGrid here */}
       <ReusableGrid columns={columns} data={lawGroups} />
 
       {showPopup && (

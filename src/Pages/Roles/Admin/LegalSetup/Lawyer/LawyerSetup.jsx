@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EditLawyerPopup from "./EditLawyerPopup";
 import IconButton from "../../../../ReusableComponents/IconButton";
-import ReusableGrid from "../../../../ReusableComponents/ReusableGrid"; // Adjust path as needed
+import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import "./EditLawyerPopup.css";
 
 function LawyerSetup() {
@@ -10,12 +10,18 @@ function LawyerSetup() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchLawyers = () => {
-    fetch("/odata/v1/Lawyers?$expand=Courts,Account")
+    fetch("/api/api/lawyers")
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         return res.json();
       })
-      .then((data) => setLawyers(data.value))
+      .then((data) => {
+        if (data.status === "SUCCESS") {
+          setLawyers(data.data);
+        } else {
+          console.error("API responded with failure:", data.message);
+        }
+      })
       .catch((err) => console.error("Error fetching lawyers:", err));
   };
 
@@ -34,28 +40,24 @@ function LawyerSetup() {
   };
 
   const columns = [
+    { key: "name", label: "Full Name" },
+    { key: "primaryNo", label: "Phone", render: (row) => row.primaryNo || "N/A" },
+    { key: "email", label: "Email" },
     {
-      key: "Account.FullName",
-      label: "Full Name",
-      render: (row) => row.Account?.FullName || "N/A",
-    },
-    { key: "PrimaryNo", label: "Phone" },
-    { key: "Email", label: "Email" },
-    {
-      key: "Courts.Name",
+      key: "courts",
       label: "Court",
       render: (row) =>
-        row.Courts && row.Courts.length > 0 ? row.Courts[0].Name : "N/A",
+        row.courts && row.courts.length > 0 ? row.courts[0] : "N/A",
     },
     {
-      key: "ExperienceYears",
+      key: "totalExperience",
       label: "Experience",
-      render: (row) => row.ExperienceYears ?? "N/A",
+      render: (row) => `${row.totalExperience ?? "N/A"} yrs`,
     },
     {
-      key: "Rating",
+      key: "rating",
       label: "Rating",
-      render: (row) => row.Rating ?? "N/A",
+      render: (row) => row.rating || "N/A",
     },
     {
       key: "actions",

@@ -3,7 +3,7 @@ import AddCourtModal from './AddCourtModal';
 import axios from 'axios';
 import IconButton from '../../../../ReusableComponents/IconButton';
 import AddButton from '../../../../ReusableComponents/AddButton';
-import ReusableGrid from '../../../../ReusableComponents/ReusableGrid'; // ✅ Add this
+import ReusableGrid from '../../../../ReusableComponents/ReusableGrid';
 import './CourtSetup.css';
 
 export default function CourtSetup() {
@@ -13,8 +13,8 @@ export default function CourtSetup() {
 
   const fetchCourts = async () => {
     try {
-      const response = await axios.get("/court/Courts");
-      const data = response.data?.value || response.data || [];
+      const response = await axios.get("/api/api/courts");
+      const data = response.data?.data || [];
       setCourts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch courts:', error);
@@ -37,10 +37,10 @@ export default function CourtSetup() {
     setShowModal(true);
   };
 
-  const handleDelete = async (courtCode) => {
+  const handleDelete = async (courtId) => {
     if (!window.confirm("Are you sure you want to delete this court?")) return;
     try {
-      await axios.delete(`/court/Courts('${courtCode}')`);
+      await axios.delete(`/api/api/courts/${courtId}`);
       fetchCourts();
     } catch (error) {
       console.error('Failed to delete court:', error);
@@ -49,13 +49,21 @@ export default function CourtSetup() {
   };
 
   const columns = [
-    { key: "Name", label: "Name" },
-    { key: "Phone", label: "Phone" },
-    { key: "Email", label: "Email" },
-    { key: "Address", label: "Address" },
-    { key: "CourtType", label: "Court Type" },
-    { key: "Jurisdiction", label: "Jurisdiction" },
-    { key: "CourtCode", label: "Court Code" },
+    { key: "name", label: "Name" },
+    { key: "phone", label: "Phone" },
+    { key: "email", label: "Email" },
+    {
+      key: "address",
+      label: "Address",
+      render: (court) => {
+        const addr = court.address;
+        if (!addr) return "-";
+        return `${addr.addressLine || ''}, ${addr.city}, ${addr.state}, ${addr.pincode}`;
+      }
+    },
+    { key: "courtType", label: "Court Type" },
+    { key: "jurisdiction", label: "Jurisdiction" },
+    { key: "courtCode", label: "Court Code" },
     {
       key: "actions",
       label: "",
@@ -63,7 +71,7 @@ export default function CourtSetup() {
       render: (court) => (
         <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
           <IconButton type="edit" onClick={() => handleEdit(court)} />
-          <IconButton type="delete" onClick={() => handleDelete(court.CourtCode)} />
+          <IconButton type="delete" onClick={() => handleDelete(court.id)} />
         </div>
       )
     }
