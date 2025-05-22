@@ -74,7 +74,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #003366;
-    padding: 12px 20px;
+    padding: 8px 20px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 6px 6px 0 0;
@@ -82,14 +82,14 @@
 
 .AdminAccount-Header h2 {
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     margin: 0;
 }
 
 .AdminAccount-CloseButton {
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 15px;
     cursor: pointer;
     color: white;
 }
@@ -130,7 +130,7 @@
 
 .AdminAccount-ButtonGroup {
     display: flex;
-    justify-content: start;
+    justify-content: center;
     gap: 10px;
     padding: 20px;
 }
@@ -186,12 +186,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0056a8;
-    color: white;
-    padding: 10px;
+    background-color: #003366;
+    padding: 8px 20px;
+    font-size: 18px;
+    font-weight: bold;
   }
   .PasswordPopup-Account-header  h2{
-    margin-bottom: 0px;
+    color: white;
+    font-size: 16px;
+    margin: 0;
   }
   
   .PasswordPopup-Account-body {
@@ -213,7 +216,7 @@
   }
   
   .PasswordPopup-Account-change {
-    background-color: #28a745;
+    background-color: #003366;
     color: white;
     padding: 8px 16px;
     border: none;
@@ -231,10 +234,10 @@
   }
   
   .PasswordPopup-Account-close {
-    background: transparent;
+    background: none;
     border: none;
-    color: white;
-    font-size: 20px;
+    font-size: 15px;
     cursor: pointer;
+    color: white;
   }
   

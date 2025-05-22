@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import "./AdminAccount.css";
 import Layout from '../../../Layout/Layout';
 import IconButton from '../../../ReusableComponents/IconButton';
@@ -10,44 +11,24 @@ const AdminAccount = () => {
   const [activeTab, setActiveTab] = useState("Admin Info");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
-  const [users, setUsers] = useState([
-    {
-      fullName: "demo_administrator",
-      login: "demo_administrator",
-      role: "Administrator",
-      lastLogin: "5/6/2025, 12:09 PM",
-      active: true,
-      isWebServiceUser: false,
-      isLocal: true,
-    },
-    {
-      fullName: "demo_user",
-      login: "demo_user",
-      role: "User",
-      lastLogin: "5/6/2025, 12:10 PM",
-      active: true,
-      isWebServiceUser: false,
-      isLocal: true,
-    },
-    {
-      fullName: "tushar",
-      login: "tushar",
-      role: "User",
-      lastLogin: "5/7/2025, 12:13 PM",
-      active: true,
-      isWebServiceUser: false,
-      isLocal: true,
-    },
-    {
-      fullName: "ujjwal",
-      login: "ujjwal",
-      role: "Legal",
-      lastLogin: "4/24/2025, 11:22 AM",
-      active: true,
-      isWebServiceUser: false,
-      isLocal: true,
-    },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/api/users')
+      .then(response => {
+        const mappedUsers = response.data.map(user => ({
+          id: user.id,
+          fullName: user.fullName || user.username,
+          login: user.username,
+          email: user.email,
+          role: user.role,
+        }));
+        setUsers(mappedUsers);
+      })
+      .catch(error => {
+        console.error("Error fetching users:", error);
+      });
+  }, []);
 
   const handleSaveUser = (newUser) => {
     setUsers(prevUsers => {
@@ -69,28 +50,9 @@ const AdminAccount = () => {
 
   const columns = [
     { key: "fullName", label: "Full name" },
-    { key: "login", label: "Login" },
-    { key: "role", label: "Roles" },
-    { key: "lastLogin", label: "Last login" },
-    {
-      key: "active",
-      label: "Active",
-      render: (row) => (
-        <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
-          {row.active ? "Active" : "Inactive"}
-        </span>
-      ),
-    },
-    {
-      key: "isWebServiceUser",
-      label: "Web service user",
-      render: (row) => (row.isWebServiceUser ? "Yes" : "No"),
-    },
-    {
-      key: "isLocal",
-      label: "Local",
-      render: (row) => (row.isLocal ? "Yes" : "No"),
-    },
+    { key: "login", label: "User Name" },
+    { key: "email", label: "Email" },
+    { key: "role", label: "Role" },
     {
       key: "actions",
       label: "",

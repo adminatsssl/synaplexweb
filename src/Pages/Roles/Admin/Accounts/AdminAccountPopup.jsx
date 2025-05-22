@@ -65,7 +65,7 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
       <div className="AdminAccount-Modal">
         <div className="AdminAccount-Header">
           <h2>{userData ? "Edit Account" : "New Account"}</h2>
-          <button className="AdminAccount-CloseButton" onClick={onClose}>×</button>
+          <button className="AdminAccount-CloseButton" onClick={onClose}>X</button>
         </div>
 
         <div className="AdminAccount-Form">
@@ -101,61 +101,13 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
               onChange={handleChange}
             >
               <option value="">Select role</option>
-              <option value="Administrator">Administrator</option>
-              <option value="Anonymous">Anonymous</option>
-              <option value="Legal">Legal</option>
-              <option value="User">User</option>
+              <option value="ADMIN">Administrator</option>
+              <option value="LEGAL">Legal</option>
+              <option value="USER">User</option>
             </select>
           </div>
 
-          <div className="AdminAccount-CheckboxLabel">
-            <label>Active</label>
-            <input
-              type="checkbox"
-              name="active"
-              checked={formData.active}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="AdminAccount-CheckboxLabel">
-            <label>Web service user</label>
-            <input
-              type="checkbox"
-              name="isWebServiceUser"
-              checked={formData.isWebServiceUser}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="AdminAccount-FormRow">
-            <label>Language</label>
-            <select
-              className="AdminAccount-Input"
-              name="language"
-              value={formData.language}
-              onChange={handleChange}
-            >
-              <option value="">Select language</option>
-              <option value="en-US">English (United States)</option>
-            </select>
-          </div>
-
-          <div className="AdminAccount-FormRow">
-            <label>Time zone</label>
-            <select
-              className="AdminAccount-Input"
-              name="timeZone"
-              value={formData.timeZone}
-              onChange={handleChange}
-            >
-              <option value="">Select time zone</option>
-              <option value="UTC-5">UTC-5 (Eastern Time)</option>
-              <option value="UTC+1">UTC+1 (CET)</option>
-              <option value="UTC+8">UTC+8 (China Standard Time)</option>
-              <option value="UTC+10">UTC+10 (AEST)</option>
-            </select>
-          </div>
+          
 
           {userData ? (
             <div className="AdminAccount-FormRow">
@@ -178,7 +130,7 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
                   onChange={handleChange}
                 />
               </div>
-              <div className="AdminAccount-FormRow">
+              {/* <div className="AdminAccount-FormRow">
                 <label>Confirm password</label>
                 <input
                   type="password"
@@ -187,7 +139,7 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />
-              </div>
+              </div> */}
             </>
           )}
         </div>

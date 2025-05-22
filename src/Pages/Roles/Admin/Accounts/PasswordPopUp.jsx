@@ -7,7 +7,7 @@ const PasswordPopup = ({ onClose, onChange }) => {
       <div className="PasswordPopup-Account-container">
         <div className="PasswordPopup-Account-header">
           <h2>Change Password</h2>
-          <button className="PasswordPopup-Account-close" onClick={onClose}>×</button>
+          <button className="PasswordPopup-Account-close" onClick={onClose}>X</button>
         </div>
         <div className="PasswordPopup-Account-body">
           <label>New password</label>
