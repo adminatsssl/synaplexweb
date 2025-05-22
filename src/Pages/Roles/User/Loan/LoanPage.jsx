@@ -623,15 +623,16 @@ useEffect(() => {
                     </div>
                 )}
                 {showLoanCase && (
-                    <div className="modal-overlay-loancase">
-                        <div className="modal-content-loancase-userrole">
-                            <AddUserCases onClose={handleCloseLoanCase} />
-                            <button onClick={handleCloseLoanCase} className="close-button-loancase">
-                                X
-                            </button>
-                        </div>
-                    </div>
-                )}
+          <div className="modal-overlay-usercase">
+            <div className="modal-content-usercase-userrole">
+              <AddUserCases  onClose={handleCloseLoanCase} />
+              <button onClick={handleCloseLoanCase} className="close-button-usercases">
+                X
+              </button>
+            </div>
+          </div>
+        )}
+ 
             </div>
         </Layout>
     );

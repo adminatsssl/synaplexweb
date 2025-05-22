@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./AdminAccount.css";
 import PasswordPopup from "./PasswordPopUp.jsx";
 import SaveButton from "../../../ReusableComponents/SaveButton";
@@ -8,47 +9,78 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
-    login: "",
-    role: "",
-    active: true,
-    isWebServiceUser: false,
-    isLocal: true,
-    language: "",
-    timeZone: "",
+    username: "",
+    email: "",
     password: "",
     confirmPassword: "",
+    role: "",
   });
 
   useEffect(() => {
     if (userData) {
       setFormData({
-        ...userData,
+        fullName: userData.fullName || "",
+        username: userData.username || "",
+        email: userData.email || "",
         password: "",
         confirmPassword: "",
+        role: userData.role || "",
       });
     }
   }, [userData]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = () => {
-    if (!userData && formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
+  const validateForm = () => {
+    const { fullName, username, email, password, confirmPassword, role } = formData;
+
+    if (!fullName || !username || !email || !role) {
+      alert("Please fill all required fields.");
+      return false;
     }
 
-    const userToSave = { ...formData };
-    delete userToSave.password;
-    delete userToSave.confirmPassword;
+    if (!userData && (!password || !confirmPassword)) {
+      alert("Please enter and confirm password.");
+      return false;
+    }
 
-    onSave(userToSave);
-    onClose();
+    if (!userData && password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    const payload = {
+      fullName: formData.fullName,
+      username: formData.username,
+      email: formData.email,
+      role: formData.role,
+      ...(userData ? {} : { password: formData.password }), // only include password on create
+    };
+
+    console.log("Sending payload:", payload);
+
+    try {
+      const response = await axios.post("/api/auth/signup", payload);
+      onSave(response.data);
+      onClose();
+    } catch (error) {
+      console.error("Error saving user:", error);
+      const message =
+        error.response?.data?.message || "Failed to save user. Please try again.";
+      alert(message);
+    }
   };
 
   const handleChangePassword = () => {
@@ -65,7 +97,9 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
       <div className="AdminAccount-Modal">
         <div className="AdminAccount-Header">
           <h2>{userData ? "Edit Account" : "New Account"}</h2>
-          <button className="AdminAccount-CloseButton" onClick={onClose}>X</button>
+          <button className="AdminAccount-CloseButton" onClick={onClose}>
+            X
+          </button>
         </div>
 
         <div className="AdminAccount-Form">
@@ -84,11 +118,22 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
             <label>User name</label>
             <input
               type="text"
-              name="login"
+              name="username"
               className="AdminAccount-Input"
-              value={formData.login}
+              value={formData.username}
               onChange={handleChange}
               disabled={!!userData}
+            />
+          </div>
+
+          <div className="AdminAccount-FormRow">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              className="AdminAccount-Input"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
 
@@ -106,8 +151,6 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
               <option value="USER">User</option>
             </select>
           </div>
-
-          
 
           {userData ? (
             <div className="AdminAccount-FormRow">
@@ -130,7 +173,7 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
                   onChange={handleChange}
                 />
               </div>
-              {/* <div className="AdminAccount-FormRow">
+              <div className="AdminAccount-FormRow">
                 <label>Confirm password</label>
                 <input
                   type="password"
@@ -139,17 +182,14 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                 />
-              </div> */}
+              </div>
             </>
           )}
         </div>
 
         <div className="AdminAccount-ButtonGroup">
           <CancelButton onClick={onClose} />
-            <SaveButton
-              onClick={handleSubmit}
-              label={"Save"}
-            />
+          <SaveButton onClick={handleSubmit} label="Save" />
         </div>
 
         {isPopupOpen && (
