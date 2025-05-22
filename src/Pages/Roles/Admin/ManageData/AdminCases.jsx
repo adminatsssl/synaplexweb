@@ -8,7 +8,7 @@ const AdminCases = () => {
   const [loading, setLoading] = useState(true);
 
   const columns = [
-    { key: 'loanAccountNumber', label: 'Case ID' },
+    { key: 'id', label: 'Case ID' },
     { key: 'cnrnumber', label: 'CNR No.' },
     { key: 'workflowType', label: 'Case Type' }, // workflowType is actually the caseType
     { key: 'status', label: 'Status' },
