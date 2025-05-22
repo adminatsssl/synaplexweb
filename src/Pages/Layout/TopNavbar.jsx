@@ -17,7 +17,7 @@ export default function TopNavbar() {
     axios
       .get("/api/api/tenants")
       .then((res) => {
-         console.log("Tenant API Response:", res.data); 
+        console.log("Tenant API Response:", res.data);
         const data = res.data?.data?.[0];
         if (data) {
           setTenant({
@@ -47,7 +47,7 @@ export default function TopNavbar() {
       <div className="user-menu">
         <div className="user-info">
           <img
-            src="http://localhost:8080/img/Home$Images$LayweriMAGE.jpg?638816259597369252"
+            src="/profile.jpg"
             alt="User Avatar"
             className="avatar"
           />

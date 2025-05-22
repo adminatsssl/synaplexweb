@@ -103,16 +103,24 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
           </tr>
         </thead>
         <tbody>
-          {currentData.map((row, index) => (
-            <tr key={index} onClick={() => onRowClick?.(row)}>
-              {columns.map((col) => (
-                <td key={col.key} style={{ width: columnWidths[col.key] }}>
-                  {col.render ? col.render(row) : row[col.key]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
+  {currentData.map((row, index) => (
+    <tr key={index} onClick={() => onRowClick?.(row)}>
+      {columns.map((col) => {
+        const isExpanded = columnWidths[col.key] > 150; // Adjust this as needed
+        return (
+          <td
+            key={col.key}
+            style={{ width: columnWidths[col.key] }}
+            className={isExpanded ? "show-full-content" : ""}
+            title={row[col.key]} // Optional hover tooltip
+          >
+            {col.render ? col.render(row) : row[col.key]}
+          </td>
+        );
+      })}
+    </tr>
+  ))}
+</tbody>
       </table>
 
       {/* Pagination Controls */}

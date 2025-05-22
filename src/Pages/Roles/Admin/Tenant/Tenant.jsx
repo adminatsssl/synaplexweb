@@ -4,11 +4,9 @@ import JSONbig from "json-bigint";
 import Layout from "../../../Layout/Layout";
 import AddButton from "../../../ReusableComponents/AddButton";
 import IconButton from "../../../ReusableComponents/IconButton";
-import TenantPopup from "./AddTenantPopup"; // New popup component
-// Assuming your reusable grid component is imported from this path:
-import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; // Adjust the path if different
-
-import "./Tenant.css"; // Keep existing styles or adapt them for the grid
+import TenantPopup from "./AddTenantPopup"; 
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; 
+import "./Tenant.css";
 
 const TenantManager = () => {
   const [tenants, setTenants] = useState([]);

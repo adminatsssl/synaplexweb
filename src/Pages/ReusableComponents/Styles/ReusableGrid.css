@@ -12,6 +12,26 @@
   padding: 8px 4px;
 }
 
+.styled-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; /* Force a maximum display width */
+}
+
+/* Show full content when column is expanded */
+.styled-table td.show-full-content {
+  white-space: normal !important;
+  overflow: visible;
+  text-overflow: unset;
+  max-width: none;
+  word-break: break-word;
+}
+.styled-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
 .resizer {
   width: 25px;
   cursor: col-resize;

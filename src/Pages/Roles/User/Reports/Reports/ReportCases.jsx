@@ -20,7 +20,7 @@ const ReportCases = () => {
         const rawCases = response.data?.data || [];
 
         const transformedData = rawCases.map((item) => ({
-          cnr: item.cnrNumber || `CNR-${item.id}`,
+          cnr: item.cnrnumber || `CNR-${item.id}`,
           loanAmount: item.loan?.loanAmount || 0,
           caseType: item.workflowType || "-",
           status: item.status || "-",

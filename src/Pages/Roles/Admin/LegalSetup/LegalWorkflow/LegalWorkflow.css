@@ -13,11 +13,11 @@
 
 .LegalWorkFlow-modal {
   width: 95%;
-  max-width: 1000px;
+  /* max-width: 1000px; */
   background: white;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
-  max-height: 90vh;
+  max-height: 100vh;
 }
 
 .LegalWorkFlow-MiddleContent{
@@ -96,9 +96,13 @@ textarea {
   margin-top: 10px;
 }
 .LegalWorkFlow-add-stage-btn{
-  background-color: #004c97;
-  color: white;
-  border: none;
+background-color: #004c97;
+    color: white;
+    border: none;
+    width: 52px;
+    height: 49px;
+    border-radius: 6px;
+    font-size: 1.5em;
 }
 
 .LegalWorkFlow-Heading{

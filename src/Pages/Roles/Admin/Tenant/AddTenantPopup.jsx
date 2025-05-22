@@ -24,20 +24,21 @@ const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
   useEffect(() => {
     if (selectedTenant) {
       setForm({
-        name: selectedTenant.Name || "",
-        gstin: selectedTenant.GSTIN || "",
-        panNo: selectedTenant.PANNo || "",
-        addressLine: selectedTenant.Address?.AddressLine || "",
-        city: selectedTenant.Address?.City || "",
-        state: selectedTenant.Address?.State || "",
-        pinCode: selectedTenant.Address?.PinCode || "",
+        name: selectedTenant.name || "",
+        gstin: selectedTenant.gstin || "",
+        panNo: selectedTenant.panNo || "",
+        addressLine: selectedTenant.address?.addressLine || "",
+        city: selectedTenant.address?.city || "",
+        state: selectedTenant.address?.state || "",
+        pinCode: selectedTenant.address?.pincode || "",
         image: null,
-        imagePreview: selectedTenant.Image || null,
-        fprName: selectedTenant.FPRName || "",
-        fprEmail: selectedTenant.FPREmail || "",
-        fprMobile: selectedTenant.FPRMobile || "",
+        imagePreview: selectedTenant.profilePic || null,
+        fprName: selectedTenant.fprName || "",
+        fprEmail: selectedTenant.email || "",
+        fprMobile: selectedTenant.phone || "",
       });
     } else {
+      // Reset the form
       setForm({
         name: "",
         gstin: "",
@@ -55,6 +56,7 @@ const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
     }
   }, [selectedTenant]);
 
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -63,12 +65,13 @@ const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
         setForm((prev) => ({
           ...prev,
           image: file,
-          imagePreview: reader.result,
+          imagePreview: reader.result, // base64 string
         }));
       };
       reader.readAsDataURL(file);
     }
   };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,53 +86,27 @@ const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
         return;
       }
 
-      let addressId = null;
-      if (selectedTenant?.Address?.ID) {
-        try {
-          await axios.get(`/odata/pos_tenant/v1/Addresses(${selectedTenant.Address.ID})`);
-          addressId = selectedTenant.Address.ID;
-          await axios.patch(`/odata/pos_tenant/v1/Addresses(${addressId})`, {
-            AddressLine: form.addressLine,
-            City: form.city,
-            State: form.state,
-            PinCode: form.pinCode,
-          });
-        } catch {
-          addressId = null;
-        }
-      }
+      const payload = {
+        id: form.id,
+        name: form.name,
+        gstin: form.gstin,
+        panNo: form.panNo,
+        fprName: form.fprName,
+        email: form.fprEmail,
+        phone: form.fprMobile,
+        address: {
+          addressLine: form.addressLine,
+          city: form.city,
+          state: form.state,
+          pincode: form.pinCode,
+        },
+        profilePic: form.imagePreview || null, // base64 image
+      };
 
-      if (!addressId) {
-        const addressRes = await axios.post("/odata/pos_tenant/v1/Addresses", {
-          AddressLine: form.addressLine,
-          City: form.city,
-          State: form.state,
-          PinCode: form.pinCode,
-        });
-        addressId = addressRes.data.ID;
-      }
-
-      const payload = new FormData();
-      payload.append("Name", form.name);
-      payload.append("GSTIN", form.gstin);
-      payload.append("PANNo", form.panNo);
-      payload.append("Address@odata.bind", `Addresses(${addressId})`);
-      payload.append("FPRName", form.fprName);
-      payload.append("FPREmail", form.fprEmail);
-      payload.append("FPRMobile", form.fprMobile);
-
-      if (form.image) {
-        payload.append("Image", form.image);
-      }
-
-      if (selectedTenant?.ID) {
-        await axios.patch(`/odata/pos_tenant/v1/Tenants(${selectedTenant.ID})`, payload, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+      if (selectedTenant?.id) {
+        await axios.put(`/api/api/tenants/${selectedTenant.id}`, payload);
       } else {
-        await axios.post("/odata/pos_tenant/v1/Tenants", payload, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await axios.post(`/api/api/tenants`, payload);
       }
 
       onSuccess();
@@ -138,6 +115,7 @@ const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
       alert("Failed to save tenant. See console for details.");
     }
   };
+
 
   if (!isOpen) return null;
 
