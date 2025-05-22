@@ -1,40 +1,50 @@
-// CaseDetailPage.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import CasesDetail from "./CaseDetail";
-
-const dummyCases = [
-  {
-    CaseID: "101",
-    LoanID: "L-0001",
-    CaseType: "Cheque Bounce",
-    Status: "Open",
-    Borrower: "John Doe",
-    LoanAmount: "$100,000",
-    NPADate: "2023-01-01",
-    CreateDate: "2023-02-01",
-    AssignedTo: "Agent A",
-    Court: "High Court",
-  },
-  {
-    CaseID: "102",
-    LoanID: "L-0002",
-    CaseType: "Sarfaesi",
-    Status: "Closed",
-    Borrower: "Jane Smith",
-    LoanAmount: "$200,000",
-    NPADate: "2023-03-01",
-    CreateDate: "2023-04-01",
-    AssignedTo: "Agent B",
-    Court: "District Court",
-  },
-];
 
 const CaseDetailPage = () => {
   const { id } = useParams();
-  const caseData = dummyCases.find((c) => c.CaseID === id);
+  const [caseData, setCaseData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!caseData) return <p>No case found</p>;
+  useEffect(() => {
+    const fetchCaseDetail = async () => {
+      try {
+        const response = await axios.get(`/api/api/cases/${id}`);
+        const item = response.data?.data;
+
+        if (item) {
+          const transformedCase = {
+            CaseID: item.id,
+            LoanID: item.loan.loanNumber,
+            CaseType: item.workflowType,
+            Status: item.status,
+            Borrower: item.loan.borrower.name,
+            LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
+            NPADate: item.loan.lastPaymentDate,
+            CreateDate: item.loan.startDate,
+            AssignedTo: "-", // Update when available
+            Court: item.loan.borrower.address.city || "-",
+          };
+          setCaseData(transformedCase);
+        } else {
+          setError("No case found.");
+        }
+      } catch (err) {
+        console.error("Error fetching case detail:", err);
+        setError("Something went wrong while fetching case details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCaseDetail();
+  }, [id]);
+
+  if (loading) return <p>Loading case details...</p>;
+  if (error) return <p>{error}</p>;
 
   return <CasesDetail caseData={caseData} />;
 };

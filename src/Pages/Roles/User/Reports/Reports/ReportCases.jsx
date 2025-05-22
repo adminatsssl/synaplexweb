@@ -1,38 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Report.css';
 import Layout from "../../../../Layout/Layout";
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import EditCasePopup from './EditCasePopup';
 import IconButton from "../../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
-
-const dummyData = [
-  {
-    cnr: 'CNR001',
-    loanAmount: 50000,
-    caseType: 'Civil',
-    status: 'Open',
-    borrower: 'John Doe',
-    createdDate: '2023-01-15',
-    assignedTo: 'Agent A',
-    court: 'Court 1',
-  },
-  {
-    cnr: 'CNR002',
-    loanAmount: 75000,
-    caseType: 'Criminal',
-    status: 'Closed',
-    borrower: 'Jane Smith',
-    createdDate: '2023-02-10',
-    assignedTo: 'Agent B',
-    court: 'Court 2',
-  }
-];
+import axios from 'axios';
 
 const ReportCases = () => {
-  const [data, setData] = useState(dummyData);
+  const [data, setData] = useState([]);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
+
+  // Fetch cases on mount
+  useEffect(() => {
+    const fetchCases = async () => {
+      try {
+        const response = await axios.get("/api/api/cases");
+        const rawCases = response.data?.data || [];
+
+        const transformedData = rawCases.map((item) => ({
+          cnr: item.cnrNumber || `CNR-${item.id}`,
+          loanAmount: item.loan?.loanAmount || 0,
+          caseType: item.workflowType || "-",
+          status: item.status || "-",
+          borrower: item.loan?.borrower?.name || "-",
+          createdDate: item.loan?.startDate || "-",
+          assignedTo: item.assignedTo || "-", // Replace if you have real data
+          court: item.loan?.borrower?.address?.city || "-",
+        }));
+
+        setData(transformedData);
+      } catch (error) {
+        console.error("Failed to fetch cases:", error);
+      }
+    };
+
+    fetchCases();
+  }, []);
 
   const handleEditClick = (caseItem) => {
     setSelectedCase(caseItem);
@@ -80,7 +85,7 @@ const ReportCases = () => {
       <EditCasePopup
         isOpen={isEditPopupOpen}
         onClose={() => setIsEditPopupOpen(false)}
-        caseData={selectedCase || dummyData[0]}
+        caseData={selectedCase}
         onSave={handleSave}
       />
     </Layout>

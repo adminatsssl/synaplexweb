@@ -5,182 +5,16 @@ import IconButton from "../../../ReusableComponents/IconButton";
 import CancelButton from "../../../ReusableComponents/CancelButton"; // Assuming path
 import SaveButton from "../../../ReusableComponents/SaveButton";
 import AddButton from "../../../ReusableComponents/AddButton";
-import { MdOutlineAssignmentInd } from "react-icons/md";
+import { PiCertificate } from "react-icons/pi";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; // Adjust path as needed
+import AddUserCases from "../Cases/UserAddCases";
+import { useEffect } from "react";
+
 
 const LoanPage = () => {
-    const initialLoanData = [
-        {
-            id: "LOAN001",
-            type: "Business Loan",
-            borrowerName: "Ujjwal Chauhan",
-            totalDueAmount: 90000,
-            defaultDate: "2025-10-04", // Standardized date formatYYYY-MM-DD
-            npaDate: "2025-10-15",
-            // Include other potential fields used in the popup
-            tenure: 60,
-            clientName: "Ujjwal Chauhan",
-            lastPaidAmount: 10000,
-            annualInterestRate: 12.5,
-            lastPaidDate: "2024-09-01",
-            interestCharges: 5000,
-            numberOfEmisPending: 10,
-            outstandingAmount: 80000,
-            disbursedAmount: 100000,
-            emiAmount: 2000,
-            borrowerMobile: "9876543210",
-            borrowerEmail: "ujjwal@example.com",
-            tenantId: "TENANT001",
-            tenantName: "Tenant One",
-            panNumber: "ABCDE1234F",
-            gstNumber: "GSTEJ2345F",
-            fprName: "FPR Agent 1",
-            fprEmail: "fpr1@example.com",
-            fprMobile: "9988776655",
-        },
-        {
-            id: "LOAN002",
-            type: "Debt Consolidation Loan",
-            borrowerName: "Vishal Singh",
-            totalDueAmount: 2000,
-            defaultDate: "2025-10-04",
-            npaDate: "2025-12-04",
-             // Include other potential fields used in the popup
-             tenure: 36,
-             clientName: "Vishal Singh",
-             lastPaidAmount: 0,
-             annualInterestRate: 10.0,
-             lastPaidDate: null,
-             interestCharges: 100,
-             numberOfEmisPending: 5,
-             outstandingAmount: 2000,
-             disbursedAmount: 50000,
-             emiAmount: 1500,
-             borrowerMobile: "9876543211",
-             borrowerEmail: "vishal@example.com",
-             tenantId: "TENANT002",
-             tenantName: "Tenant Two",
-             panNumber: "FGHIJ5678K",
-             gstNumber: "GSTKL6789M",
-             fprName: "FPR Agent 2",
-             fprEmail: "fpr2@example.com",
-             fprMobile: "9988776656",
-        },
-        {
-            id: "LOAN003",
-            type: "Auto Loan",
-            borrowerName: "Tanuj Singh",
-            totalDueAmount: 0,
-            defaultDate: "2025-08-04",
-            npaDate: "2025-10-16",
-             // Include other potential fields used in the popup
-             tenure: 48,
-             clientName: "Tanuj Singh",
-             lastPaidAmount: 30000,
-             annualInterestRate: 8.0,
-             lastPaidDate: "2025-07-01",
-             interestCharges: 0,
-             numberOfEmisPending: 0,
-             outstandingAmount: 0,
-             disbursedAmount: 300000,
-             emiAmount: 7500,
-             borrowerMobile: "9876543212",
-             borrowerEmail: "tanuj@example.com",
-             tenantId: "TENANT003",
-             tenantName: "Tenant Three",
-             panNumber: "LMNOP9012Q",
-             gstNumber: "GSTRS0123T",
-             fprName: "FPR Agent 3",
-             fprEmail: "fpr3@example.com",
-             fprMobile: "9988776657",
-        },
-        {
-            id: "LOAN004",
-            type: "Debt Consolidation Loan",
-            borrowerName: "Cheeta",
-            totalDueAmount: 927364,
-            defaultDate: "2025-10-13",
-            npaDate: "2025-10-14",
-             // Include other potential fields used in the popup
-             tenure: 72,
-             clientName: "Cheeta",
-             lastPaidAmount: 0,
-             annualInterestRate: 15.0,
-             lastPaidDate: null,
-             interestCharges: 10000,
-             numberOfEmisPending: 20,
-             outstandingAmount: 927364,
-             disbursedAmount: 1000000,
-             emiAmount: 18000,
-             borrowerMobile: "9876543213",
-             borrowerEmail: "cheeta@example.com",
-             tenantId: "TENANT004",
-             tenantName: "Tenant Four",
-             panNumber: "UVWXY3456Z",
-             gstNumber: "GSTZA4567B",
-             fprName: "FPR Agent 4",
-             fprEmail: "fpr4@example.com",
-             fprMobile: "9988776658",
-        },
-        {
-            id: "LOAN005",
-            type: "Debt Consolidation Loan",
-            borrowerName: "Tushar",
-            totalDueAmount: 93678,
-            defaultDate: "2025-10-27",
-            npaDate: "2025-04-04", // This seems like a past date based on year, adjust if needed
-             // Include other potential fields used in the popup
-             tenure: 36,
-             clientName: "Tushar",
-             lastPaidAmount: 5000,
-             annualInterestRate: 11.0,
-             lastPaidDate: "2025-03-15", // Adjust date if needed
-             interestCharges: 2000,
-             numberOfEmisPending: 15,
-             outstandingAmount: 93678,
-             disbursedAmount: 120000,
-             emiAmount: 3500,
-             borrowerMobile: "9876543214",
-             borrowerEmail: "tushar@example.com",
-             tenantId: "TENANT005",
-             tenantName: "Tenant Five",
-             panNumber: "CDEFG7890H",
-             gstNumber: "GSTIJ8901K",
-             fprName: "FPR Agent 5",
-             fprEmail: "fpr5@example.com",
-             fprMobile: "9988776659",
-        },
-        {
-            id: "LOAN006",
-            type: "Auto Loans",
-            borrowerName: "Shalini Singh",
-            totalDueAmount: 45677,
-            defaultDate: "2025-10-30",
-            npaDate: "2025-03-05", // This seems like a past date based on year, adjust if needed
-             // Include other potential fields used in the popup
-             tenure: 48,
-             clientName: "Shalini Singh",
-             lastPaidAmount: 10000,
-             annualInterestRate: 9.5,
-             lastPaidDate: "2025-02-20", // Adjust date if needed
-             interestCharges: 1500,
-             numberOfEmisPending: 12,
-             outstandingAmount: 45677,
-             disbursedAmount: 200000,
-             emiAmount: 5000,
-             borrowerMobile: "9876543215",
-             borrowerEmail: "shalini@example.com",
-             tenantId: "TENANT006",
-             tenantName: "Tenant Six",
-             panNumber: "LMNOP2345Q",
-             gstNumber: "GSTRS3456T",
-             fprName: "FPR Agent 6",
-             fprEmail: "fpr6@example.com",
-             fprMobile: "9988776660",
-        },
-    ];
 
-    const [loanData, setLoanData] = useState(initialLoanData);
+    const [loanData, setLoanData] = useState([]);
+    const [showLoanCase, setShowLoanCase] = useState(false);
     const [isAddLoanPopupVisible, setIsAddLoanPopupVisible] = useState(false);
     const [newLoanDetails, setNewLoanDetails] = useState({
         loanId: "",
@@ -214,6 +48,48 @@ const LoanPage = () => {
     // New state to track if we are editing and which loan
     const [editingLoanId, setEditingLoanId] = useState(null);
 
+useEffect(() => {
+    fetch("/api/api/loans")
+        .then((res) => res.json())
+        .then((response) => {
+            if (response.status === "SUCCESS" && Array.isArray(response.data)) {
+                const mappedLoans = response.data.map((item) => ({
+                    id: item.id,
+                    loanId: item.loanNumber,
+                    type: item.loanType,
+                    borrowerName: item.borrower.name,
+                    totalDueAmount: item.loanAmount - item.disbursedAmount, // or calculate properly
+                    defaultDate: item.lastPaymentDate,
+                    npaDate: item.nextDueDate,
+                    tenure: item.loanTenure,
+                    clientName: item.borrower.name,
+                    lastPaidAmount: null, // Not available in API
+                    annualInterestRate: item.interestRate,
+                    lastPaidDate: item.lastPaymentDate,
+                    interestCharges: null, // Not available in API
+                    numberOfEmisPending: null, // Not available in API
+                    outstandingAmount: null, // Not available in API
+                    disbursedAmount: item.disbursedAmount,
+                    emiAmount: item.emiAmount,
+                    borrowerMobile: item.borrower.contactNumber,
+                    borrowerEmail: item.borrower.email,
+                    tenantId: "", // Not available
+                    tenantName: "", // Not available
+                    panNumber: "", // Not available
+                    gstNumber: "", // Not available
+                    fprName: "", // Not available
+                    fprEmail: "", // Not available
+                    fprMobile: "", // Not available
+                }));
+                setLoanData(mappedLoans);
+            } else {
+                console.error("Invalid data format", response);
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching loans:", error);
+        });
+}, []);
 
     const handleAddLoanClick = () => {
         setEditingLoanId(null); // Clear editing state
@@ -316,8 +192,8 @@ const LoanPage = () => {
 
     const handleDeleteLoan = (loanId) => {
         if (window.confirm("Are you sure you want to delete this loan record?")) {
-             setLoanData((prev) => prev.filter((loan) => loan.id !== loanId));
-             // Potentially add a success message here
+            setLoanData((prev) => prev.filter((loan) => loan.id !== loanId));
+            // Potentially add a success message here
         }
     };
 
@@ -384,51 +260,60 @@ const LoanPage = () => {
         );
     });
 
-     // Define the columns for the ReusableGrid component
-     const columns = [
+    // Define the columns for the ReusableGrid component
+    const columns = [
         {
-          key: "id",
-          label: "Loan ID",
+            key: "id",
+            label: "Loan ID",
         },
         {
-          key: "type", // Assuming the 'type' property holds the Loan Type string
-          label: "Loan Type",
+            key: "type", // Assuming the 'type' property holds the Loan Type string
+            label: "Loan Type",
         },
         {
-          key: "borrowerName", // Using this key but rendering based on logic
-          label: "Borrower Name",
-          // Use render to fallback to clientName if borrowerName is empty
-          render: (row) => row.borrowerName || row.clientName || "N/A",
+            key: "borrowerName", // Using this key but rendering based on logic
+            label: "Borrower Name",
+            // Use render to fallback to clientName if borrowerName is empty
+            render: (row) => row.borrowerName || row.clientName || "N/A",
         },
         {
-          key: "totalDueAmount", // Using this key but rendering for formatting
-          label: "Due Amount",
-          // Use render to format as currency
-          render: (row) => `$${parseFloat(row.totalDueAmount || 0).toFixed(2)}`,
+            key: "totalDueAmount", // Using this key but rendering for formatting
+            label: "Due Amount",
+            // Use render to format as currency
+            render: (row) => `$${parseFloat(row.totalDueAmount || 0).toFixed(2)}`,
         },
         {
-          key: "defaultDate",
-          label: "Default Date",
+            key: "defaultDate",
+            label: "Default Date",
         },
         {
-          key: "npaDate",
-          label: "NPA Date",
+            key: "npaDate",
+            label: "NPA Date",
         },
         {
-          key: "actions", // Unique key for actions column
-          label: "Actions",
-          disableFilter: true, // Typically actions column is not filterable
-          render: (row) => ( // 'row' is the loan object for the current row
-            <div className="actions-cell"> {/* Container for buttons */}
-              <button className="view-btn"><MdOutlineAssignmentInd /></button> {/* Existing View button */}
-              {/* Pass the row object (the loan) to the edit handler */}
-              <IconButton type="edit" onClick={() => handleEditLoan(row)} />
-              {/* Pass the row ID (loan.id) to the delete handler */}
-              {/* <IconButton type="delete" onClick={() => handleDeleteLoan(row.id)} /> */}
-            </div>
-          ),
+            key: "actions", // Unique key for actions column
+            label: "Actions",
+            disableFilter: true, // Typically actions column is not filterable
+            render: (row) => ( // 'row' is the loan object for the current row
+                <div className="actions-cell"> {/* Container for buttons */}
+                    <button className="certificate-view-btn" onClick={handleOpenLoanCase}><PiCertificate /></button> {/* Existing View button */}
+                    {/* Pass the row object (the loan) to the edit handler */}
+                    <IconButton type="edit" onClick={() => handleEditLoan(row)} />
+                    {/* Pass the row ID (loan.id) to the delete handler */}
+                    {/* <IconButton type="delete" onClick={() => handleDeleteLoan(row.id)} /> */}
+                </div>
+            ),
         },
-      ];
+    ];
+
+
+    const handleOpenLoanCase = () => {
+        setShowLoanCase(true);
+    };
+
+    const handleCloseLoanCase = () => {
+        setShowLoanCase(false);
+    };
 
 
     return (
@@ -456,12 +341,12 @@ const LoanPage = () => {
 
                 {/* Replace the table container with the grid container */}
                 <div className="loans-grid-container styled-lookalike"> {/* Use a consistent class name */}
-                     {/* Integrate the ReusableGrid component */}
-                     <ReusableGrid
+                    {/* Integrate the ReusableGrid component */}
+                    <ReusableGrid
                         columns={columns} // Pass the defined columns
                         data={filteredLoans} // Pass the filtered data
-                        // Add other relevant props your grid supports (e.g., rowKey="id")
-                     />
+                    // Add other relevant props your grid supports (e.g., rowKey="id")
+                    />
                 </div>
 
                 {isAddLoanPopupVisible && (
@@ -507,7 +392,7 @@ const LoanPage = () => {
                                                     placeholder="0.00"
                                                 />
                                             </div>
-                                             {/* Use loanType state for the select element */}
+                                            {/* Use loanType state for the select element */}
                                             <div className="form-item">
                                                 <label htmlFor="loanType">Loan Type</label>
                                                 <select
@@ -734,6 +619,16 @@ const LoanPage = () => {
                                 <CancelButton label="Cancel" onClick={handleClosePopup} />
                                 <SaveButton label={editingLoanId ? "Update" : "Save "} onClick={handleSaveLoan} />
                             </div>
+                        </div>
+                    </div>
+                )}
+                {showLoanCase && (
+                    <div className="modal-overlay-loancase">
+                        <div className="modal-content-loancase-userrole">
+                            <AddUserCases onClose={handleCloseLoanCase} />
+                            <button onClick={handleCloseLoanCase} className="close-button-loancase">
+                                X
+                            </button>
                         </div>
                     </div>
                 )}

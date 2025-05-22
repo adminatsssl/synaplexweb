@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AddUserCases from "./UserAddCases.jsx";
 import Layout from "../../../Layout/Layout.jsx";
 import "./UserCases.css";
@@ -8,40 +9,43 @@ import IconButton from "../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 import { useNavigate } from "react-router-dom";
 
-// ✅ Dummy case data
-const dummyCases = [
-  {
-    CaseID: "101",
-    LoanID: "L-0001",
-    CaseType: "Cheque Bounce",
-    Status: "Open",
-    Borrower: "John Doe",
-    LoanAmount: "$100,000",
-    NPADate: "2023-01-01",
-    CreateDate: "2023-02-01",
-    AssignedTo: "Agent A",
-    Court: "High Court",
-  },
-  {
-    CaseID: "102",
-    LoanID: "L-0002",
-    CaseType: "Sarfaesi",
-    Status: "Closed",
-    Borrower: "Jane Smith",
-    LoanAmount: "$200,000",
-    NPADate: "2023-03-01",
-    CreateDate: "2023-04-01",
-    AssignedTo: "Agent B",
-    Court: "District Court",
-  },
-];
-
 const UserCases = () => {
-  const [cases, setCases] = useState(dummyCases); // ✅ using dummy data
+  const [cases, setCases] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCases = async () => {
+      try {
+        const response = await axios.get("/api/api/cases");
+        const caseData = response.data?.data || [];
+
+        const transformed = caseData.map((item) => ({
+          CaseID: item.id,
+          LoanID: item.loan.loanNumber,
+          CaseType: item.workflowType,
+          Status: item.status,
+          Borrower: item.loan.borrower.name,
+          LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
+          NPADate: item.loan.lastPaymentDate,
+          CreateDate: item.loan.startDate,
+          AssignedTo: "-", // Update if data available
+          Court: item.loan.borrower.address.city || "-",
+        }));
+
+        setCases(transformed);
+      } catch (error) {
+        console.error("Failed to fetch cases:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCases();
+  }, []);
 
   const handleEdit = (caseData) => {
     setSelectedCase(caseData);
@@ -86,7 +90,7 @@ const UserCases = () => {
               marginRight: "0px",
             }}
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row click
+              e.stopPropagation();
               console.log("FaHandHoldingDollar clicked");
             }}
           >
@@ -95,14 +99,22 @@ const UserCases = () => {
           <IconButton
             type="edit"
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row click
-              handleEdit(row); // Trigger the edit functionality
+              e.stopPropagation();
+              handleEdit(row);
             }}
           />
         </div>
       ),
     },
   ];
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="user-cases-container">Loading cases...</div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>

@@ -288,6 +288,13 @@
   font-size: 14px;
 }
 
+.certificate-view-btn{
+  font-size: 20px;
+    background: transparent;
+    border: none;
+    margin-right: 0px;
+}
+
 /* Global input, select, textarea styling from user */
 input[type="text"],
 input[type="number"],
