@@ -1,0 +1,110 @@
+.Arbitration-demandNotice-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.Arbitration-demandNotice-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.Arbitration-demandNotice-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.Arbitration-demandNotice-topcontent {
+    display: flex;
+    padding: 30px;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.Arbitration-demandNotice-topcontent-leftside {
+    padding: 35px 20px;
+    border: 1px solid #c3c2c2;
+    width: 75%;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.Arbitration-demandNotice-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.Arbitration-demandNotice-form-row-content{
+    width: 50%;
+}
+.Arbitration-demandNotice-form-group{
+    width: 25%;
+}
+.Arbitration-demandNotice-form-group-select{
+    width: 47%;
+}
+.Arbitration-demandNotice-topcontent-rightside {
+    width: 19%;
+    text-align: center;
+}
+.Arbitration-generateNotice-btn{
+    margin-bottom: 30px;
+
+}
+.Arbitration-generateNotice-btn button{
+    background-color: #00549e;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    padding: 10px;
+}
+
+.Arbitration-demandNotice-topcontent-rightside-icon {
+    border: 1px solid #c3c2c2;
+    padding: 40px 20px;
+    border-radius: 10px;
+     background-color: #fafafa;
+}
+
+.Arbitration-demandNotice-icon {
+    font-size: 32px;
+    display: flex;
+    gap: 5rem;
+    justify-content: center;
+}
+
+.Arbitration-demandNotice-middle-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.Arbitration-demandNotice-middle-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.Arbitration-demandNotice-middle-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.Arbitration-demandNotice-middle-content-formdata{
+    padding: 20px 30px;
+}
+
+.Arbitration-demandNotice-Bottom-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.Arbitration-demandNotice-Bottom-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.Arbitration-demandNotice-Bottom-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.Arbitration-demandNotice-Bottom-content-formdata{
+    padding: 20px 30px;
+}
+.Arbitration-demandNotice-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

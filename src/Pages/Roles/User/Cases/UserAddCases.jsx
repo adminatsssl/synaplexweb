@@ -180,26 +180,36 @@ const AddUserCases = ({ initialData = null, onClose }) => {
 
           <div className="addusercase-form-row">
             <div className="addusercase-form-group-loanId">
-              <label>Loan ID</label>
-              <input
+              <div className="addusercase-form-group-loanId-label">
+                  <label>Loan ID</label>
+              </div>
+
+              <div className="addusercase-loanID">
+                <input
                 type="text"
                 name="loanId"
                 value={formData.loanId}
                 onChange={handleChange}
                 placeholder="Loan ID"
+                
               />
               <button type="button">
                 <FaSearch />
               </button>
+
+              </div>
+              
+              
             </div>
 
             <div className="addusercase-form-group-checkbox">
-              <label>Auto Assign</label>
+              <label className="addusercase-form-group-checkbox-label">Auto Assign</label>
               <input
                 type="checkbox"
                 name="autoAssign"
                 checked={formData.autoAssign}
                 onChange={handleChange}
+                className="addusercase-checkbox"
               />
             </div>
           </div>

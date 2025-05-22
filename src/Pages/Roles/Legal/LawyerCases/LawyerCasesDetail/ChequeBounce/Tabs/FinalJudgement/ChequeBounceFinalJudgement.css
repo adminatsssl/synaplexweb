@@ -1,0 +1,70 @@
+.chequeBounce-finalJudgement-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-finalJudgement-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-finalJudgement-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.chequeBounce-finalJudgement-topcontent {
+    padding: 30px;
+}
+
+.chequeBounce-finalJudgement-topcontent-leftside {
+    padding: 15px 20px;
+    border: 1px solid #c3c2c2;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.chequeBounce-finalJudgement-form-row {
+    display: flex;
+    gap: 20px;
+}
+.chequeBounce-finalJudgement-form-row-content{
+    width: 50%;
+}
+
+.chequeBounce-finalJudgement-middle-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-finalJudgement-middle-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-finalJudgement-middle-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-finalJudgement-middle-content-formdata{
+    padding: 20px 30px;
+}
+
+.chequeBounce-finalJudgement-Bottom-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-finalJudgement-Bottom-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-finalJudgement-Bottom-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-finalJudgement-Bottom-content-formdata{
+    padding: 20px 30px;
+}
+.chequeBounce-finalJudgement-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

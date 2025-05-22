@@ -1,0 +1,52 @@
+.Arbitrator-Execution-Award-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.Arbitrator-Execution-Award-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.Arbitrator-Execution-Award-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.Arbitrator-Execution-Award-topcontent {
+    display: flex;
+    padding: 30px;
+    align-items: start;
+    justify-content: center;
+}
+
+.Arbitrator-Execution-Award-topcontent-leftside {
+    padding: 35px 20px;
+    border: 1px solid #c3c2c2;
+    width: 65%;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.Arbitrator-Execution-Award-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.Arbitrator-Execution-Award-form-row-content{
+    width: 50%;
+}
+.Arbitrator-Execution-Award-form-group{
+    width: 25%;
+}
+.Arbitrator-Execution-Award-form-group-select{
+    width: 47%;
+}
+.Arbitrator-Execution-Award-topcontent-rightside {
+    width: 19%;
+    text-align: center;
+}
+
+.Arbitrator-Execution-Award-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

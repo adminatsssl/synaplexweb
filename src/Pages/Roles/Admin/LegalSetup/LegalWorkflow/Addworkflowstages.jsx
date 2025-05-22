@@ -37,8 +37,11 @@ const Addworkflowstages = ({ onClose, onSave }) => {
         </div>
     
         <div className="add-workflow-middleContent">
-        <div className="form-grid">
-          <div className="one-span">
+        <div className="add-workflow-form-grid">
+          
+          <div className="add-workflow-top-barcontent">
+
+            <div className="add-workflow-top-barcontent-one">
             <label>Name</label>
             <input
               value={name}
@@ -47,7 +50,7 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             />
           </div>
 
-          <div className="one-span">
+          <div className="add-workflow-top-barcontent-one">
             <label>Stage Order</label>
             <input
               type="number"
@@ -57,9 +60,9 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             />
           </div>
 
-          <div className="one-span">
+          <div className="add-workflow-top-barcontent-one-checkbox">
             <label>Is Active:</label>
-            <div className="radio-options">
+            <div className="add-workflow-radio-options">
               <label>
                 <input
                   type="radio"
@@ -83,7 +86,11 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             </div>
           </div>
 
-          <div className="full-width">
+
+          </div>
+          
+
+          <div className="add-workflow-full-width">
             <label>Display Name</label>
             <input
               value={displayName}
@@ -91,7 +98,7 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             />
           </div>
 
-          <div className="full-width">
+          <div className="add-workflow-full-width">
             <label>Mouse Over</label>
             <input
               value={mouseOver}
@@ -99,41 +106,57 @@ const Addworkflowstages = ({ onClose, onSave }) => {
             />
           </div>
 
-          <div className="section-divider full-width">
-            Auto Notice Generation
+
+          <div className="add-workflow-section-divider full-width">
           </div>
 
-          <div className="field-inline-group full-width">
-            <label className="checkbox-label">
+          <div className="add-workflow-field-inline-group full-width">
+            <div>
+              <label className="add-workflow-checkbox-label">
+              Auto Notice Generation  
               <input
                 type="checkbox"
                 checked={autoNotice === "Yes"}
                 onChange={(e) => setAutoNotice(e.target.checked ? "Yes" : "No")}
               />
-              Enable Auto Notice
             </label>
-            <select
+
+
+            </div>
+
+            <div className="add-workflow-time-content-tab">
+              <select
               value={autoFrequency}
               onChange={(e) => setAutoFrequency(e.target.value)}
+              plaecholder="Time"
             >
-              <option value="0">Select</option>
+              <option value="0" plaecholder='Time'></option>
               <option value="1">Day</option>
               <option value="2">Hour</option>
               <option value="3">Minute</option>
             </select>
-            <input
+
+            </div>
+
+            <div className="add-workflow-autonotice-content-tab">
+               <input
               type="number"
               value={autoValue}
               onChange={(e) => setAutoValue(e.target.value)}
-              className="small-input"
+              className="add-workflow-small-input"
             />
+
+            </div>
+            
+            
+           
           </div>
 
-          <div className="section-divider">
+          <div className="add-workflow-section-divider">
 
           </div>
 
-          <div className="full-width">
+          <div className="add-workflow-full-width">
             <label className="required">Disposition Stages</label>
             <select>
               <option>Select...</option>
@@ -146,10 +169,10 @@ const Addworkflowstages = ({ onClose, onSave }) => {
         </div>
         
 
-        <div className="modal-actions">
-          <CancelButton onClick={onClose} className="cancel-btn" />
+        <div className="add-workflow-modal-actions">
+          <CancelButton onClick={onClose} className="add-workflow-cancel-btn" />
           <SaveButton
-            onClick={handleSave} className="save-btn"
+            onClick={handleSave} className="add-workflow-save-btn"
             label={"Save"}
           />
 

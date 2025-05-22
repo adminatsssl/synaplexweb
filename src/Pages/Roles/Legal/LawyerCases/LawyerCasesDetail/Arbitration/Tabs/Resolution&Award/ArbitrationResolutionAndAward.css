@@ -1,0 +1,52 @@
+.Arbitrator-Resolutin-Award-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.Arbitrator-Resolutin-Award-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.Arbitrator-Resolutin-Award-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.Arbitrator-Resolutin-Award-topcontent {
+    display: flex;
+    padding: 30px;
+    align-items: start;
+    justify-content: center;
+}
+
+.Arbitrator-Resolutin-Award-topcontent-leftside {
+    padding: 35px 20px;
+    border: 1px solid #c3c2c2;
+    width: 65%;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.Arbitrator-Resolutin-Award-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.Arbitrator-Resolutin-Award-form-row-content{
+    width: 50%;
+}
+.Arbitrator-Resolutin-Award-form-group{
+    width: 25%;
+}
+.Arbitrator-Resolutin-Award-form-group-select{
+    width: 47%;
+}
+.Arbitrator-Resolutin-Award-topcontent-rightside {
+    width: 19%;
+    text-align: center;
+}
+
+.Arbitrator-Resolutin-Award-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

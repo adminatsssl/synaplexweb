@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Layout from "../../Layout/Layout";
 import "./LegalPage.css";
 import { LegalMap } from "./Dashboard/Map/LegalMap";
@@ -7,11 +8,28 @@ import LegalActivityCaseTabs from "./Dashboard/Activity/LegalActivityTab";
 
 export default function LegalPage() {
   const username = localStorage.getItem("username");
-  const sampleData = JSON.stringify([
-    { state: "Maharashtra", pendingCount: 200, disposedCount: 50 },
-    { state: "Gujarat", pendingCount: 2, disposedCount: 0 },
-    { state: "Haryana", pendingCount: 50, disposedCount: 30 },
-  ]);
+  const [mapData, setMapData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSummaryData = async () => {
+      try {
+        const response = await axios.get("/api/api/cases/summaryByState");
+        if (response.status === 200) {
+          setMapData(response.data);
+        } else {
+          console.error("Failed to fetch summary data");
+        }
+      } catch (error) {
+        console.error("API error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSummaryData();
+  }, []);
+
   return (
     <Layout username={username}>
       <div className="legalpage-container">
@@ -22,10 +40,13 @@ export default function LegalPage() {
 
         <div className="legalpage-popup legalpage-popup-right">
           <h2>Case Distribution by Geography :</h2>
-          <LegalMap jsonData={sampleData} />
+          {loading ? (
+            <p>Loading map data...</p>
+          ) : (
+            <LegalMap jsonData={JSON.stringify(mapData)} />
+          )}
         </div>
       </div>
-
 
       <div className="legalpage-activity-container">
         <div className="legalpage-activity">

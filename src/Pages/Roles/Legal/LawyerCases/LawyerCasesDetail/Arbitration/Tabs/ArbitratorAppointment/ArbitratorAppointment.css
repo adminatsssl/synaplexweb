@@ -1,0 +1,52 @@
+.Arbitrator-Appointment-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.Arbitrator-Appointment-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.Arbitrator-Appointment-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.Arbitrator-Appointment-topcontent {
+    display: flex;
+    padding: 30px;
+    align-items: start;
+    justify-content: center;
+}
+
+.Arbitrator-Appointment-topcontent-leftside {
+    padding: 35px 20px;
+    border: 1px solid #c3c2c2;
+    width: 65%;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.Arbitrator-Appointment-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.Arbitrator-Appointment-form-row-content{
+    width: 50%;
+}
+.Arbitrator-Appointment-form-group{
+    width: 25%;
+}
+.Arbitrator-Appointment-form-group-select{
+    width: 47%;
+}
+.Arbitrator-Appointment-topcontent-rightside {
+    width: 19%;
+    text-align: center;
+}
+
+.Arbitrator-Appointment-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

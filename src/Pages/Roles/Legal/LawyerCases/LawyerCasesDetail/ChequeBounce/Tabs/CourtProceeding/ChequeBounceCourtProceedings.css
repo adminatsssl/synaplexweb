@@ -1,0 +1,70 @@
+.chequeBounce-courtProceeding-topcontent-container {
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-courtProceeding-topcontent-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-courtProceeding-topcontent-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+
+.chequeBounce-courtProceeding-topcontent {
+    padding: 30px;
+}
+
+.chequeBounce-courtProceeding-topcontent-leftside {
+    padding: 15px 20px;
+    border: 1px solid #c3c2c2;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.chequeBounce-courtProceeding-form-row {
+    display: flex;
+    gap: 20px;
+}
+.chequeBounce-courtProceeding-form-row-content{
+    width: 50%;
+}
+
+.chequeBounce-courtProceeding-middle-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-courtProceeding-middle-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-courtProceeding-middle-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-courtProceeding-middle-content-formdata{
+    padding: 20px 30px;
+}
+
+.chequeBounce-courtProceeding-Bottom-content{
+    border: 1px solid #c3c2c2;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+.chequeBounce-courtProceeding-Bottom-content-heading{
+    padding: 10px 20px;
+    border-bottom: 1px solid #c3c2c2;
+}
+.chequeBounce-courtProceeding-Bottom-content-heading h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+}
+.chequeBounce-courtProceeding-Bottom-content-formdata{
+    padding: 20px 30px;
+}
+.chequeBounce-courtProceeding-Bottom-btn{
+    text-align: center;
+    margin-top: 20px;
+}

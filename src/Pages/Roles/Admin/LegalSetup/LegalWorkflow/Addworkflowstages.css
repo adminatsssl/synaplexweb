@@ -42,6 +42,12 @@
   padding: 20px 45px;
 }
 
+.add-workflow-top-barcontent{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -58,7 +64,7 @@
   color: #222;
 }
 
-.add-workflow-modal input,
+/* .add-workflow-modal input,
 .add-workflow-modal select {
   width: 100%;
   padding: 10px;
@@ -67,7 +73,7 @@
   border-radius: 6px;
   box-sizing: border-box;
   margin-top: 4px;
-}
+} */
 
 .add-workflow-modal input:focus,
 .add-workflow-modal select:focus {
@@ -77,67 +83,84 @@
 }
 
 
-.radio-group {
+.add-workflow-radio-group {
   display: flex;
   flex-direction: column;
 }
 
-.radio-options {
+.add-workflow-radio-options {
   display: flex;
   gap: 20px;
-  margin-top: 5px;
 }
 
-.radio-options label {
+.add-workflow-radio-options label {
   font-weight: normal;
 }
 
-.section-divider {
+.add-workflow-section-divider {
   border-top: 1px solid #ccc;
   padding-top: 12px;
   font-size: 16px;
   font-weight: 600;
   color: #003366;
   grid-column: span 3;
+  margin-top: 20px;
 }
 
-.field-inline-group {
+.add-workflow-field-inline-group {
   display: flex;
   align-items: center;
   gap: 15px;
   grid-column: span 2;
 }
 
-.checkbox-label {
+.add-workflow-heckbox-label {
   display: flex;
   align-items: center;
   gap: 8px;
   font-weight: normal;
 }
 
-.small-input {
+.add-workflow-small-input {
   width: 80px;
 }
 
-.modal-actions {
+.add-workflow-modal-actions {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 11px;
   margin-bottom: 17px;
 }
-
-
-.full-width {
-  grid-column: span 3;
+.add-workflow-top-barcontent-one-checkbox{
+  width: 20%;
 }
 
-.two-span {
+
+div.add-workflow-full-width input {
+  width: 98%;
+}
+
+.add-workflow-two-span {
   grid-column: span 2;
 }
 
-.one-span {
+div.add-workflow-time-content-tab select{
+  width: 15rem;
+}
+div.add-workflow-autonotice-content-tab input{
+  width: 15rem;
+}
+
+.add-workflow-one-span {
   grid-column: span 1;
+}
+
+.add-workflow-top-barcontent-one{
+  width: 30%;
+}
+div.add-workflow-top-barcontent-one input{
+  width: 100%;
 }
 
 

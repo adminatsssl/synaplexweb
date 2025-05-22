@@ -1,0 +1,101 @@
+.case-detailpage-container{
+    padding: 10px;
+}
+
+.case-detailpage-topbar-heading{
+    display: flex;
+    justify-content: space-between;
+}
+
+/*-----------------------Borrower Detail CSS------------------------*/
+
+.case-detailpage-borrowerContainer {
+    background: white;
+    border-radius: 10px;    
+    overflow: hidden;
+    /* margin: 20px 0; */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+  }
+  
+  .case-detailpage-borrowerContainer-topheading {
+    background-color: #00549e;
+    color: white;
+    padding: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .case-detailpage-borrowerContainer-topheading p{
+    margin: 8px;
+  }
+  
+  .case-detailpage-borrowerContainer-content {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    padding: 0px 10px;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .case-detailpage-borrowerContainer-content p {
+    margin: 0px;
+    border-right: 1px solid #e0e0e0;
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+  .case-detailpage-borrowerContainer-content p:last-child {
+    border-right: none;
+  }
+ 
+
+/*-----------------------Loan Detail CSS------------------------*/
+
+.case-detailpage-loanContainer {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    /* margin: 20px 0; */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+  }
+  .case-detailpage-loanContainer-topheading {
+    padding: 0px 20px;
+    color: #00549e;
+  }
+  .case-detailpage-loanContainer-topheading p {
+    font-size: 20px;
+    margin-bottom: 9px;
+  }
+  .case-detailpage-loanContainer-hrline{
+    border-top: 1px solid rgb(205, 204, 204);
+    width: 98%;
+  }
+
+.case-detailpage-loanContainer-content {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 0px 20px;
+    gap: 10px;
+    text-align: left;
+  }
+
+  .case-detailpage-loanContainer-content p {
+    margin: 0px;
+    border-right: 1px solid #e0e0e0;
+    font-size: 14px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  .case-detailpage-loanContainer-content p:last-child {
+    border-right: none;
+  }
+
+  .Sarfasei-container{
+    margin-top: 30px;
+  }
+ 

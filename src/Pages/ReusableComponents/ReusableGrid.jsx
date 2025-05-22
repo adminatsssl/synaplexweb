@@ -4,7 +4,7 @@ import "./Styles/ReusableGrid.css";
 const ReusableGrid = ({ columns, data, onRowClick }) => {
   const [filters, setFilters] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 20;
+  const recordsPerPage = 15;
 
   const [columnWidths, setColumnWidths] = useState(
     columns.reduce((acc, col) => {
