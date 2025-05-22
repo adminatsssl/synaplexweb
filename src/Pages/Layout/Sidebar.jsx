@@ -87,12 +87,12 @@ export default function Sidebar() {
           { name: "StageConfig", path: "/stageconfig" },
         ],
       },
-      {
-        name:"Settings",
-        children:[
-          {name:"KeyConfig", path:"/KeyConfig"}
-        ]
-      }
+      // {
+      //   name:"Settings",
+      //   children:[
+      //     {name:"KeyConfig", path:"/KeyConfig"}
+      //   ]
+      // }
     ],
 
     ROLE_USER: [

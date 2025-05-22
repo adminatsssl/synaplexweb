@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Layout from "../../../Layout/Layout.jsx";
 import "./Template.css";
 import IconButton from "../../../ReusableComponents/IconButton";
@@ -10,6 +11,8 @@ import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 const NoticeSetupTemplate = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [templates, setTemplates] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleEdit = (template) => {
     setSelectedTemplate(template);
@@ -21,9 +24,28 @@ const NoticeSetupTemplate = () => {
     setShowPopup(true);
   };
 
-  const templates = [
-    { id: 1, name: "Template", createdOn: "2/2/2025", isDefault: true },
-  ];
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const response = await axios.get("/api/api/templates");
+        if (response.data.status === "SUCCESS") {
+          const formattedData = response.data.data.map((template) => ({
+            ...template,
+            createdOn: new Date().toLocaleDateString(), // If no date is returned by API
+          }));
+          setTemplates(formattedData);
+        } else {
+          console.error("Failed to fetch templates:", response.data.message);
+        }
+      } catch (error) {
+        console.error("API error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
 
   const columns = [
     { key: "name", label: "Template Name" },
@@ -58,7 +80,11 @@ const NoticeSetupTemplate = () => {
         </div>
 
         <div className="border rounded shadow bg-white overflow-x-auto">
-          <ReusableGrid columns={columns} data={templates} />
+          {loading ? (
+            <p className="p-4">Loading templates...</p>
+          ) : (
+            <ReusableGrid columns={columns} data={templates} />
+          )}
         </div>
 
         {showPopup && (

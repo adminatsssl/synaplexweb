@@ -1,60 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from "../../../Layout/Layout.jsx";
 import IconButton from '../../../ReusableComponents/IconButton.jsx';
 import ReusableGrid from '../../../ReusableComponents/ReusableGrid.jsx';
-
-const dummyLoans = [
-  {
-    ID: 1,
-    LoanID: 'LN001',
-    LoanType: 'Personal',
-    Amount: 10000,
-    DefaultDate: '2023-10-10',
-    BorrowerName: 'Alice Johnson',
-    Tenure: '24 months',
-    AnnualInterestRate: 5.6,
-  },
-  {
-    ID: 2,
-    LoanID: 'LN002',
-    LoanType: 'Home',
-    Amount: 250000,
-    DefaultDate: '2024-02-20',
-    BorrowerName: 'Bob Smith',
-    Tenure: '240 months',
-    AnnualInterestRate: 3.8,
-  },
-  {
-    ID: 3,
-    LoanID: 'LN003',
-    LoanType: 'Auto',
-    Amount: 35000,
-    DefaultDate: '2023-06-15',
-    BorrowerName: 'Charlie Ray',
-    Tenure: '60 months',
-    AnnualInterestRate: 4.2,
-  },
-];
+import axios from 'axios'; // Make sure axios is installed
 
 const columns = [
-  { key: 'LoanID', label: 'Loan ID' },
-  { key: 'LoanType', label: 'Loan Type' },
+  { key: 'loanNumber', label: 'Loan ID' },
+  { key: 'loanType', label: 'Loan Type' },
   {
-    key: 'Amount',
+    key: 'loanAmount',
     label: 'Amount',
-    render: (row) => `$${row.Amount.toLocaleString()}`,
+    render: (row) => `₹${row.loanAmount.toLocaleString()}`,
   },
   {
-    key: 'DefaultDate',
-    label: 'Default Date',
-    render: (row) => new Date(row.DefaultDate).toLocaleDateString(),
+    key: 'startDate',
+    label: 'Start Date',
+    render: (row) => new Date(row.startDate).toLocaleDateString(),
   },
-  { key: 'BorrowerName', label: 'Borrower' },
-  { key: 'Tenure', label: 'Tenure' },
+  { key: 'borrowerName', label: 'Borrower' },
   {
-    key: 'AnnualInterestRate',
-    label: 'Annual Interest Rate',
-    render: (row) => `${row.AnnualInterestRate}%`,
+    key: 'loanTenure',
+    label: 'Tenure',
+    render: (row) => `${row.loanTenure} months`,
+  },
+  {
+    key: 'interestRate',
+    label: 'Interest Rate',
+    render: (row) => `${row.interestRate}%`,
   },
   {
     key: 'actions',
@@ -65,11 +37,41 @@ const columns = [
 ];
 
 const AdminLoans = () => {
+  const [loans, setLoans] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLoans = async () => {
+      try {
+        const response = await axios.get('/api/api/loans');
+        if (response.data.status === 'SUCCESS') {
+          const formattedData = response.data.data.map((loan) => ({
+            ...loan,
+            borrowerName: loan.borrower?.name || 'N/A',
+          }));
+          setLoans(formattedData);
+        } else {
+          console.error('Failed to fetch loans:', response.data.message);
+        }
+      } catch (error) {
+        console.error('API error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLoans();
+  }, []);
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50 px-8 py-12">
         <h2 className="text-4xl font-bold text-gray-800 mb-6">Loans</h2>
-        <ReusableGrid columns={columns} data={dummyLoans} />
+        {loading ? (
+          <p>Loading loans...</p>
+        ) : (
+          <ReusableGrid columns={columns} data={loans} />
+        )}
       </div>
     </Layout>
   );
