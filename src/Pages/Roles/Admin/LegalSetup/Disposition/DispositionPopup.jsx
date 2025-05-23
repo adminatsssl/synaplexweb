@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './DispositionSetup.css'; // Make sure this points to the correct file
+import './DispositionSetup.css';
 import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
 
@@ -9,38 +9,43 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
 
   useEffect(() => {
     if (item) {
-      setName(item.Name || "");
-      setDescription(item.Description || "");
+      setName(item.name || "");
+      setDescription(item.description || "");
     }
   }, [item]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      Name: name,
-      Description: description,
+      name: name,
+      description: description,
     };
 
-    if (item) {
-      await fetch(`/odata/WorkflowDispositionStages(${item.ID})`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-    } else {
-      await fetch("/odata/WorkflowDispositionStages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-    }
+    try {
+      if (item) {
+        // When updating, include the item's ID in the endpoint
+        await fetch(`/api/api/dispositions/${item.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        await fetch("/api/api/dispositions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+      }
 
-    onSave();
-    onClose();
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error("Error saving disposition:", error);
+    }
   };
 
   return (
@@ -49,8 +54,7 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
         <div className="Disposition-modal-title">
           {item ? "Edit Disposition" : "Add Disposition"}
           <button className="Disposition-modal-closebutton" onClick={onClose}>X</button>
-          
-          </div>
+        </div>
 
         <div className="Disposition-middle-content">
           <form onSubmit={handleSubmit}>
@@ -77,20 +81,16 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
               </div>
             </div>
 
-
             <div className="Disposition-modal-buttons">
               <CancelButton onClick={onClose} className="Disposition-cancel-btn" />
               <SaveButton
-                onClick={handleSubmit} className="Disposition-save-btn"
+                onClick={handleSubmit}
+                className="Disposition-save-btn"
                 label={item ? "Update" : "Save"}
               />
             </div>
           </form>
-
-
         </div>
-
-
       </div>
     </div>
   );

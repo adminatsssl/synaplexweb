@@ -1,3 +1,4 @@
+// LawGroup.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import IconButton from "../../../../ReusableComponents/IconButton";
@@ -20,17 +21,21 @@ const LawGroup = () => {
       const response = await axios.get("/api/api/lawgroups");
       const rawData = response.data.data || [];
 
-      // Transform API response to match expected structure
       const transformedData = rawData.map(group => ({
-        ID: group.id,
-        Name: group.name,
-        Email: group.email,
-        PhoneNumber: group.phone,
-        AddressLine: group.address?.addressLine || `${group.address.city}, ${group.address.state} ${group.address.pincode}`,
-        TotalMember: group.totalLawyer,
-        OngoingCases: "N/A", // or add if available
-        SuccessRate: group.successRate,
-      }));
+  ID: group.id,
+  Name: group.name,
+  Email: group.email,
+  PhoneNumber: group.phone,
+  AddressLine: group.address
+    ? `${group.address.addressLine}, ${group.address.city}, ${group.address.state} ${group.address.pincode}`
+    : "-",
+  TotalMember: group.totalLawyer,
+  OngoingCases: "N/A",
+  SuccessRate: group.successRate,
+  RegistrationNumber: group.registrationNumber,
+  EstablishmentYear: group.establishmentYear,
+}));
+
 
       setLawGroups(transformedData);
     } catch (error) {
@@ -85,10 +90,7 @@ const LawGroup = () => {
     { key: "Name", label: "Name" },
     { key: "Email", label: "Email" },
     { key: "PhoneNumber", label: "Phone Number" },
-    {
-      key: "AddressLine",
-      label: "Address",
-    },
+    { key: "AddressLine", label: "Address" },
     { key: "TotalMember", label: "Total Members" },
     { key: "OngoingCases", label: "Ongoing Cases" },
     {

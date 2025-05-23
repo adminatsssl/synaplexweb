@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import JSONBig from "json-bigint";
 import IconButton from "../../../ReusableComponents/IconButton";
 import AddBorrower from "./AddBorrower";
 import "./BorrowerOverview.css";
@@ -11,6 +10,7 @@ import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
   const [borrowers, setBorrowers] = useState([]);
+  const [rawBorrowers, setRawBorrowers] = useState([]); // Store original API data
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedBorrower, setSelectedBorrower] = useState(null);
@@ -22,6 +22,10 @@ const BorrowerOverview = () => {
       .then((response) => {
         const responseData = response.data;
         if (responseData.status === "SUCCESS" && Array.isArray(responseData.data)) {
+          // Store the raw data for editing
+          setRawBorrowers(responseData.data);
+          
+          // Transform for display
           const transformedData = responseData.data.map((item) => ({
             ID: item.id,
             Name: item.name,
@@ -33,39 +37,41 @@ const BorrowerOverview = () => {
             CreditScore: item.creditScore ?? "N/A",
             JobTitle: item.jobTitle ?? "N/A",
             MonthlyIncome: item.monthlyIncome ?? "N/A",
+            // Store the original data for editing
+            originalData: item
           }));
           setBorrowers(transformedData);
         } else {
           console.warn("Unexpected response format:", responseData);
           setBorrowers([]);
+          setRawBorrowers([]);
         }
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching borrowers:", error);
         setBorrowers([]);
+        setRawBorrowers([]);
         setLoading(false);
       });
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`/api/borrowers/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+ const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`/api/api/borrowers/${id}`, {
+      method: "DELETE"
+    });
 
-      if (response.ok) {
-        fetchBorrowers();
-      } else {
-        console.error("Failed to delete. Status:", response.status);
-      }
-    } catch (error) {
-      console.error("Error during delete:", error);
+    if (response.ok) {
+      fetchBorrowers(); // Refresh the list after deletion
+    } else {
+      console.error("Failed to delete. Status:", response.status);
     }
-  };
+  } catch (error) {
+    console.error("Error during delete:", error);
+  }
+};
+
 
   useEffect(() => {
     fetchBorrowers();
@@ -77,7 +83,9 @@ const BorrowerOverview = () => {
   };
 
   const handleEditBorrower = (borrower) => {
-    setSelectedBorrower(borrower);
+    // Find the original borrower data from rawBorrowers
+    const originalBorrower = rawBorrowers.find(b => b.id === borrower.ID);
+    setSelectedBorrower(originalBorrower);
     setShowModal(true);
   };
 
@@ -120,6 +128,8 @@ const BorrowerOverview = () => {
 
         {showModal && (
           <AddBorrower
+            key={selectedBorrower?.id || "new"}
+            selectedBorrower={selectedBorrower}
             onClose={() => {
               setShowModal(false);
               setSelectedBorrower(null);
@@ -129,7 +139,6 @@ const BorrowerOverview = () => {
               setShowModal(false);
               setSelectedBorrower(null);
             }}
-            selectedBorrower={selectedBorrower}
           />
         )}
       </div>

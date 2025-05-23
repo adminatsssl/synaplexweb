@@ -55,78 +55,48 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      if (!form.name || !form.addressLine || !form.city || !form.state || !form.pinCode) {
-        alert("Please complete all required fields, including address.");
-        return;
-      }
-
-      let addressId = null;
-
-      // Update or Create Address
-      if (selectedLawGroup?.Address_Group?.ID) {
-        const addrIdStr = selectedLawGroup.Address_Group.ID.toString();
-        try {
-          await axiosJson.get(`/odata/lawgroup/Addresses(${addrIdStr})`);
-          addressId = addrIdStr;
-
-          await axiosJson.patch(`/odata/lawgroup/Addresses(${addressId})`, {
-            AddressLine: form.addressLine,
-            City: form.city,
-            State: form.state,
-            PinCode: form.pinCode
-          });
-        } catch {
-          console.warn("Address not found. Will create a new one.");
-        }
-      }
-
-      if (!addressId) {
-        const addressRes = await axiosJson.post("/odata/lawgroup/Addresses", {
-          AddressLine: form.addressLine,
-          City: form.city,
-          State: form.state,
-          PinCode: form.pinCode
-        });
-
-        if (!addressRes.data?.ID) {
-          throw new Error("Address creation failed — missing ID.");
-        }
-
-        addressId = addressRes.data.ID.toString();
-      }
-
-      // Construct LawGroup payload
-      const payload = {
-        Name: form.name,
-        Email: form.email,
-        PhoneNumber: form.phone,
-        RegistrationNumber: form.registrationNumber,
-        EstablishmentYear: form.year,
-        TotalMember: parseInt(form.totalMember),
-        OngoingCases: parseInt(form.ongoingCases),
-        SuccessRate: parseFloat(form.successRate),
-        "Address_Group@odata.bind": `Addresses(${addressId})`
-      };
-
-      // Create or update LawGroup
-      if (selectedLawGroup?.ID) {
-        const groupIdStr = selectedLawGroup.ID.toString();
-        await axiosJson.patch(`/odata/lawgroup/Groups(${groupIdStr})`, payload);
-      } else {
-        await axiosJson.post("/odata/lawgroup/Groups", payload);
-      }
-
-      alert(`Law Group ${selectedLawGroup ? "updated" : "submitted"} successfully!`);
-      if (onSuccess) onSuccess();
-    } catch (error) {
-      console.error("Submission error:", error.response?.data || error.message);
-      alert("Failed to submit. Check console for details.");
+  try {
+    if (!form.name || !form.addressLine || !form.city || !form.state || !form.pinCode) {
+      alert("Please complete all required fields, including address.");
+      return;
     }
-  };
+
+    // Prepare payload including address as nested object
+    const payload = {
+      Name: form.name,
+      Email: form.email,
+      PhoneNumber: form.phone,
+      RegistrationNumber: form.registrationNumber,
+      EstablishmentYear: form.year,
+      TotalMember: form.totalMember,
+      OngoingCases: form.ongoingCases,
+      SuccessRate: form.successRate,
+      Address_Group: {
+        AddressLine: form.addressLine,
+        City: form.city,
+        State: form.state,
+        PinCode: form.pinCode
+      }
+    };
+
+    if (selectedLawGroup?.ID) {
+      const groupIdStr = selectedLawGroup.ID.toString();
+      // Correct REST URL with just the ID
+      await axiosJson.put(`/api/api/lawgroups/${groupIdStr}`, payload);
+    } else {
+      await axiosJson.post("/api/api/lawgroups", payload);
+    }
+
+    alert(`Law Group ${selectedLawGroup ? "updated" : "submitted"} successfully!`);
+    if (onSuccess) onSuccess();
+  } catch (error) {
+    console.error("Submission error:", error.response?.data || error.message);
+    alert("Failed to submit. Check console for details.");
+  }
+};
 
   return (
     <div className="LawGroup-popup-container">
@@ -135,7 +105,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
       <div className='LawGroup-Middle-Content'>
 
         <div className='LawGroup-Middle-FieldContent'>
-          {/*Middle Content*/}
           <h2 className="LawGroup-section-title">Group Detail</h2>
           <div className="LawGroup-form-grid">
             <label><span>Group Name</span><input name="name" value={form.name} onChange={handleChange} /></label>
@@ -148,35 +117,27 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
         </div>
 
         <div className='LawGroup-Middle-FieldContent'>
-          {/*Middle Content*/}
           <h2 className="LawGroup-section-title">Address</h2>
           <label className="LawGroup-textarea-label">
             <span>Address Line</span>
             <textarea className='LawGroup-textarea' name="addressLine" value={form.addressLine} onChange={handleChange} />
           </label>
           <div className="LawGroup-address-grid">
-            <label><span>City</span><br/><input name="city" value={form.city} onChange={handleChange} /></label>
-            <label><span>State</span><br/><input name="state" value={form.state} onChange={handleChange} /></label>
-            <label><span>PinCode</span><br/><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
+            <label><span>City</span><br /><input name="city" value={form.city} onChange={handleChange} /></label>
+            <label><span>State</span><br /><input name="state" value={form.state} onChange={handleChange} /></label>
+            <label><span>PinCode</span><br /><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
           </div>
         </div>
 
         <div className='LawGroup-Middle-FieldContent'>
-          {/*Middle Content*/}
-        <h2 className="LawGroup-section-title">FPR Details:</h2>
-        <div className="LawGroup-form-grid">
-          <label><span>FPR E-Mail</span><br/><input name="email" value={form.email} onChange={handleChange} /></label>
-          <label><span>Phone No</span><br/><input name="phone" value={form.phone} onChange={handleChange} /></label>
+          <h2 className="LawGroup-section-title">FPR Details:</h2>
+          <div className="LawGroup-form-grid">
+            <label><span>FPR E-Mail</span><br /><input name="email" value={form.email} onChange={handleChange} /></label>
+            <label><span>Phone No</span><br /><input name="phone" value={form.phone} onChange={handleChange} /></label>
+          </div>
         </div>
 
-        </div>
-        
       </div>
-
-
-
-
-
 
       <div className="LawGroup-button-row">
         <CancelButton onClick={onCancel} className="LawGroup-cancel-button" />
@@ -184,7 +145,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
           onClick={handleSubmit} className="LawGroup-save-button"
           label={selectedLawGroup ? "Update" : "Save"}
         />
-
       </div>
     </div>
   );
