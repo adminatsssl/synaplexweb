@@ -15,7 +15,7 @@ const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
     addressLine: '',
     city: '',
     state: '',
-    pinCode: '',
+    pincode: '',
     email: '',
     phone: ''
   });
@@ -32,7 +32,7 @@ const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
         addressLine: selectedLawFirm.address?.addressLine || '',
         city: selectedLawFirm.address?.city || '',
         state: selectedLawFirm.address?.state || '',
-        pinCode: selectedLawFirm.address?.pinCode || '',
+        pincode: selectedLawFirm.address?.pincode || '',
         email: selectedLawFirm.email || '',
         phone: selectedLawFirm.phone || ''
       });
@@ -59,7 +59,7 @@ const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
         addressLine: form.addressLine,
         city: form.city,
         state: form.state,
-        pinCode: form.pinCode
+        pincode: form.pincode
       }
     };
 
@@ -105,7 +105,7 @@ const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
           <div className="LawFirm-address-grid">
             <label><span>City</span><br/><input name="city" value={form.city} onChange={handleChange} /></label>
             <label><span>State</span><br/><input name="state" value={form.state} onChange={handleChange} /></label>
-            <label><span>PinCode</span><br/><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
+            <label><span>pincode</span><br/><input name="pincode" value={form.pincode} onChange={handleChange} /></label>
           </div>
         </div>
 
