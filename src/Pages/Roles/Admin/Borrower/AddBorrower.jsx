@@ -20,21 +20,21 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   });
 
   useEffect(() => {
-    if (selectedBorrower) {
-      setFormData({
-        Name: selectedBorrower.Name || "",
-        Phone: selectedBorrower.Phone || "",
-        Email: selectedBorrower.Email || "",
-        Address: selectedBorrower.Address || "",
-        City: selectedBorrower.City || "",
-        State: selectedBorrower.State || "",
-        Pincode: selectedBorrower.Pincode || "",
-        CreditScore: selectedBorrower.CreditScore || "",
-        JobTitle: selectedBorrower.JobTitle || "",
-        MonthlyIncome: selectedBorrower.MonthlyIncome || "",
-      });
-    }
-  }, [selectedBorrower]);
+  if (selectedBorrower) {
+    setFormData({
+      Name: selectedBorrower.name || "",
+      Phone: selectedBorrower.contactNumber || "",
+      Email: selectedBorrower.email || "",
+      Address: selectedBorrower.address?.addressLine || "",
+      City: selectedBorrower.address?.city || "",
+      State: selectedBorrower.address?.state || "",
+      Pincode: selectedBorrower.address?.pincode || "",
+      CreditScore: selectedBorrower.creditScore ?? "",
+      JobTitle: selectedBorrower.jobTitle || "",
+      MonthlyIncome: selectedBorrower.monthlyIncome ?? "",
+    });
+  }
+}, [selectedBorrower]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,48 +45,58 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const payload = {
-      Name: formData.Name,
-      Phone: formData.Phone,
-      Email: formData.Email,
-      Address: formData.Address,
-      City: formData.City,
-      State: formData.State,
-      Pincode: formData.Pincode,
-      CreditScore: formData.CreditScore,
-      JobTitle: formData.JobTitle,
-      MonthlyIncome: formData.MonthlyIncome,
-    };
+  const payload = {
+    name: formData.Name,
+    contactNumber: formData.Phone,
+    email: formData.Email,
+    creditScore: formData.CreditScore,
+    jobTitle: formData.JobTitle,
+    monthlyIncome: formData.MonthlyIncome,
+    address: {
+      addressLine: formData.Address,
+      city: formData.City,
+      state: formData.State,
+      pincode: formData.Pincode,
+    },
+  };
 
-    try {
-      const borrowerId = selectedBorrower?.ID || selectedBorrower?.id;
-      const response = borrowerId
-        ? await axios.patch(
-            `/odata/postapiservice/Borrowers(${borrowerId})`,
-            JSONBig.stringify(payload),
-            {
-              headers: { "Content-Type": "application/json" },
-              transformRequest: [(data) => data],
-            }
-          )
-        : await axios.post("/odata/postapiservice/Borrowers", payload, {
-            headers: { "Content-Type": "application/json" },
-          });
+  try {
+    if (selectedBorrower?.id) {
+      // PUT request for update
+      const response = await axios.put(
+        `/api/api/borrowers/${selectedBorrower.id}`,
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      if ([200, 201, 204].includes(response.status)) {
+      if ([200, 204].includes(response.status)) {
         onSave();
       } else {
-        alert("Failed to save borrower data.");
+        alert("Failed to update borrower.");
       }
-    } catch (error) {
-      const errorMsg =
-        error.response?.data || error.message || "Unknown error occurred";
-      console.error("Error saving borrower:", errorMsg);
-      alert(`Error: ${JSON.stringify(errorMsg)}`);
+    } else {
+      // POST request for new
+      const response = await axios.post("/api/api/borrowers", payload, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if ([200, 201].includes(response.status)) {
+        onSave();
+      } else {
+        alert("Failed to create borrower.");
+      }
     }
-  };
+  } catch (error) {
+    const errorMsg =
+      error.response?.data || error.message || "Unknown error occurred";
+    console.error("Error saving borrower:", errorMsg);
+    alert(`Error: ${JSON.stringify(errorMsg)}`);
+  }
+};
 
   return (
     <div className="addborrower-modal">
