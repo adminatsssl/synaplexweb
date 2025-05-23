@@ -37,9 +37,10 @@ const LegalCaseTypeSetup = () => {
     try {
       const stringId = id.toString();
       console.log("Deleting ID: " + stringId);
-      await fetch(`/api/api/legalCaseType/${stringId}`, {
+      await fetch(`/api/api/legalCaseTypes/${stringId}`, {
         method: "DELETE",
       });
+
       fetchLegalCaseTypes();
     } catch (error) {
       console.error("Error deleting legal case type:", error);

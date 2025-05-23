@@ -32,21 +32,23 @@ export default function CourtSetup() {
     setSelectedCourt(null);
   };
 
-  const handleEdit = (court) => {
-    setSelectedCourt(court);
-    setShowModal(true);
-  };
+const handleEdit = (court) => {
+  setSelectedCourt(court);
+  setShowModal(true);
+};
 
-  const handleDelete = async (courtId) => {
-    if (!window.confirm("Are you sure you want to delete this court?")) return;
-    try {
-      await axios.delete(`/api/api/courts/${courtId}`);
-      fetchCourts();
-    } catch (error) {
-      console.error('Failed to delete court:', error);
-      alert('Delete failed.');
-    }
-  };
+
+const handleDelete = async (courtId) => {
+  if (!window.confirm('Are you sure you want to delete this court?')) return;
+  try {
+    await axios.delete(`/api/api/courts/${courtId}`);
+    fetchCourts();
+  } catch (error) {
+    console.error('Failed to delete court:', error);
+    alert('Delete failed.');
+  }
+};
+
 
   const columns = [
     { key: "name", label: "Name" },
@@ -80,7 +82,11 @@ export default function CourtSetup() {
   return (
     <div className="court-setup-container">
       <div className="court-setup-header">
-        <AddButton text="Add Court" onClick={() => setShowModal(true)} />
+        <AddButton text="Add Court" onClick={() => {
+          setSelectedCourt(null);
+          setShowModal(true);
+        }} />
+
       </div>
 
       <ReusableGrid columns={columns} data={courts} />
