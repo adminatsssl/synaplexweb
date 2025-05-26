@@ -11,31 +11,29 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     templateName: "",
   });
 
+  const [workflowData, setWorkflowData] = useState([]);
   const [templateNames, setTemplateNames] = useState([]);
+  const [stageOptions, setStageOptions] = useState([]);
 
+  // Load initial form data
   useEffect(() => {
     if (initialData) {
       setFormData({
         caseType: initialData.caseType || "",
-        stageName: initialData.name || "",
+        stageName: initialData.stageName || "",
         templateName: initialData.templateName || "",
       });
     }
   }, [initialData]);
 
-  // Fetch templates from the API
+  // Fetch templates
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
         const response = await axios.get("/api/api/templates");
-        console.log("Raw response data:", response.data);
-
-        // The actual data array is in response.data.data
         const dataArray = response.data.data;
-
         if (Array.isArray(dataArray)) {
           const names = dataArray.map((template) => template.name);
-          console.log("Extracted template names:", names);
           setTemplateNames(names);
         } else {
           console.warn("API 'data' property is not an array:", dataArray);
@@ -46,10 +44,42 @@ const StageTemplateModal = ({ onClose, initialData }) => {
         setTemplateNames([]);
       }
     };
-
     fetchTemplates();
   }, []);
 
+  // Fetch workflow types and stages
+  useEffect(() => {
+    const fetchWorkflowData = async () => {
+      try {
+        const response = await axios.get("/api/api/workflowType");
+        const workflowTypes = response.data.data;
+        if (Array.isArray(workflowTypes)) {
+          setWorkflowData(workflowTypes);
+        } else {
+          console.warn("API 'data' property is not an array:", workflowTypes);
+          setWorkflowData([]);
+        }
+      } catch (error) {
+        console.error("Error fetching workflow data:", error);
+        setWorkflowData([]);
+      }
+    };
+    fetchWorkflowData();
+  }, []);
+
+  // Update stage options based on selected caseType
+  useEffect(() => {
+    const selectedWorkflow = workflowData.find(
+      (workflow) => workflow.name === formData.caseType
+    );
+    if (selectedWorkflow && Array.isArray(selectedWorkflow.workflowStages)) {
+      setStageOptions(selectedWorkflow.workflowStages);
+    } else {
+      setStageOptions([]);
+    }
+  }, [formData.caseType, workflowData]);
+
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -58,10 +88,28 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     }));
   };
 
-  const handleSave = () => {
-    console.log("Saved form data:", formData);
-    // TODO: Implement actual save logic here!
-    onClose();
+  // Final save handler
+  const handleSave = async () => {
+    console.log("Form data to save:", formData);
+
+    const postData = {
+    workflowTypeName: formData.caseType,
+    stageName: formData.stageName,
+    templateNames: [formData.templateName],  // <-- Here
+  };
+
+    try {
+      const response = await axios.post(
+        "/api/api/templates/workflow/attachTemplate",
+        postData
+      );
+      console.log("Save response:", response.data);
+      alert("Template attached successfully!");
+      onClose();
+    } catch (error) {
+      console.error("Error saving template:", error);
+      alert("Failed to attach template. Please try again.");
+    }
   };
 
   return (
@@ -82,9 +130,11 @@ const StageTemplateModal = ({ onClose, initialData }) => {
               onChange={handleChange}
             >
               <option value="">Select Case Type</option>
-              <option value="SARFAESI">SARFAESI</option>
-              <option value="Cheque Bounce">Cheque Bounce</option>
-              {/* Add more options as needed */}
+              {workflowData.map((workflow) => (
+                <option key={workflow.id} value={workflow.name}>
+                  {workflow.name}
+                </option>
+              ))}
             </select>
           </label>
 
@@ -96,10 +146,11 @@ const StageTemplateModal = ({ onClose, initialData }) => {
               onChange={handleChange}
             >
               <option value="">Select Stage Name</option>
-              <option value="Demand Notice Generation">
-                Demand Notice Generation
-              </option>
-              {/* Add more options as needed */}
+              {stageOptions.map((stage) => (
+                <option key={stage.id} value={stage.stageName}>
+                  {stage.stageName}
+                </option>
+              ))}
             </select>
           </label>
 

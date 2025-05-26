@@ -1,4 +1,5 @@
-import React from 'react';
+// import React from 'react';
+import React, { useState } from 'react'; // ✅ Fix
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoMdMail } from "react-icons/io";
 import { FaSms } from "react-icons/fa";
@@ -7,10 +8,15 @@ import ReusableGrid from "../../../../../../ReusableComponents/ReusableGrid.jsx"
 import './DemandNoticeSarfaesi.css';
 import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
-
+import NoticePreviewModal from './NoticePreviewModal';
 
 const DemandNoticeSarfasei = () => {
     // Sample data for disposition summary
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
+
     const dispositionData = [
         { stage: "Stage 1", comment: "Hello world" },
     ];
@@ -66,6 +72,7 @@ const DemandNoticeSarfasei = () => {
                     </div>
 
                     <div className='demandNotice-Sarfasei-topcontent-rightside'>
+                        <button onClick={openModal} className='assetValuation-generatenotice-btn'>Generate Notice</button>
                         <h4>View Generated Notice</h4>
                         <div className='demandNotice-Sarfasei-topcontent-rightside-icon'>
                             <div className='emandNotice-Sarfasei-icon'>
@@ -102,12 +109,14 @@ const DemandNoticeSarfasei = () => {
             </div>
 
             <div className='demandNotice-Sarfasei-Bottom-btn'>
-                <CancelButton/>
-                <SaveButton label='Save & Next'/>
+                <CancelButton />
+                <SaveButton label='Save & Next' />
 
             </div>
+            <NoticePreviewModal isOpen={isModalOpen} onClose={closeModal} />
 
         </div>
+
     );
 };
 
