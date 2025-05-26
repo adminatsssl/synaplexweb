@@ -9,6 +9,7 @@ import './LawGroup.css';
 
 const LawGroup = () => {
   const [lawGroups, setLawGroups] = useState([]);
+  const [rawLawGroups, setRawLawGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -22,21 +23,21 @@ const LawGroup = () => {
       const rawData = response.data.data || [];
 
       const transformedData = rawData.map(group => ({
-  ID: group.id,
-  Name: group.name,
-  Email: group.email,
-  PhoneNumber: group.phone,
-  AddressLine: group.address
-    ? `${group.address.addressLine}, ${group.address.city}, ${group.address.state} ${group.address.pincode}`
-    : "-",
-  TotalMember: group.totalLawyer,
-  OngoingCases: "N/A",
-  SuccessRate: group.successRate,
-  RegistrationNumber: group.registrationNumber,
-  EstablishmentYear: group.establishmentYear,
-}));
+        ID: group.id,
+        Name: group.name,
+        Email: group.email,
+        PhoneNumber: group.phone,
+        AddressLine: group.address
+          ? `${group.address.addressLine}, ${group.address.city}, ${group.address.state} ${group.address.pincode}`
+          : "-",
+        TotalMember: group.totalLawyer,
+        OngoingCases: group.ongoingCases ?? "N/A",
+        SuccessRate: group.successRate,
+        RegistrationNumber: group.registrationNumber,
+        EstablishmentYear: group.establishmentYear,
+      }));
 
-
+      setRawLawGroups(rawData);
       setLawGroups(transformedData);
     } catch (error) {
       console.error("Error fetching law groups:", error);
@@ -61,25 +62,23 @@ const LawGroup = () => {
     setShowPopup(true);
   };
 
-  const openEditPopup = (group) => {
-    setSelectedLawGroup(group);
+  const openEditPopup = (groupRow) => {
+    const originalGroup = rawLawGroups.find(group => group.id === groupRow.ID);
+    setSelectedLawGroup(originalGroup);
     setShowPopup(true);
   };
 
   const handleDelete = async (groupId) => {
     try {
-      const response = await fetch(`/api/api/lawgroups/${groupId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (response.ok) {
+      const response = await axios.delete(`/api/api/lawgroups/${groupId}`);
+      if (response.status === 200) {
         setRefreshTrigger(prev => prev + 1);
       } else {
-        console.error("Failed to delete. Status:", response.status);
+        alert("Failed to delete law group.");
       }
     } catch (error) {
-      console.error("Error during delete:", error);
+      console.error("Delete failed:", error);
+      alert("An error occurred during deletion.");
     }
   };
 
