@@ -54,7 +54,7 @@ const LawyerCases = () => {
   };
 
   const handleRowClick = (caseData) => {
-    navigate(`/case/${caseData.CaseID}`);
+    navigate(`/lawyercase/${caseData.CaseID}`);
   };
 
   const closeModal = () => {
