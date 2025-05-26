@@ -17,7 +17,7 @@ export default function TopNavbar() {
     axios
       .get("/api/api/tenants")
       .then((res) => {
-        console.log("Tenant API Response:", res.data);
+        // console.log("Tenant API Response:", res.data);
         const data = res.data?.data?.[0];
         if (data) {
           setTenant({

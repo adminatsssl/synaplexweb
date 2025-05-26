@@ -1,25 +1,22 @@
-// Keep your imports the same
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./EditLawyerPopup.css";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
-
 import SaveButton from "../../../../ReusableComponents/SaveButton";
 import AddButton from "../../../../ReusableComponents/AddButton";
 
-
-const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
+const EditLawyerPopup = ({ isOpen, onClose, onSave, lawyer }) => {
   const [form, setForm] = useState({
     image: null,
-    imagePreview: "/Lawyer.png",
+    imagePreview: "",
     name: "",
     licenseNo: "",
     qualification: "",
-    successRate: 0.00,
-    rating: 0.00,
+    successRate: 0.0,
+    rating: 0.0,
     lawyerType: "Law Firm",
     lawFirm: "",
     lawGroup: "",
-    searchTerm: "",
     experience: 0,
     specialization: "",
     court: "",
@@ -32,124 +29,145 @@ const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
     email: "",
     password: "",
     retypePassword: "",
-    fees: [{ caseType: "", stageName: "", rate: "" }]
+    fees: [{ caseType: "", stageName: "", rate: "" }],
   });
 
   useEffect(() => {
-    if (selectedLawyer) {
-      setForm({
-        image: null,
-        imagePreview: selectedLawyer.ImageUrl || "/Screenshot (27).png",
-        name: selectedLawyer.Account?.FullName || "",
-        licenseNo: selectedLawyer.LicenseNumber || "",
-        qualification: selectedLawyer.Qualification || "",
-        successRate: selectedLawyer.SuccessRate || 0.00,
-        rating: selectedLawyer.Rating || 0.00,
-        lawyerType: selectedLawyer.Type || "Law Firm",
-        lawFirm: selectedLawyer.LawFirm || "",
-        lawGroup: selectedLawyer.LawGroup || "",
-        experience: selectedLawyer.ExperienceYears || 0,
-        court: selectedLawyer.Court || "",
-        specialization: selectedLawyer.Specialization || "",
-        primaryMobile: selectedLawyer.PrimaryNo || "",
-        secondaryMobile: selectedLawyer.SecondaryNo || "",
-        addressLine: selectedLawyer.Address?.AddressLine || "",
-        city: selectedLawyer.Address?.City || "",
-        state: selectedLawyer.Address?.State || "",
-        pinCode: selectedLawyer.Address?.PinCode || "",
-        email: selectedLawyer.Email || "",
-        password: "",
-        retypePassword: "",
-        fees: selectedLawyer.Fees || [{ caseType: "", stageName: "", rate: "" }]
-      });
-    } else {
-      setForm({
-        image: null,
-        imagePreview: "/Lawyer.png",
-        name: "",
-        licenseNo: "",
-        qualification: "",
-        successRate: 0.00,
-        rating: 0.00,
-        lawyerType: "Law Firm",
-        lawFirm: "",
-        lawGroup: "",
-        searchTerm: "",
-        experience: 0,
-        specialization: "",
-        court: "",
-        primaryMobile: "",
-        secondaryMobile: "",
-        addressLine: "",
-        city: "",
-        state: "",
-        pinCode: "",
-        email: "",
-        password: "",
-        retypePassword: "",
-        fees: [{ caseType: "", stageName: "", rate: "" }]
-      });
-    }
-  }, [selectedLawyer]);
+    if (lawyer){
+      const cleanSuccessRate = parseFloat(
+        (lawyer.successRate || "").replace("%", "").trim()
+      );
+      const cleanRating = parseFloat(
+        (lawyer.rating || "").replace("%", "").trim()
+      );
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm(prev => ({
+      if (lawyer) {
+        setForm({
+          image: null,
+          imagePreview: lawyer.profilePic || "/Lawyer.png",
+          name: lawyer.name || "",
+          licenseNo: lawyer.licenseNo || "",
+          qualification: lawyer.qualification || "",
+          successRate: isNaN(cleanSuccessRate) ? 0 : cleanSuccessRate,
+          rating: isNaN(cleanRating) ? 0 : cleanRating,       // <- FIX HERE
+          lawyerType: "Law Firm", // or derive from data if you have
+          lawFirm: "", // no info in example data, keep empty or set if available
+          lawGroup: "", // same as above
+          experience: lawyer.totalExperience || 0,
+          specialization: lawyer.specialization || "",
+          court: lawyer.courts && lawyer.courts.length > 0 ? lawyer.courts[0] : "",
+          primaryMobile: lawyer.primaryNo || "",
+          secondaryMobile: lawyer.secondaryNo || "",
+          addressLine: lawyer.address?.addressLine || "",
+          city: lawyer.address?.city || "",
+          state: lawyer.address?.state || "",
+          pinCode: lawyer.address?.pincode || "",
+          email: lawyer.email || "",
+          password: "",
+          retypePassword: "",
+          fees: [{ caseType: "", stageName: "", rate: "" }], // no fees info in example data
+        });
+      }
+      } else {
+        // reset form on no lawyer
+        setForm((prev) => ({
           ...prev,
-          image: file,
-          imagePreview: reader.result
+          image: null,
+          imagePreview: "/Lawyer.png",
+          name: "",
+          licenseNo: "",
+          qualification: "",
+          successRate: 0.0,
+          rating: 0.0,
+          lawyerType: "Law Firm",
+          lawFirm: "",
+          lawGroup: "",
+          experience: 0,
+          specialization: "",
+          court: "",
+          primaryMobile: "",
+          secondaryMobile: "",
+          addressLine: "",
+          city: "",
+          state: "",
+          pinCode: "",
+          email: "",
+          password: "",
+          retypePassword: "",
+          fees: [{ caseType: "", stageName: "", rate: "" }],
         }));
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setForm(prev => ({
-        ...prev,
-        image: null,
-        imagePreview: "/Lawyer.png"
-      }));
-    }
-  };
+      }
+    },[lawyer?.id]); 
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+
+    const cleanValue =
+      name === "successRate" || name === "rating"
+        ? value.replace("%", "")
+        : value;
+
+    setForm((prev) => ({ ...prev, [name]: cleanValue }));
   };
 
-  const handleFeeChange = (index, field, value) => {
-    const updatedFees = [...form.fees];
-    updatedFees[index][field] = value;
-    setForm(prev => ({ ...prev, fees: updatedFees }));
+  const handleImageUpload = (e) => {
+  const file = e.target.files[0];
+  // console.log("Selected file:", file);
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      // console.log("FileReader result:", reader.result);
+      setForm((prev) => ({
+        ...prev,
+        image: file,
+        imagePreview: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Validate required fields here if needed
+
+  const dataToSubmit = {
+    name: form.name,
+    licenseNo: form.licenseNo || null,
+    qualification: form.qualification || null,
+    successRate: form.successRate !== "" ? `${parseFloat(form.successRate)}` : null,
+    rating: form.rating !== "" ? `${parseFloat(form.rating)}` : null,
+    email: form.email,
+    primaryNo: form.primaryMobile,
+    secondaryNo: form.secondaryMobile || null,
+    specialization: form.specialization,
+    totalExperience: form.experience,
+    courts: form.court ? [form.court] : [],
+    lawFirms: form.lawFirm ? [form.lawFirm] : [],
+    lawGroups: form.lawGroup ? [form.lawGroup] : [],
+    address: {
+      city: form.city,
+      state: form.state,
+      pincode: form.pinCode,
+      addressLine: form.addressLine || null,
+    },
+    profilePic: form.imagePreview || null, // send base64 string here
   };
 
-  const addFeeRow = () => {
-    setForm(prev => ({
-      ...prev,
-      fees: [...prev.fees, { caseType: "", stageName: "", rate: "" }]
-    }));
-  };
+  try {
+    const response = await axios.put(`api/api/lawyers/${lawyer?.id}`, dataToSubmit);
+    console.log("Update successful:", response.data);
+    if (onSave) onSave(response.data);
+    if (onClose) onClose();
+  } catch (error) {
+    console.error("Error updating lawyer:", error.response ? error.response.data : error.message);
+    alert("Failed to update lawyer. Please try again.");
+  }
+};
 
-  const removeFeeRow = (index) => {
-    if (form.fees.length > 1) {
-      const updatedFees = form.fees.filter((_, i) => i !== index);
-      setForm(prev => ({ ...prev, fees: updatedFees }));
-    }
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (onSuccess) onSuccess();
-  };
-
-  const handleViewFeeRow = (index) => {
-    // Implement your view logic here. For example, you could:
-    // 1. Open a modal to display the fee details.
-    // 2. Expand the table row to show more information.
-    console.log(`View details for fee at index ${index}`, form.fees[index]);
-    // For now, let's just log the details.
-  };
 
   if (!isOpen) return null;
 
@@ -158,11 +176,12 @@ const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
       <div className="lawyer-content">
         <div className="lawyer-header">
           <h2>Lawyer</h2>
-          <button onClick={onClose} className="close-btn">×</button>
+          <button onClick={onClose} className="close-btn">
+            ×
+          </button>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="lawyer-body">
-
             {/* Lawyer Detail Section */}
             <div className="section bordered-section">
               <h2>Lawyer Detail</h2>
@@ -194,6 +213,7 @@ const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
                       name="name"
                       value={form.name}
                       onChange={handleChange}
+                      
                     />
                   </div>
 
@@ -304,6 +324,7 @@ const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
                     onChange={handleChange}
                   >
                     <option value="">Select Specialization</option>
+                    <option value="Civil Law">Civil Law</option>
                     <option value="Criminal Law">Criminal Law</option>
                     <option value="Corporate Law">Corporate Law</option>
                     <option value="Family Law">Family Law</option>
@@ -390,7 +411,8 @@ const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
               </div>
             </div>
 
-            {!selectedLawyer && (
+            {/* Email and Password Section */}
+            {!lawyer && (
               <div className="section bordered-section">
                 <h2>Login Detail</h2>
                 <div className="form-item">
@@ -427,67 +449,69 @@ const EditLawyerPopup = ({ isOpen, onClose, onSuccess, selectedLawyer }) => {
 
             {/* Fees Section */}
             <div className="section bordered-section">
-              <div className="fees-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div
+                className="fees-header"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <h2>Fees</h2>
-                <AddButton text="ADD" onClick={addFeeRow} />
+                <AddButton
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      fees: [...prev.fees, { caseType: "", stageName: "", rate: "" }],
+                    }))
+                  }
+                />
               </div>
 
-              <table className="fees-table">
-                <thead>
-                  <tr>
-                    <th>Case Type</th>
-                    <th>Stage Name</th>
-                    <th>Rate</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {form.fees.map((fee, index) => (
-                    <tr key={index}>
-                      <td>
-                        <input
-                          type="text"
-                          value={fee.caseType}
-                          onChange={(e) => handleFeeChange(index, 'caseType', e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={fee.stageName}
-                          onChange={(e) => handleFeeChange(index, 'stageName', e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={fee.rate}
-                          onChange={(e) => handleFeeChange(index, 'rate', e.target.value)}
-                        />
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className="view-btn" // Changed class name
-                          onClick={() => handleViewFeeRow(index)}
-                        >
-                          <span role="img" aria-label="view">👁️</span> {/* Eye icon */}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {form.fees.map((fee, idx) => (
+                <div
+                  className="fees-form-row"
+                  key={idx}
+                  style={{ marginBottom: "10px" }}
+                >
+                  <input
+                    type="text"
+                    placeholder="Case Type"
+                    value={fee.caseType}
+                    onChange={(e) => {
+                      const newFees = [...form.fees];
+                      newFees[idx].caseType = e.target.value;
+                      setForm((prev) => ({ ...prev, fees: newFees }));
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Stage Name"
+                    value={fee.stageName}
+                    onChange={(e) => {
+                      const newFees = [...form.fees];
+                      newFees[idx].stageName = e.target.value;
+                      setForm((prev) => ({ ...prev, fees: newFees }));
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Rate"
+                    value={fee.rate}
+                    onChange={(e) => {
+                      const newFees = [...form.fees];
+                      newFees[idx].rate = e.target.value;
+                      setForm((prev) => ({ ...prev, fees: newFees }));
+                    }}
+                  />
+                </div>
+              ))}
             </div>
-
           </div>
 
           <div className="lawyer-footer">
-            <CancelButton onClick={onClose} className="cancel-btn" />
-        <SaveButton
-          onClick={handleSubmit} className="save-btn"
-          label={ "Save"}
-        />
+            <CancelButton onClick={onClose} />
+            <SaveButton type="submit" />
           </div>
         </form>
       </div>

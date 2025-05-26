@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import LawyerAddCases from "./LawyerAddCases.jsx";
 import Layout from "../../../Layout/Layout.jsx";
@@ -8,40 +9,44 @@ import AddButton from "../../../ReusableComponents/AddButton.jsx";
 import IconButton from "../../../ReusableComponents/IconButton.jsx";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid.jsx";
 
-// ✅ Dummy case data
-const dummyCases = [
-  {
-    CaseID: "101",
-    LoanID: "L-0001",
-    CaseType: "Cheque Bounce",
-    Status: "Open",
-    Borrower: "John Doe",
-    LoanAmount: "$100,000",
-    NPADate: "2023-01-01",
-    CreateDate: "2023-02-01",
-    AssignedTo: "Lawyer A",
-    Court: "High Court",
-  },
-  {
-    CaseID: "102",
-    LoanID: "L-0002",
-    CaseType: "Sarfaesi",
-    Status: "Closed",
-    Borrower: "Jane Smith",
-    LoanAmount: "$200,000",
-    NPADate: "2023-03-01",
-    CreateDate: "2023-04-01",
-    AssignedTo: "Lawyer B",
-    Court: "District Court",
-  },
-];
 
 const LawyerCases = () => {
-  const [cases, setCases] = useState(dummyCases); // ✅ use dummy data
+  const [cases, setCases] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCases = async () => {
+      try {
+        const response = await axios.get("/api/api/cases");
+        const caseData = response.data?.data || [];
+
+        const transformed = caseData.map((item) => ({
+          CaseID: item.id,
+          LoanID: item.loan.loanNumber,
+          CaseType: item.workflowType,
+          Status: item.status,
+          Borrower: item.loan.borrower.name,
+          LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
+          NPADate: item.loan.lastPaymentDate,
+          CreateDate: item.loan.startDate,
+          AssignedTo: "-", // Update if data available
+          Court: item.loan.borrower.address.city || "-",
+        }));
+
+        setCases(transformed);
+      } catch (error) {
+        console.error("Failed to fetch cases:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCases();
+  }, []);
 
   const handleEdit = (caseData) => {
     setSelectedCase(caseData);
@@ -49,7 +54,7 @@ const LawyerCases = () => {
   };
 
   const handleRowClick = (caseData) => {
-    navigate(`/lawyercase/${caseData.CaseID}`);
+    navigate(`/case/${caseData.CaseID}`);
   };
 
   const closeModal = () => {
@@ -60,7 +65,7 @@ const LawyerCases = () => {
   const openModal = () => setShowModal(true);
 
   const columns = [
-    { key: "CaseID", label: "Case ID" },
+    // { key: "CaseID", label: "Case ID" },
     { key: "LoanID", label: "Loan ID" },
     { key: "CaseType", label: "Case Type" },
     { key: "Status", label: "Status" },
@@ -86,7 +91,7 @@ const LawyerCases = () => {
               marginRight: "0px",
             }}
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row navigation
+              e.stopPropagation();
               console.log("FaHandHoldingDollar clicked");
             }}
           >
@@ -95,7 +100,7 @@ const LawyerCases = () => {
           <IconButton
             type="edit"
             onClick={(e) => {
-              e.stopPropagation(); // Prevent row navigation
+              e.stopPropagation();
               handleEdit(row);
             }}
           />
@@ -103,6 +108,14 @@ const LawyerCases = () => {
       ),
     },
   ];
+
+  if (loading) {
+    return (
+      <Layout>
+        <div className="user-cases-container">Loading cases...</div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -116,13 +129,19 @@ const LawyerCases = () => {
           </div>
         </div>
 
-        <ReusableGrid columns={columns} data={cases} onRowClick={handleRowClick} />
+        <ReusableGrid
+          columns={columns}
+          data={cases}
+          onRowClick={handleRowClick}
+        />
 
         {showModal && (
           <div className="modal-overlay-usercase">
             <div className="modal-content-usercase-userrole">
               <LawyerAddCases initialData={selectedCase} onClose={closeModal} />
-              <button onClick={closeModal} className="close-button-usercases">X</button>
+              <button onClick={closeModal} className="close-button-usercases">
+                X
+              </button>
             </div>
           </div>
         )}
@@ -130,5 +149,6 @@ const LawyerCases = () => {
     </Layout>
   );
 };
+
 
 export default LawyerCases;

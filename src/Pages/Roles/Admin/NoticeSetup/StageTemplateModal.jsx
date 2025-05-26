@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./StageConfig.css";
 import SaveButton from "../../../ReusableComponents/SaveButton";
 import CancelButton from "../../../ReusableComponents/CancelButton";
@@ -10,6 +11,8 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     templateName: "",
   });
 
+  const [templateNames, setTemplateNames] = useState([]);
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -20,6 +23,33 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     }
   }, [initialData]);
 
+  // Fetch templates from the API
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        const response = await axios.get("/api/api/templates");
+        console.log("Raw response data:", response.data);
+
+        // The actual data array is in response.data.data
+        const dataArray = response.data.data;
+
+        if (Array.isArray(dataArray)) {
+          const names = dataArray.map((template) => template.name);
+          console.log("Extracted template names:", names);
+          setTemplateNames(names);
+        } else {
+          console.warn("API 'data' property is not an array:", dataArray);
+          setTemplateNames([]);
+        }
+      } catch (error) {
+        console.error("Error fetching templates:", error);
+        setTemplateNames([]);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -29,9 +59,8 @@ const StageTemplateModal = ({ onClose, initialData }) => {
   };
 
   const handleSave = () => {
-    // Implement save logic here
-    // For editing, update the existing item
-    // For adding, create a new item
+    console.log("Saved form data:", formData);
+    // TODO: Implement actual save logic here!
     onClose();
   };
 
@@ -58,6 +87,7 @@ const StageTemplateModal = ({ onClose, initialData }) => {
               {/* Add more options as needed */}
             </select>
           </label>
+
           <label>
             Stage Name
             <select
@@ -66,10 +96,13 @@ const StageTemplateModal = ({ onClose, initialData }) => {
               onChange={handleChange}
             >
               <option value="">Select Stage Name</option>
-              <option value="Demand Notice Generation">Demand Notice Generation</option>
+              <option value="Demand Notice Generation">
+                Demand Notice Generation
+              </option>
               {/* Add more options as needed */}
             </select>
           </label>
+
           <label>
             Template Name
             <select
@@ -78,19 +111,22 @@ const StageTemplateModal = ({ onClose, initialData }) => {
               onChange={handleChange}
             >
               <option value="">Select Template Name</option>
-              <option value="Template A">Template A</option>
-              <option value="Template B">Template B</option>
-              {/* Add more options as needed */}
+              {templateNames.map((name, index) => (
+                <option key={index} value={name}>
+                  {name}
+                </option>
+              ))}
             </select>
           </label>
         </div>
         <hr />
         <div className="stageconfig-modal-footer">
-        <CancelButton onClick={onClose} className="stageconfig-cancel-btn" />
-        <SaveButton
-          onClick={handleSave} className="stageconfig-save-btn"
-          label={"Save"}
-        />
+          <CancelButton onClick={onClose} className="stageconfig-cancel-btn" />
+          <SaveButton
+            onClick={handleSave}
+            className="stageconfig-save-btn"
+            label="Save"
+          />
         </div>
       </div>
     </div>

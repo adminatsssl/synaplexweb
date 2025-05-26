@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import IconButton from "../../../ReusableComponents/IconButton";
 import Layout from "../../../Layout/Layout";
 import "./StageConfig.css";
@@ -9,6 +10,27 @@ import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 const StageConfig = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [stageData, setStageData] = useState([]);
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/api/templates/attachedTemplatesList");
+        // Map the API response to the structure expected by your table
+        const mappedData = response.data.map((item) => ({
+          caseType: item.workflowTypeName,
+          name: item.stageName,
+          templateName: item.templateName,
+        }));
+        setStageData(mappedData);
+      } catch (error) {
+        console.error("Error fetching stage data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleAddClick = () => {
     setEditingItem(null);
@@ -24,11 +46,6 @@ const StageConfig = () => {
     setShowModal(false);
     setEditingItem(null);
   };
-
-  const stageData = [
-    { caseType: "SARFAESI", name: "Demand Notice Generation" },
-    { caseType: "Cheque Bounce", name: "Demand Notice Generation" },
-  ];
 
   const columns = [
     { key: "caseType", label: "Case Type" },
