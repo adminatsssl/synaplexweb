@@ -1,24 +1,75 @@
 import React, { useState } from "react";
+import axios from "axios";
 import CancelButton from "../../../ReusableComponents/CancelButton";
 import SaveButton from "../../../ReusableComponents/SaveButton";
 import "./LoanPage.css";
 
 const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
-    const [newLoanDetails, setNewLoanDetails] = useState(initialData);
-    const [popupSearchQuery, setPopupSearchQuery] = useState("");
+  const [newLoanDetails, setNewLoanDetails] = useState(initialData);
+  const [popupSearchQuery, setPopupSearchQuery] = useState("");
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewLoanDetails((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewLoanDetails((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handlePopupSearchChange = (e) => {
-        setPopupSearchQuery(e.target.value);
-    };
+  const handlePopupSearchChange = (e) => {
+    setPopupSearchQuery(e.target.value);
+  };
 
-    const handleSave = () => {
-        onSave(newLoanDetails);
-    };
+  const handleSave = async () => {
+  // Map form fields to API structure
+  const payload = {
+    loanNumber: newLoanDetails.loanId,
+    loanType: newLoanDetails.loanType,
+    loanAmount: parseFloat(newLoanDetails.totalDueAmount) || 0,
+    disbursedAmount: parseFloat(newLoanDetails.disbursedAmount) || 0,
+    interestRate: parseFloat(newLoanDetails.annualInterestRate) || 0,
+    loanTenure: parseInt(newLoanDetails.tenure) || 0,
+    startDate: newLoanDetails.lastPaidDate,
+    endDate: newLoanDetails.defaultDate,
+    emisPending: parseInt(newLoanDetails.numberOfEmisPending) || 0,
+    repaymentFrequency: "NA",
+    emiAmount: parseFloat(newLoanDetails.emiAmount) || 0,
+    status: "NA",
+    securityType: "NA",
+    assetDetails: "NA",
+    lastPaymentDate: newLoanDetails.lastPaidDate,
+    nextDueDate: newLoanDetails.npaDate,
+    borrower: {
+      name: newLoanDetails.borrowerName,
+      contactNumber: newLoanDetails.borrowerMobile,
+      email: newLoanDetails.borrowerEmail,
+      creditScore: 750.5,
+      monthlyIncome: 65000.0,
+      jobTitle: "NA",
+      address: {
+        city: "NA",
+        state: "NA",
+        pincode: "NA",
+        addressLine: "NA"
+      }
+    }
+  };
+
+  try {
+    let response;
+    if (editingLoanId) {
+      // Edit: PUT request
+      response = await axios.put(`/api/api/loans/${editingLoanId}`, payload);
+    //   console.log("Loan updated:", response.data);
+    } else {
+      // New: POST request
+      response = await axios.post("/api/api/loans", payload);
+    //   console.log("Loan created:", response.data);
+    }
+    onSave(newLoanDetails);
+    onClose();
+  } catch (error) {
+    // console.error("Error saving loan:", error);
+    alert("Failed to save the loan. Please try again.");
+  }
+};
 
     return (
         <div className="lawyer-modal">
@@ -209,7 +260,7 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
                             </div>
                         </div>
 
-                        <div className="bordered-section">
+                        {/* <div className="bordered-section">
                             <h3 style={{ textDecoration: 'underline' }}>Tenant Details</h3>
                             <div className="form-row">
                                 <div className="form-item" style={{ flex: 1 }}>
@@ -247,9 +298,9 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className="bordered-section">
+                        {/* <div className="bordered-section">
                             <h3 style={{ textDecoration: 'underline' }}>FPR Details</h3>
                             <div className="form-row">
                                 <div className="form-item" style={{ flex: 1 }}>
@@ -279,14 +330,14 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
                 <div className="lawyer-footer">
-                    <CancelButton label="Cancel" onClick={onClose} />
-                    <SaveButton label={editingLoanId ? "Update" : "Save "} onClick={handleSave} />
-                </div>
+          <CancelButton label="Cancel" onClick={onClose} />
+          <SaveButton label={editingLoanId ? "Update" : "Save"} onClick={handleSave} />
+        </div>
             </div>
         </div>
     );
