@@ -21,6 +21,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
     const [tabs, setTabs] = useState([]);
     const [activeTab, setActiveTab] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
+    const [noticeExists, setNoticeExists] = useState(false);
 
     useEffect(() => {
         // Fetch templates from API
@@ -39,10 +40,24 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
             }
         };
 
+        // Check if notice exists for this case
+        const checkNoticeExists = async () => {
+            try {
+                const response = await fetch(`/api/notice/exists/${caseId}`);
+                const data = await response.json();
+                if (data.status === 'SUCCESS') {
+                    setNoticeExists(data.data);
+                }
+            } catch (error) {
+                console.error('Error checking notice existence:', error);
+            }
+        };
+
         fetchTemplates();
+        checkNoticeExists();
         setTabs(tabsAPI);
         setActiveTab(tabsAPI[0]?.id);
-    }, []);
+    }, [caseId]);
 
     const handleSend = () => {
         console.log(`Sending via ${activeTab} using template ID: ${selectedTemplate}`);
@@ -50,6 +65,11 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
     };
 
     const handleGenerateNotice = async () => {
+        if (noticeExists) {
+            alert('A notice has already been generated for this case.');
+            return;
+        }
+
         setIsGenerating(true);
         try {
             const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
@@ -67,6 +87,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
             const data = await response.json();
             if (response.ok) {
                 alert('Notice generated successfully!');
+                setNoticeExists(true); // Update state to reflect that notice now exists
             } else {
                 alert('Failed to generate notice: ' + (data.message || 'Unknown error'));
             }
@@ -111,9 +132,10 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
                             <button 
                                 className="generate-button" 
                                 onClick={handleGenerateNotice}
-                                disabled={isGenerating}
+                                disabled={isGenerating || noticeExists}
+                                title={noticeExists ? 'Notice has already been generated' : ''}
                             >
-                                {isGenerating ? 'Generating...' : 'Generate Notice'}
+                                {isGenerating ? 'Generating...' : noticeExists ? 'Notice Generated' : 'Generate Notice'}
                             </button>
                             <button className="download-button" onClick={() => console.log("Download PDF")}>Download</button>
                         </>
