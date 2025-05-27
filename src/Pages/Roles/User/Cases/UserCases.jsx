@@ -8,11 +8,13 @@ import AddButton from "../../../ReusableComponents/AddButton";
 import IconButton from "../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 import { useNavigate } from "react-router-dom";
+import AssignCase from "./AssignCase.jsx";
 
 const UserCases = () => {
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
 
   const navigate = useNavigate();
@@ -52,12 +54,23 @@ const UserCases = () => {
     setShowModal(true);
   };
 
+  const handleAssign = (caseData, e) => {
+    e.stopPropagation();
+    setSelectedCase(caseData);
+    setShowAssignModal(true);
+  };
+
   const handleRowClick = (caseData) => {
     navigate(`/case/${caseData.CaseID}`);
   };
 
   const closeModal = () => {
     setShowModal(false);
+    setSelectedCase(null);
+  };
+
+  const closeAssignModal = () => {
+    setShowAssignModal(false);
     setSelectedCase(null);
   };
 
@@ -88,11 +101,9 @@ const UserCases = () => {
               padding: 0,
               fontSize: "20px",
               marginRight: "0px",
+              cursor: "pointer",
             }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("FaHandHoldingDollar clicked");
-            }}
+            onClick={(e) => handleAssign(row, e)}
           >
             <FaHandHoldingDollar />
           </button>
@@ -139,6 +150,17 @@ const UserCases = () => {
             <div className="modal-content-usercase-userrole">
               <AddUserCases initialData={selectedCase} onClose={closeModal} />
               <button onClick={closeModal} className="close-button-usercases">
+                X
+              </button>
+            </div>
+          </div>
+        )}
+
+        {showAssignModal && (
+          <div className="modal-overlay-usercase">
+            <div className="modal-content-usercase-userrole">
+              <AssignCase onClose={closeAssignModal} />
+              <button onClick={closeAssignModal} className="close-button-usercases">
                 X
               </button>
             </div>

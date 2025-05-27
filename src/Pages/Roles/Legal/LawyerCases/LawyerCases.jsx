@@ -81,22 +81,7 @@ const LawyerCases = () => {
       disableFilter: true,
       render: (row) => (
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <button
-            style={{
-              color: "#0056B3",
-              background: "none",
-              border: "none",
-              padding: 0,
-              fontSize: "20px",
-              marginRight: "0px",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("FaHandHoldingDollar clicked");
-            }}
-          >
-            <FaHandHoldingDollar />
-          </button>
+          
           <IconButton
             type="edit"
             onClick={(e) => {

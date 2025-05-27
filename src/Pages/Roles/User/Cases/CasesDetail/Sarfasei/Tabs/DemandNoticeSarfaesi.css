@@ -59,6 +59,9 @@
 .demandNotice-Sarfasei-middle-content-heading{
     padding: 10px 20px;
     border-bottom: 1px solid #c3c2c2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .demandNotice-Sarfasei-middle-content-heading h5{
     margin-bottom: 0px;

@@ -9,6 +9,7 @@ import './DemandNoticeSarfaesi.css';
 import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
 import NoticePreviewModal from './NoticePreviewModal';
+import AddButton from "../../../../../../ReusableComponents/AddButton.jsx";
 
 const DemandNoticeSarfasei = () => {
     // Sample data for disposition summary
@@ -92,6 +93,7 @@ const DemandNoticeSarfasei = () => {
             <div className='demandNotice-Sarfasei-middle-content'>
                 <div className='demandNotice-Sarfasei-middle-content-heading'>
                     <h5>Disposition Summary</h5>
+                    <AddButton text="Add " onClick={""} />
                 </div>
                 <div className='demandNotice-Sarfasei-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />
