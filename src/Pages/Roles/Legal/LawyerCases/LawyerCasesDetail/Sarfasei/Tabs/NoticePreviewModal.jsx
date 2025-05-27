@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './NoticePreviewModal.css';
 
-const NoticePreviewModal = ({ isOpen, onClose }) => {
+const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
     if (!isOpen) return null;
+    
+    if (!caseId) {
+        console.error('No caseId provided to NoticePreviewModal');
+        return null;
+    }
 
     const tabsAPI = [
         { id: 'speedPost', label: 'Speed Post' },
@@ -15,6 +20,7 @@ const NoticePreviewModal = ({ isOpen, onClose }) => {
     const [selectedTemplate, setSelectedTemplate] = useState('');
     const [tabs, setTabs] = useState([]);
     const [activeTab, setActiveTab] = useState('');
+    const [isGenerating, setIsGenerating] = useState(false);
 
     useEffect(() => {
         // Fetch templates from API
@@ -43,47 +49,81 @@ const NoticePreviewModal = ({ isOpen, onClose }) => {
         // Replace with actual sending logic
     };
 
-const renderPreviewContent = () => {
-    const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
-    if (!selected) return <p>No template selected.</p>;
+    const handleGenerateNotice = async () => {
+        setIsGenerating(true);
+        try {
+            const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
+            const response = await fetch('/api/notice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    caseId: caseId,
+                    pdfBody: selected?.pdfBody || "Default notice content"
+                })
+            });
 
-    let bodyContent = '';
-    switch (activeTab) {
-        case 'speedPost':
-            bodyContent = selected.pdfBody;
-            break;
-        case 'email':
-            bodyContent = selected.emailBody;
-            break;
-        case 'whatsapp':
-            bodyContent = selected.whatsappBody;
-            break;
-        case 'sms':
-            bodyContent = selected.smsBody;
-            break;
-        default:
-            bodyContent = '';
-    }
+            const data = await response.json();
+            if (response.ok) {
+                alert('Notice generated successfully!');
+            } else {
+                alert('Failed to generate notice: ' + (data.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Error generating notice:', error);
+            alert('Failed to generate notice. Please try again.');
+        } finally {
+            setIsGenerating(false);
+        }
+    };
 
-    return (
-        <>
-            <p><strong>{activeTab === 'email' ? 'Subject:' : ''}</strong> {activeTab === 'email' ? selected.emailSubject : ''}</p>
-            <p>{bodyContent}</p>
+    const renderPreviewContent = () => {
+        const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
+        if (!selected) return <p>No template selected.</p>;
 
-            <div className="action-buttons">
-                {activeTab === 'speedPost' && (
-                    <>
-                        <button className="generate-button" onClick={() => console.log("Generate Notice")}>Generate Notice</button>
-                        <button className="download-button" onClick={() => console.log("Download PDF")}>Download</button>
-                    </>
-                )}
-                <button className="send-button" onClick={handleSend}>Send</button>
-                <button className="cancel-button" onClick={onClose}>Cancel</button>
-            </div>
-        </>
-    );
-};
+        let bodyContent = '';
+        switch (activeTab) {
+            case 'speedPost':
+                bodyContent = selected.pdfBody;
+                break;
+            case 'email':
+                bodyContent = selected.emailBody;
+                break;
+            case 'whatsapp':
+                bodyContent = selected.whatsappBody;
+                break;
+            case 'sms':
+                bodyContent = selected.smsBody;
+                break;
+            default:
+                bodyContent = '';
+        }
 
+        return (
+            <>
+                <p><strong>{activeTab === 'email' ? 'Subject:' : ''}</strong> {activeTab === 'email' ? selected.emailSubject : ''}</p>
+                <p>{bodyContent}</p>
+
+                <div className="action-buttons">
+                    {activeTab === 'speedPost' && (
+                        <>
+                            <button 
+                                className="generate-button" 
+                                onClick={handleGenerateNotice}
+                                disabled={isGenerating}
+                            >
+                                {isGenerating ? 'Generating...' : 'Generate Notice'}
+                            </button>
+                            <button className="download-button" onClick={() => console.log("Download PDF")}>Download</button>
+                        </>
+                    )}
+                    <button className="send-button" onClick={handleSend}>Send</button>
+                    <button className="cancel-button" onClick={onClose}>Cancel</button>
+                </div>
+            </>
+        );
+    };
 
     return (
         <div className="modal-overlay">

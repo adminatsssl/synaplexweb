@@ -11,6 +11,12 @@ import ChequeBounceContent from "./ChequeBounce/ChequeBounceContent.jsx";
 const LawyerCasesDetail = ({ caseData }) => {
     if (!caseData) return null;
 
+    // Debug: Log the caseData structure
+    console.log('Case Data:', caseData);
+
+    // Try to find the case ID from various possible properties
+    const caseId = caseData.id || caseData.ID || caseData.caseId || caseData.CaseID || caseData.LoanID;
+
     return (
         <Layout>
             <div className="case-detailpage-container">
@@ -50,7 +56,7 @@ const LawyerCasesDetail = ({ caseData }) => {
                         <p>Loan ID<br /><strong>{caseData.LoanID}</strong></p>
                         <p>Amount<br /><strong>{caseData.LoanAmount}</strong> </p>
                         <p>Tenure<br /><strong>{caseData.CaseType}</strong> </p>
-                        <p>Annual Interest Rate<br /><strong> 20</strong> </p>
+                        <p>Annual Interest Rate<br /><strong>20</strong> </p>
                         <p>Loan Type<br /><strong>Personal Loan</strong> </p>
                         <p>Default Date<br /><strong>{caseData.CreateDate}</strong></p>
                         <p>NPA Date<br /><strong>{caseData.NPADate}</strong> </p>
@@ -59,7 +65,7 @@ const LawyerCasesDetail = ({ caseData }) => {
                 </div>
                 <div className="Sarfasei-container">
                     {caseData.CaseType?.toLowerCase() === "cheque bounce" && <ChequeBounceContent />}
-                    {caseData.CaseType?.toLowerCase() === "sarfaesi" && <SarfaseiContent />}
+                    {caseData.CaseType?.toLowerCase() === "sarfaesi" && <SarfaseiContent caseId={caseId} />}
                     {caseData.CaseType?.toLowerCase() === "arbitration" && <ArbitrationContent />}
                 </div>
 

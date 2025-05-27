@@ -11,7 +11,12 @@ import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
 import NoticePreviewModal from './NoticePreviewModal';
 import AddButton from "../../../../../../ReusableComponents/AddButton.jsx";
 
-const DemandNoticeSarfasei = () => {
+const DemandNoticeSarfasei = ({ caseId }) => {
+    if (!caseId) {
+        console.error('No caseId provided to DemandNoticeSarfasei');
+        return null;
+    }
+
     // Sample data for disposition summary
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -115,7 +120,7 @@ const DemandNoticeSarfasei = () => {
                 <SaveButton label='Save & Next' />
 
             </div>
-            <NoticePreviewModal isOpen={isModalOpen} onClose={closeModal} />
+            <NoticePreviewModal isOpen={isModalOpen} onClose={closeModal} caseId={caseId} />
 
         </div>
 
