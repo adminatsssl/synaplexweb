@@ -1,68 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from "../../../Layout/Layout.jsx";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
-
-const dummyNotices = [
-  {
-    NoticeDate: '2025-04-10',
-    DueDate: '2025-05-01',
-    Status: 'Pending',
-    isgeneratePDF: true,
-    AuctionDate: '2025-05-15',
-    AuctionLocation: 'New York',
-    ValuationAmount: 150000,
-    NoticeTemplate: 'Template A',
-    NoticeId: 'N1001',
-    TrackingId: 'TRK001',
-    NoticeType: 'Type A',
-    Stage: 'Initial',
-  },
-  {
-    NoticeDate: '2025-03-28',
-    DueDate: '2025-04-20',
-    Status: 'Completed',
-    isgeneratePDF: false,
-    AuctionDate: '2025-05-02',
-    AuctionLocation: 'Los Angeles',
-    ValuationAmount: 220000,
-    NoticeTemplate: 'Template B',
-    NoticeId: 'N1002',
-    TrackingId: 'TRK002',
-    NoticeType: 'Type B',
-    Stage: 'Final',
-  },
-];
-
-const columns = [
-  { key: 'NoticeDate', label: 'Notice Date' },
-  { key: 'DueDate', label: 'Due Date' },
-  { key: 'Status', label: 'Status' },
-  {
-    key: 'isgeneratePDF',
-    label: 'Generate PDF',
-    render: (row) => (row.isgeneratePDF ? 'Yes' : 'No'),
-  },
-  { key: 'AuctionDate', label: 'Auction Date' },
-  { key: 'AuctionLocation', label: 'Auction Location' },
-  {
-    key: 'ValuationAmount',
-    label: 'Valuation',
-    render: (row) => `$${row.ValuationAmount.toLocaleString()}`,
-  },
-  { key: 'NoticeTemplate', label: 'Template' },
-  { key: 'NoticeId', label: 'Notice ID' },
-  { key: 'TrackingId', label: 'Tracking ID' },
-  { key: 'NoticeType', label: 'Type' },
-  { key: 'Stage', label: 'Stage' },
-];
+import IconButton from "../../../ReusableComponents/IconButton";
+import { FaUser, FaEye } from "react-icons/fa";
+import { MdMessage } from "react-icons/md";
 
 const AdminNotices = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchNotices();
+  }, []);
+
+  const fetchNotices = async () => {
+    try {
+      const response = await fetch('/api/notice');
+      const result = await response.json();
+      
+      if (result.status === 'SUCCESS') {
+        // Transform the data to match the grid structure
+        const transformedData = result.data.map(notice => ({
+          noticeId: notice.id,
+          caseNumber: notice.caseNumber,
+          noticeDate: new Date(notice.createdAt).toLocaleDateString(),
+          status: notice.caseStatus,
+          workflowType: notice.workflowType,
+          loanNumber: notice.loanNumber,
+          loanType: notice.loanType,
+          borrowerName: notice.borrowerName,
+          borrowerContact: notice.borrowerContact,
+          borrowerEmail: notice.borrowerEmail
+        }));
+        setData(transformedData);
+      } else {
+        setError('Failed to fetch notices');
+      }
+    } catch (err) {
+      setError('Error fetching notices: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const columns = [
+    { key: "noticeId", label: "Notice ID" },
+    { key: "caseNumber", label: "Case Number" },
+    { key: "noticeDate", label: "Notice Date" },
+    { key: "status", label: "Status" },
+    { key: "workflowType", label: "Workflow Type" },
+    { key: "loanNumber", label: "Loan Number" },
+    { key: "loanType", label: "Loan Type" },
+    { key: "borrowerName", label: "Borrower Name" },
+    { key: "borrowerContact", label: "Contact" },
+    { key: "borrowerEmail", label: "Email" },
+    {
+      key: "actions",
+      label: "Actions",
+      disableFilter: true,
+      render: (row) => (
+        <div className="userNotice-actions">
+          <button className="userNoticeBtn1">
+            <FaUser />
+          </button>
+          <button className="userNoticeBtn1">
+            <FaEye />
+          </button>
+          <button className="userNoticeBtn1">
+            <MdMessage />
+          </button>
+          <IconButton type="delete" className="userNoticeBtn" />
+        </div>
+      ),
+    },
+  ];
+
+  if (loading) return (
+    <Layout>
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-800 mb-6">Notice</h2>
+          <p>Loading notices...</p>
+        </div>
+      </div>
+    </Layout>
+  );
+
+  if (error) return (
+    <Layout>
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-800 mb-6">Notice</h2>
+          <p style={{ color: 'red' }}>{error}</p>
+        </div>
+      </div>
+    </Layout>
+  );
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-100 p-8">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-bold text-gray-800 mb-6">Notice</h2>
-          <ReusableGrid columns={columns} data={dummyNotices} />
+          <ReusableGrid columns={columns} data={data} />
         </div>
       </div>
     </Layout>
