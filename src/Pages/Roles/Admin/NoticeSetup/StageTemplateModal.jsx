@@ -3,16 +3,17 @@ import axios from "axios";
 import "./StageConfig.css";
 import SaveButton from "../../../ReusableComponents/SaveButton";
 import CancelButton from "../../../ReusableComponents/CancelButton";
+import Select from 'react-select';
 
 const StageTemplateModal = ({ onClose, initialData }) => {
   const [formData, setFormData] = useState({
     caseType: "",
     stageName: "",
-    templateName: "",
+    selectedTemplates: [],
   });
 
   const [workflowData, setWorkflowData] = useState([]);
-  const [templateNames, setTemplateNames] = useState([]);
+  const [templateOptions, setTemplateOptions] = useState([]);
   const [stageOptions, setStageOptions] = useState([]);
 
   // Load initial form data
@@ -21,7 +22,8 @@ const StageTemplateModal = ({ onClose, initialData }) => {
       setFormData({
         caseType: initialData.caseType || "",
         stageName: initialData.stageName || "",
-        templateName: initialData.templateName || "",
+        selectedTemplates: initialData.templateNames ? 
+          initialData.templateNames.map(name => ({ value: name, label: name })) : [],
       });
     }
   }, [initialData]);
@@ -33,15 +35,18 @@ const StageTemplateModal = ({ onClose, initialData }) => {
         const response = await axios.get("/api/api/templates");
         const dataArray = response.data.data;
         if (Array.isArray(dataArray)) {
-          const names = dataArray.map((template) => template.name);
-          setTemplateNames(names);
+          const options = dataArray.map((template) => ({
+            value: template.name,
+            label: template.name
+          }));
+          setTemplateOptions(options);
         } else {
           console.warn("API 'data' property is not an array:", dataArray);
-          setTemplateNames([]);
+          setTemplateOptions([]);
         }
       } catch (error) {
         console.error("Error fetching templates:", error);
-        setTemplateNames([]);
+        setTemplateOptions([]);
       }
     };
     fetchTemplates();
@@ -88,15 +93,23 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     }));
   };
 
+  // Handle template selection
+  const handleTemplateChange = (selectedOptions) => {
+    setFormData(prev => ({
+      ...prev,
+      selectedTemplates: selectedOptions || []
+    }));
+  };
+
   // Final save handler
   const handleSave = async () => {
     console.log("Form data to save:", formData);
 
     const postData = {
-    workflowTypeName: formData.caseType,
-    stageName: formData.stageName,
-    templateNames: [formData.templateName],  // <-- Here
-  };
+      workflowTypeName: formData.caseType,
+      stageName: formData.stageName,
+      templateNames: formData.selectedTemplates.map(template => template.value),
+    };
 
     try {
       const response = await axios.post(
@@ -104,11 +117,11 @@ const StageTemplateModal = ({ onClose, initialData }) => {
         postData
       );
       console.log("Save response:", response.data);
-      alert("Template attached successfully!");
+      alert("Templates attached successfully!");
       onClose();
     } catch (error) {
       console.error("Error saving template:", error);
-      alert("Failed to attach template. Please try again.");
+      alert("Failed to attach templates. Please try again.");
     }
   };
 
@@ -155,29 +168,28 @@ const StageTemplateModal = ({ onClose, initialData }) => {
           </label>
 
           <label>
-            Template Name
-            <select
-              name="templateName"
-              value={formData.templateName}
-              onChange={handleChange}
-            >
-              <option value="">Select Template Name</option>
-              {templateNames.map((name, index) => (
-                <option key={index} value={name}>
-                  {name}
-                </option>
-              ))}
-            </select>
+            Template Names
+            <Select
+              isMulti
+              name="templates"
+              options={templateOptions}
+              value={formData.selectedTemplates}
+              onChange={handleTemplateChange}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder="Select templates..."
+            />
           </label>
-        </div>
-        <hr />
-        <div className="stageconfig-modal-footer">
-          <CancelButton onClick={onClose} className="stageconfig-cancel-btn" />
-          <SaveButton
-            onClick={handleSave}
-            className="stageconfig-save-btn"
-            label="Save"
-          />
+        
+          <hr />
+          <div className="stageconfig-modal-footer">
+            <CancelButton onClick={onClose} className="stageconfig-cancel-btn" />
+            <SaveButton
+              onClick={handleSave}
+              className="stageconfig-save-btn"
+              label="Save"
+            />
+          </div>
         </div>
       </div>
     </div>

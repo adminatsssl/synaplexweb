@@ -61,7 +61,7 @@ const AdminNotices = () => {
       disableFilter: true,
       render: (row) => (
         <div className="userNotice-actions">
-          <button className="userNoticeBtn1">
+          {/* <button className="userNoticeBtn1">
             <FaUser />
           </button>
           <button className="userNoticeBtn1">
@@ -69,7 +69,7 @@ const AdminNotices = () => {
           </button>
           <button className="userNoticeBtn1">
             <MdMessage />
-          </button>
+          </button> */}
           <IconButton type="delete" className="userNoticeBtn" />
         </div>
       ),
