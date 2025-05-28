@@ -48,33 +48,22 @@ const AddUserCases = ({ initialData = null, onClose }) => {
     dateOfFiling: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        cnrNo: "",
-        loanId: initialData.LoanID || "",
-        borrower: initialData.Borrower || "",
-        loanType: initialData.LoanType || "",
-        loanAmount: initialData.LoanAmount || 0,
-        defaultDate: initialData.DefaultDate || "",
-        npaDate: initialData.NPADate || "",
-        autoAssign: false,
-        crnNo: initialData.CrnNo || "",
-        courtType: initialData.Court || "",
-        hearingDate: initialData.HearingDate || "",
-        status: initialData.Status || "Initiated",
-        caseType: initialData.CaseType || "",
-        fiNo: initialData.FiNo || 0,
-        fiYear: initialData.FiYear || 0,
-        regNo: initialData.RegNo || 0,
-        regYear: initialData.RegYear || 0,
-        dateOfFiling: initialData.DateOfFiling || "",
-      });
+      setFormData(prevData => ({
+        ...prevData,
+        loanId: initialData.loanId || "",
+        borrower: initialData.borrower || "",
+        loanType: initialData.loanType || "",
+        loanAmount: initialData.loanAmount || 0,
+        defaultDate: initialData.defaultDate || "",
+        npaDate: initialData.npaDate || "",
+      }));
     }
   }, [initialData]);
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -84,38 +73,18 @@ const AddUserCases = ({ initialData = null, onClose }) => {
     }));
   };
 
-  const handleSave = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
-    setMessage("");
-
     try {
+      // Get court ID from court type
+      const courtId = 1; // Replace with actual court ID logic
+
+      // Extract loan ID from form data
+      const loanId = formData.loanId;
+
       if (!initialData) {
-        // ADD mode
-        const borrowerResponse = await axios.post("/odata/usercases/Borrowers", {
-          Name: formData.borrower,
-        });
-        const borrowerId = borrowerResponse.data.id;
-
-        const loanResponse = await axios.post("/odata/usercases/Loans", {
-          BorrowerId: borrowerId,
-          LoanType: formData.loanType,
-          LoanAmount: parseFloat(formData.loanAmount),
-          DefaultDate: formData.defaultDate,
-          NpaDate: formData.npaDate,
-        });
-        const loanId = loanResponse.data.id;
-
-        const courtResponse = await axios.post("/odata/usercases/Courts", {
-          CourtType: formData.courtType,
-          FiNo: parseInt(formData.fiNo, 10),
-          FiYear: parseInt(formData.fiYear, 10),
-          RegNo: parseInt(formData.regNo, 10),
-          RegYear: parseInt(formData.regYear, 10),
-          HearingDate: formData.hearingDate,
-          DateOfFiling: formData.dateOfFiling,
-        });
-        const courtId = courtResponse.data.id;
-
+        // CREATE mode
         await axios.post("/odata/usercases/LexCases", {
           LoanId: loanId,
           CourtId: courtId,
@@ -186,20 +155,19 @@ const AddUserCases = ({ initialData = null, onClose }) => {
 
               <div className="addusercase-loanID">
                 <input
-                type="text"
-                name="loanId"
-                value={formData.loanId}
-                onChange={handleChange}
-                placeholder="Loan ID"
-                
-              />
-              <button type="button">
-                <FaSearch />
-              </button>
-
+                  type="text"
+                  name="loanId"
+                  value={formData.loanId}
+                  onChange={handleChange}
+                  placeholder="Loan ID"
+                  disabled={!!initialData}
+                />
+                {!initialData && (
+                  <button type="button">
+                    <FaSearch />
+                  </button>
+                )}
               </div>
-              
-              
             </div>
 
             <div className="addusercase-form-group-checkbox">
@@ -223,9 +191,24 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 value={formData.borrower}
                 onChange={handleChange}
                 placeholder="Borrower Name"
+                disabled={!!initialData}
               />
             </div>
 
+            <div className="addusercase-form-group">
+              <label>Loan Type</label>
+              <input 
+                type="text"
+                name="loanType" 
+                value={formData.loanType}
+                onChange={handleChange}
+                placeholder="Loan Type"
+                disabled={!!initialData}
+              />
+            </div>
+          </div>
+
+          <div className="addusercase-form-row">
             <div className="addusercase-form-group">
               <label>Loan Amount</label>
               <input
@@ -233,28 +216,11 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="loanAmount"
                 value={formData.loanAmount}
                 onChange={handleChange}
-                placeholder="0.00"
+                placeholder="Enter Amount"
+                disabled={!!initialData}
               />
             </div>
 
-            <div className="addusercase-form-group">
-              <label>Loan Type</label>
-              <select
-                name="loanType"
-                value={formData.loanType}
-                onChange={handleChange}
-              >
-                <option value="">Select Loan Type</option>
-                {loanTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="addusercase-form-row">
             <div className="addusercase-form-group">
               <label>Default Date</label>
               <input
@@ -262,6 +228,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="defaultDate"
                 value={formData.defaultDate}
                 onChange={handleChange}
+                disabled={!!initialData}
               />
             </div>
 
@@ -272,50 +239,36 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="npaDate"
                 value={formData.npaDate}
                 onChange={handleChange}
+                disabled={!!initialData}
               />
             </div>
           </div>
         </div>
 
-        {/* Court and Case Details */}
+        {/* Case Details */}
         <div className="addusercase-form-section addusercase-card">
-          <h3>Court & Case Detail</h3>
+          <h3>Case Detail</h3>
 
-          <div className="addusercase-form-row2">
+          <div className="addusercase-form-row">
             <div className="addusercase-form-group">
-              <label>CRN No</label>
+              <label>CRN No.</label>
               <input
                 type="text"
                 name="crnNo"
                 value={formData.crnNo}
                 onChange={handleChange}
-                placeholder="CRN No"
+                placeholder="Enter CRN No"
               />
             </div>
 
             <div className="addusercase-form-group">
-              <label>Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
-                <option>Initiated</option>
-                <option>Pending</option>
-                <option>Closed</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="addusercase-form-row2">
-            <div className="addusercase-form-group">
-              <label>Court Type</label>
+              <label>Court</label>
               <input
                 type="text"
                 name="courtType"
                 value={formData.courtType}
                 onChange={handleChange}
-                placeholder="Court Type"
+                placeholder="Select Court"
               />
             </div>
 
@@ -327,6 +280,21 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 value={formData.hearingDate}
                 onChange={handleChange}
               />
+            </div>
+          </div>
+
+          <div className="addusercase-form-row">
+            <div className="addusercase-form-group">
+              <label>Status</label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+              >
+                <option value="Initiated">Initiated</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
             </div>
 
             <div className="addusercase-form-group">
@@ -346,15 +314,15 @@ const AddUserCases = ({ initialData = null, onClose }) => {
             </div>
           </div>
 
-          <div className="addusercase-form-row2">
+          <div className="addusercase-form-row">
             <div className="addusercase-form-group">
-              <label>FI No</label>
+              <label>FI No.</label>
               <input
                 type="number"
                 name="fiNo"
                 value={formData.fiNo}
                 onChange={handleChange}
-                placeholder="FI No"
+                placeholder="Enter FI No"
               />
             </div>
 
@@ -365,7 +333,31 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="fiYear"
                 value={formData.fiYear}
                 onChange={handleChange}
-                placeholder="FI Year"
+                placeholder="Enter FI Year"
+              />
+            </div>
+          </div>
+
+          <div className="addusercase-form-row">
+            <div className="addusercase-form-group">
+              <label>Reg No.</label>
+              <input
+                type="number"
+                name="regNo"
+                value={formData.regNo}
+                onChange={handleChange}
+                placeholder="Enter Reg No"
+              />
+            </div>
+
+            <div className="addusercase-form-group">
+              <label>Reg Year</label>
+              <input
+                type="number"
+                name="regYear"
+                value={formData.regYear}
+                onChange={handleChange}
+                placeholder="Enter Reg Year"
               />
             </div>
 
@@ -379,49 +371,15 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               />
             </div>
           </div>
-
-          <div className="addusercase-form-row2">
-            <div className="addusercase-form-group">
-              <label>Reg No</label>
-              <input
-                type="number"
-                name="regNo"
-                value={formData.regNo}
-                onChange={handleChange}
-                placeholder="Reg No"
-              />
-            </div>
-
-            <div className="addusercase-form-group">
-              <label>Reg Year</label>
-              <input
-                type="number"
-                name="regYear"
-                value={formData.regYear}
-                onChange={handleChange}
-                placeholder="Reg Year"
-              />
-            </div>
-          </div>
         </div>
       </div>
 
-      <div className="addusercase-action-buttons">
-        <CancelButton
-          onClick={handleCancel}
-          className="addusercase-cancel-button"
-        />
-        <SaveButton
-          onClick={handleSave}
-          disabled={loading}
-          className="addusercase-save-button"
-          label={loading ? "Saving..." : "Save"}
-        />
+      <div className="addusercase-button-container">
+        <CancelButton onClick={handleCancel} />
+        <SaveButton onClick={handleSubmit} disabled={loading} />
       </div>
 
-      {message && (
-        <div className="addusercase-message-container">{message}</div>
-      )}
+      {message && <div className="message">{message}</div>}
     </div>
   );
 };

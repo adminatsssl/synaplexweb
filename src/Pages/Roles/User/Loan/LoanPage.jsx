@@ -14,6 +14,7 @@ const LoanPage = () => {
     const [isAddLoanPopupVisible, setIsAddLoanPopupVisible] = useState(false);
     const [editingLoanId, setEditingLoanId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedLoan, setSelectedLoan] = useState(null);
 
     useEffect(() => {
         fetch("/api/api/loans")
@@ -99,12 +100,14 @@ const LoanPage = () => {
         setSearchQuery(e.target.value);
     };
 
-    const handleOpenLoanCase = () => {
+    const handleOpenLoanCase = (loan) => {
+        setSelectedLoan(loan);
         setShowLoanCase(true);
     };
 
     const handleCloseLoanCase = () => {
         setShowLoanCase(false);
+        setSelectedLoan(null);
     };
 
     const filteredLoans = loanData.filter((loan) => {
@@ -157,7 +160,7 @@ const LoanPage = () => {
             disableFilter: true,
             render: (row) => (
                 <div className="actions-cell">
-                    <button className="certificate-view-btn" onClick={handleOpenLoanCase}><PiCertificate /></button>
+                    <button className="certificate-view-btn" onClick={() => handleOpenLoanCase(row)}><PiCertificate /></button>
                     <IconButton type="edit" onClick={() => handleEditLoan(row)} />
                 </div>
             ),
@@ -224,7 +227,17 @@ const LoanPage = () => {
                 {showLoanCase && (
                     <div className="modal-overlay-usercase">
                         <div className="modal-content-usercase-userrole">
-                            <AddUserCases onClose={handleCloseLoanCase} />
+                            <AddUserCases 
+                                onClose={handleCloseLoanCase} 
+                                initialData={{
+                                    loanId: selectedLoan.loanId,
+                                    borrower: selectedLoan.borrowerName,
+                                    loanType: selectedLoan.type,
+                                    loanAmount: selectedLoan.totalDueAmount,
+                                    defaultDate: selectedLoan.defaultDate,
+                                    npaDate: selectedLoan.npaDate,
+                                }}
+                            />
                             <button onClick={handleCloseLoanCase} className="close-button-usercases">
                                 X
                             </button>
