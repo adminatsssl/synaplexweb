@@ -51,6 +51,30 @@ const NoticeSetupTemplate = () => {
     fetchTemplates(); // Refresh the templates list
   };
 
+  const handleDelete = async (template) => {
+    if (!template.id) {
+      alert('Cannot delete template: Missing template ID');
+      return;
+    }
+
+    const confirmDelete = window.confirm(`Are you sure you want to delete the template "${template.name}"?`);
+    if (!confirmDelete) return;
+
+    try {
+      const response = await axios.delete(`/api/api/templates/${template.id}`);
+      if (response.data.status === 'SUCCESS') {
+        alert('Template deleted successfully!');
+        fetchTemplates(); // Refresh the list
+      } else {
+        alert('Failed to delete template: ' + (response.data.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error deleting template:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Unknown error occurred';
+      alert('Failed to delete template: ' + errorMessage);
+    }
+  };
+
   const columns = [
     { key: "name", label: "Template Name" },
     { key: "createdOn", label: "Created On" },
@@ -61,7 +85,13 @@ const NoticeSetupTemplate = () => {
       render: (template) => (
         <div className="text-right space-x-2">
           <IconButton type="edit" onClick={() => handleEdit(template)} />
-          <IconButton type="delete" />
+          <IconButton 
+            type="delete" 
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent any parent handlers from firing
+              handleDelete(template);
+            }} 
+          />
         </div>
       ),
     },
