@@ -18,58 +18,58 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
   };
 
   const handleSave = async () => {
-  // Map form fields to API structure
-  const payload = {
-    loanNumber: newLoanDetails.loanId,
-    loanType: newLoanDetails.loanType,
-    loanAmount: parseFloat(newLoanDetails.totalDueAmount) || 0,
-    disbursedAmount: parseFloat(newLoanDetails.disbursedAmount) || 0,
-    interestRate: parseFloat(newLoanDetails.annualInterestRate) || 0,
-    loanTenure: parseInt(newLoanDetails.tenure) || 0,
-    startDate: newLoanDetails.lastPaidDate,
-    endDate: newLoanDetails.defaultDate,
-    emisPending: parseInt(newLoanDetails.numberOfEmisPending) || 0,
-    repaymentFrequency: "NA",
-    emiAmount: parseFloat(newLoanDetails.emiAmount) || 0,
-    status: "NA",
-    securityType: "NA",
-    assetDetails: "NA",
-    lastPaymentDate: newLoanDetails.lastPaidDate,
-    nextDueDate: newLoanDetails.npaDate,
-    borrower: {
-      name: newLoanDetails.borrowerName,
-      contactNumber: newLoanDetails.borrowerMobile,
-      email: newLoanDetails.borrowerEmail,
-      creditScore: 750.5,
-      monthlyIncome: 65000.0,
-      jobTitle: "NA",
-      address: {
-        city: "NA",
-        state: "NA",
-        pincode: "NA",
-        addressLine: "NA"
+    // Map form fields to API structure
+    const payload = {
+      loanNumber: newLoanDetails.loanNumber,
+      loanType: newLoanDetails.loanType,
+      loanAmount: parseFloat(newLoanDetails.totalDueAmount) || 0,
+      disbursedAmount: parseFloat(newLoanDetails.disbursedAmount) || 0,
+      interestRate: parseFloat(newLoanDetails.annualInterestRate) || 0,
+      loanTenure: parseInt(newLoanDetails.tenure) || 0,
+      startDate: newLoanDetails.lastPaidDate,
+      endDate: newLoanDetails.defaultDate,
+      emisPending: parseInt(newLoanDetails.numberOfEmisPending) || 0,
+      repaymentFrequency: "NA",
+      emiAmount: parseFloat(newLoanDetails.emiAmount) || 0,
+      status: "NA",
+      securityType: "NA",
+      assetDetails: "NA",
+      lastPaymentDate: newLoanDetails.lastPaidDate,
+      nextDueDate: newLoanDetails.npaDate,
+      borrower: {
+        name: newLoanDetails.borrowerName,
+        contactNumber: newLoanDetails.borrowerMobile,
+        email: newLoanDetails.borrowerEmail,
+        creditScore: 750.5,
+        monthlyIncome: 65000.0,
+        jobTitle: "NA",
+        address: {
+          city: "NA",
+          state: "NA",
+          pincode: "NA",
+          addressLine: "NA"
+        }
       }
+    };
+
+    try {
+      let response;
+      if (editingLoanId) {
+        // Edit: PUT request
+        response = await axios.put(`/api/api/loans/${editingLoanId}`, payload);
+      //   console.log("Loan updated:", response.data);
+      } else {
+        // New: POST request
+        response = await axios.post("/api/api/loans", payload);
+      //   console.log("Loan created:", response.data);
+      }
+      onSave(newLoanDetails);
+      onClose();
+    } catch (error) {
+      // console.error("Error saving loan:", error);
+      alert("Failed to save the loan. Please try again.");
     }
   };
-
-  try {
-    let response;
-    if (editingLoanId) {
-      // Edit: PUT request
-      response = await axios.put(`/api/api/loans/${editingLoanId}`, payload);
-    //   console.log("Loan updated:", response.data);
-    } else {
-      // New: POST request
-      response = await axios.post("/api/api/loans", payload);
-    //   console.log("Loan created:", response.data);
-    }
-    onSave(newLoanDetails);
-    onClose();
-  } catch (error) {
-    // console.error("Error saving loan:", error);
-    alert("Failed to save the loan. Please try again.");
-  }
-};
 
     return (
         <div className="lawyer-modal">
@@ -97,11 +97,12 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
                         <div className="form-grid">
                             <div className="form-column">
                                 <div className="form-item">
-                                    <label htmlFor="loanId">Loan ID</label>
+                                    <label htmlFor="loanNumber">Loan Number</label>
                                     <input
-                                        type="text" id="loanId" name="loanId"
-                                        value={newLoanDetails.loanId} onChange={handleInputChange}
-                                        placeholder="Enter Loan ID"
+                                        type="text" id="loanNumber" name="loanNumber"
+                                        value={newLoanDetails.loanNumber}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter Loan Number"
                                         disabled={!!editingLoanId}
                                     />
                                 </div>

@@ -23,7 +23,7 @@ const LoanPage = () => {
                 if (response.status === "SUCCESS" && Array.isArray(response.data)) {
                     const mappedLoans = response.data.map((item) => ({
                         id: item.id,
-                        loanId: item.loanNumber,
+                        loanNumber: item.loanNumber,
                         type: item.loanType,
                         borrowerName: item.borrower.name,
                         totalDueAmount: item.loanAmount - item.disbursedAmount,
@@ -78,7 +78,7 @@ const LoanPage = () => {
             );
         } else {
             const newLoanEntry = {
-                id: newLoanDetails.loanId,
+                id: newLoanDetails.loanNumber,
                 type: newLoanDetails.loanType,
                 borrowerName: newLoanDetails.borrowerName || newLoanDetails.clientName || "N/A",
                 totalDueAmount: newLoanDetails.totalDueAmount,
@@ -129,8 +129,8 @@ const LoanPage = () => {
 
     const columns = [
         {
-            key: "id",
-            label: "Loan ID",
+            key: "loanNumber",
+            label: "Loan Number",
         },
         {
             key: "type",
@@ -194,7 +194,7 @@ const LoanPage = () => {
                         initialData={editingLoanId ? 
                             loanData.find(loan => loan.id === editingLoanId) || {} : 
                             {
-                                loanId: "",
+                                loanNumber: "",
                                 tenure: "",
                                 totalDueAmount: "",
                                 clientName: "",
@@ -230,7 +230,7 @@ const LoanPage = () => {
                             <AddUserCases 
                                 onClose={handleCloseLoanCase} 
                                 initialData={{
-                                    loanId: selectedLoan.loanId,
+                                    loanId: selectedLoan.loanNumber,
                                     borrower: selectedLoan.borrowerName,
                                     loanType: selectedLoan.type,
                                     loanAmount: selectedLoan.totalDueAmount,

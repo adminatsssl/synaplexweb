@@ -150,7 +150,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
           <div className="addusercase-form-row">
             <div className="addusercase-form-group-loanId">
               <div className="addusercase-form-group-loanId-label">
-                  <label>Loan ID</label>
+                  <label>Loan Number</label>
               </div>
 
               <div className="addusercase-loanID">
@@ -159,7 +159,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                   name="loanId"
                   value={formData.loanId}
                   onChange={handleChange}
-                  placeholder="Loan ID"
+                  placeholder="Loan Number"
                   disabled={!!initialData}
                 />
                 {!initialData && (
