@@ -3,65 +3,94 @@ import { Autocomplete, TextField } from "@mui/material";
 import "./LegalWorkflow.css";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import Addworkflowstages from "./Addworkflowstages";
-import JSONbig from "json-bigint";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
-
-const caseTypes = [
-  "Arbitration",
-  "SARFAESI",
-  "Cheque_Bounce",
-  "Debt_Recovery_Tribunal__DRT_",
-  "Civil_Court",
-  "IBC_NCLT",
-  "Criminal_Complaints",
-];
+import axios from "axios";
 
 const WorkflowModal = ({ onClose, workflow }) => {
-  const [caseType, setCaseType] = useState(workflow?.CaseType || "");
-  const [description, setDescription] = useState(workflow?.Description || "");
-  const [dispositionStages, setDispositionStages] = useState([]);
-  const [selectedStages, setSelectedStages] = useState([]);
-  const [csrfToken, setCsrfToken] = useState("");
+  const [name, setName] = useState(workflow?.name || "");
+  const [description, setDescription] = useState(workflow?.description || "");
+  const [workflowStages, setWorkflowStages] = useState([]);
   const [showStagePopup, setShowStagePopup] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const isEdit = !!workflow;
-  const [workflowStages, setWorkflowStages] = useState([
-    {
-      name: "Initiation",
-      order: 1,
-      displayName: "Initiation",
-      mouseOver: "Initiation",
-      isActive: "Yes",
-      autoNotice: "No",
-      autoFrequency: 0,
-      autoValue: 0,
-    },
-    {
-      name: "Demand Notice",
-      order: 2,
-      displayName: "Demand Notice",
-      mouseOver: "Demand Notice",
-      isActive: "Yes",
-      autoNotice: "No",
-      autoFrequency: 0,
-      autoValue: 0,
-    },
-  ]);
+  // Map workflow stages when workflow prop changes
+  useEffect(() => {
+    if (workflow?.workflowStages) {
+      const mappedStages = workflow.workflowStages.map(stage => ({
+        name: stage.stageName,
+        order: stage.stageOrder,
+        displayName: stage.stageName,
+        mouseOver: stage.stageName,
+        isActive: true
+      }));
+      setWorkflowStages(mappedStages);
+    }
+  }, [workflow]);
 
-  const addStage = () => {
-    const newStage = {
-      name: `New Stage ${workflowStages.length + 1}`,
-      order: workflowStages.length + 1,
-      displayName: `New Stage ${workflowStages.length + 1}`,
-      mouseOver: `New Stage ${workflowStages.length + 1}`,
-      isActive: "Yes",
-      autoNotice: "No",
-      autoFrequency: 0,
-      autoValue: 0,
-    };
-    setWorkflowStages([...workflowStages, newStage]);
+  const handleSave = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    
+    if (!name.trim()) {
+      alert("Workflow name is required");
+      return;
+    }
+
+    if (workflowStages.length === 0) {
+      alert("At least one workflow stage is required");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload = {
+        name,
+        description,
+        workflowStages: workflowStages.map(stage => ({
+          stageName: stage.name,
+          stageOrder: stage.order
+        }))
+      };
+
+      let response;
+      if (workflow?.id) {
+        response = await axios.put(`/api/api/workflowType/${workflow.id}`, payload);
+      } else {
+        response = await axios.post('/api/api/workflowType', payload);
+      }
+
+      if (response.data.status === 'SUCCESS') {
+        alert(`Workflow ${workflow?.id ? 'updated' : 'created'} successfully!`);
+        onClose();
+      } else {
+        alert(`Failed to ${workflow?.id ? 'update' : 'create'} workflow: ${response.data.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error saving workflow:', error);
+      alert(`Failed to ${workflow?.id ? 'update' : 'create'} workflow: ${error.response?.data?.message || error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddStage = (newStage) => {
+    // Check if stage order already exists
+    const orderExists = workflowStages.some(stage => stage.order === newStage.order);
+    if (orderExists) {
+      alert(`Stage order ${newStage.order} already exists. Please use a different order number.`);
+      return;
+    }
+
+    setWorkflowStages([...workflowStages, {
+      name: newStage.name,
+      order: newStage.order,
+      displayName: newStage.displayName,
+      mouseOver: newStage.mouseOver,
+      isActive: newStage.isActive === "Yes"
+    }]);
   };
 
   const deleteStage = (index) => {
@@ -70,112 +99,15 @@ const WorkflowModal = ({ onClose, workflow }) => {
     setWorkflowStages(updated);
   };
 
-  const handleAddStage = (newStage) => {
-    setWorkflowStages([...workflowStages, newStage]);
-  };
-
-  useEffect(() => {
-    fetchCsrfToken();
-    fetchDispositionStages();
-  }, []);
-
-  const fetchCsrfToken = async () => {
-    try {
-      const response = await fetch("/odata/legal/$metadata", {
-        method: "GET",
-        headers: {
-          "X-CSRF-Token": "fetch",
-        },
-        credentials: "include",
-      });
-      const token = response.headers.get("x-csrf-token");
-      setCsrfToken(token || "");
-    } catch (error) {
-      console.error("Error fetching CSRF token:", error);
-    }
-  };
-
-  const fetchDispositionStages = async () => {
-    try {
-      const res = await fetch("/odata/legal/WorkflowDispositionStages", {
-        credentials: "include",
-      });
-      const text = await res.text();
-      const data = JSONbig.parse(text);
-      setDispositionStages(data.value);
-
-      if (workflow?.WorkflowDispositionStages) {
-        const preSelected = data.value.filter((stage) =>
-          workflow.WorkflowDispositionStages.some((s) => s.ID === stage.ID)
-        );
-        setSelectedStages(preSelected);
-      }
-    } catch (error) {
-      console.error("Error fetching disposition stages:", error);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      CaseType: caseType,
-      Description: description,
-    };
-
-    if (selectedStages.length > 0) {
-      payload.WorkflowDispositionStages = selectedStages.map((stage) => ({
-        _id: `WorkflowDispositionStages(${stage.ID})`,
-      }));
-    }
-
-    try {
-      const url = `/odata/legal/LegalWorkflows${
-        isEdit ? `(${workflow.ID})` : ""
-      }`;
-      const method = isEdit ? "PATCH" : "POST";
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-          Accept: "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.error("Error response:", errorData);
-        alert(`Failed to save: ${errorData.message || res.statusText}`);
-        return;
-      }
-
-      onClose();
-    } catch (err) {
-      console.error("Error saving workflow:", err);
-      alert("Network error occurred while saving.");
-    }
-  };
-
   const stageColumns = [
-    { key: "name", label: "Name" },
+    { key: "name", label: "Stage Name" },
     { key: "order", label: "Stage Order" },
-    { key: "displayName", label: "Display Name" },
-    { key: "mouseOver", label: "Mouse Over" },
-    { key: "isActive", label: "Is Active" },
-    { key: "autoNotice", label: "Auto Notice" },
-    { key: "autoFrequency", label: "Auto Frequency" },
-    { key: "autoValue", label: "Auto Value" },
     {
       key: "actions",
       label: "",
       disableFilter: true,
       render: (row, index) => (
         <div style={{ display: "flex", gap: "1px", alignItems: "center" }}>
-          <IconButton type="edit" />
           <IconButton type="delete" onClick={() => deleteStage(index)} />
         </div>
       ),
@@ -186,76 +118,51 @@ const WorkflowModal = ({ onClose, workflow }) => {
     <div className="LegalWorkFlow-modal-overlay">
       <div className="LegalWorkFlow-modal">
         <div className="LegalWorkFlow-Heading">
-          <h3>{isEdit ? "Edit" : "Add"} Workflow</h3>
+          <h3>{workflow ? "Edit" : "Add"} Workflow</h3>
           <button className="LegalWorkFlow-closebutton" onClick={onClose}>X</button>
-          
-          </div>
-        
-        <div className="LegalWorkFlow-MiddleContent">
-        <form onSubmit={handleSubmit}>
-          <label>Case Type</label>
-          <select
-            value={caseType}
-            onChange={(e) => setCaseType(e.target.value)}
-            required
-          >
-            <option value="">Select Case Type</option>
-            {caseTypes.map((ct) => (
-              <option key={ct} value={ct}>
-                {ct.replace(/_/g, " ")}
-              </option>
-            ))}
-          </select>
-
-          <label>Description</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-
-          <label>Disposition Stages</label>
-          <Autocomplete
-            multiple
-            options={dispositionStages}
-            getOptionLabel={(option) => option.Name}
-            value={selectedStages}
-            onChange={(event, newValue) => setSelectedStages(newValue)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="outlined"
-                placeholder="Select Stages"
-              />
-            )}
-          />
-
-          <h4 style={{ marginTop: "20px" }}>Workflow Stages</h4>
-          <button
-            type="button"
-            className="LegalWorkFlow-add-stage-btn"
-            onClick={() => setShowStagePopup(true)}
-          >
-            +
-          </button>
-
-          <div className="LegalWorkFlow-table-scroll-container">
-            <ReusableGrid columns={stageColumns} data={workflowStages} />
-          </div>
-
-          <div className="LegalWorkFlow-modal-actions">
-          
-            <CancelButton onClick={onClose} className="cancel-btn" />
-        <SaveButton
-          onClick={handleSubmit} className="save-btn"
-          label={isEdit ? "Update" : "Save"}
-        />
-
-          </div>
-        </form>
-
         </div>
         
+        <div className="LegalWorkFlow-MiddleContent">
+          <form onSubmit={handleSave}>
+            <label>Workflow Name<span style={{ color: 'red' }}>*</span></label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="Enter workflow name"
+            />
+
+            <label>Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter workflow description"
+            />
+
+            <h4 style={{ marginTop: "20px" }}>Workflow Stages<span style={{ color: 'red' }}>*</span></h4>
+            <button
+              type="button"
+              className="LegalWorkFlow-add-stage-btn"
+              onClick={() => setShowStagePopup(true)}
+            >
+              +
+            </button>
+
+            <div className="LegalWorkFlow-table-scroll-container">
+              <ReusableGrid columns={stageColumns} data={workflowStages} />
+            </div>
+
+            <div className="LegalWorkFlow-modal-actions">
+              <CancelButton onClick={onClose} className="cancel-btn" />
+              <SaveButton
+                type="submit"
+                className="save-btn"
+                label={loading ? "Saving..." : (workflow ? "Update" : "Save")}
+                disabled={loading}
+              />
+            </div>
+          </form>
+        </div>
 
         {showStagePopup && (
           <Addworkflowstages
