@@ -22,10 +22,12 @@ const TemplatePopup = ({ onClose, templateData, onSave }) => {
     pdfBody: "",
     whatsappBody: "",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (templateData) {
       setFormData({
+        id: templateData.id,
         name: templateData.name || "",
         defaultTemplate: templateData.defaultTemplate || false,
         emailSubject: templateData.emailSubject || "",
@@ -45,21 +47,26 @@ const TemplatePopup = ({ onClose, templateData, onSave }) => {
     }));
   };
 
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      alert('Template name is required');
+      return false;
+    }
+
+    if (!formData.smsBody && !formData.emailBody && !formData.pdfBody && !formData.whatsappBody) {
+      alert('At least one template content (SMS, Email, PDF, or WhatsApp) is required');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSave = async () => {
+    if (!validateForm()) return;
+
+    setLoading(true);
     try {
-      // Validate required fields
-      if (!formData.name) {
-        alert('Template name is required');
-        return;
-      }
-
-      // Ensure at least one content type is filled
-      if (!formData.smsBody && !formData.emailBody && !formData.pdfBody && !formData.whatsappBody) {
-        alert('At least one template content (SMS, Email, PDF, or WhatsApp) is required');
-        return;
-      }
-
-      const response = await axios.post('/api/api/templates', {
+      const payload = {
         name: formData.name,
         defaultTemplate: formData.defaultTemplate,
         emailSubject: formData.emailSubject,
@@ -67,19 +74,30 @@ const TemplatePopup = ({ onClose, templateData, onSave }) => {
         smsBody: formData.smsBody,
         pdfBody: formData.pdfBody,
         whatsappBody: formData.whatsappBody
-      });
+      };
+
+      let response;
+      if (templateData?.id) {
+        // Edit existing template
+        response = await axios.put(`/api/api/templates/${templateData.id}`, payload);
+      } else {
+        // Create new template
+        response = await axios.post('/api/api/templates', payload);
+      }
 
       if (response.data.status === 'SUCCESS') {
-        alert('Template created successfully!');
+        alert(`Template ${templateData?.id ? 'updated' : 'created'} successfully!`);
         if (onSave) onSave();
         onClose();
       } else {
-        alert('Failed to create template: ' + (response.data.message || 'Unknown error'));
+        alert(`Failed to ${templateData?.id ? 'update' : 'create'} template: ` + (response.data.message || 'Unknown error'));
       }
     } catch (error) {
-      console.error('Error creating template:', error);
+      console.error(`Error ${templateData?.id ? 'updating' : 'creating'} template:`, error);
       const errorMessage = error.response?.data?.message || error.message || 'Unknown error occurred';
-      alert('Failed to create template: ' + errorMessage);
+      alert(`Failed to ${templateData?.id ? 'update' : 'create'} template: ` + errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -186,7 +204,8 @@ const TemplatePopup = ({ onClose, templateData, onSave }) => {
             <SaveButton
               onClick={handleSave}
               className="templatesetup-save-btn"
-              label="Save"
+              label={loading ? "Saving..." : (templateData ? "Update" : "Save")}
+              disabled={loading}
             />
           </div>
         </div>
