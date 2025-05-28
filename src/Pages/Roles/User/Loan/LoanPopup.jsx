@@ -5,7 +5,10 @@ import SaveButton from "../../../ReusableComponents/SaveButton";
 import "./LoanPage.css";
 
 const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
-  const [newLoanDetails, setNewLoanDetails] = useState(initialData);
+  const [newLoanDetails, setNewLoanDetails] = useState({
+    ...initialData,
+    id: initialData?.id || null  // Track the auto-generated ID
+  });
   const [popupSearchQuery, setPopupSearchQuery] = useState("");
 
   const handleInputChange = (e) => {
@@ -57,16 +60,20 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
       if (editingLoanId) {
         // Edit: PUT request
         response = await axios.put(`/api/api/loans/${editingLoanId}`, payload);
-      //   console.log("Loan updated:", response.data);
       } else {
         // New: POST request
         response = await axios.post("/api/api/loans", payload);
-      //   console.log("Loan created:", response.data);
+        // Save the auto-generated ID from the response
+        if (response.data.status === "SUCCESS") {
+          setNewLoanDetails(prev => ({
+            ...prev,
+            id: response.data.data.id
+          }));
+        }
       }
       onSave(newLoanDetails);
       onClose();
     } catch (error) {
-      // console.error("Error saving loan:", error);
       alert("Failed to save the loan. Please try again.");
     }
   };

@@ -230,7 +230,8 @@ const LoanPage = () => {
                             <AddUserCases 
                                 onClose={handleCloseLoanCase} 
                                 initialData={{
-                                    loanId: selectedLoan.loanNumber,
+                                    loanId: selectedLoan.id,
+                                    loanNumber: selectedLoan.loanNumber,
                                     borrower: selectedLoan.borrowerName,
                                     loanType: selectedLoan.type,
                                     loanAmount: selectedLoan.totalDueAmount,
