@@ -194,3 +194,40 @@
     transform: translateX(22px);
   }
   
+  /* Required field indicator */
+  .required {
+    color: #dc3545;
+    margin-left: 4px;
+  }
+  
+  /* Input styles */
+  .templatesetup-templateinput input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .templatesetup-templateinput input:focus {
+    outline: none;
+    border-color: #00549E;
+    box-shadow: 0 0 0 2px rgba(0, 84, 158, 0.2);
+  }
+  
+  .templatesetup-tab-content textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+  }
+  
+  .templatesetup-tab-content textarea:focus {
+    outline: none;
+    border-color: #00549E;
+    box-shadow: 0 0 0 2px rgba(0, 84, 158, 0.2);
+  }
+  

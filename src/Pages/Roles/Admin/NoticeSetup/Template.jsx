@@ -24,28 +24,32 @@ const NoticeSetupTemplate = () => {
     setShowPopup(true);
   };
 
-  useEffect(() => {
-    const fetchTemplates = async () => {
-      try {
-        const response = await axios.get("/api/api/templates");
-        if (response.data.status === "SUCCESS") {
-          const formattedData = response.data.data.map((template) => ({
-            ...template,
-            createdOn: new Date().toLocaleDateString(), // If no date is returned by API
-          }));
-          setTemplates(formattedData);
-        } else {
-          console.error("Failed to fetch templates:", response.data.message);
-        }
-      } catch (error) {
-        console.error("API error:", error);
-      } finally {
-        setLoading(false);
+  const fetchTemplates = async () => {
+    try {
+      const response = await axios.get("/api/api/templates");
+      if (response.data.status === "SUCCESS") {
+        const formattedData = response.data.data.map((template) => ({
+          ...template,
+          createdOn: new Date().toLocaleDateString(), // If no date is returned by API
+        }));
+        setTemplates(formattedData);
+      } else {
+        console.error("Failed to fetch templates:", response.data.message);
       }
-    };
+    } catch (error) {
+      console.error("API error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTemplates();
   }, []);
+
+  const handleSave = () => {
+    fetchTemplates(); // Refresh the templates list
+  };
 
   const columns = [
     { key: "name", label: "Template Name" },
@@ -91,6 +95,7 @@ const NoticeSetupTemplate = () => {
           <TemplatePopup
             onClose={() => setShowPopup(false)}
             templateData={selectedTemplate}
+            onSave={handleSave}
           />
         )}
       </div>

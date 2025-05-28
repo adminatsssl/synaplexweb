@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './EmailTab.css'
 
-const EmailTab = () => {
+const EmailTab = ({ subject, body, onSubjectChange, onBodyChange }) => {
   const [digitalSignature, setDigitalSignature] = useState('no');
   const [encryption, setEncryption] = useState('no');
 
@@ -14,6 +14,8 @@ const EmailTab = () => {
           <input
             type="text"
             className=""
+            placeholder="{{borrowerEmail}}"
+            disabled
           />
         </div>
         <div className='EmailTab-SendField'>
@@ -21,6 +23,7 @@ const EmailTab = () => {
           <input
             type="text"
             className=""
+            placeholder="Optional"
           />
         </div>
         <div className='EmailTab-SendField'>
@@ -28,6 +31,7 @@ const EmailTab = () => {
           <input
             type="text"
             className=""
+            placeholder="Optional"
           />
         </div>
       </div>
@@ -38,17 +42,19 @@ const EmailTab = () => {
         <input
           type="text"
           className=""
+          value={subject || ""}
+          onChange={onSubjectChange}
+          placeholder="Enter email subject..."
         />
       </div>
 
       {/* Digital Signature & Encryption */}
       <div className="EmailTab-BottomTab-Heading">
-      <span className="">Digital Signature</span>
-      <span className="">Encryption</span>
+        <span className="">Digital Signature</span>
+        <span className="">Encryption</span>
       </div>
       <div className='EmailTab-BottomTab-Checkbox'>
-      <div className='EmailTab-BottomTab-Input'>
-          
+        <div className='EmailTab-BottomTab-Input'>
           <label className="">
             <input
               type="radio"
@@ -72,8 +78,7 @@ const EmailTab = () => {
             No
           </label>
         </div>
-      <div className='EmailTab-BottomTab-Input'>
-          
+        <div className='EmailTab-BottomTab-Input'>
           <label className="">
             <input
               type="radio"
@@ -97,10 +102,12 @@ const EmailTab = () => {
             No
           </label>
         </div>
-
       </div>
-      <textarea/>
-      
+      <textarea
+        value={body || ""}
+        onChange={onBodyChange}
+        placeholder="Enter email body text..."
+      />
     </div>
   );
 };
