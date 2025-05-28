@@ -63,18 +63,18 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
       } else {
         // New: POST request
         response = await axios.post("/api/api/loans", payload);
-        // Save the auto-generated ID from the response
-        if (response.data.status === "SUCCESS") {
-          setNewLoanDetails(prev => ({
-            ...prev,
-            id: response.data.data.id
-          }));
-        }
       }
-      onSave(newLoanDetails);
-      onClose();
+
+      if (response.data.status === "SUCCESS") {
+        // Pass the response data back to parent
+        onSave(response.data.data);
+        onClose();
+      } else {
+        alert(response.data.message || "Failed to save the loan. Please try again.");
+      }
     } catch (error) {
-      alert("Failed to save the loan. Please try again.");
+      console.error("Error saving loan:", error);
+      alert(error.response?.data?.message || "Failed to save the loan. Please try again.");
     }
   };
 

@@ -15,49 +15,53 @@ const LoanPage = () => {
     const [editingLoanId, setEditingLoanId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedLoan, setSelectedLoan] = useState(null);
+    const [refreshTrigger, setRefreshTrigger] = useState(0); // Add refresh trigger
+
+    const fetchLoans = async () => {
+        try {
+            const res = await fetch("/api/api/loans");
+            const response = await res.json();
+            if (response.status === "SUCCESS" && Array.isArray(response.data)) {
+                const mappedLoans = response.data.map((item) => ({
+                    id: item.id,
+                    loanNumber: item.loanNumber,
+                    type: item.loanType,
+                    borrowerName: item.borrower.name,
+                    totalDueAmount: item.loanAmount - item.disbursedAmount,
+                    defaultDate: item.lastPaymentDate,
+                    npaDate: item.nextDueDate,
+                    tenure: item.loanTenure,
+                    clientName: item.borrower.name,
+                    lastPaidAmount: null,
+                    annualInterestRate: item.interestRate,
+                    lastPaidDate: item.lastPaymentDate,
+                    interestCharges: null,
+                    numberOfEmisPending: null,
+                    outstandingAmount: null,
+                    disbursedAmount: item.disbursedAmount,
+                    emiAmount: item.emiAmount,
+                    borrowerMobile: item.borrower.contactNumber,
+                    borrowerEmail: item.borrower.email,
+                    tenantId: "",
+                    tenantName: "",
+                    panNumber: "",
+                    gstNumber: "",
+                    fprName: "",
+                    fprEmail: "",
+                    fprMobile: "",
+                }));
+                setLoanData(mappedLoans);
+            } else {
+                console.error("Invalid data format", response);
+            }
+        } catch (error) {
+            console.error("Error fetching loans:", error);
+        }
+    };
 
     useEffect(() => {
-        fetch("/api/api/loans")
-            .then((res) => res.json())
-            .then((response) => {
-                if (response.status === "SUCCESS" && Array.isArray(response.data)) {
-                    const mappedLoans = response.data.map((item) => ({
-                        id: item.id,
-                        loanNumber: item.loanNumber,
-                        type: item.loanType,
-                        borrowerName: item.borrower.name,
-                        totalDueAmount: item.loanAmount - item.disbursedAmount,
-                        defaultDate: item.lastPaymentDate,
-                        npaDate: item.nextDueDate,
-                        tenure: item.loanTenure,
-                        clientName: item.borrower.name,
-                        lastPaidAmount: null,
-                        annualInterestRate: item.interestRate,
-                        lastPaidDate: item.lastPaymentDate,
-                        interestCharges: null,
-                        numberOfEmisPending: null,
-                        outstandingAmount: null,
-                        disbursedAmount: item.disbursedAmount,
-                        emiAmount: item.emiAmount,
-                        borrowerMobile: item.borrower.contactNumber,
-                        borrowerEmail: item.borrower.email,
-                        tenantId: "",
-                        tenantName: "",
-                        panNumber: "",
-                        gstNumber: "",
-                        fprName: "",
-                        fprEmail: "",
-                        fprMobile: "",
-                    }));
-                    setLoanData(mappedLoans);
-                } else {
-                    console.error("Invalid data format", response);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching loans:", error);
-            });
-    }, []);
+        fetchLoans();
+    }, [refreshTrigger]); // Add refreshTrigger as dependency
 
     const handleAddLoanClick = () => {
         setEditingLoanId(null);
@@ -69,7 +73,7 @@ const LoanPage = () => {
         setEditingLoanId(null);
     };
 
-    const handleSaveLoan = (newLoanDetails) => {
+    const handleSaveLoan = async (newLoanDetails) => {
         if (editingLoanId) {
             setLoanData((prev) =>
                 prev.map((loan) =>
@@ -77,16 +81,8 @@ const LoanPage = () => {
                 )
             );
         } else {
-            const newLoanEntry = {
-                id: newLoanDetails.loanNumber,
-                type: newLoanDetails.loanType,
-                borrowerName: newLoanDetails.borrowerName || newLoanDetails.clientName || "N/A",
-                totalDueAmount: newLoanDetails.totalDueAmount,
-                defaultDate: newLoanDetails.defaultDate,
-                npaDate: newLoanDetails.npaDate,
-                ...newLoanDetails,
-            };
-            setLoanData((prev) => [...prev, newLoanEntry]);
+            // After successful save, trigger refresh
+            setRefreshTrigger(prev => prev + 1);
         }
         handleClosePopup();
     };
@@ -101,6 +97,7 @@ const LoanPage = () => {
     };
 
     const handleOpenLoanCase = (loan) => {
+        console.log('Selected loan data:', loan); // Debug log
         setSelectedLoan(loan);
         setShowLoanCase(true);
     };
@@ -128,6 +125,10 @@ const LoanPage = () => {
     });
 
     const columns = [
+        {
+            key: "id",
+            label: "ID",
+        },
         {
             key: "loanNumber",
             label: "Loan Number",
@@ -230,7 +231,7 @@ const LoanPage = () => {
                             <AddUserCases 
                                 onClose={handleCloseLoanCase} 
                                 initialData={{
-                                    loanId: selectedLoan.id,
+                                    loanId: selectedLoan.id, // This should be the numeric ID
                                     loanNumber: selectedLoan.loanNumber,
                                     borrower: selectedLoan.borrowerName,
                                     loanType: selectedLoan.type,
