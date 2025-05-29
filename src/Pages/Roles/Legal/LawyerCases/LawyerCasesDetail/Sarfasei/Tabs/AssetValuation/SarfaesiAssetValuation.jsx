@@ -6,6 +6,7 @@ import { GiMailbox } from "react-icons/gi";
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx"; 
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
+import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import './SarfaesiAssetValuation.css';
 
 
@@ -48,7 +49,7 @@ const SarfaesiAssetValuation = ()=>{
                         </div>
                     </div>
 
-                    <div className='assetValuation-Sarfasei-topcontent-rightside'>
+                    {/* <div className='assetValuation-Sarfasei-topcontent-rightside'>
                         <button className='assetValuation-generatenotice-btn'>Generate Notice</button>
                         <h4>View Generated Notice</h4>
                         <div className='assetValuation-Sarfasei-topcontent-rightside-icon'>
@@ -61,14 +62,15 @@ const SarfaesiAssetValuation = ()=>{
                                 <IoLogoWhatsapp />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
 
             <div className='assetValuation-Sarfasei-middle-content'>
                 <div className='assetValuation-Sarfasei-middle-content-heading'>
-                    <h5 >Disposition Summary</h5>
+                    <h5>Disposition Summary</h5>
+                    <AddButton text="Add " onClick={""} />
                 </div>
                 <div className='assetValuation-Sarfasei-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />

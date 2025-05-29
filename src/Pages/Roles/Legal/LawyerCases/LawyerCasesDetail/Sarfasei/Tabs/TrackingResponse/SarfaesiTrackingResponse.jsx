@@ -4,6 +4,7 @@ import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
 import './SarfaesiTrackingResponse.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
+import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import axios from 'axios';
 
 const dispositionData = [
@@ -210,6 +211,7 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
             <div className='sarfaesi-tracking-response-middle-content'>
                 <div className='sarfaesi-tracking-response-middle-content-heading'>
                     <h5>Disposition Summary</h5>
+                    <AddButton text="Add " onClick={""} />
                 </div>
                 <div className='sarfaesi-tracking-response-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />

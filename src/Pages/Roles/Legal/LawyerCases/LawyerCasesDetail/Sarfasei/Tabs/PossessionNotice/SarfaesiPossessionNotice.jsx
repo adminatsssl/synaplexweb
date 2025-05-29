@@ -2,6 +2,7 @@ import React from 'react';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
+import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import './SarfaesiPossessionNotice.css'
 
 const dispositionData = [
@@ -59,6 +60,7 @@ const SarfaesiPossessionNotice = ()=>{
             <div className='possessionNotice-Sarfasei-middle-content'>
                 <div className='possessionNotice-Sarfasei-middle-content-heading'>
                     <h5>Disposition Summary</h5>
+                    <AddButton text="Add " onClick={""} />
                 </div>
                 <div className='possessionNotice-Sarfasei-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />

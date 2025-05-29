@@ -108,6 +108,7 @@ const DemandNoticeSarfasei = ({ caseId }) => {
             <div className='demandNotice-Sarfasei-Bottom-content'>
                 <div className='demandNotice-Sarfasei-Bottom-content-heading'>
                     <h5>Uploaded Documents</h5>
+                    <AddButton text="Add " onClick={""} />
                 </div>
                 <div className='demandNotice-Sarfasei-Bottom-content-formdata'>
                     <ReusableGrid columns={documentColumns} data={documentData} />

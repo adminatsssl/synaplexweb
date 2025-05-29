@@ -38,12 +38,15 @@
     margin-top: 20px;
     border-radius: 10px;
 }
-.possessionNotice-Sarfasei-middle-content-heading{
+.possessionNotice-Sarfasei-middle-content-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 20px;
     border-bottom: 1px solid #c3c2c2;
 }
-.possessionNotice-Sarfasei-middle-content-heading h5{
-    margin-bottom: 0px;
+.possessionNotice-Sarfasei-middle-content-heading h5 {
+    margin: 0;
     font-size: 16px;
 }
 .possessionNotice-Sarfasei-middle-content-formdata{

@@ -2,6 +2,7 @@ import React from 'react';
 import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
+import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import './SarfaesiAuctionRecovery.css'
 
 
@@ -71,6 +72,7 @@ const SarfaesiAuctionRecovery = () => {
             <div className='sarfaesi-auctionRecovery-middle-content'>
                 <div className='sarfaesi-auctionRecovery-middle-content-heading'>
                     <h5>Disposition Summary</h5>
+                    <AddButton text="Add " onClick={""} />
                 </div>
                 <div className='sarfaesi-auctionRecovery-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />

@@ -88,3 +88,16 @@
     text-align: center;
     margin-top: 20px;
 }
+
+.demandNotice-Sarfasei-middle-content-heading,
+.demandNotice-Sarfasei-Bottom-content-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.demandNotice-Sarfasei-middle-content-heading h5,
+.demandNotice-Sarfasei-Bottom-content-heading h5 {
+    margin: 0;
+}

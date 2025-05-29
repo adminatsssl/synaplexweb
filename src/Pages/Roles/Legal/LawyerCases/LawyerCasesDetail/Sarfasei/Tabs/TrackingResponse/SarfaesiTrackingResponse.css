@@ -64,12 +64,15 @@
 }
 
 .sarfaesi-tracking-response-middle-content-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 20px;
     border-bottom: 1px solid #c3c2c2;
 }
 
 .sarfaesi-tracking-response-middle-content-heading h5 {
-    margin-bottom: 0px;
+    margin: 0;
     font-size: 16px;
 }
 
