@@ -1,5 +1,5 @@
 // import React from 'react';
-import React, { useState } from 'react'; // ✅ Fix
+import React, { useState, useEffect } from 'react'; // ✅ Fix
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoMdMail } from "react-icons/io";
 import { FaSms } from "react-icons/fa";
@@ -11,32 +11,123 @@ import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
 import NoticePreviewModal from './NoticePreviewModal';
 import AddButton from "../../../../../../ReusableComponents/AddButton.jsx";
 import DispositionModal from './DispositionModal';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const DemandNoticeSarfasei = ({ caseId }) => {
+const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
     if (!caseId) {
         console.error('No caseId provided to DemandNoticeSarfasei');
         return null;
     }
 
-    // Sample data for disposition summary
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [hasExistingData, setHasExistingData] = useState(false);
+    const [noticeData, setNoticeData] = useState({
+        noticeDeadline: '',
+        noticeSentDate: '',
+        noticeType: 'Legal Demand',
+        remarks: 'Urgent notice issued',
+        dispositions: []
+    });
+
+    useEffect(() => {
+        if (caseId) {
+            checkExistingData();
+        }
+    }, [caseId]);
+
+    const checkExistingData = async () => {
+        try {
+            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`);
+            if (response.data && Object.keys(response.data).length > 0) {
+                setHasExistingData(true);
+                setNoticeData({
+                    noticeDeadline: response.data.noticeDeadline || '',
+                    noticeSentDate: response.data.noticeSentDate || '',
+                    noticeType: response.data.noticeType || 'Legal Demand',
+                    remarks: response.data.remarks || '',
+                    dispositions: response.data.dispositions || []
+                });
+            }
+        } catch (error) {
+            console.log('No existing notice data found - first time visit');
+        }
+    };
+
+    const handleInputChange = (e) => {
+        if (hasExistingData) return;
+        const { name, value } = e.target;
+        setNoticeData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     const openDispositionModal = () => setIsDispositionModalOpen(true);
     const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
-    const dispositionData = [
-        { stage: "Stage 1", comment: "Hello world" },
-    ];
+    const handleSaveDisposition = (dispositionData) => {
+        setNoticeData(prev => ({
+            ...prev,
+            dispositions: [...prev.dispositions, dispositionData]
+        }));
+        closeDispositionModal();
+    };
+
+    const handleSaveAndNext = async () => {
+        if (!caseId) {
+            alert('Case ID is missing!');
+            return;
+        }
+
+        if (hasExistingData) {
+            // If data exists and onStageComplete is provided, move to next stage
+            if (onStageComplete) {
+                onStageComplete();
+            }
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const payload = {
+                ...noticeData,
+                caseId: caseId
+            };
+
+            const response = await axios.post('/api/api/demandNotice', payload);
+            
+            if (response.status === 200) {
+                setHasExistingData(true);
+                if (response.data) {
+                    setNoticeData(prev => ({
+                        ...prev,
+                        ...response.data
+                    }));
+                }
+                
+                // Only call onStageComplete if it's provided
+                if (onStageComplete) {
+                    onStageComplete();
+                }
+            }
+        } catch (error) {
+            console.error('Error saving notice data:', error);
+            alert('Error saving data. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const dispositionColumns = [
-        { key: "stage", label: "Disposition Stage" },
-        { key: "comment", label: "Comment" },
+        { key: "name", label: "Disposition Stage" },
+        { key: "description", label: "Comment" }
     ];
 
-    // Sample data for uploaded documents
     const documentData = [
         { name: "Aadhar", createdDate: "Hello world", uploadedBy: "Hello world" },
     ];
@@ -47,47 +138,74 @@ const DemandNoticeSarfasei = ({ caseId }) => {
         { key: "uploadedBy", label: "Uploaded By" },
     ];
 
-    const handleSaveDisposition = () => {
-        // Handle saving disposition data
-        closeDispositionModal();
-    };
-
     return (
         <div className='demandNotice-Sarfasei-container'>
-
             <div className='demandNotice-Sarfasei-topcontent-container'>
                 <div className='demandNotice-Sarfasei-topcontent-heading'>
-                    <h5>Demand Notice Generation - Section 13(2)</h5>
+                    <h5>Demand Notice Generation - Section 13(2) {hasExistingData && '(Completed)'}</h5>
                 </div>
                 <div className='demandNotice-Sarfasei-topcontent'>
-
                     <div className='demandNotice-Sarfasei-topcontent-leftside'>
                         <div className="Sarfasei-notice-form-row">
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Deadline</label>
-                                <input type="date" className="notice-input" />
+                                <input 
+                                    type="date" 
+                                    className="notice-input"
+                                    name="noticeDeadline"
+                                    value={noticeData.noticeDeadline}
+                                    onChange={handleInputChange}
+                                    readOnly={hasExistingData}
+                                />
                             </div>
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Sent Date</label>
-                                <input type="date" className="notice-input" />
+                                <input 
+                                    type="date" 
+                                    className="notice-input"
+                                    name="noticeSentDate"
+                                    value={noticeData.noticeSentDate}
+                                    onChange={handleInputChange}
+                                    readOnly={hasExistingData}
+                                />
                             </div>
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Type</label>
-                                <select className="notice-input">
-                                    <option value="business">Taking control of existing business</option>
-                                    <option value="receiver">Appointing a receiver to manage assets</option>
-                                    <option value="possession">Taking possession of assets</option>
+                                <select 
+                                    className="notice-input"
+                                    name="noticeType"
+                                    value={noticeData.noticeType}
+                                    onChange={handleInputChange}
+                                    disabled={hasExistingData}
+                                >
+                                    <option value="Legal Demand">Legal Demand</option>
+                                    <option value="Taking control of existing business">Taking control of existing business</option>
+                                    <option value="Appointing a receiver to manage assets">Appointing a receiver to manage assets</option>
+                                    <option value="Taking possession of assets">Taking possession of assets</option>
                                 </select>
                             </div>
                         </div>
                         <div className="Sarfasei-notice-form-group">
                             <label>Remarks</label>
-                            <textarea className="Sarfasei-notice-textarea" rows="3"></textarea>
+                            <textarea 
+                                className="Sarfasei-notice-textarea" 
+                                rows="3"
+                                name="remarks"
+                                value={noticeData.remarks}
+                                onChange={handleInputChange}
+                                readOnly={hasExistingData}
+                            ></textarea>
                         </div>
                     </div>
 
                     <div className='demandNotice-Sarfasei-topcontent-rightside'>
-                        <button onClick={openModal} className='assetValuation-generatenotice-btn'>Generate Notice</button>
+                        <button 
+                            onClick={openModal} 
+                            className='assetValuation-generatenotice-btn'
+                            disabled={loading || !noticeData.noticeDeadline || !noticeData.noticeSentDate}
+                        >
+                            Generate Notice
+                        </button>
                         <h4>View Generated Notice</h4>
                         <div className='demandNotice-Sarfasei-topcontent-rightside-icon'>
                             <div className='emandNotice-Sarfasei-icon'>
@@ -100,46 +218,56 @@ const DemandNoticeSarfasei = ({ caseId }) => {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div className='demandNotice-Sarfasei-middle-content'>
                 <div className='demandNotice-Sarfasei-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={openDispositionModal} />
+                    <AddButton text="Add" onClick={openDispositionModal} disabled={hasExistingData} />
                 </div>
                 <div className='demandNotice-Sarfasei-middle-content-formdata'>
-                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+                    <ReusableGrid columns={dispositionColumns} data={noticeData.dispositions} />
                 </div>
             </div>
 
             <div className='demandNotice-Sarfasei-Bottom-content'>
                 <div className='demandNotice-Sarfasei-Bottom-content-heading'>
                     <h5>Uploaded Documents</h5>
-                    <AddButton text="Add " onClick={""} />
+                    <AddButton text="Add" onClick={""} disabled={hasExistingData} />
                 </div>
                 <div className='demandNotice-Sarfasei-Bottom-content-formdata'>
                     <ReusableGrid columns={documentColumns} data={documentData} />
                 </div>
-
             </div>
 
             <div className='demandNotice-Sarfasei-Bottom-btn'>
                 <CancelButton />
-                <SaveButton label='Save & Next' />
-
+                <SaveButton 
+                    label='Save & Next'
+                    onClick={handleSaveAndNext}
+                    disabled={loading || (hasExistingData && onStageComplete === undefined)}
+                />
             </div>
-            <NoticePreviewModal isOpen={isModalOpen} onClose={closeModal} caseId={caseId} />
+
+            <NoticePreviewModal 
+                isOpen={isModalOpen} 
+                onClose={closeModal} 
+                caseId={caseId} 
+            />
             <DispositionModal 
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}
+                disabled={hasExistingData}
             />
-
         </div>
-
     );
+};
+
+DemandNoticeSarfasei.propTypes = {
+    caseId: PropTypes.number.isRequired,
+    onStageComplete: PropTypes.func
 };
 
 export default DemandNoticeSarfasei;

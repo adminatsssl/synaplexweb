@@ -8,6 +8,7 @@ import SarfaesiAssetValuation from "./Tabs/AssetValuation/SarfaesiAssetValuation
 import SarfaesiAuctionRecovery from "./Tabs/AuctionRecovery/SarfaesiAuctionRecovery.jsx";
 import CaseDetailClose from "./Tabs/Close/CaseDetailClose.jsx";
 import CaseHistoryAccordion from "../CaseHistory.jsx";
+import PropTypes from 'prop-types';
 
 const steps = [
   { label: "Initiation" },
@@ -32,7 +33,7 @@ const dummyData = [
 ];
 
 const SarfaseiContent = ({ caseId }) => {
-  const [activeStep, setActiveStep] = useState(2);
+  const [activeStep, setActiveStep] = useState(2); // Default to "Demand Notice Generation" step
 
   const handleStepClick = (stepNum) => {
     setActiveStep(stepNum);
@@ -62,19 +63,51 @@ const SarfaseiContent = ({ caseId }) => {
           />
         </div>
 
-        {activeStep === 2 && <DemandNoticeSarfasei caseId={caseId} onStageComplete={handleStageComplete} />}
-        {activeStep === 3 && <SarfaesiTrackingResponse caseId={caseId} onStageComplete={handleStageComplete} />}
-        {activeStep === 4 && <SarfaesiPossessionNotice onStageComplete={handleStageComplete} />}
-        {activeStep === 5 && <SarfaesiAssetValuation onStageComplete={handleStageComplete} />}
-        {activeStep === 6 && <SarfaesiAuctionRecovery onStageComplete={handleStageComplete} />}
-        {activeStep === 7 && <CaseDetailClose onStageComplete={handleStageComplete} />}
+        {activeStep === 2 && (
+          <DemandNoticeSarfasei 
+            caseId={caseId} 
+            onStageComplete={handleStageComplete} 
+          />
+        )}
+        {activeStep === 3 && (
+          <SarfaesiTrackingResponse 
+            caseId={caseId} 
+            onStageComplete={handleStageComplete} 
+          />
+        )}
+        {activeStep === 4 && (
+          <SarfaesiPossessionNotice 
+            caseId={caseId}
+            onStageComplete={handleStageComplete} 
+          />
+        )}
+        {activeStep === 5 && (
+          <SarfaesiAssetValuation 
+            caseId={caseId}
+            onStageComplete={handleStageComplete} 
+          />
+        )}
+        {activeStep === 6 && (
+          <SarfaesiAuctionRecovery 
+            caseId={caseId}
+            onStageComplete={handleStageComplete} 
+          />
+        )}
+        {activeStep === 7 && (
+          <CaseDetailClose 
+            caseId={caseId}
+            onStageComplete={handleStageComplete} 
+          />
+        )}
       </div>
 
-      <>
-        <CaseHistoryAccordion data={dummyData} />
-      </>
+      <CaseHistoryAccordion data={dummyData} />
     </div>
   );
+};
+
+SarfaseiContent.propTypes = {
+  caseId: PropTypes.number.isRequired
 };
 
 export default SarfaseiContent;
