@@ -5,6 +5,7 @@ import './SarfaesiTrackingResponse.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
+import DispositionModal from '../DispositionModal';
 import axios from 'axios';
 
 const dispositionData = [
@@ -26,6 +27,7 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
     const [trackingData, setTrackingData] = useState(initialTrackingData);
     const [loading, setLoading] = useState(false);
     const [hasExistingData, setHasExistingData] = useState(false);
+    const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
 
     useEffect(() => {
         if (caseId) {
@@ -125,6 +127,14 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
         }
     };
 
+    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
+
+    const handleSaveDisposition = () => {
+        // Handle saving disposition data
+        closeDispositionModal();
+    };
+
     if (!caseId) {
         return <div>Error: Case ID is required</div>;
     }
@@ -211,12 +221,18 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
             <div className='sarfaesi-tracking-response-middle-content'>
                 <div className='sarfaesi-tracking-response-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={""} />
+                    <AddButton text="Add " onClick={openDispositionModal} />
                 </div>
                 <div className='sarfaesi-tracking-response-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />
                 </div>
             </div>
+
+            <DispositionModal 
+                isOpen={isDispositionModalOpen}
+                onClose={closeDispositionModal}
+                onSave={handleSaveDisposition}
+            />
 
             <div className='sarfaesi-tracking-response-Bottom-btn'>
                 <CancelButton/>

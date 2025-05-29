@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
+import DispositionModal from '../DispositionModal';
 import './SarfaesiAuctionRecovery.css'
 
-
-
 const SarfaesiAuctionRecovery = () => {
+    const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+
+    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
+
+    const handleSaveDisposition = () => {
+        // Handle saving disposition data
+        closeDispositionModal();
+    };
 
     const dispositionData = [
         { stage: "Stage 1", comment: "Hello world" },
@@ -72,12 +80,18 @@ const SarfaesiAuctionRecovery = () => {
             <div className='sarfaesi-auctionRecovery-middle-content'>
                 <div className='sarfaesi-auctionRecovery-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={""} />
+                    <AddButton text="Add " onClick={openDispositionModal} />
                 </div>
                 <div className='sarfaesi-auctionRecovery-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />
                 </div>
             </div>
+
+            <DispositionModal 
+                isOpen={isDispositionModalOpen}
+                onClose={closeDispositionModal}
+                onSave={handleSaveDisposition}
+            />
 
             <div className='sarfaesi-auctionRecovery-Bottom-btn'>
                 <CancelButton />

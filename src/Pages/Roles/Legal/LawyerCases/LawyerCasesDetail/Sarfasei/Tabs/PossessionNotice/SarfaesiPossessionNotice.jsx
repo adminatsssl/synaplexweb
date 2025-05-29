@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
+import DispositionModal from '../DispositionModal';
 import './SarfaesiPossessionNotice.css'
 
 const dispositionData = [
@@ -15,6 +16,16 @@ const dispositionData = [
     ];
 
 const SarfaesiPossessionNotice = ()=>{
+    const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+
+    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
+
+    const handleSaveDisposition = () => {
+        // Handle saving disposition data
+        closeDispositionModal();
+    };
+
     return(
         <div className='possessionNotice-Sarfasei-container'>
 
@@ -60,12 +71,18 @@ const SarfaesiPossessionNotice = ()=>{
             <div className='possessionNotice-Sarfasei-middle-content'>
                 <div className='possessionNotice-Sarfasei-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={""} />
+                    <AddButton text="Add " onClick={openDispositionModal} />
                 </div>
                 <div className='possessionNotice-Sarfasei-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />
                 </div>
             </div>
+
+            <DispositionModal 
+                isOpen={isDispositionModalOpen}
+                onClose={closeDispositionModal}
+                onSave={handleSaveDisposition}
+            />
 
             <div className='possessionNotice-Sarfasei-Bottom-btn'>
                 <CancelButton/>

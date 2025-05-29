@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IoLogoWhatsapp } from "react-icons/io";
 import { IoMdMail } from "react-icons/io";
 import { FaSms } from "react-icons/fa";
@@ -7,13 +7,22 @@ import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.j
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
+import DispositionModal from '../DispositionModal';
 import './SarfaesiAssetValuation.css';
 
 
 const SarfaesiAssetValuation = ()=>{
+    const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
 
+    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
-     const dispositionData = [
+    const handleSaveDisposition = () => {
+        // Handle saving disposition data
+        closeDispositionModal();
+    };
+
+    const dispositionData = [
         { stage: "Stage 1", comment: "Hello world" },
     ];
 
@@ -70,13 +79,18 @@ const SarfaesiAssetValuation = ()=>{
             <div className='assetValuation-Sarfasei-middle-content'>
                 <div className='assetValuation-Sarfasei-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={""} />
+                    <AddButton text="Add " onClick={openDispositionModal} />
                 </div>
                 <div className='assetValuation-Sarfasei-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />
                 </div>
             </div>
 
+            <DispositionModal 
+                isOpen={isDispositionModalOpen}
+                onClose={closeDispositionModal}
+                onSave={handleSaveDisposition}
+            />
 
             <div className='assetValuation-Sarfasei-Bottom-btn'>
                 <CancelButton/>

@@ -10,6 +10,7 @@ import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
 import NoticePreviewModal from './NoticePreviewModal';
 import AddButton from "../../../../../../ReusableComponents/AddButton.jsx";
+import DispositionModal from './DispositionModal';
 
 const DemandNoticeSarfasei = ({ caseId }) => {
     if (!caseId) {
@@ -19,9 +20,12 @@ const DemandNoticeSarfasei = ({ caseId }) => {
 
     // Sample data for disposition summary
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
     const dispositionData = [
         { stage: "Stage 1", comment: "Hello world" },
@@ -42,6 +46,11 @@ const DemandNoticeSarfasei = ({ caseId }) => {
         { key: "createdDate", label: "Created Date" },
         { key: "uploadedBy", label: "Uploaded By" },
     ];
+
+    const handleSaveDisposition = () => {
+        // Handle saving disposition data
+        closeDispositionModal();
+    };
 
     return (
         <div className='demandNotice-Sarfasei-container'>
@@ -98,7 +107,7 @@ const DemandNoticeSarfasei = ({ caseId }) => {
             <div className='demandNotice-Sarfasei-middle-content'>
                 <div className='demandNotice-Sarfasei-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={""} />
+                    <AddButton text="Add " onClick={openDispositionModal} />
                 </div>
                 <div className='demandNotice-Sarfasei-middle-content-formdata'>
                     <ReusableGrid columns={dispositionColumns} data={dispositionData} />
@@ -122,6 +131,11 @@ const DemandNoticeSarfasei = ({ caseId }) => {
 
             </div>
             <NoticePreviewModal isOpen={isModalOpen} onClose={closeModal} caseId={caseId} />
+            <DispositionModal 
+                isOpen={isDispositionModalOpen}
+                onClose={closeDispositionModal}
+                onSave={handleSaveDisposition}
+            />
 
         </div>
 
