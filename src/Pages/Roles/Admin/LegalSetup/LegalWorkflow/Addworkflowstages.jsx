@@ -6,9 +6,6 @@ import CancelButton from "../../../../ReusableComponents/CancelButton";
 const Addworkflowstages = ({ onClose, onSave }) => {
   const [name, setName] = useState("");
   const [order, setOrder] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [mouseOver, setMouseOver] = useState("");
-  const [isActive, setIsActive] = useState("Yes");
 
   const handleSave = () => {
     if (!name.trim()) {
@@ -22,11 +19,8 @@ const Addworkflowstages = ({ onClose, onSave }) => {
     }
 
     const newStage = {
-      name,
-      order: parseInt(order),
-      displayName: displayName || name,
-      mouseOver: mouseOver || name,
-      isActive
+      name: name.trim(),
+      order: parseInt(order)
     };
     onSave(newStage);
     onClose();
@@ -64,50 +58,6 @@ const Addworkflowstages = ({ onClose, onSave }) => {
                   min="1"
                 />
               </div>
-
-              <div className="add-workflow-top-barcontent-one-checkbox">
-                <label>Is Active:</label>
-                <div className="add-workflow-radio-options">
-                  <label>
-                    <input
-                      type="radio"
-                      name="isActive"
-                      value="Yes"
-                      checked={isActive === "Yes"}
-                      onChange={() => setIsActive("Yes")}
-                    />
-                    Yes
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="isActive"
-                      value="No"
-                      checked={isActive === "No"}
-                      onChange={() => setIsActive("No")}
-                    />
-                    No
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="add-workflow-full-width">
-              <label>Display Name</label>
-              <input
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Enter display name (optional)"
-              />
-            </div>
-
-            <div className="add-workflow-full-width">
-              <label>Mouse Over Text</label>
-              <input
-                value={mouseOver}
-                onChange={(e) => setMouseOver(e.target.value)}
-                placeholder="Enter mouse over text (optional)"
-              />
             </div>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Autocomplete, TextField } from "@mui/material";
 import "./LegalWorkflow.css";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import Addworkflowstages from "./Addworkflowstages";
@@ -9,23 +8,32 @@ import CancelButton from "../../../../ReusableComponents/CancelButton";
 import axios from "axios";
 
 const WorkflowModal = ({ onClose, workflow }) => {
-  const [name, setName] = useState(workflow?.name || "");
-  const [description, setDescription] = useState(workflow?.description || "");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [workflowStages, setWorkflowStages] = useState([]);
   const [showStagePopup, setShowStagePopup] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Map workflow stages when workflow prop changes
+  // Reset form when workflow changes (including when modal opens/closes)
   useEffect(() => {
-    if (workflow?.workflowStages) {
-      const mappedStages = workflow.workflowStages.map(stage => ({
-        name: stage.stageName,
-        order: stage.stageOrder,
-        displayName: stage.stageName,
-        mouseOver: stage.stageName,
-        isActive: true
-      }));
-      setWorkflowStages(mappedStages);
+    // Clear form first
+    setName("");
+    setDescription("");
+    setWorkflowStages([]);
+    
+    // If editing existing workflow, populate form
+    if (workflow) {
+      setName(workflow.name || "");
+      setDescription(workflow.description || "");
+      if (workflow.workflowStages && Array.isArray(workflow.workflowStages)) {
+        const mappedStages = workflow.workflowStages
+          .map(stage => ({
+            name: stage.stageName,
+            order: stage.stageOrder
+          }))
+          .sort((a, b) => a.order - b.order);
+        setWorkflowStages(mappedStages);
+      }
     }
   }, [workflow]);
 
@@ -44,12 +52,24 @@ const WorkflowModal = ({ onClose, workflow }) => {
       return;
     }
 
+    // Remove any duplicate stages before saving
+    const uniqueStages = workflowStages.reduce((acc, current) => {
+      const isDuplicate = acc.find(
+        item => item.name.toLowerCase() === current.name.toLowerCase() && 
+               item.order === current.order
+      );
+      if (!isDuplicate) {
+        acc.push(current);
+      }
+      return acc;
+    }, []);
+
     setLoading(true);
     try {
       const payload = {
         name,
         description,
-        workflowStages: workflowStages.map(stage => ({
+        workflowStages: uniqueStages.map(stage => ({
           stageName: stage.name,
           stageOrder: stage.order
         }))
@@ -77,26 +97,38 @@ const WorkflowModal = ({ onClose, workflow }) => {
   };
 
   const handleAddStage = (newStage) => {
+    // Check if stage name already exists (case insensitive)
+    const nameExists = workflowStages.some(
+      stage => stage.name.toLowerCase() === newStage.name.toLowerCase()
+    );
+    if (nameExists) {
+      alert(`Stage name "${newStage.name}" already exists. Please use a different name.`);
+      return;
+    }
+
     // Check if stage order already exists
-    const orderExists = workflowStages.some(stage => stage.order === newStage.order);
+    const orderExists = workflowStages.some(
+      stage => stage.order === newStage.order
+    );
     if (orderExists) {
       alert(`Stage order ${newStage.order} already exists. Please use a different order number.`);
       return;
     }
 
-    setWorkflowStages([...workflowStages, {
-      name: newStage.name,
-      order: newStage.order,
-      displayName: newStage.displayName,
-      mouseOver: newStage.mouseOver,
-      isActive: newStage.isActive === "Yes"
-    }]);
+    // Add new stage and sort by order
+    setWorkflowStages(prevStages => 
+      [...prevStages, {
+        name: newStage.name,
+        order: newStage.order
+      }].sort((a, b) => a.order - b.order)
+    );
+    
+    // Close the add stage popup
+    setShowStagePopup(false);
   };
 
   const deleteStage = (index) => {
-    const updated = [...workflowStages];
-    updated.splice(index, 1);
-    setWorkflowStages(updated);
+    setWorkflowStages(prevStages => prevStages.filter((_, i) => i !== index));
   };
 
   const stageColumns = [
