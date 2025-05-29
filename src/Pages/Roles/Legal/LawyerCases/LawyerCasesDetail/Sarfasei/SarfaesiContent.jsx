@@ -32,11 +32,17 @@ const dummyData = [
 ];
 
 const SarfaseiContent = ({ caseId }) => {
-  const [activeStep, setActiveStep] = useState(2); // Default to "Demand Notice Generation" step
+  const [activeStep, setActiveStep] = useState(2);
 
   const handleStepClick = (stepNum) => {
     setActiveStep(stepNum);
-    // console.log(":", stepNum);
+  };
+
+  const handleStageComplete = () => {
+    // Move to next stage
+    if (activeStep < steps.length) {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   if (!caseId) {
@@ -56,13 +62,12 @@ const SarfaseiContent = ({ caseId }) => {
           />
         </div>
 
-        {/* Conditionally render the DemandNoticeSarfasei component */}
-        {activeStep === 2 && <DemandNoticeSarfasei caseId={caseId} />}
-        {activeStep === 3 && <SarfaesiTrackingResponse caseId={caseId} />}
-        {activeStep === 4 && <SarfaesiPossessionNotice />}
-        {activeStep === 5 && <SarfaesiAssetValuation />}
-        {activeStep === 6 && <SarfaesiAuctionRecovery />}
-        {activeStep === 7 && <CaseDetailClose />}
+        {activeStep === 2 && <DemandNoticeSarfasei caseId={caseId} onStageComplete={handleStageComplete} />}
+        {activeStep === 3 && <SarfaesiTrackingResponse caseId={caseId} onStageComplete={handleStageComplete} />}
+        {activeStep === 4 && <SarfaesiPossessionNotice onStageComplete={handleStageComplete} />}
+        {activeStep === 5 && <SarfaesiAssetValuation onStageComplete={handleStageComplete} />}
+        {activeStep === 6 && <SarfaesiAuctionRecovery onStageComplete={handleStageComplete} />}
+        {activeStep === 7 && <CaseDetailClose onStageComplete={handleStageComplete} />}
       </div>
 
       <>

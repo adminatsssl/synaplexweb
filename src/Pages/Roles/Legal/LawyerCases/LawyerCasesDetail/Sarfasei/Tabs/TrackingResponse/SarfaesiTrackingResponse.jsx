@@ -21,7 +21,7 @@ const initialTrackingData = {
     isResponseOverdue: false
 };
 
-const SarfaesiTrackingResponse = ({ caseId }) => {
+const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
     const [trackingData, setTrackingData] = useState(initialTrackingData);
     const [loading, setLoading] = useState(false);
     const [hasExistingData, setHasExistingData] = useState(false);
@@ -51,8 +51,8 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
     };
 
     const handleInputChange = (e) => {
+        if (hasExistingData) return; // Prevent changes if data exists
         const { name, value } = e.target;
-        // For number inputs, convert the string value to a number
         const newValue = e.target.type === 'number' ? parseFloat(value) : value;
         setTrackingData(prev => ({
             ...prev,
@@ -61,6 +61,7 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
     };
 
     const handleRadioChange = (field) => (e) => {
+        if (hasExistingData) return; // Prevent changes if data exists
         const value = e.target.value === 'true';
         setTrackingData(prev => ({
             ...prev,
@@ -71,6 +72,14 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
     const handleSaveAndNext = async () => {
         if (!caseId) {
             alert('Case ID is missing!');
+            return;
+        }
+
+        // Don't allow saving if data already exists
+        if (hasExistingData) {
+            if (onStageComplete) {
+                onStageComplete();
+            }
             return;
         }
 
@@ -89,24 +98,23 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                 ]
             };
 
-            const method = hasExistingData ? 'put' : 'post';
-            const url = hasExistingData 
-                ? `/api/api/tracking60DayResponse/${caseId}`
-                : '/api/api/tracking60DayResponse';
-
             console.log('Sending payload:', payload);
-            const response = await axios[method](url, payload);
+            const response = await axios.post('/api/api/tracking60DayResponse', payload);
             
             if (response.status === 200) {
                 setHasExistingData(true);
-                // Update the local state with the response data if available
                 if (response.data) {
                     setTrackingData(prev => ({
                         ...prev,
                         ...response.data
                     }));
                 }
-                alert('Data saved successfully!');
+                // alert('Data saved successfully!');
+                
+                // Move to next stage after successful save
+                if (onStageComplete) {
+                    onStageComplete();
+                }
             }
         } catch (error) {
             console.error('Error saving tracking data:', error);
@@ -124,7 +132,9 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
         <div className="sarfaesi-tracking-response-container">
             <div className='sarfaesi-tracking-response-top-container'>
                 <div className='sarfaesi-tracking-response-top-container-heading'> 
-                    <h5 className="sarfaesi-tracking-response-title">Tracking 15-Day Response:</h5>
+                    <h5 className="sarfaesi-tracking-response-title">
+                        Tracking 15-Day Response {hasExistingData && '(Completed)'}
+                    </h5>
                 </div>
                 
                 <div className="sarfaesi-tracking-response-box">
@@ -138,6 +148,8 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                             className="sarfaesi-tracking-response-days-input"
                             step="0.01"
                             min="0"
+                            readOnly={hasExistingData}
+                            style={hasExistingData ? { backgroundColor: '#f5f5f5', cursor: 'not-allowed' } : {}}
                         />
                         <div className="sarfaesi-tracking-response-radio-container">
                             <div className="sarfaesi-tracking-response-radio-group1">
@@ -150,6 +162,7 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                                             value="true"
                                             checked={trackingData.isResponseReceived === true}
                                             onChange={handleRadioChange('isResponseReceived')}
+                                            disabled={hasExistingData}
                                         /> Yes
                                     </label>
                                     <label>
@@ -159,6 +172,7 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                                             value="false"
                                             checked={trackingData.isResponseReceived === false}
                                             onChange={handleRadioChange('isResponseReceived')}
+                                            disabled={hasExistingData}
                                         /> No
                                     </label>
                                 </div>
@@ -173,6 +187,7 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                                             value="true"
                                             checked={trackingData.isResponseOverdue === true}
                                             onChange={handleRadioChange('isResponseOverdue')}
+                                            disabled={hasExistingData}
                                         /> Yes
                                     </label>
                                     <label>
@@ -182,6 +197,7 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                                             value="false"
                                             checked={trackingData.isResponseOverdue === false}
                                             onChange={handleRadioChange('isResponseOverdue')}
+                                            disabled={hasExistingData}
                                         /> No
                                     </label>
                                 </div>
@@ -205,7 +221,7 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
                 <SaveButton 
                     label='Save & Next' 
                     onClick={handleSaveAndNext}
-                    disabled={loading}
+                    disabled={loading || (hasExistingData && !onStageComplete)}
                 />
             </div>
         </div>
@@ -213,7 +229,8 @@ const SarfaesiTrackingResponse = ({ caseId }) => {
 };
 
 SarfaesiTrackingResponse.propTypes = {
-    caseId: PropTypes.number.isRequired
+    caseId: PropTypes.number.isRequired,
+    onStageComplete: PropTypes.func
 };
 
 export default SarfaesiTrackingResponse;
