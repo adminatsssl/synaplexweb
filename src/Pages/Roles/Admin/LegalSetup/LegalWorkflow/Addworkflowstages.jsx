@@ -1,74 +1,172 @@
 import React, { useState } from "react";
 import "./Addworkflowstages.css";
-import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
-import CancelButton from "../../../../ReusableComponents/CancelButton";
 
 const Addworkflowstages = ({ onClose, onSave }) => {
-  const [name, setName] = useState("");
-  const [order, setOrder] = useState("");
+  const [formData, setFormData] = useState({
+    stageName: "",
+    stageOrder: "0",
+    isActive: true,
+    displayName: "",
+    mouseOver: "",
+    autoNoticeGeneration: false,
+    autoNoticeType: "",
+    autoNoticeOrder: "0",
+    dispositionStages: []
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
   const handleSave = () => {
-    if (!name.trim()) {
+    if (!formData.stageName.trim()) {
       alert("Stage name is required");
       return;
     }
 
-    if (!order || order <= 0) {
-      alert("Valid stage order is required");
-      return;
-    }
-
-    const newStage = {
-      name: name.trim(),
-      order: parseInt(order)
+    // Transform the data to match the expected API format
+    const payload = {
+      name: formData.stageName.trim(),
+      order: parseInt(formData.stageOrder),
+      isActive: formData.isActive,
+      displayName: formData.displayName,
+      mouseOver: formData.mouseOver,
+      autoNoticeGeneration: formData.autoNoticeGeneration,
+      autoNoticeType: formData.autoNoticeType,
+      autoNoticeOrder: parseInt(formData.autoNoticeOrder),
+      dispositionStages: formData.dispositionStages
     };
-    onSave(newStage);
+
+    onSave(payload);
     onClose();
   };
 
   return (
-    <div className="add-workflow-overlay">
-      <div className="add-workflow-modal">
-        <div className="add-workflow-heading">
-          <h4>Add Workflow Stage</h4>
-          <button className="add-workflow-closebutton" onClick={onClose}>X</button>
+    <div className="modal-container">
+      <div className="modal-box">
+        <div className="modal-title">
+          <h2>Legal Workflow Stages</h2>
+          <button className="close-btn" onClick={onClose}>×</button>
         </div>
-    
-        <div className="add-workflow-middleContent">
-          <div className="add-workflow-form-grid">
-            <div className="add-workflow-top-barcontent">
-              <div className="add-workflow-top-barcontent-one">
-                <label>Stage Name<span style={{ color: 'red' }}>*</span></label>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="Enter stage name"
-                />
-              </div>
 
-              <div className="add-workflow-top-barcontent-one">
-                <label>Stage Order<span style={{ color: 'red' }}>*</span></label>
-                <input
-                  type="number"
-                  value={order}
-                  onChange={(e) => setOrder(e.target.value)}
-                  required
-                  placeholder="Enter stage order"
-                  min="1"
-                />
+        <div className="modal-body">
+          <div className="form-row">
+            <div className="input-group">
+              <label>Name</label>
+              <input
+                type="text"
+                name="stageName"
+                value={formData.stageName}
+                onChange={handleChange}
+                placeholder="Enter name"
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Stage order</label>
+              <input
+                type="text"
+                name="stageOrder"
+                value={formData.stageOrder}
+                onChange={handleChange}
+                placeholder="0"
+              />
+            </div>
+
+            <div className="input-group radio-container">
+              <label>Is active</label>
+              <div className="radio-options">
+                <label>
+                  <input
+                    type="radio"
+                    name="isActive"
+                    checked={formData.isActive}
+                    onChange={() => setFormData(prev => ({ ...prev, isActive: true }))}
+                  />
+                  Yes
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="isActive"
+                    checked={!formData.isActive}
+                    onChange={() => setFormData(prev => ({ ...prev, isActive: false }))}
+                  />
+                  No
+                </label>
               </div>
             </div>
           </div>
+
+          <div className="input-group full-width">
+            <label>Display name</label>
+            <input
+              type="text"
+              name="displayName"
+              value={formData.displayName}
+              onChange={handleChange}
+              placeholder="Enter display name"
+            />
+          </div>
+
+          <div className="input-group full-width">
+            <label>Mouse Over</label>
+            <input
+              type="text"
+              name="mouseOver"
+              value={formData.mouseOver}
+              onChange={handleChange}
+              placeholder="Enter mouse over text"
+            />
+          </div>
+
+          <div className="notice-section">
+            <label>Auto Notice Generation</label>
+            <div className="notice-controls">
+              <input
+                type="checkbox"
+                name="autoNoticeGeneration"
+                checked={formData.autoNoticeGeneration}
+                onChange={handleChange}
+              />
+              <select
+                name="autoNoticeType"
+                value={formData.autoNoticeType}
+                onChange={handleChange}
+                disabled={!formData.autoNoticeGeneration}
+              >
+                <option value="">Select type</option>
+              </select>
+              <input
+                type="text"
+                name="autoNoticeOrder"
+                value={formData.autoNoticeOrder}
+                onChange={handleChange}
+                placeholder="0"
+                disabled={!formData.autoNoticeGeneration}
+              />
+            </div>
+          </div>
+
+          <div className="disposition-section">
+            <label>Disposition Stages</label>
+            <select
+              name="dispositionStages"
+              value={formData.dispositionStages}
+              onChange={handleChange}
+              multiple
+            >
+            </select>
+          </div>
         </div>
 
-        <div className="add-workflow-modal-actions">
-          <CancelButton onClick={onClose} className="add-workflow-cancel-btn" />
-          <SaveButton
-            onClick={handleSave}
-            className="add-workflow-save-btn"
-            label="Save"
-          />
+        <div className="modal-footer">
+          <button className="cancel-btn" onClick={onClose}>Cancel</button>
+          <button className="save-btn" onClick={handleSave}>SAVE</button>
         </div>
       </div>
     </div>
