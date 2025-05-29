@@ -13,15 +13,26 @@ const WorkflowModal = ({ onClose, workflow }) => {
   const [workflowStages, setWorkflowStages] = useState([]);
   const [showStagePopup, setShowStagePopup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showDispositionDropdown, setShowDispositionDropdown] = useState(false);
+  const [selectedDispositions, setSelectedDispositions] = useState([]);
+
+  // Dummy disposition stages
+  const dispositionStages = [
+    { id: 1, name: "Initial Review" },
+    { id: 2, name: "Document Verification" },
+    { id: 3, name: "Legal Assessment" },
+    { id: 4, name: "Court Filing" },
+    { id: 5, name: "Case Hearing" },
+    { id: 6, name: "Final Disposition" }
+  ];
 
   // Reset form when workflow changes (including when modal opens/closes)
   useEffect(() => {
-    // Clear form first
     setName("");
     setDescription("");
     setWorkflowStages([]);
+    setSelectedDispositions([]);
     
-    // If editing existing workflow, populate form
     if (workflow) {
       setName(workflow.name || "");
       setDescription(workflow.description || "");
@@ -34,8 +45,21 @@ const WorkflowModal = ({ onClose, workflow }) => {
           .sort((a, b) => a.order - b.order);
         setWorkflowStages(mappedStages);
       }
+      if (workflow.dispositions) {
+        setSelectedDispositions(workflow.dispositions.map(d => d.id));
+      }
     }
   }, [workflow]);
+
+  const toggleDisposition = (id) => {
+    setSelectedDispositions(prev => {
+      if (prev.includes(id)) {
+        return prev.filter(item => item !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
+  };
 
   const handleSave = async (e) => {
     if (e) {
@@ -72,7 +96,8 @@ const WorkflowModal = ({ onClose, workflow }) => {
         workflowStages: uniqueStages.map(stage => ({
           stageName: stage.name,
           stageOrder: stage.order
-        }))
+        })),
+        dispositionIds: selectedDispositions
       };
 
       let response;
@@ -170,6 +195,39 @@ const WorkflowModal = ({ onClose, workflow }) => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Enter workflow description"
             />
+
+            <div className="disposition-dropdown-container">
+              <label>Case Disposition Stages</label>
+              <div 
+                className="disposition-dropdown-header"
+                onClick={() => setShowDispositionDropdown(!showDispositionDropdown)}
+              >
+                <span>
+                  {selectedDispositions.length 
+                    ? `${selectedDispositions.length} stages selected` 
+                    : "Select disposition stages"}
+                </span>
+                <span className="dropdown-arrow">{showDispositionDropdown ? '▼' : '▶'}</span>
+              </div>
+              {showDispositionDropdown && (
+                <div className="disposition-dropdown-list">
+                  {dispositionStages.map(stage => (
+                    <div 
+                      key={stage.id} 
+                      className="disposition-dropdown-item"
+                      onClick={() => toggleDisposition(stage.id)}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedDispositions.includes(stage.id)}
+                        onChange={() => {}}
+                      />
+                      <span>{stage.name}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <h4 style={{ marginTop: "20px" }}>Workflow Stages<span style={{ color: 'red' }}>*</span></h4>
             <button

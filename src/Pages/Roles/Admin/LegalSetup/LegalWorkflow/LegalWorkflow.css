@@ -147,3 +147,79 @@ background-color: #004c97;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.LegalWorkFlow-multiselect {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.LegalWorkFlow-multiselect option {
+  padding: 8px;
+}
+
+.LegalWorkFlow-multiselect option:checked {
+  background-color: #e6f3ff;
+}
+
+.disposition-dropdown-container {
+  position: relative;
+  margin-top: 15px;
+}
+
+.disposition-dropdown-header {
+  width: 25%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.disposition-dropdown-header:hover {
+  border-color: #999;
+}
+
+.dropdown-arrow {
+  color: #666;
+  font-size: 12px;
+}
+
+.disposition-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.disposition-dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.disposition-dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.disposition-dropdown-item input[type="checkbox"] {
+  margin: 0;
+}
