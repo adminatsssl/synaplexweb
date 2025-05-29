@@ -37,7 +37,7 @@ const ChequeBounceContent = () => {
 
   const handleStepClick = (stepNum) => {
     setActiveStep(stepNum);
-    console.log("Clicked step:", stepNum);
+    // console.log("Clicked step:", stepNum);
   };
 
   return (

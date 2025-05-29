@@ -14,8 +14,14 @@ const LawyerCasesDetail = ({ caseData }) => {
     // Debug: Log the caseData structure
     console.log('Case Data:', caseData);
 
-    // Try to find the case ID from various possible properties
-    const caseId = caseData.id || caseData.ID || caseData.caseId || caseData.CaseID || caseData.LoanID;
+    // Extract and ensure caseId is a number
+    const caseId = parseInt(caseData.CaseID || caseData.id || '0', 10);
+
+    // Validate caseId
+    if (!caseId) {
+        console.error('Invalid or missing case ID:', caseData);
+        return <div>Error: Invalid case ID</div>;
+    }
 
     return (
         <Layout>

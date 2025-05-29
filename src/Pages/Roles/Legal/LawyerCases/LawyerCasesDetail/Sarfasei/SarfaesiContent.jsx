@@ -36,7 +36,7 @@ const SarfaseiContent = ({ caseId }) => {
 
   const handleStepClick = (stepNum) => {
     setActiveStep(stepNum);
-    console.log("Clicked step:", stepNum);
+    // console.log(":", stepNum);
   };
 
   if (!caseId) {
@@ -58,7 +58,7 @@ const SarfaseiContent = ({ caseId }) => {
 
         {/* Conditionally render the DemandNoticeSarfasei component */}
         {activeStep === 2 && <DemandNoticeSarfasei caseId={caseId} />}
-        {activeStep === 3 && <SarfaesiTrackingResponse />}
+        {activeStep === 3 && <SarfaesiTrackingResponse caseId={caseId} />}
         {activeStep === 4 && <SarfaesiPossessionNotice />}
         {activeStep === 5 && <SarfaesiAssetValuation />}
         {activeStep === 6 && <SarfaesiAuctionRecovery />}
