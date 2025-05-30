@@ -36,6 +36,10 @@ const SarfaseiContent = ({ caseId }) => {
   const [activeStep, setActiveStep] = useState(2); // Default to "Demand Notice Generation" step
 
   const handleStepClick = (stepNum) => {
+    // Prevent clicking on step 1 (Initiation)
+    if (stepNum === 1) {
+      return;
+    }
     setActiveStep(stepNum);
   };
 
@@ -60,6 +64,7 @@ const SarfaseiContent = ({ caseId }) => {
             steps={steps}
             activeStep={activeStep}
             onStepClick={handleStepClick}
+            disabledSteps={[1]} // Disable step 1 (Initiation)
           />
         </div>
 

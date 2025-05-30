@@ -6,8 +6,10 @@ import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import DispositionModal from '../DispositionModal';
 import './SarfaesiPossessionNotice.css'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const SarfaesiPossessionNotice = ({ caseId })=>{
+const SarfaesiPossessionNotice = ({ caseId, onNextStep })=>{
+    const navigate = useNavigate();
     const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
     const [isDataExists, setIsDataExists] = useState(false);
     const [formData, setFormData] = useState({
@@ -47,7 +49,7 @@ const SarfaesiPossessionNotice = ({ caseId })=>{
     };
 
     const handleInputChange = (e) => {
-        if (isDataExists) return; // Prevent editing if data exists
+        if (isDataExists) return;
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -56,14 +58,16 @@ const SarfaesiPossessionNotice = ({ caseId })=>{
     };
 
     const handleSaveDisposition = (dispositionData) => {
-        if (isDataExists) return; // Prevent adding dispositions if data exists
+        if (isDataExists) return;
         setDispositions(prev => [...prev, dispositionData]);
         closeDispositionModal();
     };
 
     const handleSubmit = async () => {
         if (isDataExists) {
-            // alert('This possession notice has already been saved and cannot be modified.');
+            if (onNextStep) {
+                onNextStep();
+            }
             return;
         }
 
@@ -71,20 +75,21 @@ const SarfaesiPossessionNotice = ({ caseId })=>{
             const payload = {
                 ...formData,
                 dispositions
-                
             };
             await axios.post('/api/api/possessionNotice', payload);
-            // alert('Possession notice saved successfully!');
-            setIsDataExists(true); // Lock the form after successful save
+            setIsDataExists(true);
+            
+            // Move to next step
+            if (onNextStep) {
+                onNextStep();
+            }
         } catch (error) {
             console.error('Error saving possession notice:', error);
-            alert('Error saving possession notice');
         }
     };
 
     const openDispositionModal = () => {
         if (isDataExists) {
-            alert('Cannot add dispositions as data already exists');
             return;
         }
         setIsDispositionModalOpen(true);
@@ -155,7 +160,7 @@ const SarfaesiPossessionNotice = ({ caseId })=>{
                         <div className="Sarfasei-possessionnotice-form-group">
                             <label>Remarks</label>
                             <textarea 
-                                className="Sarfasei-possessionnotice-textarea" 
+                                className="Sarfaesi-possessionnotice-textarea" 
                                 rows="3"
                                 name="remarks"
                                 value={formData.remarks}
@@ -186,9 +191,8 @@ const SarfaesiPossessionNotice = ({ caseId })=>{
             <div className='possessionNotice-Sarfasei-Bottom-btn'>
                 <CancelButton/>
                 <SaveButton 
-                    label='Save & Next' 
+                    label={isDataExists ? 'Next' : 'Save & Next'}
                     onClick={handleSubmit}
-                    disabled={isDataExists}
                 />
             </div>
         </div>

@@ -6,6 +6,7 @@ export default function ReusableCaseStage({
   activeStep = 1,
   onStepClick = null,
   showArrow = true,
+  disabledSteps = [],
 }) {
   return (
     <div>
@@ -14,6 +15,7 @@ export default function ReusableCaseStage({
           const stepNumber = index + 1;
           const isCompleted = stepNumber < activeStep;
           const isActive = stepNumber === activeStep;
+          const isDisabled = disabledSteps.includes(stepNumber);
 
           const stepClass = `reusable-case-stage-step-box ${
             isActive
@@ -21,10 +23,10 @@ export default function ReusableCaseStage({
               : isCompleted
               ? "reusable-case-stage-completed"
               : "reusable-case-stage-upcoming reusable-case-stage-clickable"
-          }`;
+          } ${isDisabled ? "reusable-case-stage-disabled" : ""}`;
 
           const handleClick = () => {
-            if (onStepClick) {
+            if (onStepClick && !isDisabled) {
               onStepClick(stepNumber);
             }
           };
@@ -34,7 +36,7 @@ export default function ReusableCaseStage({
               key={index}
               className={stepClass}
               onClick={handleClick}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
             >
               <div className="reusable-case-stage-step-title">
                 Step {stepNumber}
