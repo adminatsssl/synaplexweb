@@ -4,10 +4,14 @@ import "./ReusableCaseStage.css";
 export default function ReusableCaseStage({
   steps = [],
   activeStep = 1,
+  viewedStep = null,
   onStepClick = null,
   showArrow = true,
   disabledSteps = [],
 }) {
+  // If viewedStep is not provided, use activeStep
+  const currentlyViewedStep = viewedStep || activeStep;
+
   return (
     <div>
       <div className="reusable-case-stage-progress-container">
@@ -15,15 +19,19 @@ export default function ReusableCaseStage({
           const stepNumber = index + 1;
           const isCompleted = stepNumber < activeStep;
           const isActive = stepNumber === activeStep;
+          const isViewed = stepNumber === currentlyViewedStep;
           const isDisabled = disabledSteps.includes(stepNumber);
 
+          // Determine the CSS classes for the step
           const stepClass = `reusable-case-stage-step-box ${
             isActive
               ? "reusable-case-stage-active"
               : isCompleted
               ? "reusable-case-stage-completed"
-              : "reusable-case-stage-upcoming reusable-case-stage-clickable"
-          } ${isDisabled ? "reusable-case-stage-disabled" : ""}`;
+              : "reusable-case-stage-upcoming"
+          } ${!isDisabled ? "reusable-case-stage-clickable" : ""} ${
+            isDisabled ? "reusable-case-stage-disabled" : ""
+          }`;
 
           const handleClick = () => {
             if (onStepClick && !isDisabled) {
@@ -53,7 +61,7 @@ export default function ReusableCaseStage({
       </div>
 
       <div className="reusable-case-stage-content">
-        {steps[activeStep - 1]?.content}
+        {steps[currentlyViewedStep - 1]?.content}
       </div>
     </div>
   );

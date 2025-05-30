@@ -33,11 +33,14 @@ const dummyData = [
 ];
 
 const SarfaseiContent = ({ caseId, initialActiveStep = 2 }) => {
+  // Keep track of both the active stage and the currently viewed stage
   const [activeStep, setActiveStep] = useState(initialActiveStep);
+  const [viewedStep, setViewedStep] = useState(initialActiveStep);
 
-  // Update activeStep when initialActiveStep changes
+  // Update both active and viewed step when initialActiveStep changes
   useEffect(() => {
     setActiveStep(initialActiveStep);
+    setViewedStep(initialActiveStep);
   }, [initialActiveStep]);
 
   const handleStepClick = (stepNum) => {
@@ -45,14 +48,32 @@ const SarfaseiContent = ({ caseId, initialActiveStep = 2 }) => {
     if (stepNum === 1) {
       return;
     }
-    setActiveStep(stepNum);
+    
+    // Prevent accessing future stages beyond the active stage
+    if (stepNum > activeStep) {
+      return;
+    }
+    
+    // Only update the viewed step, not the active step
+    setViewedStep(stepNum);
   };
 
   const handleStageComplete = () => {
-    // Move to next stage
+    // Move both active and viewed step forward
     if (activeStep < steps.length) {
-      setActiveStep(activeStep + 1);
+      const nextStep = activeStep + 1;
+      setActiveStep(nextStep);
+      setViewedStep(nextStep);
     }
+  };
+
+  // Calculate disabled steps - includes step 1 and all steps beyond current active step
+  const getDisabledSteps = () => {
+    const disabledSteps = [1]; // Always disable step 1 (Initiation)
+    for (let i = activeStep + 1; i <= steps.length; i++) {
+      disabledSteps.push(i);
+    }
+    return disabledSteps;
   };
 
   if (!caseId) {
@@ -67,43 +88,44 @@ const SarfaseiContent = ({ caseId, initialActiveStep = 2 }) => {
         <div className="Sarfasei-resuable-content">
           <ReusableCaseStage
             steps={steps}
-            activeStep={activeStep}
+            activeStep={activeStep}     // This controls the dark blue indicator
+            viewedStep={viewedStep}     // This controls which content is shown
             onStepClick={handleStepClick}
-            disabledSteps={[1]} // Disable step 1 (Initiation)
+            disabledSteps={getDisabledSteps()}
           />
         </div>
 
-        {activeStep === 2 && (
+        {viewedStep === 2 && (
           <DemandNoticeSarfasei 
             caseId={caseId} 
             onStageComplete={handleStageComplete} 
           />
         )}
-        {activeStep === 3 && (
+        {viewedStep === 3 && (
           <SarfaesiTrackingResponse 
             caseId={caseId} 
             onStageComplete={handleStageComplete} 
           />
         )}
-        {activeStep === 4 && (
+        {viewedStep === 4 && (
           <SarfaesiPossessionNotice 
             caseId={caseId}
             onStageComplete={handleStageComplete} 
           />
         )}
-        {activeStep === 5 && (
+        {viewedStep === 5 && (
           <SarfaesiAssetValuation 
             caseId={caseId}
             onStageComplete={handleStageComplete} 
           />
         )}
-        {activeStep === 6 && (
+        {viewedStep === 6 && (
           <SarfaesiAuctionRecovery 
             caseId={caseId}
             onStageComplete={handleStageComplete} 
           />
         )}
-        {activeStep === 7 && (
+        {viewedStep === 7 && (
           <CaseDetailClose 
             caseId={caseId}
             onStageComplete={handleStageComplete} 
