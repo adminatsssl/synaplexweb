@@ -1,29 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import DispositionModal from '../DispositionModal';
 import './SarfaesiAuctionRecovery.css'
+import axios from 'axios';
 
-const SarfaesiAuctionRecovery = () => {
+const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
     const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+    const [isDataExists, setIsDataExists] = useState(false);
+    const [formData, setFormData] = useState({
+        recoveryAmount: '',
+        recoveryDate: '',
+        recoveryStatus: 'Pending',
+        recoveryMode: 'Direct transfer',
+        remark: '',
+        caseId: caseId
+    });
+    const [dispositions, setDispositions] = useState([]);
 
-    const openDispositionModal = () => setIsDispositionModalOpen(true);
-    const closeDispositionModal = () => setIsDispositionModalOpen(false);
+    useEffect(() => {
+        fetchAuctionRecovery();
+    }, [caseId]);
 
-    const handleSaveDisposition = () => {
-        // Handle saving disposition data
+    const fetchAuctionRecovery = async () => {
+        try {
+            const response = await axios.get(`/api/api/auctionRecovery/case/${caseId}`);
+            const data = response.data;
+            if (data && Object.keys(data).length > 0) {
+                setIsDataExists(true);
+                setFormData({
+                    recoveryAmount: data.recoveryAmount || '',
+                    recoveryDate: data.recoveryDate || '',
+                    recoveryStatus: data.recoveryStatus || 'Pending',
+                    recoveryMode: data.recoveryMode || 'Direct transfer',
+                    remark: data.remark || '',
+                    caseId: data.caseId
+                });
+                setDispositions(data.dispositions || []);
+            }
+        } catch (error) {
+            console.error('Error fetching auction recovery:', error);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        if (isDataExists) return;
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSaveDisposition = (dispositionData) => {
+        if (isDataExists) return;
+        setDispositions(prev => [...prev, dispositionData]);
         closeDispositionModal();
     };
 
-    const dispositionData = [
-        { stage: "Stage 1", comment: "Hello world" },
-    ];
+    const handleSubmit = async () => {
+        if (isDataExists) {
+            if (onStageComplete) {
+                onStageComplete();
+            }
+            return;
+        }
+
+        try {
+            const payload = {
+                ...formData,
+                dispositions
+            };
+            await axios.post('/api/api/auctionRecovery', payload);
+            setIsDataExists(true);
+            
+            if (onStageComplete) {
+                onStageComplete();
+            }
+        } catch (error) {
+            console.error('Error saving auction recovery:', error);
+        }
+    };
+
+    const openDispositionModal = () => {
+        if (isDataExists) return;
+        setIsDispositionModalOpen(true);
+    };
+    
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
     const dispositionColumns = [
-        { key: "stage", label: "Disposition Stage" },
-        { key: "comment", label: "Comment" },
+        { key: "name", label: "Disposition Stage" },
+        { key: "description", label: "Description" }
     ];
 
     return (
@@ -38,52 +108,75 @@ const SarfaesiAuctionRecovery = () => {
                         <div className='sarfaesi-auctionRecovery-input-container'>
                             <div className='sarfaesi-auctionRecovery-input'>
                                 <label>Recovery Amount</label>
-                                <input type='text' placeholder='0.00' />
+                                <input 
+                                    type='number' 
+                                    name="recoveryAmount"
+                                    value={formData.recoveryAmount}
+                                    onChange={handleInputChange}
+                                    placeholder='0.00'
+                                    disabled={isDataExists}
+                                />
                             </div>
                             <div className='sarfaesi-auctionRecovery-input'>
                                 <label>Recovery Date</label>
-                                <input type='date' placeholder='mm/dd/yyyy' />
+                                <input 
+                                    type='date' 
+                                    name="recoveryDate"
+                                    value={formData.recoveryDate}
+                                    onChange={handleInputChange}
+                                    disabled={isDataExists}
+                                />
                             </div>
-
                         </div>
                         <div className="sarfaesi-auctionRecovery-input-container">
-                                <div className='sarfaesi-auctionRecovery-input'>
-                                    <label>Recovery Status</label>
-                                    <select>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Completed">Completed</option>
-                                        <option value="Failed">Failed</option>
-                                    </select>
-                                </div>
-
-                                <div className='sarfaesi-auctionRecovery-input'>
-                                    <label>Recovery Mode</label>
-                                    <select>
-                                        <option value="Pending">Direct transfer</option>
-                                        <option value="Completed">Adjusted Against Loan</option>
-                                        <option value="Failed">Others</option>
-                                    </select>
-                                </div>
-
-
+                            <div className='sarfaesi-auctionRecovery-input'>
+                                <label>Recovery Status</label>
+                                <select
+                                    name="recoveryStatus"
+                                    value={formData.recoveryStatus}
+                                    onChange={handleInputChange}
+                                    disabled={isDataExists}
+                                >
+                                    <option value="Pending">Pending</option>
+                                    <option value="Recovered">Recovered</option>
+                                    <option value="Failed">Failed</option>
+                                </select>
+                            </div>
+                            <div className='sarfaesi-auctionRecovery-input'>
+                                <label>Recovery Mode</label>
+                                <select
+                                    name="recoveryMode"
+                                    value={formData.recoveryMode}
+                                    onChange={handleInputChange}
+                                    disabled={isDataExists}
+                                >
+                                    <option value="Direct transfer">Direct transfer</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Adjusted Against Loan">Adjusted Against Loan</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
                         </div>
                         <div>
                             <label>Remark</label>
-                            <textarea></textarea>
+                            <textarea
+                                name="remark"
+                                value={formData.remark}
+                                onChange={handleInputChange}
+                                disabled={isDataExists}
+                            ></textarea>
                         </div>
                     </div>
-
                 </div>
             </div>
-
 
             <div className='sarfaesi-auctionRecovery-middle-content'>
                 <div className='sarfaesi-auctionRecovery-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={openDispositionModal} />
+                    <AddButton text="Add " onClick={openDispositionModal} disabled={isDataExists} />
                 </div>
                 <div className='sarfaesi-auctionRecovery-middle-content-formdata'>
-                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+                    <ReusableGrid columns={dispositionColumns} data={dispositions} />
                 </div>
             </div>
 
@@ -95,8 +188,10 @@ const SarfaesiAuctionRecovery = () => {
 
             <div className='sarfaesi-auctionRecovery-Bottom-btn'>
                 <CancelButton />
-                <SaveButton label='Save & Next' />
-
+                <SaveButton 
+                    label={isDataExists ? 'Next' : 'Save & Next'}
+                    onClick={handleSubmit}
+                />
             </div>
         </div>
     )

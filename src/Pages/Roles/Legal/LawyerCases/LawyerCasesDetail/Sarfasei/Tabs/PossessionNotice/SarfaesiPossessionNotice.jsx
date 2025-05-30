@@ -6,10 +6,8 @@ import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import DispositionModal from '../DispositionModal';
 import './SarfaesiPossessionNotice.css'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const SarfaesiPossessionNotice = ({ caseId, onNextStep })=>{
-    const navigate = useNavigate();
+const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
     const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
     const [isDataExists, setIsDataExists] = useState(false);
     const [formData, setFormData] = useState({
@@ -65,8 +63,8 @@ const SarfaesiPossessionNotice = ({ caseId, onNextStep })=>{
 
     const handleSubmit = async () => {
         if (isDataExists) {
-            if (onNextStep) {
-                onNextStep();
+            if (onStageComplete) {
+                onStageComplete();
             }
             return;
         }
@@ -79,9 +77,8 @@ const SarfaesiPossessionNotice = ({ caseId, onNextStep })=>{
             await axios.post('/api/api/possessionNotice', payload);
             setIsDataExists(true);
             
-            // Move to next step
-            if (onNextStep) {
-                onNextStep();
+            if (onStageComplete) {
+                onStageComplete();
             }
         } catch (error) {
             console.error('Error saving possession notice:', error);
@@ -89,16 +86,15 @@ const SarfaesiPossessionNotice = ({ caseId, onNextStep })=>{
     };
 
     const openDispositionModal = () => {
-        if (isDataExists) {
-            return;
-        }
+        if (isDataExists) return;
         setIsDispositionModalOpen(true);
     };
+    
     const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
     const dispositionColumns = [
         { key: "name", label: "Disposition Stage" },
-        { key: "description", label: "Description" },
+        { key: "description", label: "Description" }
     ];
 
     return(
