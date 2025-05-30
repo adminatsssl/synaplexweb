@@ -22,6 +22,7 @@ const LawyerCaseDetailPage = () => {
             CaseID: item.id,
             LoanID: item.loan.loanNumber,
             CaseType: item.workflowType,
+            activeStageName:item.activeStageName,
             Status: item.status,
             Borrower: item.loan.borrower.name,
             LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,

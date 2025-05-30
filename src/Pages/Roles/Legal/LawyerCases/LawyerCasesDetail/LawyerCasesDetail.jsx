@@ -45,7 +45,7 @@ const LawyerCasesDetail = ({ caseData }) => {
                         <p>CNR No.<br /><strong>{caseData.LoanID}</strong></p>
                         <p>File No.<br /><strong>{caseData.CaseType}</strong> </p>
                         <p>Case Type<br /><strong>{caseData.LoanAmount}</strong> </p>
-                        <p>Stage<br /><strong>{caseData.NPADate}</strong> </p>
+                        <p>Stage<br /><strong>{caseData.activeStageName}</strong> </p>
                         <p>Associated Court<br /><strong> {caseData.Court}</strong> </p>
                         <p>Created On<br /><strong>{caseData.AssignedTo}</strong> </p>
                         <p>Created By<br /><strong>{caseData.Court}</strong> </p>
