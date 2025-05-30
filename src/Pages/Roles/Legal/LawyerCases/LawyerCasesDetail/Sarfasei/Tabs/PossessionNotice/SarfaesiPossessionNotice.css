@@ -73,3 +73,27 @@
     text-align: center;
     margin-top: 20px;
 }
+
+.notice-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: 1px solid #ffeeba;
+    font-size: 14px;
+}
+
+/* Style for disabled inputs */
+.possessionnotice-input:disabled,
+.Sarfasei-possessionnotice-textarea:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Style for disabled buttons */
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
