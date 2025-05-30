@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReusableCaseStage from "../ReusableCaseStage";
 import './SarfaesiContent.css';
 import DemandNoticeSarfasei from "./Tabs/DemandNoticeSarfasei";
@@ -32,8 +32,13 @@ const dummyData = [
   },
 ];
 
-const SarfaseiContent = ({ caseId }) => {
-  const [activeStep, setActiveStep] = useState(2); // Default to "Demand Notice Generation" step
+const SarfaseiContent = ({ caseId, initialActiveStep = 2 }) => {
+  const [activeStep, setActiveStep] = useState(initialActiveStep);
+
+  // Update activeStep when initialActiveStep changes
+  useEffect(() => {
+    setActiveStep(initialActiveStep);
+  }, [initialActiveStep]);
 
   const handleStepClick = (stepNum) => {
     // Prevent clicking on step 1 (Initiation)
@@ -105,14 +110,16 @@ const SarfaseiContent = ({ caseId }) => {
           />
         )}
       </div>
-
-      <CaseHistoryAccordion data={dummyData} />
+      <>
+        <CaseHistoryAccordion data={dummyData} />
+      </>
     </div>
   );
 };
 
 SarfaseiContent.propTypes = {
-  caseId: PropTypes.number.isRequired
+  caseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  initialActiveStep: PropTypes.number
 };
 
 export default SarfaseiContent;
