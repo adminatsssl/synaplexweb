@@ -80,12 +80,11 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
 
     const handleSaveAndNext = async () => {
         if (!caseId) {
-            alert('Case ID is missing!');
+            console.error('No caseId provided');
             return;
         }
 
         if (hasExistingData) {
-            // If data exists and onStageComplete is provided, move to next stage
             if (onStageComplete) {
                 onStageComplete();
             }
@@ -99,25 +98,14 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
                 caseId: caseId
             };
 
-            const response = await axios.post('/api/api/demandNotice', payload);
+            await axios.post('/api/api/demandNotice', payload);
+            setHasExistingData(true);
             
-            if (response.status === 200) {
-                setHasExistingData(true);
-                if (response.data) {
-                    setNoticeData(prev => ({
-                        ...prev,
-                        ...response.data
-                    }));
-                }
-                
-                // Only call onStageComplete if it's provided
-                if (onStageComplete) {
-                    onStageComplete();
-                }
+            if (onStageComplete) {
+                onStageComplete();
             }
         } catch (error) {
-            console.error('Error saving notice data:', error);
-            alert('Error saving data. Please try again.');
+            console.error('Error saving demand notice:', error);
         } finally {
             setLoading(false);
         }
@@ -242,11 +230,11 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
             </div>
 
             <div className='demandNotice-Sarfasei-Bottom-btn'>
-                <CancelButton />
+                <CancelButton/>
                 <SaveButton 
-                    label='Save & Next'
+                    label={hasExistingData ? 'Next' : 'Save & Next'}
                     onClick={handleSaveAndNext}
-                    disabled={loading || (hasExistingData && onStageComplete === undefined)}
+                    disabled={loading}
                 />
             </div>
 

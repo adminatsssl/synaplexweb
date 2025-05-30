@@ -8,78 +8,66 @@ import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
 import DispositionModal from '../DispositionModal';
 import axios from 'axios';
 
-const dispositionData = [
-    { stage: "Stage 1", comment: "Hello world" },
-];
-
-const dispositionColumns = [
-    { key: "stage", label: "Disposition Stage" },
-    { key: "comment", label: "Comment" },
-];
-
-const initialTrackingData = {
-    daysRemainingForResponse: 0,
-    isResponseReceived: false,
-    isResponseOverdue: false
-};
-
 const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
-    const [trackingData, setTrackingData] = useState(initialTrackingData);
-    const [loading, setLoading] = useState(false);
-    const [hasExistingData, setHasExistingData] = useState(false);
     const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+    const [isDataExists, setIsDataExists] = useState(false);
+    const [formData, setFormData] = useState({
+        daysRemainingForResponse: '',
+        isResponseReceived: false,
+        isResponseOverdue: false,
+        caseId: caseId
+    });
+    const [dispositions, setDispositions] = useState([]);
 
     useEffect(() => {
-        if (caseId) {
-            checkExistingData();
-        }
+        fetchTrackingResponse();
     }, [caseId]);
 
-    const checkExistingData = async () => {
+    const fetchTrackingResponse = async () => {
         try {
             const response = await axios.get(`/api/api/tracking60DayResponse/case/${caseId}`);
-            if (response.data && Object.keys(response.data).length > 0) {
-                setHasExistingData(true);
-                setTrackingData({
-                    daysRemainingForResponse: response.data.daysRemainingForResponse || 0,
-                    isResponseReceived: response.data.isResponseReceived || false,
-                    isResponseOverdue: response.data.isResponseOverdue || false
+            const data = response.data;
+            if (data && Object.keys(data).length > 0) {
+                setIsDataExists(true);
+                setFormData({
+                    daysRemainingForResponse: data.daysRemainingForResponse || '',
+                    isResponseReceived: data.isResponseReceived || false,
+                    isResponseOverdue: data.isResponseOverdue || false,
+                    caseId: data.caseId
                 });
+                setDispositions(data.dispositions || []);
             }
         } catch (error) {
-            // If 404 or no data, it means this is first time
-            // We don't need to show any error as this is expected for first visit
-            console.log('No existing tracking data found - first time visit');
+            console.error('Error fetching tracking response:', error);
         }
     };
 
     const handleInputChange = (e) => {
-        if (hasExistingData) return; // Prevent changes if data exists
+        if (isDataExists) return;
         const { name, value } = e.target;
-        const newValue = e.target.type === 'number' ? parseFloat(value) : value;
-        setTrackingData(prev => ({
+        setFormData(prev => ({
             ...prev,
-            [name]: newValue
+            [name]: value
         }));
     };
 
     const handleRadioChange = (field) => (e) => {
-        if (hasExistingData) return; // Prevent changes if data exists
+        if (isDataExists) return;
         const value = e.target.value === 'true';
-        setTrackingData(prev => ({
+        setFormData(prev => ({
             ...prev,
             [field]: value
         }));
     };
 
-    const handleSaveAndNext = async () => {
-        if (!caseId) {
-            alert('Case ID is missing!');
-            return;
-        }
+    const handleSaveDisposition = (dispositionData) => {
+        if (isDataExists) return;
+        setDispositions(prev => [...prev, dispositionData]);
+        closeDispositionModal();
+    };
 
-        // Don't allow saving if data already exists
-        if (hasExistingData) {
+    const handleSubmit = async () => {
+        if (isDataExists) {
             if (onStageComplete) {
                 onStageComplete();
             }
@@ -87,64 +75,39 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
         }
 
         try {
-            setLoading(true);
             const payload = {
-                daysRemainingForResponse: parseFloat(trackingData.daysRemainingForResponse) || 0,
-                isResponseReceived: trackingData.isResponseReceived,
-                isResponseOverdue: trackingData.isResponseOverdue,
-                caseId: caseId,
-                dispositions: [
-                    {
-                        name: "jkasfnjkaf",
-                        description: "asjkfajkf"
-                    }
-                ]
+                ...formData,
+                dispositions
             };
-
-            console.log('Sending payload:', payload);
-            const response = await axios.post('/api/api/tracking60DayResponse', payload);
+            await axios.post('/api/api/tracking60DayResponse', payload);
+            setIsDataExists(true);
             
-            if (response.status === 200) {
-                setHasExistingData(true);
-                if (response.data) {
-                    setTrackingData(prev => ({
-                        ...prev,
-                        ...response.data
-                    }));
-                }
-                // alert('Data saved successfully!');
-                
-                // Move to next stage after successful save
-                if (onStageComplete) {
-                    onStageComplete();
-                }
+            if (onStageComplete) {
+                onStageComplete();
             }
         } catch (error) {
-            console.error('Error saving tracking data:', error);
-            alert('Error saving data. Please try again.');
-        } finally {
-            setLoading(false);
+            console.error('Error saving tracking response:', error);
         }
     };
 
-    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const openDispositionModal = () => {
+        if (isDataExists) return;
+        setIsDispositionModalOpen(true);
+    };
+    
     const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
-    const handleSaveDisposition = () => {
-        // Handle saving disposition data
-        closeDispositionModal();
-    };
-
-    if (!caseId) {
-        return <div>Error: Case ID is required</div>;
-    }
+    const dispositionColumns = [
+        { key: "name", label: "Disposition Stage" },
+        { key: "description", label: "Description" }
+    ];
 
     return (
         <div className="sarfaesi-tracking-response-container">
             <div className='sarfaesi-tracking-response-top-container'>
                 <div className='sarfaesi-tracking-response-top-container-heading'> 
                     <h5 className="sarfaesi-tracking-response-title">
-                        Tracking 15-Day Response {hasExistingData && '(Completed)'}
+                        Tracking 60-Day Response {isDataExists && '(Completed)'}
                     </h5>
                 </div>
                 
@@ -154,61 +117,62 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
                         <input
                             type="number"
                             name="daysRemainingForResponse"
-                            value={trackingData.daysRemainingForResponse}
+                            value={formData.daysRemainingForResponse}
                             onChange={handleInputChange}
                             className="sarfaesi-tracking-response-days-input"
-                            step="0.01"
-                            min="0"
-                            readOnly={hasExistingData}
-                            style={hasExistingData ? { backgroundColor: '#f5f5f5', cursor: 'not-allowed' } : {}}
+                            disabled={isDataExists}
                         />
                         <div className="sarfaesi-tracking-response-radio-container">
                             <div className="sarfaesi-tracking-response-radio-group1">
-                                <p className="sarfaesi-tracking-response-radio-title"><strong>Is Response Received ?</strong></p>
+                                <p className="sarfaesi-tracking-response-radio-title">
+                                    <strong>Is Response Received?</strong>
+                                </p>
                                 <div className='sarfaesi-tracking-response-radio-btn'>
                                     <label>
                                         <input 
                                             type="radio" 
-                                            name="responseReceived" 
+                                            name="responseReceived"
                                             value="true"
-                                            checked={trackingData.isResponseReceived === true}
+                                            checked={formData.isResponseReceived === true}
                                             onChange={handleRadioChange('isResponseReceived')}
-                                            disabled={hasExistingData}
+                                            disabled={isDataExists}
                                         /> Yes
                                     </label>
                                     <label>
                                         <input 
                                             type="radio" 
-                                            name="responseReceived" 
+                                            name="responseReceived"
                                             value="false"
-                                            checked={trackingData.isResponseReceived === false}
+                                            checked={formData.isResponseReceived === false}
                                             onChange={handleRadioChange('isResponseReceived')}
-                                            disabled={hasExistingData}
+                                            disabled={isDataExists}
                                         /> No
                                     </label>
                                 </div>
                             </div>
                             <div className="sarfaesi-tracking-response-radio-group2">
-                                <p className="sarfaesi-tracking-response-radio-title"><strong>Is Response Overdue ?</strong></p>
+                                <p className="sarfaesi-tracking-response-radio-title">
+                                    <strong>Is Response Overdue?</strong>
+                                </p>
                                 <div className='sarfaesi-tracking-response-radio-btn'>
                                     <label>
                                         <input 
                                             type="radio" 
-                                            name="responseOverdue" 
+                                            name="responseOverdue"
                                             value="true"
-                                            checked={trackingData.isResponseOverdue === true}
+                                            checked={formData.isResponseOverdue === true}
                                             onChange={handleRadioChange('isResponseOverdue')}
-                                            disabled={hasExistingData}
+                                            disabled={isDataExists}
                                         /> Yes
                                     </label>
                                     <label>
                                         <input 
                                             type="radio" 
-                                            name="responseOverdue" 
+                                            name="responseOverdue"
                                             value="false"
-                                            checked={trackingData.isResponseOverdue === false}
+                                            checked={formData.isResponseOverdue === false}
                                             onChange={handleRadioChange('isResponseOverdue')}
-                                            disabled={hasExistingData}
+                                            disabled={isDataExists}
                                         /> No
                                     </label>
                                 </div>
@@ -221,10 +185,10 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
             <div className='sarfaesi-tracking-response-middle-content'>
                 <div className='sarfaesi-tracking-response-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton text="Add " onClick={openDispositionModal} />
+                    <AddButton text="Add " onClick={openDispositionModal} disabled={isDataExists} />
                 </div>
                 <div className='sarfaesi-tracking-response-middle-content-formdata'>
-                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+                    <ReusableGrid columns={dispositionColumns} data={dispositions} />
                 </div>
             </div>
 
@@ -235,11 +199,10 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
             />
 
             <div className='sarfaesi-tracking-response-Bottom-btn'>
-                <CancelButton/>
+                <CancelButton />
                 <SaveButton 
-                    label='Save & Next' 
-                    onClick={handleSaveAndNext}
-                    disabled={loading || (hasExistingData && !onStageComplete)}
+                    label={isDataExists ? 'Next' : 'Save & Next'}
+                    onClick={handleSubmit}
                 />
             </div>
         </div>
