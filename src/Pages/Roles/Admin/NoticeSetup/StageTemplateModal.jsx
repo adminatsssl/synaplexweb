@@ -113,7 +113,7 @@ const StageTemplateModal = ({ onClose, initialData }) => {
 
     try {
       const response = await axios.post(
-        "/api/api/templates/workflow/attachTemplate",
+        "/api/api/templates/attachedTemplatesList",
         postData
       );
       console.log("Save response:", response.data);
