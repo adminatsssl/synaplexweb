@@ -190,7 +190,7 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
                         <button 
                             onClick={openModal} 
                             className='assetValuation-generatenotice-btn'
-                            disabled={loading || !noticeData.noticeDeadline || !noticeData.noticeSentDate}
+                            // disabled={loading || !noticeData.noticeDeadline || !noticeData.noticeSentDate}
                         >
                             Generate Notice
                         </button>
