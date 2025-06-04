@@ -8,7 +8,7 @@ import ChequeBounceCourtProceedings from "./Tabs/CourtProceeding/ChequeBounceCou
 import ChequeBounceFinalJudgement from "./Tabs/FinalJudgement/ChequeBounceFinalJudgement";
 import CaseDetailClose from "../Sarfasei/Tabs/Close/CaseDetailClose";
 import CaseHistoryAccordion from "../CaseHistory.jsx";
-
+import PropTypes from 'prop-types';
 
 const steps = [
   { label: "Initiation" },
@@ -32,41 +32,54 @@ const dummyData = [
   },
 ];
 
-const ChequeBounceContent = () => {
+const ChequeBounceContent = ({ caseId }) => {
   const [activeStep, setActiveStep] = useState(2); 
 
   const handleStepClick = (stepNum) => {
     setActiveStep(stepNum);
-    // console.log("Clicked step:", stepNum);
   };
+
+  const handleStageComplete = () => {
+    setActiveStep(prev => prev + 1);
+  };
+
+  if (!caseId) {
+    console.error('No caseId provided to ChequeBounceContent');
+    return null;
+  }
 
   return (
     <div className="ChequeBounce-content-container-topbar">
       <div className="ChequeBounce-content-container">
         <h4>CASE PROGRESS</h4>
-      <div className="ChequeBounce-resuable-content">
-        <ReusableCaseStage
-          steps={steps}
-          activeStep={activeStep}
-          onStepClick={handleStepClick}
-        />
+        <div className="ChequeBounce-resuable-content">
+          <ReusableCaseStage
+            steps={steps}
+            activeStep={activeStep}
+            onStepClick={handleStepClick}
+          />
+        </div>
+
+        {activeStep === 2 && (
+          <ChequeBounceDemandNotice 
+            caseId={caseId} 
+            onStageComplete={handleStageComplete}
+          />
+        )}
+        {activeStep === 3 && <ChequeBounceTrackingResponse />}
+        {activeStep === 4 && <ChequeBounceComplaintFilling />}
+        {activeStep === 5 && <ChequeBounceCourtProceedings />}
+        {activeStep === 6 && <ChequeBounceFinalJudgement />}
+        {activeStep === 7 && <CaseDetailClose />}
       </div>
 
-      {/* Conditionally render the DemandNoticeSarfasei component */}
-      {activeStep === 2 && <ChequeBounceDemandNotice />}
-      {activeStep === 3 && <ChequeBounceTrackingResponse />}
-      {activeStep === 4 && <ChequeBounceComplaintFilling />}
-      {activeStep === 5 && <ChequeBounceCourtProceedings />}
-      {activeStep === 6 && <ChequeBounceFinalJudgement />}
-      {activeStep === 7 && <CaseDetailClose />}
-
-      </div>
-      <>
       <CaseHistoryAccordion data={dummyData} />
-      </>
-
     </div>
   );
+};
+
+ChequeBounceContent.propTypes = {
+  caseId: PropTypes.number.isRequired
 };
 
 export default ChequeBounceContent;

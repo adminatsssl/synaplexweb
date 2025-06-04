@@ -151,7 +151,7 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
                 </div>
 
                 <div className="Sarfasei-container">
-                    {caseData.CaseType?.toLowerCase() === "cheque bounce" && 
+                    {caseData.CaseType?.toLowerCase() === "cheque_bounce" && 
                         <ChequeBounceContent 
                             caseId={caseId} 
                             initialActiveStep={activeStepNumber}
