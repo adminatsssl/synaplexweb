@@ -27,13 +27,11 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
         // Fetch templates from API
         const fetchTemplates = async () => {
             try {
-                const res = await fetch('/api/api/templates/chequeBounce');
+                const res = await fetch('/api/api/templates');
                 const data = await res.json();
                 if (data.status === 'SUCCESS') {
                     setTemplateOptions(data.data);
                     setSelectedTemplate(data.data[0]?.id || '');
-                    setTabs(tabsAPI);
-                    setActiveTab('speedPost');
                 } else {
                     console.error('Failed to fetch templates');
                 }
@@ -42,54 +40,56 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
             }
         };
 
-        fetchTemplates();
-    }, []);
-
-    const handleSend = async () => {
-        try {
-            const response = await fetch('/api/api/notices/send', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    caseId,
-                    templateId: selectedTemplate,
-                    type: activeTab
-                }),
-            });
-
-            if (response.ok) {
-                alert('Notice sent successfully!');
-                onClose();
-            } else {
-                throw new Error('Failed to send notice');
+        // Check if notice exists for this case
+        const checkNoticeExists = async () => {
+            try {
+                const response = await fetch(`/api/notice/exists/${caseId}`);
+                const data = await response.json();
+                if (data.status === 'SUCCESS') {
+                    setNoticeExists(data.data);
+                }
+            } catch (error) {
+                console.error('Error checking notice existence:', error);
             }
-        } catch (error) {
-            console.error('Error sending notice:', error);
-            alert('Failed to send notice. Please try again.');
-        }
+        };
+
+        fetchTemplates();
+        checkNoticeExists();
+        setTabs(tabsAPI);
+        setActiveTab(tabsAPI[0]?.id);
+    }, [caseId]);
+
+    const handleSend = () => {
+        console.log(`Sending via ${activeTab} using template ID: ${selectedTemplate}`);
+        // Replace with actual sending logic
     };
 
     const handleGenerateNotice = async () => {
+        if (noticeExists) {
+            alert('A notice has already been generated for this case.');
+            return;
+        }
+
+        setIsGenerating(true);
         try {
-            setIsGenerating(true);
-            const response = await fetch('/api/api/notices/generate', {
+            const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
+            const response = await fetch('/api/notice', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    caseId,
-                    templateId: selectedTemplate
-                }),
+                    caseId: caseId,
+                    pdfBody: selected?.pdfBody || "Default notice content"
+                })
             });
 
+            const data = await response.json();
             if (response.ok) {
-                setNoticeExists(true);
                 alert('Notice generated successfully!');
+                setNoticeExists(true); // Update state to reflect that notice now exists
             } else {
-                throw new Error('Failed to generate notice');
+                alert('Failed to generate notice: ' + (data.message || 'Unknown error'));
             }
         } catch (error) {
             console.error('Error generating notice:', error);
