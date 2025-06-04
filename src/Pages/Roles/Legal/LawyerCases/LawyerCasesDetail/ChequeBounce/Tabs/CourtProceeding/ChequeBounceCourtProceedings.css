@@ -36,12 +36,15 @@
     margin-top: 20px;
     border-radius: 10px;
 }
-.chequeBounce-courtProceeding-middle-content-heading{
+.chequeBounce-courtProceeding-middle-content-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 10px 20px;
     border-bottom: 1px solid #c3c2c2;
 }
-.chequeBounce-courtProceeding-middle-content-heading h5{
-    margin-bottom: 0px;
+.chequeBounce-courtProceeding-middle-content-heading h5 {
+    margin: 0;
     font-size: 16px;
 }
 .chequeBounce-courtProceeding-middle-content-formdata{

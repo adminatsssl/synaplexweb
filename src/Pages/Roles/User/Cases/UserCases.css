@@ -324,3 +324,7 @@ div.addusercase-form-group-loanId button {
   border-left: 4px solid #0a4c9a;
   font-size: 14px;
 }
+
+.addusercase-button-container{
+  text-align: center;
+}

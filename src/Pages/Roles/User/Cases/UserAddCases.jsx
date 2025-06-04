@@ -83,10 +83,10 @@ const AddUserCases = ({ initialData = null, onClose }) => {
       
       console.log('Response:', response);
 
-      if (response.data.status === "SUCCESS") {
+     if (response.data.status === "SUCCESS") {
         setMessage("Case created successfully!");
+        onClose();
       } else {
-        setMessage("Failed to create case: " + response.data.message);
       }
     } catch (error) {
       console.error("Error details:", error.response?.data || error.message);
