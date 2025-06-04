@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReusableCaseStage from "../ReusableCaseStage";
 import './ChequeBounceContent.css';
 import ChequeBounceDemandNotice from "./Tabs/DemandNotice/ChequeBounceDemandNotice";
@@ -32,15 +32,48 @@ const dummyData = [
   },
 ];
 
-const ChequeBounceContent = ({ caseId }) => {
-  const [activeStep, setActiveStep] = useState(2); 
+const ChequeBounceContent = ({ caseId, initialActiveStep = 2 }) => {
+  // Keep track of both the active stage and the currently viewed stage
+  const [activeStep, setActiveStep] = useState(initialActiveStep);
+  const [viewedStep, setViewedStep] = useState(initialActiveStep);
+
+  // Update both active and viewed step when initialActiveStep changes
+  useEffect(() => {
+    setActiveStep(initialActiveStep);
+    setViewedStep(initialActiveStep);
+  }, [initialActiveStep]);
 
   const handleStepClick = (stepNum) => {
-    setActiveStep(stepNum);
+    // Prevent clicking on step 1 (Initiation)
+    if (stepNum === 1) {
+      return;
+    }
+    
+    // Prevent accessing future stages beyond the active stage
+    if (stepNum > activeStep) {
+      return;
+    }
+    
+    // Only update the viewed step, not the active step
+    setViewedStep(stepNum);
   };
 
   const handleStageComplete = () => {
-    setActiveStep(prev => prev + 1);
+    // Move both active and viewed step forward
+    if (activeStep < steps.length) {
+      const nextStep = activeStep + 1;
+      setActiveStep(nextStep);
+      setViewedStep(nextStep);
+    }
+  };
+
+  // Calculate disabled steps - includes step 1 and all steps beyond current active step
+  const getDisabledSteps = () => {
+    const disabledSteps = [1]; // Always disable step 1 (Initiation)
+    for (let i = activeStep + 1; i <= steps.length; i++) {
+      disabledSteps.push(i);
+    }
+    return disabledSteps;
   };
 
   if (!caseId) {
@@ -56,29 +89,31 @@ const ChequeBounceContent = ({ caseId }) => {
           <ReusableCaseStage
             steps={steps}
             activeStep={activeStep}
+            viewedStep={viewedStep}
             onStepClick={handleStepClick}
+            disabledSteps={getDisabledSteps()}
           />
         </div>
 
-        {activeStep === 2 && (
+        {viewedStep === 2 && (
           <ChequeBounceDemandNotice 
             caseId={caseId} 
             onStageComplete={handleStageComplete}
           />
         )}
-        {activeStep === 3 && (
+        {viewedStep === 3 && (
           <ChequeBounceTrackingResponse 
             caseId={caseId}
             onStageComplete={handleStageComplete}
           />
         )}
-        {activeStep === 4 && <ChequeBounceComplaintFilling caseId={caseId}
+        {viewedStep === 4 && <ChequeBounceComplaintFilling caseId={caseId}
             onStageComplete={handleStageComplete} />}
-        {activeStep === 5 && <ChequeBounceCourtProceedings  caseId={caseId}
+        {viewedStep === 5 && <ChequeBounceCourtProceedings  caseId={caseId}
             onStageComplete={handleStageComplete} />}
-        {activeStep === 6 && <ChequeBounceFinalJudgement caseId={caseId}
+        {viewedStep === 6 && <ChequeBounceFinalJudgement caseId={caseId}
             onStageComplete={handleStageComplete} />}
-        {activeStep === 7 && <CaseDetailClose  caseId={caseId}
+        {viewedStep === 7 && <CaseDetailClose  caseId={caseId}
             onStageComplete={handleStageComplete} />}
       </div>
 
@@ -88,7 +123,8 @@ const ChequeBounceContent = ({ caseId }) => {
 };
 
 ChequeBounceContent.propTypes = {
-  caseId: PropTypes.number.isRequired
+  caseId: PropTypes.number.isRequired,
+  initialActiveStep: PropTypes.number
 };
 
 export default ChequeBounceContent;

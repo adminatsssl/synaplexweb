@@ -47,7 +47,8 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
     const getActiveStepNumber = () => {
         if (!caseData?.CaseType || !caseData?.activeStageName) return 2; // Default to step 2
         
-        const caseType = caseData.CaseType.toLowerCase();
+        // Normalize case type by converting to lowercase and removing underscores
+        const caseType = caseData.CaseType.toLowerCase().replace(/_/g, ' ');
         const stageMap = stageToStepMap[caseType];
         
         if (!stageMap) return 2;
@@ -58,7 +59,8 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
         // If no exact match, try to find partial match
         if (!stepNumber) {
             const stageName = Object.keys(stageMap).find(key => 
-                caseData.activeStageName.includes(key) || key.includes(caseData.activeStageName)
+                caseData.activeStageName.toLowerCase().includes(key.toLowerCase()) || 
+                key.toLowerCase().includes(caseData.activeStageName.toLowerCase())
             );
             stepNumber = stageName ? stageMap[stageName] : 2;
         }
@@ -151,7 +153,7 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
                 </div>
 
                 <div className="Sarfasei-container">
-                    {caseData.CaseType?.toLowerCase() === "cheque_bounce" && 
+                    {caseData.CaseType?.toLowerCase().replace(/_/g, ' ') === "cheque bounce" && 
                         <ChequeBounceContent 
                             caseId={caseId} 
                             initialActiveStep={activeStepNumber}
