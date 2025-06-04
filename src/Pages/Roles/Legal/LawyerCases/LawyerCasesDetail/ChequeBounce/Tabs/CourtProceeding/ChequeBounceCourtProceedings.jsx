@@ -1,102 +1,211 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx"; 
 import './ChequeBounceCourtProceedings.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
+import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
+import DispositionModal from '../DemandNotice/DispositionModal';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
+const ChequeBounceCourtProceedings = ({ caseId, onStageComplete }) => {
+    if (!caseId) {
+        console.error('No caseId provided to ChequeBounceCourtProceedings');
+        return null;
+    }
 
-const ChequeBounceCourtProceedings = () => {
-    // Sample data for disposition summary
-    const dispositionData = [
-        { stage: "Stage 1", comment: "Hello world" },
-    ];
+    const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+    const [hasExistingData, setHasExistingData] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        hearingDate: '',
+        judgeName: '',
+        supportingEvidence: '',
+        notes: '',
+        dispositions: []
+    });
+
+    useEffect(() => {
+        fetchExistingData();
+    }, [caseId]);
+
+    const fetchExistingData = async () => {
+        try {
+            const response = await axios.get(`/api/api/courtProceedingsCB/case/${caseId}`);
+            if (response.data && Object.keys(response.data).length > 0) {
+                setHasExistingData(true);
+                setFormData({
+                    hearingDate: response.data.hearingDate || '',
+                    judgeName: response.data.judgeName || '',
+                    supportingEvidence: response.data.supportingEvidence || '',
+                    notes: response.data.notes || '',
+                    dispositions: response.data.dispositions || []
+                });
+            }
+        } catch (error) {
+            console.log('No existing court proceedings data found');
+        }
+    };
+
+    const handleInputChange = (e) => {
+        if (hasExistingData) return;
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const openDispositionModal = () => setIsDispositionModalOpen(true);
+    const closeDispositionModal = () => setIsDispositionModalOpen(false);
+
+    const handleSaveDisposition = (dispositionData) => {
+        if (hasExistingData) return;
+        setFormData(prev => ({
+            ...prev,
+            dispositions: [...prev.dispositions, dispositionData]
+        }));
+        closeDispositionModal();
+    };
+
+    const handleSaveAndNext = async () => {
+        if (hasExistingData) {
+            if (onStageComplete) {
+                onStageComplete();
+            }
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const payload = {
+                ...formData,
+                caseId: caseId
+            };
+
+            console.log("Payload : ", payload);
+            await axios.post('/api/api/courtProceedingsCB', payload);
+            setHasExistingData(true);
+            
+            if (onStageComplete) {
+                onStageComplete();
+            }
+        } catch (error) {
+            console.error('Error saving court proceedings:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const dispositionColumns = [
-        { key: "stage", label: "Disposition Stage" },
-        { key: "comment", label: "Comment" },
-    ];
-
-    // Sample data for uploaded documents
-    const documentData = [
-        { name: "Aadhar", createdDate: "Hello world", uploadedBy: "Hello world" },
-    ];
-
-    const documentColumns = [
-        { key: "name", label: "Document Name" },
-        { key: "createdDate", label: "Created Date" },
-        { key: "uploadedBy", label: "Uploaded By" },
+        { key: "name", label: "Disposition Stage" },
+        { key: "description", label: "Comment" }
     ];
 
     return (
         <div className='chequeBounce-courtProceeding-container'>
-
             <div className='chequeBounce-courtProceeding-topcontent-container'>
                 <div className='chequeBounce-courtProceeding-topcontent-heading'>
-                    <h5>Court Hearing</h5>
+                    <h5>Court Hearing {hasExistingData && '(Completed - Fields are Read Only)'}</h5>
                 </div>
                 <div className='chequeBounce-courtProceeding-topcontent'>
-
                     <div className='chequeBounce-courtProceeding-topcontent-leftside'>
                         <div className="chequeBounce-courtProceeding-form-row">
                             <div className='chequeBounce-courtProceeding-form-row-content'>
                                 <div className="chequeBounce-courtProceeding-form-group">
-                                <label>Hearing Date</label>
-                                <input type="date" className="notice-input" />
-                            </div>
-                            <div className="chequeBounce-courtProceeding-form-group">
-                                <label>Supporting Evidence</label>
-                                <input type="text" className="notice-input" />
-                            </div>
-
+                                    <label>Hearing Date</label>
+                                    <input 
+                                        type="date" 
+                                        className={`notice-input ${hasExistingData ? 'readonly-field' : ''}`}
+                                        name="hearingDate"
+                                        value={formData.hearingDate}
+                                        onChange={handleInputChange}
+                                        readOnly={hasExistingData}
+                                        style={hasExistingData ? { backgroundColor: '#f5f5f5', cursor: 'not-allowed' } : {}}
+                                    />
+                                </div>
+                                <div className="chequeBounce-courtProceeding-form-group">
+                                    <label>Supporting Evidence</label>
+                                    <input 
+                                        type="text" 
+                                        className={`notice-input ${hasExistingData ? 'readonly-field' : ''}`}
+                                        name="supportingEvidence"
+                                        value={formData.supportingEvidence}
+                                        onChange={handleInputChange}
+                                        readOnly={hasExistingData}
+                                        style={hasExistingData ? { backgroundColor: '#f5f5f5', cursor: 'not-allowed' } : {}}
+                                    />
+                                </div>
                             </div>
                             
                             <div className='chequeBounce-courtProceeding-form-row-content'>
                                 <div className="chequeBounce-courtProceeding-form-group">
-                                <label>Judge Name</label>
-                                <input type='text'/>
+                                    <label>Judge Name</label>
+                                    <input 
+                                        type='text'
+                                        className={`notice-input ${hasExistingData ? 'readonly-field' : ''}`}
+                                        name="judgeName"
+                                        value={formData.judgeName}
+                                        onChange={handleInputChange}
+                                        readOnly={hasExistingData}
+                                        style={hasExistingData ? { backgroundColor: '#f5f5f5', cursor: 'not-allowed' } : {}}
+                                    />
+                                </div>
+                                <div className="chequeBounce-courtProceeding-form-group">
+                                    <label>Notes</label>
+                                    <textarea 
+                                        className={`chequeBounce-courtProceeding-textarea ${hasExistingData ? 'readonly-field' : ''}`}
+                                        rows="3"
+                                        name="notes"
+                                        value={formData.notes}
+                                        onChange={handleInputChange}
+                                        readOnly={hasExistingData}
+                                        style={hasExistingData ? { backgroundColor: '#f5f5f5', cursor: 'not-allowed' } : {}}
+                                    />
+                                </div>
                             </div>
-                            <div className="chequeBounce-courtProceeding-form-group">
-                            <label>Notes</label>
-                            <textarea className="chequeBounce-courtProceeding-textarea" rows="3"></textarea>
                         </div>
-
-                            </div>
-                            
-
-                        </div>
-                        
                     </div>
-
                 </div>
             </div>
 
             <div className='chequeBounce-courtProceeding-middle-content'>
                 <div className='chequeBounce-courtProceeding-middle-content-heading'>
                     <h5>Disposition Summary</h5>
+                    <AddButton 
+                        text="Add" 
+                        onClick={openDispositionModal} 
+                        disabled={hasExistingData}
+                        style={hasExistingData ? { opacity: 0.7 } : {}}
+                    />
                 </div>
                 <div className='chequeBounce-courtProceeding-middle-content-formdata'>
-                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+                    <ReusableGrid columns={dispositionColumns} data={formData.dispositions} />
                 </div>
-            </div>
-
-            <div className='chequeBounce-courtProceeding-Bottom-content'>
-                <div className='chequeBounce-courtProceeding-Bottom-content-heading'>
-                    <h5>Uploaded Documents</h5>
-                </div>
-                <div className='chequeBounce-courtProceeding-Bottom-content-formdata'>
-                    <ReusableGrid columns={documentColumns} data={documentData} />
-                </div>
-
             </div>
 
             <div className='chequeBounce-courtProceeding-Bottom-btn'>
-                <CancelButton/>
-                <SaveButton label='Save & Next'/>
-
+                <CancelButton />
+                <SaveButton 
+                    label={hasExistingData ? 'Next' : 'Save & Next'} 
+                    onClick={handleSaveAndNext}
+                    disabled={loading || (!hasExistingData && (!formData.hearingDate || !formData.judgeName))}
+                />
             </div>
 
+            <DispositionModal 
+                isOpen={isDispositionModalOpen}
+                onClose={closeDispositionModal}
+                onSave={handleSaveDisposition}
+                disabled={hasExistingData}
+            />
         </div>
     );
+};
+
+ChequeBounceCourtProceedings.propTypes = {
+    caseId: PropTypes.number.isRequired,
+    onStageComplete: PropTypes.func
 };
 
 export default ChequeBounceCourtProceedings;
