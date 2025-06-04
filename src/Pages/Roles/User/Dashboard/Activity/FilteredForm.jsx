@@ -2,18 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./FilteredForm.css";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid.jsx";
-
+import { useNavigate } from "react-router-dom";
+ 
 export default function FilteredForm({ activeTab }) {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
-
+ 
+  const navigate = useNavigate();
+ 
   useEffect(() => {
     const fetchCases = async () => {
       try {
         const response = await axios.get("/api/api/cases");
         const caseData = response.data?.data || [];
-
+ 
         const transformed = caseData.map((item) => ({
+          CaseID: item.id,
           cnr: item.cnrnumber || "-",
           createdDate: item.createdAt ? item.createdAt.split("T")[0] : "-",
           status: item.status || "-",
@@ -23,27 +27,33 @@ export default function FilteredForm({ activeTab }) {
           lawyer: "-", // Placeholder
           tab: item.workflowType?.toUpperCase() || "-"
         }));
-
+ 
         setData(transformed);
       } catch (error) {
         console.error("Error fetching case data:", error);
       }
     };
-
+ 
     fetchCases();
   }, []);
-
+ 
   useEffect(() => {
     if (!activeTab) return;
-
+ 
     const filteredData = data.filter(
       (d) => d.tab === activeTab.toUpperCase()
     );
-
+ 
     console.log("Filtered by Case Type:", activeTab, filteredData);
     setFiltered(filteredData);
   }, [activeTab, data]);
-
+ 
+  const handleRowClick = (row) => {
+    if (row?.CaseID) {
+      navigate(`/case/${row.CaseID}`);
+    }
+  };
+ 
   const columns = [
     { key: "cnr", label: "CNR No." },
     { key: "createdDate", label: "Created Date" },
@@ -53,13 +63,16 @@ export default function FilteredForm({ activeTab }) {
     { key: "hearingDate", label: "Hearing Date" },
     { key: "lawyer", label: "Lawyer" }
   ];
-
+ 
   return (
     <div className="activity-form-wrapper">
       <ReusableGrid
         columns={columns}
         data={filtered}
+        onRowClick={handleRowClick}
       />
     </div>
   );
 }
+ 
+ 
