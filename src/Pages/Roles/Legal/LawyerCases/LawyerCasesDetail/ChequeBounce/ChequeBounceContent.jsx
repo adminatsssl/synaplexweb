@@ -66,11 +66,20 @@ const ChequeBounceContent = ({ caseId }) => {
             onStageComplete={handleStageComplete}
           />
         )}
-        {activeStep === 3 && <ChequeBounceTrackingResponse />}
-        {activeStep === 4 && <ChequeBounceComplaintFilling />}
-        {activeStep === 5 && <ChequeBounceCourtProceedings />}
-        {activeStep === 6 && <ChequeBounceFinalJudgement />}
-        {activeStep === 7 && <CaseDetailClose />}
+        {activeStep === 3 && (
+          <ChequeBounceTrackingResponse 
+            caseId={caseId}
+            onStageComplete={handleStageComplete}
+          />
+        )}
+        {activeStep === 4 && <ChequeBounceComplaintFilling caseId={caseId}
+            onStageComplete={handleStageComplete} />}
+        {activeStep === 5 && <ChequeBounceCourtProceedings  caseId={caseId}
+            onStageComplete={handleStageComplete} />}
+        {activeStep === 6 && <ChequeBounceFinalJudgement caseId={caseId}
+            onStageComplete={handleStageComplete} />}
+        {activeStep === 7 && <CaseDetailClose  caseId={caseId}
+            onStageComplete={handleStageComplete} />}
       </div>
 
       <CaseHistoryAccordion data={dummyData} />
