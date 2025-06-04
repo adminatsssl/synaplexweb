@@ -1,63 +1,48 @@
-// FilteredForm.js
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./FilteredForm.css";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid.jsx";
 
-export default function FilteredForm({ activeTab, selectedStage }) {
+export default function FilteredForm({ activeTab }) {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    // Mock data to simulate fetch
-    const mock = [
-        {
-          cnr: "CNR123",
-          createdDate: "2024-05-01",
-          status: "Open",
-          borrower: "John Doe",
-          court: "Delhi Court",
-          hearingDate: "2024-06-10",
-          lawyer: "Amit",
-          tab: "SARFASEI",
-          stage: "Demand Notice Generation - Section 13(2)"
-        },
-        {
-          cnr: "CNR999",
-          createdDate: "2024-05-05",
-          status: "Closed",
-          borrower: "Jane Smith",
-          court: "Mumbai Court",
-          hearingDate: "2024-07-01",
-          lawyer: "Priya",
-          tab: "Cheque Bounce",
-          stage: "Tracking 60 Day Response - Section 138(c)"
-        },
-        {
-          cnr: "CNR456",
-          createdDate: "2024-05-10",
-          status: "Open",
-          borrower: "Ravi Kumar",
-          court: "Chennai Court",
-          hearingDate: "2024-06-20",
-          lawyer: "Suman",
-          tab: "SARFASEI",
-          stage: "Possession Notice - Section 13(4)"  // 👈 This matches the selected stage
-        }
-      ];
-      
+    const fetchCases = async () => {
+      try {
+        const response = await axios.get("/api/api/cases");
+        const caseData = response.data?.data || [];
 
-    setData(mock);
+        const transformed = caseData.map((item) => ({
+          cnr: item.cnrnumber || "-",
+          createdDate: item.createdAt ? item.createdAt.split("T")[0] : "-",
+          status: item.status || "-",
+          borrower: item.loan?.borrower?.name || "-",
+          court: item.loan?.borrower?.address?.city || "-",
+          hearingDate: item.hearingDate ? item.hearingDate.split("T")[0] : "-",
+          lawyer: "-", // Placeholder
+          tab: item.workflowType?.toUpperCase() || "-"
+        }));
+
+        setData(transformed);
+      } catch (error) {
+        console.error("Error fetching case data:", error);
+      }
+    };
+
+    fetchCases();
   }, []);
 
   useEffect(() => {
-    if (!activeTab || !selectedStage) return;
+    if (!activeTab) return;
 
-    const tabStageFiltered = data.filter(
-      (d) => d.tab === activeTab && d.stage === selectedStage.label
+    const filteredData = data.filter(
+      (d) => d.tab === activeTab.toUpperCase()
     );
 
-    setFiltered(tabStageFiltered);
-  }, [activeTab, selectedStage, data]);
+    console.log("Filtered by Case Type:", activeTab, filteredData);
+    setFiltered(filteredData);
+  }, [activeTab, data]);
 
   const columns = [
     { key: "cnr", label: "CNR No." },
@@ -71,12 +56,10 @@ export default function FilteredForm({ activeTab, selectedStage }) {
 
   return (
     <div className="activity-form-wrapper">
-      <ReusableGrid 
-        columns={columns} 
-        data={selectedStage?.count > 0 ? filtered : []} 
+      <ReusableGrid
+        columns={columns}
+        data={filtered}
       />
     </div>
   );
-  
-  
 }
