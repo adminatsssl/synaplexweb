@@ -9,16 +9,27 @@ import ChequeBounceFinalJudgement from "./Tabs/FinalJudgement/ChequeBounceFinalJ
 import CaseDetailClose from "../Sarfasei/Tabs/Close/CaseDetailClose";
 import CaseHistoryAccordion from "../CaseHistory.jsx";
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 const steps = [
   { label: "Initiation" },
   { label: "Demand Notice Generation" },
   { label: "Tracking 15-Day Response" },
-  { label: "Complaint Filling" },
+  { label: "Complaint Filing" },
   { label: "Court Proceedings" },
   { label: "Final Judgment" },
   { label: "Closure" },
 ];
+
+const stageNameToStepMap = {
+  "Initiation": 1,
+  "Demand Notice Generation": 2,
+  "Tracking 15-Day Response": 3,
+  "Complaint Filing": 4,
+  "Court Proceedings": 5,
+  "Final Judgment": 6,
+  "Closure": 7
+};
 
 const dummyData = [
   {
@@ -33,15 +44,31 @@ const dummyData = [
 ];
 
 const ChequeBounceContent = ({ caseId, initialActiveStep = 2 }) => {
-  // Keep track of both the active stage and the currently viewed stage
   const [activeStep, setActiveStep] = useState(initialActiveStep);
   const [viewedStep, setViewedStep] = useState(initialActiveStep);
+  const [loading, setLoading] = useState(true);
 
-  // Update both active and viewed step when initialActiveStep changes
   useEffect(() => {
-    setActiveStep(initialActiveStep);
-    setViewedStep(initialActiveStep);
-  }, [initialActiveStep]);
+    const fetchCaseDetails = async () => {
+      try {
+        const response = await axios.get(`/api/api/cases/${caseId}`);
+        if (response.data && response.data.data) {
+          const { activeStageName } = response.data.data;
+          const mappedStep = stageNameToStepMap[activeStageName] || initialActiveStep;
+          setActiveStep(mappedStep);
+          setViewedStep(mappedStep);
+        }
+      } catch (error) {
+        console.error('Error fetching case details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (caseId) {
+      fetchCaseDetails();
+    }
+  }, [caseId, initialActiveStep]);
 
   const handleStepClick = (stepNum) => {
     // Prevent clicking on step 1 (Initiation)
@@ -79,6 +106,10 @@ const ChequeBounceContent = ({ caseId, initialActiveStep = 2 }) => {
   if (!caseId) {
     console.error('No caseId provided to ChequeBounceContent');
     return null;
+  }
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
