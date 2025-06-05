@@ -103,7 +103,7 @@ export default function ActivityCaseTabs() {
   }, []);
 
   useEffect(() => {
-    const defaultStage = stageMap[activeTab]?.[0] || null;
+    const defaultStage = stageMap[activeTab]?.[1] || null;
     setSelectedStage(defaultStage);
   }, [activeTab, stageMap]);
 

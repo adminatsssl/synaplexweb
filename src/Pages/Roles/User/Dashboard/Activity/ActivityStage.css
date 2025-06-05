@@ -49,6 +49,11 @@
     /* same as background */
 }
 
+.stage-item.disabled {
+  pointer-events: none;
+  cursor: none;
+}
+
 .stage-label {
     font-weight: 600;
     font-size: 14px;
