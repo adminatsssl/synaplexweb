@@ -1,27 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import ReusableGrid from "../../../../../../ReusableComponents/ReusableGrid.jsx";
 import './DemandNoticeSarfaesi.css';
-import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx"
-import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
+import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx";
+import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx";
 
-// Import icons
 import whatsappIcon from '../../../../../../../assets/icons/whatsapp.png';
 import emailIcon from '../../../../../../../assets/icons/email.png';
 import smsIcon from '../../../../../../../assets/icons/sms.png';
 import mailboxIcon from '../../../../../../../assets/icons/mailbox.png';
 
 const DemandNoticeSarfasei = () => {
-    // Sample data for disposition summary
-    const dispositionData = [
-        { stage: "Stage 1", comment: "Hello world" },
-    ];
+    const { id: caseId } = useParams(); // this is caseId from URL
+    const [noticeData, setNoticeData] = useState({
+        noticeDeadline: '',
+        noticeSentDate: '',
+        noticeType: '',
+        remarks: '',
+        dispositions: []
+    });
+
+    useEffect(() => {
+        if (caseId) {
+            fetchNoticeData();
+        }
+    }, [caseId]);
+
+    const fetchNoticeData = async () => {
+        try {
+            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`);
+            const data = response.data;
+
+            // Ensure response's caseId matches route caseId
+            if (data.caseId?.toString() !== caseId.toString()) {
+                console.warn("Mismatched caseId in response!");
+                return;
+            }
+
+            setNoticeData({
+                noticeDeadline: data.noticeDeadline || '',
+                noticeSentDate: data.noticeSentDate || '',
+                noticeType: data.noticeType || '',
+                remarks: data.remarks || '',
+                dispositions: data.dispositions || []
+            });
+        } catch (error) {
+            console.error('Error fetching demand notice data:', error);
+        }
+    };
 
     const dispositionColumns = [
         { key: "stage", label: "Disposition Stage" },
         { key: "comment", label: "Comment" },
     ];
 
-    // Sample data for uploaded documents
     const documentData = [
         { name: "Aadhar", createdDate: "Hello world", uploadedBy: "Hello world" },
     ];
@@ -40,27 +73,47 @@ const DemandNoticeSarfasei = () => {
                 </div>
                 <div className='demandNotice-Sarfasei-topcontent'>
                     <div className='demandNotice-Sarfasei-topcontent-leftside'>
-                        <div className="Sarfasei-notice-form-row"> 
+                        <div className="Sarfasei-notice-form-row">
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Deadline</label>
-                                <input type="date" className="notice-input" />
+                                <input
+                                    type="date"
+                                    className="notice-input"
+                                    value={noticeData.noticeDeadline}
+                                    readOnly
+                                    disabled
+                                />
                             </div>
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Sent Date</label>
-                                <input type="date" className="notice-input" />
+                                <input
+                                    type="date"
+                                    className="notice-input"
+                                    value={noticeData.noticeSentDate}
+                                    readOnly
+                                    disabled
+                                />
                             </div>
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Type</label>
-                                <select className="notice-input">
-                                    <option value="business">Taking control of existing business</option>
-                                    <option value="receiver">Appointing a receiver to manage assets</option>
-                                    <option value="possession">Taking possession of assets</option>
-                                </select>
+                                <input
+                                    type="text"
+                                    className="notice-input"
+                                    name="noticeType"
+                                    value={noticeData.noticeType}
+                                    disabled
+                                />
                             </div>
                         </div>
                         <div className="Sarfasei-notice-form-group">
                             <label>Remarks</label>
-                            <textarea className="Sarfasei-notice-textarea" rows="3"></textarea>
+                            <textarea
+                                className="Sarfasei-notice-textarea"
+                                rows="3"
+                                value={noticeData.remarks}
+                                readOnly
+                                disabled
+                            ></textarea>
                         </div>
                     </div>
 
@@ -85,7 +138,7 @@ const DemandNoticeSarfasei = () => {
                     <h5>Disposition Summary</h5>
                 </div>
                 <div className='demandNotice-Sarfasei-middle-content-formdata'>
-                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+                    <ReusableGrid columns={dispositionColumns} data={noticeData.dispositions} />
                 </div>
             </div>
 
@@ -98,10 +151,10 @@ const DemandNoticeSarfasei = () => {
                 </div>
             </div>
 
-            <div className='demandNotice-Sarfasei-Bottom-btn'>
-                <CancelButton/>
-                <SaveButton label='Save & Next'/>
-            </div>
+            {/* <div className='demandNotice-Sarfasei-Bottom-btn'>
+                <CancelButton />
+                <SaveButton label='Save & Next' />
+            </div> */}
         </div>
     );
 };
