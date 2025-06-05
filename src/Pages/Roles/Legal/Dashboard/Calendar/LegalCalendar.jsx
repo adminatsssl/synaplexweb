@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'; 
-import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar'; 
-import format from 'date-fns/format'; 
-import parse from 'date-fns/parse'; 
-import startOfWeek from 'date-fns/startOfWeek'; 
-import getDay from 'date-fns/getDay'; 
-import 'react-big-calendar/lib/css/react-big-calendar.css'; 
+import React, { useState, useEffect } from 'react';
+import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
+import startOfWeek from 'date-fns/startOfWeek';
+import getDay from 'date-fns/getDay';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './LegalCalendar.css';
 import enUS from 'date-fns/locale/en-US';
 
@@ -20,45 +20,42 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-const allEvents = [
-  {
-    title: 'Neha Singh',
-    start: new Date('2025-05-11'),
-    end: new Date('2025-05-11'),
-    status: 'Pending',
-  },
-  {
-    title: 'Aakash Sharma',
-    start: new Date('2025-05-12'),
-    end: new Date('2025-05-12'),
-    status: 'Pending',
-  },
-  {
-    title: 'Ujjwal Chauhan',
-    start: new Date('2025-05-15'),
-    end: new Date('2025-05-15'),
-    status: 'Pending',
-  },
-  {
-    title: 'Neha Singh',
-    start: new Date('2025-05-16'),
-    end: new Date('2025-05-16'),
-    status: 'Disposed',
-  },
-  {
-    title: 'Vanshika',
-    start: new Date('2025-05-17'),
-    end: new Date('2025-05-19'),
-    status: 'Pending',
-  },
-];
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 
 function LegalCalendarCases() {
-  const [events, setEvents] = useState(allEvents);
+  const [events, setEvents] = useState([]);
   const [showPending, setShowPending] = useState(true);
   const [showDisposed, setShowDisposed] = useState(false);
-  const [view, setView] = useState(Views.MONTH); // Set initial view to 'month'
-  const [date, setDate] = useState(new Date()); // Track current date for navigation
+  const [view, setView] = useState(Views.MONTH);
+  const [date, setDate] = useState(new Date());
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch(`/api/api/cases/calendar`, {
+          headers : getAuthHeaders()
+        });
+        const data = await response.json();
+
+        // Convert start/end strings to Date objects
+        const formattedEvents = data.map((event) => ({
+          ...event,
+          start: new Date(event.start),
+          end: new Date(event.end),
+        }));
+
+        setEvents(formattedEvents);
+      } catch (error) {
+        console.error('Failed to fetch calendar events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const filteredEvents = events.filter(
     (e) =>
@@ -79,26 +76,17 @@ function LegalCalendarCases() {
     };
   };
 
-  // Handle navigation manually
   const handleNavigate = (date, view) => {
-    console.log(date, view); // Logging the new date and view
-    setView(view); // Update the view state
-    setDate(date); // Set the new date when navigating
+    setView(view);
+    setDate(date);
   };
 
-  // Update the view when the user clicks on 'today', 'next', 'prev'
   const handleViewChange = (newView) => {
-    setView(newView); // Update the current view state
+    setView(newView);
   };
-
-  useEffect(() => {
-    // This effect will force re-render on date or view change
-    console.log(`Updated View: ${view}, Date: ${date}`);
-  }, [view, date]); // Depend on both view and date to trigger updates
 
   return (
     <div className="calendar-container">
-      {/* <h2>Cases Calendar</h2> */}
       <div className="filters">
         <label>
           <input
@@ -123,14 +111,14 @@ function LegalCalendarCases() {
         events={filteredEvents}
         startAccessor="start"
         endAccessor="end"
-        view={view} // Pass the current view state here
-        onView={handleViewChange} // Handle the view change when user switches between month/week/day
+        view={view}
+        onView={handleViewChange}
         defaultView={Views.MONTH}
         views={['month', 'week', 'day']}
-        date={date} // Pass the current date state here to ensure the calendar updates
+        date={date}
         style={{ height: 600 }}
         eventPropGetter={eventStyleGetter}
-        onNavigate={handleNavigate} // Manually handle navigation events (e.g. next/prev/today)
+        onNavigate={handleNavigate}
       />
     </div>
   );

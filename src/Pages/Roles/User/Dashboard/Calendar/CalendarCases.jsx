@@ -20,6 +20,11 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
+
 function CalendarCases() {
   const [events, setEvents] = useState([]);
   const [showPending, setShowPending] = useState(true);
@@ -31,7 +36,9 @@ function CalendarCases() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('/api/api/cases/calendar');
+        const response = await fetch(`/api/api/cases/calendar`, {
+          headers : getAuthHeaders()
+        });
         const data = await response.json();
 
         // Convert start/end strings to Date objects
