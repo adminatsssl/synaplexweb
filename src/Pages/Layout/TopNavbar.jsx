@@ -7,6 +7,12 @@ export default function TopNavbar() {
   const [tenant, setTenant] = useState(null);
   const navigate = useNavigate();
 
+  const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
+
   const handleSignOut = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("role");
@@ -15,7 +21,9 @@ export default function TopNavbar() {
 
   useEffect(() => {
     axios
-      .get("/api/api/tenants")
+      .get(`/api/api/tenants`, {
+        headers : getAuthHeaders()
+      })
       .then((res) => {
         // console.log("Tenant API Response:", res.data);
         const data = res.data?.data?.[0];
