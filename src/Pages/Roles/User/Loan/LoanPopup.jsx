@@ -10,6 +10,9 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
     id: initialData?.id || null  // Track the auto-generated ID
   });
   const [popupSearchQuery, setPopupSearchQuery] = useState("");
+  const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,10 +62,14 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
       let response;
       if (editingLoanId) {
         // Edit: PUT request
-        response = await axios.put(`/api/api/loans/${editingLoanId}`, payload);
+        response = await axios.put(`/api/api/loans/${editingLoanId}`, payload, {
+            headers : getAuthHeaders()
+        });
       } else {
         // New: POST request
-        response = await axios.post("/api/api/loans", payload);
+        response = await axios.post("/api/api/loans", payload, {
+            headers : getAuthHeaders()
+        });
       }
 
       if (response.data.status === "SUCCESS") {

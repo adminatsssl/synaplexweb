@@ -75,9 +75,11 @@ const CreateCase = ({ initialData = null, onClose }) => {
 
       console.log('Sending payload:', payload);
 
+
       const response = await axios.post("/api/api/cases", payload, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
       

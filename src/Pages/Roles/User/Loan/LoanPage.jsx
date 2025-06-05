@@ -16,10 +16,15 @@ const LoanPage = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedLoan, setSelectedLoan] = useState(null);
     const [refreshTrigger, setRefreshTrigger] = useState(0); // Add refresh trigger
+    const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
 
     const fetchLoans = async () => {
         try {
-            const res = await fetch("/api/api/loans");
+            const res = await fetch(`/api/api/loans`, {
+                headers : getAuthHeaders()
+            });
             const response = await res.json();
             if (response.status === "SUCCESS" && Array.isArray(response.data)) {
                 const mappedLoans = response.data.map((item) => ({
