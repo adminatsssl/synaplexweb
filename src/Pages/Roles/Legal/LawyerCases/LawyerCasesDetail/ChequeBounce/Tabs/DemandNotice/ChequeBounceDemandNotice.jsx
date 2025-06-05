@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoMdMail } from "react-icons/io";
-import { FaSms } from "react-icons/fa";
-import { GiMailbox } from "react-icons/gi";
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
 import './ChequeBounceDemandNotice.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
@@ -12,6 +8,12 @@ import NoticePreviewModal from './NoticePreviewModal';
 import DispositionModal from './DispositionModal';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+
+// Import icons
+import whatsappIcon from '../../../../../../../../assets/icons/whatsapp.png';
+import emailIcon from '../../../../../../../../assets/icons/email.png';
+import smsIcon from '../../../../../../../../assets/icons/sms.png';
+import mailboxIcon from '../../../../../../../../assets/icons/mailbox.png';
 
 const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
     if (!caseId) {
@@ -105,8 +107,8 @@ const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
     };
 
     const dispositionColumns = [
-        { key: "name", label: "Disposition Stage" },
-        { key: "description", label: "Comment" }
+        { key: "stage", label: "Disposition Stage" },
+        { key: "comment", label: "Comment" },
     ];
 
     return (
@@ -190,12 +192,12 @@ const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
                         <h4>View Generated Notice</h4>
                         <div className='chequeBounce-demandNotice-topcontent-rightside-icon'>
                             <div className='chequeBounce-demandNotice-icon'>
-                                <GiMailbox />
-                                <FaSms />
+                                <img src={emailIcon} alt="Email" className="custom-icon email-icon" />
+                                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" />
                             </div>
                             <div className='chequeBounce-demandNotice-icon'>
-                                <IoMdMail />
-                                <IoLogoWhatsapp />
+                                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" />
+                                <img src={mailboxIcon} alt="Physical Mail" className="custom-icon physical-mail-icon" />
                             </div>
                         </div>
                     </div>

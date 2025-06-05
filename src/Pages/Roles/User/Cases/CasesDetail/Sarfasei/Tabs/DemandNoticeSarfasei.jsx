@@ -1,13 +1,14 @@
 import React from 'react';
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoMdMail } from "react-icons/io";
-import { FaSms } from "react-icons/fa";
-import { GiMailbox } from "react-icons/gi";
-import ReusableGrid from "../../../../../../ReusableComponents/ReusableGrid.jsx"; // Adjust path as needed
+import ReusableGrid from "../../../../../../ReusableComponents/ReusableGrid.jsx";
 import './DemandNoticeSarfaesi.css';
 import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
 
+// Import icons
+import whatsappIcon from '../../../../../../../assets/icons/whatsapp.png';
+import emailIcon from '../../../../../../../assets/icons/email.png';
+import smsIcon from '../../../../../../../assets/icons/sms.png';
+import mailboxIcon from '../../../../../../../assets/icons/mailbox.png';
 
 const DemandNoticeSarfasei = () => {
     // Sample data for disposition summary
@@ -33,13 +34,11 @@ const DemandNoticeSarfasei = () => {
 
     return (
         <div className='demandNotice-Sarfasei-container'>
-
             <div className='demandNotice-Sarfasei-topcontent-container'>
                 <div className='demandNotice-Sarfasei-topcontent-heading'>
                     <h5>Demand Notice Generation - Section 13(2)</h5>
                 </div>
                 <div className='demandNotice-Sarfasei-topcontent'>
-
                     <div className='demandNotice-Sarfasei-topcontent-leftside'>
                         <div className="Sarfasei-notice-form-row"> 
                             <div className="Sarfasei-notice-form-group">
@@ -68,17 +67,16 @@ const DemandNoticeSarfasei = () => {
                     <div className='demandNotice-Sarfasei-topcontent-rightside'>
                         <h4>View Generated Notice</h4>
                         <div className='demandNotice-Sarfasei-topcontent-rightside-icon'>
-                            <div className='emandNotice-Sarfasei-icon'>
-                                <GiMailbox />
-                                <FaSms />
+                            <div className='demandNotice-Sarfasei-icon'>
+                                <img src={emailIcon} alt="Email" className="custom-icon email-icon" />
+                                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" />
                             </div>
-                            <div className='emandNotice-Sarfasei-icon'>
-                                <IoMdMail />
-                                <IoLogoWhatsapp />
+                            <div className='demandNotice-Sarfasei-icon'>
+                                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" />
+                                <img src={mailboxIcon} alt="Physical Mail" className="custom-icon physical-mail-icon" />
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -98,15 +96,12 @@ const DemandNoticeSarfasei = () => {
                 <div className='demandNotice-Sarfasei-Bottom-content-formdata'>
                     <ReusableGrid columns={documentColumns} data={documentData} />
                 </div>
-
             </div>
 
             <div className='demandNotice-Sarfasei-Bottom-btn'>
                 <CancelButton/>
                 <SaveButton label='Save & Next'/>
-
             </div>
-
         </div>
     );
 };

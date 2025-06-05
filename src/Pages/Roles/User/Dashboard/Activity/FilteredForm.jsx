@@ -3,19 +3,18 @@ import axios from "axios";
 import "./FilteredForm.css";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid.jsx";
 import { useNavigate } from "react-router-dom";
- 
-export default function FilteredForm({ activeTab }) {
+
+export default function FilteredForm({ activeTab, activeStage }) {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
- 
   const navigate = useNavigate();
- 
+
   useEffect(() => {
     const fetchCases = async () => {
       try {
         const response = await axios.get("/api/api/cases");
         const caseData = response.data?.data || [];
- 
+
         const transformed = caseData.map((item) => ({
           CaseID: item.id,
           cnr: item.cnrnumber || "-",
@@ -25,35 +24,48 @@ export default function FilteredForm({ activeTab }) {
           court: item.loan?.borrower?.address?.city || "-",
           hearingDate: item.hearingDate ? item.hearingDate.split("T")[0] : "-",
           lawyer: "-", // Placeholder
-          tab: item.workflowType?.toUpperCase() || "-"
+          tab: item.workflowType?.toUpperCase()?.trim() || "-",
+          stage: item.activeStageName?.trim() || "-"
         }));
- 
+
+        console.log("Fetched data:", transformed);
         setData(transformed);
       } catch (error) {
         console.error("Error fetching case data:", error);
       }
     };
- 
+
     fetchCases();
   }, []);
- 
+
   useEffect(() => {
-    if (!activeTab) return;
- 
+    if (!activeTab || !activeStage) return;
+
+    const normalizedStage = activeStage.trim().toLowerCase();
+    const normalizedTab = activeTab.trim().toUpperCase();
+    
+
     const filteredData = data.filter(
-      (d) => d.tab === activeTab.toUpperCase()
+      (d) =>
+        d.tab === normalizedTab &&
+        d.stage.trim().toLowerCase() === normalizedStage
     );
- 
-    console.log("Filtered by Case Type:", activeTab, filteredData);
+
+    console.log("Filtered:", {
+      activeTab,
+      activeStage,
+      filteredData
+    });
+
     setFiltered(filteredData);
-  }, [activeTab, data]);
- 
+  }, [activeTab, activeStage, data]);
+
   const handleRowClick = (row) => {
     if (row?.CaseID) {
       navigate(`/case/${row.CaseID}`);
     }
   };
- 
+
   const columns = [
     { key: "cnr", label: "CNR No." },
     { key: "createdDate", label: "Created Date" },
@@ -63,16 +75,18 @@ export default function FilteredForm({ activeTab }) {
     { key: "hearingDate", label: "Hearing Date" },
     { key: "lawyer", label: "Lawyer" }
   ];
- 
+
   return (
     <div className="activity-form-wrapper">
-      <ReusableGrid
-        columns={columns}
-        data={filtered}
-        onRowClick={handleRowClick}
-      />
+      {filtered.length === 0 ? (
+        <div className="no-data-msg">No cases found for selected stage.</div>
+      ) : (
+        <ReusableGrid
+          columns={columns}
+          data={filtered}
+          onRowClick={handleRowClick}
+        />
+      )}
     </div>
   );
 }
- 
- 

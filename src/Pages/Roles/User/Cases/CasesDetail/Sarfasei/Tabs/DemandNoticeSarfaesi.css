@@ -41,14 +41,29 @@
     border: 1px solid #c3c2c2;
     padding: 40px 20px;
     border-radius: 10px;
-     background-color: #fafafa;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.emandNotice-Sarfasei-icon {
-    font-size: 32px;
+.demandNotice-Sarfasei-icon {
     display: flex;
-    gap: 5rem;
+    gap: 3rem;
     justify-content: center;
+    align-items: center;
+}
+
+/* Custom Icon Styles */
+.custom-icon {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.custom-icon:hover {
+    transform: scale(1.1);
 }
 
 .demandNotice-Sarfasei-middle-content{
@@ -90,4 +105,24 @@
 .demandNotice-Sarfasei-Bottom-btn{
     text-align: center;
     margin-top: 20px;
+}
+
+/* Form Styles */
+.Sarfasei-notice-form-group {
+    margin-bottom: 15px;
+}
+
+.notice-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.Sarfasei-notice-textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
 }
