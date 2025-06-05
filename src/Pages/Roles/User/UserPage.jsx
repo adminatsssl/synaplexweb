@@ -11,10 +11,16 @@ export default function UserPage() {
   const [mapData, setMapData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+    const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
   useEffect(() => {
     const fetchSummaryData = async () => {
       try {
-        const response = await axios.get("/api/api/cases/summaryByState");
+        const response = await axios.get(`/api/api/cases/summaryByState`, {
+          headers : getAuthHeaders()
+        });
         if (response.status === 200) {
           setMapData(response.data);
         } else {
