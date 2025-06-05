@@ -15,6 +15,14 @@ const caseTypes = [
   "CRIMINAL"
 ];
 
+const courtTypes = [
+  "Court",
+  "DRT",
+  "High Court",
+  "Supreme Court",
+  "NCLT"
+];
+
 const AddUserCases = ({ initialData = null, onClose }) => {
   console.log('Initial Data received:', initialData); // Debug log
 
@@ -25,7 +33,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
     loanType: initialData?.loanType || "",
     loanAmount: initialData?.loanAmount || 0,
     defaultDate: initialData?.defaultDate || "",
-    npaDate: initialData?.npaDate || "",
+    npaDate: initialData?.npaDate || "", 
     workflowType: "",
     courtType: "",
     hearingDate: "",
@@ -50,6 +58,11 @@ const AddUserCases = ({ initialData = null, onClose }) => {
     }));
   };
 
+  const handleSearch = async () => {
+    // Implement loan search functionality here
+    console.log("Searching for loan:", formData.loanNumber);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -66,7 +79,6 @@ const AddUserCases = ({ initialData = null, onClose }) => {
         throw new Error("Hearing Date is required");
       }
 
-      // Ensure loanId is a number
       const payload = {
         loanId: Number(formData.loanId),
         workflowType: formData.workflowType,
@@ -83,10 +95,9 @@ const AddUserCases = ({ initialData = null, onClose }) => {
       
       console.log('Response:', response);
 
-     if (response.data.status === "SUCCESS") {
+      if (response.data.status === "SUCCESS") {
         setMessage("Case created successfully!");
         onClose();
-      } else {
       }
     } catch (error) {
       console.error("Error details:", error.response?.data || error.message);
@@ -120,7 +131,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
       </div>
 
       <div className="addusercase-form-sections">
-        {/* Loan and Borrower Details - Read Only */}
+        {/* Loan and Borrower Details */}
         <div className="addusercase-form-section addusercase-card">
           <h3>Loan and Borrower Detail</h3>
 
@@ -132,9 +143,17 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               <div className="addusercase-loanID">
                 <input
                   type="text"
+                  name="loanNumber"
                   value={formData.loanNumber}
-                  disabled
+                  onChange={handleChange}
+                  placeholder="Enter Loan Number"
                 />
+                <button 
+                  className="addusercase-search-button"
+                  onClick={handleSearch}
+                >
+                  <FaSearch />
+                </button>
               </div>
             </div>
 
@@ -155,8 +174,10 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               <label>Borrower</label>
               <input
                 type="text"
+                name="borrower"
                 value={formData.borrower}
-                disabled
+                onChange={handleChange}
+                placeholder="Enter Borrower Name"
               />
             </div>
 
@@ -164,8 +185,10 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               <label>Loan Type</label>
               <input 
                 type="text"
+                name="loanType"
                 value={formData.loanType}
-                disabled
+                onChange={handleChange}
+                placeholder="Enter Loan Type"
               />
             </div>
           </div>
@@ -175,8 +198,10 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               <label>Loan Amount</label>
               <input
                 type="number"
+                name="loanAmount"
                 value={formData.loanAmount}
-                disabled
+                onChange={handleChange}
+                placeholder="Enter Loan Amount"
               />
             </div>
 
@@ -184,8 +209,9 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               <label>Default Date</label>
               <input
                 type="date"
+                name="defaultDate"
                 value={formData.defaultDate}
-                disabled
+                onChange={handleChange}
               />
             </div>
 
@@ -193,8 +219,9 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               <label>NPA Date</label>
               <input
                 type="date"
+                name="npaDate"
                 value={formData.npaDate}
-                disabled
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -218,13 +245,18 @@ const AddUserCases = ({ initialData = null, onClose }) => {
 
             <div className="addusercase-form-group">
               <label>Court</label>
-              <input
-                type="text"
+              <select
                 name="courtType"
                 value={formData.courtType}
                 onChange={handleChange}
-                placeholder="Select Court"
-              />
+              >
+                <option value="">Select Court</option>
+                {courtTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="addusercase-form-group">
@@ -273,8 +305,8 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 type="number"
                 name="fiNo"
                 value={formData.fiNo}
+                onChange={handleChange}
                 placeholder="Enter FI No"
-                disabled
               />
             </div>
 
@@ -284,8 +316,8 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 type="number"
                 name="fiYear"
                 value={formData.fiYear}
+                onChange={handleChange}
                 placeholder="Enter FI Year"
-                disabled
               />
             </div>
           </div>
@@ -297,8 +329,8 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 type="number"
                 name="regNo"
                 value={formData.regNo}
+                onChange={handleChange}
                 placeholder="Enter Reg No"
-                disabled
               />
             </div>
 
@@ -308,8 +340,8 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 type="number"
                 name="regYear"
                 value={formData.regYear}
+                onChange={handleChange}
                 placeholder="Enter Reg Year"
-                disabled
               />
             </div>
 
@@ -319,7 +351,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 type="date"
                 name="dateOfFiling"
                 value={formData.dateOfFiling}
-                disabled
+                onChange={handleChange}
               />
             </div>
           </div>

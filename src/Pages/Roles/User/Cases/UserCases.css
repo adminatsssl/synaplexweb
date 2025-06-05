@@ -149,7 +149,6 @@ div.addusercase-search-input {
   border-radius: 4px;
 }
 
-
 .addusercase-search-button {
   padding: 6px 12px;
   height: 38px;
@@ -211,7 +210,6 @@ div.addusercase-form-group-checkbox label {
   flex-direction: column;
   min-width: 200px;
   flex: 1;
-  /* margin-top: 15px; */
 }
 
 .addusercase-form-group label {
@@ -227,22 +225,13 @@ div.addusercase-form-group input {
   border-radius: 4px;
   margin-top: 5px;
 }
+
 .addusercase-form-group select {
   font-size: 14px;
   padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   height: 35px;
-}
-
-/* input[type="date"] {
-  font-family: inherit;
-  font-size: 14px;
-} */
-
-.addusercase-checkbox-container {
-  display: flex;
-  align-items: center;
 }
 
 .addusercase-form-group-loanId {
@@ -254,21 +243,22 @@ div.addusercase-form-group input {
   margin-right: 5px;
   display: flex;
 }
-div.addusercase-loanID input{
-   height: 32px;
-    width: 60% !important;
+
+div.addusercase-loanID input {
+  height: 32px;
+  width: 60% !important;
 }
 
 div.addusercase-form-group-loanId button {
   background-color: #004b8d;
   color: white;
   border: 1px solid #004b8d;
-  border-radius: 4px 4px 4px 4px;
+  border-radius: 4px;
   padding: 0px 12px;
   font-size: 14px;
   cursor: pointer;
-      height: 32px;
-    margin-left: 5px;
+  height: 32px;
+  margin-left: 5px;
 }
 
 .addusercase-checkbox {
@@ -285,36 +275,9 @@ div.addusercase-form-group-loanId button {
   margin-bottom: 0;
 }
 
-.addusercase-action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px;
-}
-
-.addusercase-cancel-button,
-.addusercase-save-button {
-  font-size: 14px;
-  padding: 6px 20px;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-
-.addusercase-cancel-button {
-  background-color: white;
-  color: #0a4c9a;
-  border: 1px solid #0a4c9a;
-}
-
-.addusercase-save-button {
-  background-color: #0a4c9a;
-  color: white;
-}
-
-.addusercase-save-button:disabled {
-  background-color: #999;
-  cursor: not-allowed;
+.addusercase-button-container {
+  text-align: center;
+  padding: 20px;
 }
 
 .addusercase-message-container {
@@ -325,6 +288,75 @@ div.addusercase-form-group-loanId button {
   font-size: 14px;
 }
 
-.addusercase-button-container{
+/* Disabled state styles */
+.addusercase-form-group input:disabled {
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Error state styles */
+.addusercase-form-group input.error {
+  border-color: #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Success state styles */
+.success-message {
+  color: #28a745;
+  font-size: 14px;
+  margin-top: 10px;
   text-align: center;
+}
+
+/* Loading state styles */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Modal animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.addusercase-container {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .addusercase-form-row {
+    flex-direction: column;
+  }
+  
+  .addusercase-form-group {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .addusercase-form-group-loanId {
+    width: 100%;
+  }
+  
+  div.addusercase-loanID input {
+    width: 100% !important;
+  }
+  
+  .addusercase-form-group-checkbox {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }

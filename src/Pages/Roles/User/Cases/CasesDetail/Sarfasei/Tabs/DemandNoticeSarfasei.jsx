@@ -41,7 +41,7 @@ const DemandNoticeSarfasei = () => {
                 <div className='demandNotice-Sarfasei-topcontent'>
 
                     <div className='demandNotice-Sarfasei-topcontent-leftside'>
-                        <div className="Sarfasei-notice-form-row">
+                        <div className="Sarfasei-notice-form-row"> 
                             <div className="Sarfasei-notice-form-group">
                                 <label>Notice Deadline</label>
                                 <input type="date" className="notice-input" />

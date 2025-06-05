@@ -1,11 +1,7 @@
 // import React from 'react';
 import React, { useState, useEffect } from 'react'; // ✅ Fix
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoMdMail } from "react-icons/io";
-import { FaSms } from "react-icons/fa";
-import { GiMailbox } from "react-icons/gi";
 import ReusableGrid from "../../../../../../ReusableComponents/ReusableGrid.jsx"; // Adjust path as needed
-import './DemandNoticeSarfaesi.css';
+import './DemandNoticeSarfaesi.css';  // Fixed CSS filename
 import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx"
 import NoticePreviewModal from './NoticePreviewModal';
@@ -13,6 +9,13 @@ import AddButton from "../../../../../../ReusableComponents/AddButton.jsx";
 import DispositionModal from './DispositionModal';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+
+// Import icons
+
+import whatsappIcon from '../../../../../../../assets/icons/whatsapp.png';
+import emailIcon from '../../../../../../../assets/icons/email.png';
+import smsIcon from '../../../../../../../assets/icons/sms.png';
+import mailboxIcon from '../../../../../../../assets/icons/mailbox.png';
 
 const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
     if (!caseId) {
@@ -190,20 +193,20 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
                         <button 
                             onClick={openModal} 
                             className='assetValuation-generatenotice-btn'
-                            // disabled={loading || !noticeData.noticeDeadline || !noticeData.noticeSentDate}
                         >
                             Generate Notice
                         </button>
                         <h4>View Generated Notice</h4>
                         <div className='demandNotice-Sarfasei-topcontent-rightside-icon'>
-                            <div className='emandNotice-Sarfasei-icon'>
-                                <GiMailbox />
-                                <FaSms />
+                        <div className='demandNotice-Sarfasei-icon'>
+                                <img src={emailIcon} alt="Email" className="custom-icon email-icon" />
+                                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" />
                             </div>
-                            <div className='emandNotice-Sarfasei-icon'>
-                                <IoMdMail />
-                                <IoLogoWhatsapp />
+                            <div className='demandNotice-Sarfasei-icon'>
+                                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" />
+                                <img src={mailboxIcon} alt="Physical Mail" className="custom-icon physical-mail-icon" />
                             </div>
+
                         </div>
                     </div>
                 </div>
