@@ -16,10 +16,15 @@ const LawyerNotice = () => {
   useEffect(() => {
     fetchNotices();
   }, []);
+  const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
 
   const fetchNotices = async () => {
     try {
-      const response = await fetch('/api/notice');
+      const response = await fetch(`/api/notice`, {
+        headers: getAuthHeaders()
+      });
       const result = await response.json();
       
       if (result.status === 'SUCCESS') {
