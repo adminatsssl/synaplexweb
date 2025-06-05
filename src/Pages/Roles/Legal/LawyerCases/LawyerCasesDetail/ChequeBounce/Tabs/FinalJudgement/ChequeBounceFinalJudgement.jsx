@@ -29,9 +29,15 @@ const ChequeBounceFinalJudgement = ({ caseId, onStageComplete }) => {
         fetchExistingData();
     }, [caseId]);
 
+    const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
     const fetchExistingData = async () => {
         try {
-            const response = await axios.get(`/api/api/finalJudgmentCB/case/${caseId}`);
+            const response = await axios.get(`/api/api/finalJudgmentCB/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             if (response.data && Object.keys(response.data).length > 0) {
                 setHasExistingData(true);
                 setFormData({
@@ -84,7 +90,9 @@ const ChequeBounceFinalJudgement = ({ caseId, onStageComplete }) => {
             };
 
             console.log("Payload : ", payload);
-            await axios.post('/api/api/finalJudgmentCB', payload);
+            await axios.post('/api/api/finalJudgmentCB', payload,{
+                headers: getAuthHeaders()
+            });
             setHasExistingData(true);
             
             if (onStageComplete) {

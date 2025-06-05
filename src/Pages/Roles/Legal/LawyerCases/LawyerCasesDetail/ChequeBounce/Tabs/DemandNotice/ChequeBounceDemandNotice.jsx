@@ -37,9 +37,15 @@ const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
         fetchExistingData();
     }, [caseId]);
 
+    const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
     const fetchExistingData = async () => {
         try {
-            const response = await axios.get(`/api/api/demandnoticeCB/case/${caseId}`);
+            const response = await axios.get(`/api/api/demandnoticeCB/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             if (response.data && Object.keys(response.data).length > 0) {
                 setHasExistingData(true);
                 setFormData({
@@ -93,7 +99,9 @@ const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
                 caseId: caseId
             };
             console.log("Payload : ", payload);
-            await axios.post('/api/api/demandnoticeCB', payload);
+            await axios.post('/api/api/demandnoticeCB', payload,{
+                headers: getAuthHeaders()
+            });
             setHasExistingData(true);
             
             if (onStageComplete) {

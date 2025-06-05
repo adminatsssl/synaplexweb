@@ -27,7 +27,9 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
         // Fetch templates from API
         const fetchTemplates = async () => {
             try {
-                const res = await fetch('/api/api/templates');
+                const res = await fetch('/api/api/templates',{
+                    headers: getAuthHeaders()
+                });
                 const data = await res.json();
                 if (data.status === 'SUCCESS') {
                     setTemplateOptions(data.data);
@@ -40,10 +42,16 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
             }
         };
 
+        const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
         // Check if notice exists for this case
         const checkNoticeExists = async () => {
             try {
-                const response = await fetch(`/api/notice/exists/${caseId}`);
+                const response = await fetch(`/api/notice/exists/${caseId}`,{
+                    headers: getAuthHeaders()
+                });
                 const data = await response.json();
                 if (data.status === 'SUCCESS') {
                     setNoticeExists(data.data);
@@ -75,9 +83,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
             const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
             const response = await fetch('/api/notice', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: getAuthHeaders(),
                 body: JSON.stringify({
                     caseId: caseId,
                     pdfBody: selected?.pdfBody || "Default notice content"

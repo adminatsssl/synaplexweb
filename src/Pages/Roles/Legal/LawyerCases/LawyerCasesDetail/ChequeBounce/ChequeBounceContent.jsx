@@ -48,10 +48,16 @@ const ChequeBounceContent = ({ caseId, initialActiveStep = 2 }) => {
   const [viewedStep, setViewedStep] = useState(initialActiveStep);
   const [loading, setLoading] = useState(true);
 
+  const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
   useEffect(() => {
     const fetchCaseDetails = async () => {
       try {
-        const response = await axios.get(`/api/api/cases/${caseId}`);
+        const response = await axios.get(`/api/api/cases/${caseId}`,{
+          headers: getAuthHeaders()
+        });
         if (response.data && response.data.data) {
           const { activeStageName } = response.data.data;
           const mappedStep = stageNameToStepMap[activeStageName] || initialActiveStep;

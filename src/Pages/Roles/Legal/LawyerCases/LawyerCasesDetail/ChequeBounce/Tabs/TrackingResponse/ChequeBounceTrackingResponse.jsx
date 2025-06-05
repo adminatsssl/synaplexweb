@@ -14,6 +14,8 @@ const ChequeBounceTrackingResponse = ({ caseId, onStageComplete }) => {
         return null;
     }
 
+
+
     const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
     const [hasExistingData, setHasExistingData] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -28,9 +30,15 @@ const ChequeBounceTrackingResponse = ({ caseId, onStageComplete }) => {
         fetchExistingData();
     }, [caseId]);
 
+    const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
     const fetchExistingData = async () => {
         try {
-            const response = await axios.get(`/api/api/tracking15DayResponseCB/case/${caseId}`);
+            const response = await axios.get(`/api/api/tracking15DayResponseCB/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             if (response.data && Object.keys(response.data).length > 0) {
                 setHasExistingData(true);
                 setFormData({
@@ -90,7 +98,9 @@ const ChequeBounceTrackingResponse = ({ caseId, onStageComplete }) => {
             };
 
             console.log("Payload : ", payload);
-            await axios.post('/api/api/tracking15DayResponseCB', payload);
+            await axios.post('/api/api/tracking15DayResponseCB', payload,{
+                headers: getAuthHeaders()
+            });
             setHasExistingData(true);
             
             if (onStageComplete) {

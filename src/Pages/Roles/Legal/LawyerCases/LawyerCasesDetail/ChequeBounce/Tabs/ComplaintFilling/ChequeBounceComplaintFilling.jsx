@@ -29,9 +29,15 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
         fetchExistingData();
     }, [caseId]);
 
+    const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
     const fetchExistingData = async () => {
         try {
-            const response = await axios.get(`/api/api/complaintFilingCB/case/${caseId}`);
+            const response = await axios.get(`/api/api/complaintFilingCB/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             if (response.data && Object.keys(response.data).length > 0) {
                 setHasExistingData(true);
                 setFormData({
@@ -84,7 +90,9 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
             };
 
             console.log("Payload : ", payload);
-            await axios.post('/api/api/complaintFilingCB', payload);
+            await axios.post('/api/api/complaintFilingCB', payload,{
+                headers: getAuthHeaders()
+            });
             setHasExistingData(true);
             
             if (onStageComplete) {
