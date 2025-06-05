@@ -11,12 +11,17 @@ const LawyerCaseDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
 
   const fetchCaseDetail = useCallback(async () => {
     try {
       const response = await axios.get(`/api/api/cases/${id}`, {
         // Add cache-busting parameter
         params: { _t: Date.now() }
+      },{
+        headers: getAuthHeaders()
       });
       const item = response.data?.data;
 

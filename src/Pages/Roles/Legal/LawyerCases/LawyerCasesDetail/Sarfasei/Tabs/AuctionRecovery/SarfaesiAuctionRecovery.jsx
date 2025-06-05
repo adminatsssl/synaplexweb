@@ -19,6 +19,9 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
         caseId: caseId
     });
     const [dispositions, setDispositions] = useState([]);
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      });
 
     useEffect(() => {
         fetchAuctionRecovery();
@@ -26,7 +29,9 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
 
     const fetchAuctionRecovery = async () => {
         try {
-            const response = await axios.get(`/api/api/auctionRecovery/case/${caseId}`);
+            const response = await axios.get(`/api/api/auctionRecovery/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             const data = response.data;
             if (data && Object.keys(data).length > 0) {
                 setIsDataExists(true);
@@ -73,7 +78,9 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
                 ...formData,
                 dispositions
             };
-            await axios.post('/api/api/auctionRecovery', payload);
+            await axios.post('/api/api/auctionRecovery', payload,{
+                headers: getAuthHeaders()
+            });
             setIsDataExists(true);
             
             if (onStageComplete) {

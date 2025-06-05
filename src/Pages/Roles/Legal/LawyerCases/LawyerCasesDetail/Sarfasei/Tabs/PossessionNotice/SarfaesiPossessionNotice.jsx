@@ -24,10 +24,14 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
     useEffect(() => {
         fetchPossessionNotice();
     }, [caseId]);
-
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      });
     const fetchPossessionNotice = async () => {
         try {
-            const response = await axios.get(`/api/api/possessionNotice/case/${caseId}`);
+            const response = await axios.get(`/api/api/possessionNotice/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             const data = response.data;
             if (data && Object.keys(data).length > 0) {
                 setIsDataExists(true);
@@ -74,7 +78,9 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                 ...formData,
                 dispositions
             };
-            await axios.post('/api/api/possessionNotice', payload);
+            await axios.post('/api/api/possessionNotice', payload, {
+                headers: getAuthHeaders()
+            });
             setIsDataExists(true);
             
             if (onStageComplete) {

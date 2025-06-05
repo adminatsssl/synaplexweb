@@ -23,9 +23,15 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
         fetchTrackingResponse();
     }, [caseId]);
 
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      });
+
     const fetchTrackingResponse = async () => {
         try {
-            const response = await axios.get(`/api/api/tracking60DayResponse/case/${caseId}`);
+            const response = await axios.get(`/api/api/tracking60DayResponse/case/${caseId}`,{
+                headers: getAuthHeaders()
+            });
             const data = response.data;
             if (data && Object.keys(data).length > 0) {
                 setIsDataExists(true);
@@ -79,7 +85,9 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
                 ...formData,
                 dispositions
             };
-            await axios.post('/api/api/tracking60DayResponse', payload);
+            await axios.post('/api/api/tracking60DayResponse', payload, {
+                headers: getAuthHeaders()
+            });
             setIsDataExists(true);
             
             if (onStageComplete) {

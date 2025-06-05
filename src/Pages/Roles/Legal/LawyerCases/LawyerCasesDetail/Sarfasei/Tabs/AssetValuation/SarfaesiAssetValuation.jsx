@@ -21,6 +21,9 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
         caseId: caseId
     });
     const [dispositions, setDispositions] = useState([]);
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      });
 
     useEffect(() => {
         fetchAssetValuation();
@@ -28,7 +31,9 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
 
     const fetchAssetValuation = async () => {
         try {
-            const response = await axios.get(`/api/api/assetValuationAuctions/case/${caseId}`);
+            const response = await axios.get(`/api/api/assetValuationAuctions/case/${caseId}`, {
+                headers: getAuthHeaders()
+            });
             const data = response.data;
             if (data && Object.keys(data).length > 0) {
                 setIsDataExists(true);
@@ -73,7 +78,9 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
                 ...formData,
                 dispositions
             };
-            await axios.post('/api/api/assetValuationAuctions', payload);
+            await axios.post('/api/api/assetValuationAuctions', payload, {
+                headers: getAuthHeaders()
+            });
             setIsDataExists(true);
             
             if (onStageComplete) {

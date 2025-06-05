@@ -3,7 +3,7 @@ import './NoticePreviewModal.css';
 
 const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
     if (!isOpen) return null;
-    
+
     if (!caseId) {
         console.error('No caseId provided to NoticePreviewModal');
         return null;
@@ -16,6 +16,11 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
         { id: 'sms', label: 'SMS' }
     ];
 
+
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+
     const [templateOptions, setTemplateOptions] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState('');
     const [tabs, setTabs] = useState([]);
@@ -27,7 +32,9 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
         // Fetch templates from API
         const fetchTemplates = async () => {
             try {
-                const res = await fetch('/api/api/templates');
+                const res = await fetch(`/api/api/templates`, {
+                    headers : getAuthHeaders()
+                });
                 const data = await res.json();
                 if (data.status === 'SUCCESS') {
                     setTemplateOptions(data.data);
@@ -43,7 +50,9 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
         // Check if notice exists for this case
         const checkNoticeExists = async () => {
             try {
-                const response = await fetch(`/api/notice/exists/${caseId}`);
+                const response = await fetch(`/api/notice/exists/${caseId}`, {
+                    headers : getAuthHeaders()
+                });
                 const data = await response.json();
                 if (data.status === 'SUCCESS') {
                     setNoticeExists(data.data);
@@ -75,9 +84,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
             const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
             const response = await fetch('/api/notice', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: getAuthHeaders(),
                 body: JSON.stringify({
                     caseId: caseId,
                     pdfBody: selected?.pdfBody || "Default notice content"
@@ -129,8 +136,8 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
                 <div className="action-buttons">
                     {activeTab === 'speedPost' && (
                         <>
-                            <button 
-                                className="generate-button" 
+                            <button
+                                className="generate-button"
                                 onClick={handleGenerateNotice}
                                 disabled={isGenerating || noticeExists}
                                 title={noticeExists ? 'Notice has already been generated' : ''}

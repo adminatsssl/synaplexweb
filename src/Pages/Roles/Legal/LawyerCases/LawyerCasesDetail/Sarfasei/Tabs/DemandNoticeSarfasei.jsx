@@ -40,10 +40,15 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
             checkExistingData();
         }
     }, [caseId]);
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      });
 
     const checkExistingData = async () => {
         try {
-            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`);
+            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`, {
+                headers: getAuthHeaders()
+            });
             if (response.data && Object.keys(response.data).length > 0) {
                 setHasExistingData(true);
                 setNoticeData({
