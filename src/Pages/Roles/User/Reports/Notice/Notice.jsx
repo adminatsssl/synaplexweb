@@ -13,17 +13,21 @@ const UserNotice = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+  const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
   useEffect(() => {
     fetchNotices();
   }, []);
 
   const fetchNotices = async () => {
     try {
-      // Using the proxy configuration from vite.config.js
       const response = await fetch('/api/notice', {
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
       const result = await response.json();

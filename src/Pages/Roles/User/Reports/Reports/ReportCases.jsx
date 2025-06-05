@@ -11,12 +11,16 @@ const ReportCases = () => {
   const [data, setData] = useState([]);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
-
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
   // Fetch cases on mount
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await axios.get("/api/api/cases");
+        const response = await axios.get(`/api/api/cases`, {
+          headers: getAuthHeaders()
+        });
         const rawCases = response.data?.data || [];
 
         const transformedData = rawCases.map((item) => ({
