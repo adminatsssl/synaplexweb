@@ -87,8 +87,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
       } else {
         await axiosJson.post("/api/api/lawgroups", payload);
       }
-
-      // alert(`Law Group ${selectedLawGroup ? "updated" : "created"} successfully!`);
       onSuccess?.();
     } catch (error) {
       console.error("Submission error:", error.response?.data || error.message);
@@ -96,50 +94,199 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
     }
   };
 
+  const handleOverlayClick = (e) => {
+    if (e.target.className === 'LawGroup-modal-overlay') {
+      onCancel();
+    }
+  };
+
   return (
-    <form className="LawGroup-popup-container" onSubmit={handleSubmit}>
-      <div className="LawGroup-Heading">{selectedLawGroup ? "Edit Law Group" : "Law Group"}</div>
-
-      <div className="LawGroup-Middle-Content">
-        <div className="LawGroup-Middle-FieldContent">
-          <h2 className="LawGroup-section-title">Group Detail</h2>
-          <div className="LawGroup-form-grid">
-            <label><span>Group Name</span><input name="name" value={form.name} onChange={handleChange} /></label>
-            <label><span>Registration No</span><input name="registrationNumber" value={form.registrationNumber} onChange={handleChange} /></label>
-            <label><span>Establishment Year</span><input name="year" value={form.year} onChange={handleChange} /></label>
-            <label><span>Total Members</span><input name="totalMember" type="number" value={form.totalMember} onChange={handleChange} /></label>
-            <label><span>Ongoing Cases</span><input name="ongoingCases" type="number" value={form.ongoingCases} onChange={handleChange} /></label>
-            <label><span>Success Rate</span><input name="successRate" type="number" step="0.01" value={form.successRate} onChange={handleChange} /></label>
-          </div>
+    <div className="LawGroup-modal-overlay" onClick={handleOverlayClick}>
+      <div className="law-group-modal" onClick={e => e.stopPropagation()}>
+        <div className="law-group-header">
+          <h2>Law Group Detail</h2>
+          <button 
+            type="button" 
+            className="close-button" 
+            onClick={onCancel}
+            aria-label="Close modal"
+          >
+            ×
+          </button>
         </div>
 
-        <div className="LawGroup-Middle-FieldContent">
-          <h2 className="LawGroup-section-title">Address</h2>
-          <label className="LawGroup-textarea-label">
-            <span>Address Line</span>
-            <textarea name="addressLine" className="LawGroup-textarea" value={form.addressLine} onChange={handleChange} />
-          </label>
-          <div className="LawGroup-address-grid">
-            <label><span>City</span><input name="city" value={form.city} onChange={handleChange} /></label>
-            <label><span>State</span><input name="state" value={form.state} onChange={handleChange} /></label>
-            <label><span>PinCode</span><input name="pinCode" value={form.pinCode} onChange={handleChange} /></label>
-          </div>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-section">
+            <div className="form-row">
+              <div className="form-field">
+                <label>Law Group Name</label>
+                <input 
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                 
+                  required
+                />
+              </div>
+            </div>
 
-        <div className="LawGroup-Middle-FieldContent">
-          <h2 className="LawGroup-section-title">FPR Details</h2>
-          <div className="LawGroup-form-grid">
-            <label><span>FPR E-Mail</span><input name="email" value={form.email} onChange={handleChange} /></label>
-            <label><span>Phone No</span><input name="phone" value={form.phone} onChange={handleChange} /></label>
+            <div className="form-row two-columns">
+              <div className="form-field">
+                <label>Registration No.</label>
+                <input 
+                  type="text"
+                  name="registrationNumber"
+                  value={form.registrationNumber}
+                  onChange={handleChange}
+                  
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label>Establishment Year</label>
+                <input 
+                  type="text"
+                  name="year"
+                  value={form.year}
+                  onChange={handleChange}
+                  
+                />
+              </div>
+            </div>
+
+            <div className="form-row three-columns">
+              <div className="form-field">
+                <label>Total No. Of Lawyers</label>
+                <input 
+                  type="number"
+                  name="totalMember"
+                  value={form.totalMember}
+                  onChange={handleChange}
+                  
+                  min="0"
+                />
+              </div>
+              <div className="form-field">
+                <label>Success Rate</label>
+                <input 
+                  type="number"
+                  name="successRate"
+                  value={form.successRate}
+                  onChange={handleChange}
+                 
+                  min="0"
+                  max="100"
+                  step="0.01"
+                />
+              </div>
+              <div className="form-field">
+                <label>Ongoing Cases</label>
+                <input 
+                  type="number"
+                  name="ongoingCases"
+                  value={form.ongoingCases}
+                  onChange={handleChange}
+                  
+                  min="0"
+                />
+              </div>
+            </div>
           </div>
-        </div>
+
+          <div className="form-section">
+            <h3>Address</h3>
+            <div className="form-row">
+              <div className="form-field full-width">
+                <label>Address Line</label>
+                <textarea
+                  name="addressLine"
+                  value={form.addressLine}
+                  onChange={handleChange}
+                  rows="3"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-row three-columns">
+              <div className="form-field">
+                <label>City</label>
+                <input 
+                  type="text"
+                  name="city"
+                  value={form.city}
+                  onChange={handleChange}
+                  
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label>State</label>
+                <input 
+                  type="text"
+                  name="state"
+                  value={form.state}
+                  onChange={handleChange}
+                  
+                  required
+                />
+              </div>
+              <div className="form-field">
+                <label>Pincode</label>
+                <input 
+                  type="text"
+                  name="pinCode"
+                  value={form.pinCode}
+                  onChange={handleChange}
+                  
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <h3>FPR Details:</h3>
+            <div className="form-row three-columns">
+              <div className="form-field">
+                <label>FPR Name</label>
+                <input 
+                  type="text"
+                  name="fprName"
+                  
+                />
+              </div>
+              <div className="form-field">
+                <label>FPR E-Mail</label>
+                <input 
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  
+                />
+              </div>
+              <div className="form-field">
+                <label>Phone No.</label>
+                <input 
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+             
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <CancelButton onClick={onCancel} />
+            <SaveButton type="submit" />
+          </div>
+        </form>
       </div>
-
-      <div className="LawGroup-button-row">
-        <CancelButton onClick={onCancel} className="LawGroup-cancel-button" />
-        <SaveButton type="submit" className="LawGroup-save-button" />
-      </div>
-    </form>
+    </div>
   );
 };
 

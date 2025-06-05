@@ -3,113 +3,200 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: 999;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-/* Modal content */
-.LawGroup-modal-content {
-  background-color: #fff;
-  width: 90%;
-  max-width: 900px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  margin: 2rem auto;
-}
-
-/* Close button */
-.LawGroup-modal-close {
-  position: absolute;
-  top: 5px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: white;
-}
-
-/* Heading */
-.LawGroup-Heading {
-  background-color: #003366;
-  color: white;
-  padding: 12px 20px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Section titles */
-.LawGroup-section-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 1rem 0 0.5rem;
-  text-decoration: underline;
-}
-
-/* Middle content wrapper */
-.LawGroup-Middle-Content {
   padding: 20px;
+  z-index: 9999;
+  overflow-y: auto;
 }
 
-/* Grouped content sections */
-.LawGroup-Middle-FieldContent {
-  margin-bottom: 30px;
-  padding: 15px;
-  border: 1px solid rgb(199, 198, 198);
-  border-radius: 6px;
+.law-group-modal {
+  background: #FFFFFF;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 
-/* Grid layouts */
-.LawGroup-form-grid,
-.LawGroup-address-grid {
-  display: grid;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+/* Remove any existing modal close styles */
+.LawGroup-modal-close,
+.modal-close {
+  display: none !important;
 }
 
-.LawGroup-form-grid {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-.LawGroup-address-grid {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-/* Labels and inputs */
-label {
+.law-group-header {
+  position: sticky;
+  top: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #004B96;
+  color: white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  z-index: 10;
+}
+
+.law-group-header h2 {
+  margin: 0;
+  font-size: 20px;
   font-weight: 500;
 }
 
-input,
-textarea {
-  padding: 0.5rem;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline-color: #003e87;
+.close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  margin: -8px;
+  z-index: 11;
 }
 
-/* Textarea specific styling */
-textarea.LawGroup-textarea {
+.close-button:hover {
+  opacity: 0.8;
+}
+
+.form-section {
+  padding: 24px;
+  border-bottom: 1px solid #E5E7EB;
+  background: #fff;
+}
+
+.form-section h3 {
+  color: #111827;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+}
+
+.form-row {
+  margin-bottom: 20px;
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field label {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-field input,
+.form-field textarea {
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #111827;
+  background: #FFFFFF;
+  width: 100%;
+  height: 38px;
+}
+
+/* Full width input for first field */
+.form-row:first-child .form-field input {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Two columns layout */
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.two-columns .form-field input {
+  width: 100%;
+}
+
+/* Three columns layout */
+.three-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.three-columns .form-field input {
+  width: 100%;
+}
+
+/* Address section */
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field textarea {
   resize: vertical;
   min-height: 80px;
-  max-height: 200px;
+  height: auto;
+  width: 100%;
 }
 
-/* Button row */
-.LawGroup-button-row {
+/* Form actions */
+.form-actions {
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  padding: 1rem 0 2rem;
+  gap: 12px;
+  padding: 16px 24px;
+  background: #F9FAFB;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-top: 1px solid #E5E7EB;
+  z-index: 10;
+}
+
+/* Required field indicator */
+label[for*="required"]::after,
+label:has(+ input[required])::after {
+  content: " *";
+  color: #DC2626;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .two-columns,
+  .three-columns {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .law-group-modal {
+    margin: 0;
+    max-width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .LawGroup-modal-overlay {
+    padding: 0;
+  }
+  
+  .form-row:first-child .form-field input {
+    max-width: 100%;
+  }
 }
