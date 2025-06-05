@@ -16,6 +16,7 @@ export default function TopNavbar() {
   const handleSignOut = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("role");
+    localStorage.removeItem("token");
     navigate("/"); // redirect to homepage/login page
   };
 
