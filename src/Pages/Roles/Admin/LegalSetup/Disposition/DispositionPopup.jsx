@@ -3,6 +3,11 @@ import './DispositionSetup.css';
 import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
 
+const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const DispositionPopup = ({ onClose, onSave, item }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -26,17 +31,13 @@ const DispositionPopup = ({ onClose, onSave, item }) => {
         // When updating, include the item's ID in the endpoint
         await fetch(`/api/api/dispositions/${item.id}`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: getAuthHeaders(),
           body: JSON.stringify(payload),
         });
       } else {
         await fetch("/api/api/dispositions", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: getAuthHeaders(),
           body: JSON.stringify(payload),
         });
       }

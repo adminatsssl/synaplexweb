@@ -16,7 +16,12 @@ const AdminNotices = () => {
 
   const fetchNotices = async () => {
     try {
-      const response = await fetch('/api/notice');
+      const response = await fetch('/api/notice', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       const result = await response.json();
       
       if (result.status === 'SUCCESS') {

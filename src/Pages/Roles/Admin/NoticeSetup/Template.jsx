@@ -24,9 +24,15 @@ const NoticeSetupTemplate = () => {
     setShowPopup(true);
   };
 
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
   const fetchTemplates = async () => {
     try {
-      const response = await axios.get("/api/api/templates");
+      const response = await axios.get("/api/api/templates", {
+        headers: getAuthHeaders()
+      });
       if (response.data.status === "SUCCESS") {
         const formattedData = response.data.data.map((template) => ({
           ...template,
@@ -61,7 +67,9 @@ const NoticeSetupTemplate = () => {
     if (!confirmDelete) return;
 
     try {
-      const response = await axios.delete(`/api/api/templates/${template.id}`);
+      const response = await axios.delete(`/api/api/templates/${template.id}`, {
+        headers: getAuthHeaders()
+      });
       if (response.data.status === 'SUCCESS') {
         alert('Template deleted successfully!');
         fetchTemplates(); // Refresh the list

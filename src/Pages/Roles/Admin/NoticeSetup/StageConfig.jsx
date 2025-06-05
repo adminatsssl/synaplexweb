@@ -7,6 +7,10 @@ import AddButton from "../../../ReusableComponents/AddButton";
 import StageTemplateModal from "./StageTemplateModal";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const StageConfig = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -16,7 +20,9 @@ const StageConfig = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/api/templates/attachedTemplatesList");
+        const response = await axios.get("/api/api/templates/attachedTemplatesList", {
+          headers: getAuthHeaders()
+        });
         // Map the API response to the structure expected by your table
         const mappedData = response.data.map((item) => ({
           caseType: item.workflowTypeName,

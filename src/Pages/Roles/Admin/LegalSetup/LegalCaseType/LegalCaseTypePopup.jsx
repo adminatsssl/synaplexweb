@@ -3,6 +3,11 @@ import "./LegalCaseTypeSetup.css";
 import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
 
+const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const LegalCaseTypePopup = ({ onClose, onSave, item }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -26,14 +31,14 @@ useEffect(() => {
       // Update
       await fetch(`/api/api/legalCaseTypes/${item.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(body),
       });
     } else {
       // Create
       await fetch("/api/api/legalCaseTypes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(body),
       });
     }

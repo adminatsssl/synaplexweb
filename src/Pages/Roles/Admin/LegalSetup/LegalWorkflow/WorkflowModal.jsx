@@ -7,6 +7,10 @@ import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
 import axios from "axios";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const WorkflowModal = ({ onClose, workflow }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -102,9 +106,13 @@ const WorkflowModal = ({ onClose, workflow }) => {
 
       let response;
       if (workflow?.id) {
-        response = await axios.put(`/api/api/workflowType/${workflow.id}`, payload);
+        response = await axios.put(`/api/api/workflowType/${workflow.id}`, payload, {
+          headers: getAuthHeaders()
+        });
       } else {
-        response = await axios.post('/api/api/workflowType', payload);
+        response = await axios.post('/api/api/workflowType', payload, {
+          headers: getAuthHeaders()
+        });
       }
 
       if (response.data.status === 'SUCCESS') {

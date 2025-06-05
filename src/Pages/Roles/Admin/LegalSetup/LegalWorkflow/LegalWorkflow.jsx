@@ -7,6 +7,10 @@ import WorkflowModal from "./WorkflowModal";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import axios from "axios";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const LegalWorkflow = () => {
   const [workflows, setWorkflows] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -14,7 +18,9 @@ const LegalWorkflow = () => {
 
   const fetchWorkflows = async () => {
     try {
-      const response = await axios.get("/api/api/workflowType");
+      const response = await axios.get("/api/api/workflowType", {
+        headers: getAuthHeaders()
+      });
       if (response.data.status === "SUCCESS" && Array.isArray(response.data.data)) {
         // Process the workflows to ensure no duplicate stages
         const processedWorkflows = response.data.data.map(workflow => ({
@@ -44,7 +50,9 @@ const LegalWorkflow = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this workflow?")) return;
     try {
-      const response = await axios.delete(`/api/api/workflowType/${id}`);
+      const response = await axios.delete(`/api/api/workflowType/${id}`, {
+        headers: getAuthHeaders()
+      });
       if (response.data.status === "SUCCESS") {
         await fetchWorkflows();
       } else {

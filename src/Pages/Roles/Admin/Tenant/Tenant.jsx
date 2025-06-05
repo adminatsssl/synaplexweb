@@ -8,6 +8,10 @@ import TenantPopup from "./AddTenantPopup";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid"; 
 import "./Tenant.css";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const TenantManager = () => {
   const [tenants, setTenants] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -24,7 +28,7 @@ const TenantManager = () => {
 const fetchTenants = async () => {
   try {
     const res = await axios.get("/api/api/tenants", {
-      transformResponse: data => JSONbig.parse(data)
+      headers: getAuthHeaders()
     });
     if (res.data.status === "SUCCESS" && Array.isArray(res.data.data)) {
       setTenants(res.data.data);
@@ -59,7 +63,9 @@ const fetchTenants = async () => {
   const handleDeleteClick = async (tenantId) => {
     try {
       if (window.confirm("Are you sure you want to delete this tenant?")) {
-        await axios.delete(`/api/api/tenants/${tenantId}`);
+        await axios.delete(`/api/api/tenants/${tenantId}`, {
+          headers: getAuthHeaders()
+        });
         showMessage("Tenant deleted successfully!", "success");
         fetchTenants(); // Refresh the list after deletion
       }

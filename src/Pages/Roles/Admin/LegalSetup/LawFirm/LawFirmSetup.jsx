@@ -6,6 +6,11 @@ import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import LawFirmPopup from "./LawFirmPopup";
 import "./LawFirm.css";
 
+const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const LawFirm = () => {
   const [lawFirms, setLawFirms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,7 +22,9 @@ const LawFirm = () => {
   const fetchLawFirms = () => {
     setLoading(true);
     axios
-      .get("/api/api/lawfirms")
+      .get(`/api/api/lawfirms`, {
+        headers: getAuthHeaders()
+      })
       .then(response => {
         setLawFirms(response.data.data || []);
         setLoading(false);
@@ -52,8 +59,8 @@ const LawFirm = () => {
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`/api/api/lawfirms/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        method: 'DELETE',
+        headers: getAuthHeaders()
       });
 
       if (response.ok) {

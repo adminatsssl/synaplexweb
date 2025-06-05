@@ -6,6 +6,11 @@ import JSONbig from 'json-bigint';
 import AddButton from '../../../../ReusableComponents/AddButton';
 import ReusableGrid from '../../../../ReusableComponents/ReusableGrid';
 
+const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const LegalCaseTypeSetup = () => {
   const [legalCaseTypes, setLegalCaseTypes] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -13,7 +18,9 @@ const LegalCaseTypeSetup = () => {
 
   const fetchLegalCaseTypes = async () => {
     try {
-      const res = await fetch("/api/api/legalCaseTypes");
+      const res = await fetch("/api/api/legalCaseTypes", {
+        headers: getAuthHeaders()
+      });
       const text = await res.text();
       const parsed = JSONbig.parse(text);
       console.log(parsed);
@@ -39,6 +46,7 @@ const LegalCaseTypeSetup = () => {
       console.log("Deleting ID: " + stringId);
       await fetch(`/api/api/legalCaseTypes/${stringId}`, {
         method: "DELETE",
+        headers: getAuthHeaders()
       });
 
       fetchLegalCaseTypes();

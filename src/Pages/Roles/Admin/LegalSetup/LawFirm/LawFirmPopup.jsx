@@ -4,6 +4,10 @@ import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton";
 import './LawFirm.css';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
   const [form, setForm] = useState({
     name: '',
@@ -65,9 +69,13 @@ const LawFirmPopup = ({ onSuccess, onCancel, selectedLawFirm }) => {
 
     try {
       if (selectedLawFirm?.id) {
-        await axios.put(`/api/api/lawfirms/${selectedLawFirm.id}`, payload);
+        await axios.put(`/api/api/lawfirms/${selectedLawFirm.id}`, payload, {
+          headers: getAuthHeaders()
+        });
       } else {
-        await axios.post('/api/api/lawfirms', payload);
+        await axios.post('/api/api/lawfirms', payload, {
+          headers: getAuthHeaders()
+        });
       }
 
       onSuccess?.();

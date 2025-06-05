@@ -16,8 +16,13 @@ const AdminCases = () => {
 
   useEffect(() => {
     const fetchCases = async () => {
+      const token = localStorage.getItem('token');
       try {
-        const response = await axios.get('/api/api/cases');
+        const response = await axios.get('/api/api/cases', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (response.data.status === 'SUCCESS') {
           setCases(response.data.data);
         } else {

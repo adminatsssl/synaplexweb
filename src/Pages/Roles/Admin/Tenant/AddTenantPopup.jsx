@@ -5,6 +5,10 @@ import CancelButton from "../../../ReusableComponents/CancelButton";
 import SaveButton from "../../../ReusableComponents/SaveButton";
 import "./Tenant.css";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
   const [form, setForm] = useState({
     name: "",
@@ -104,9 +108,13 @@ const TenantPopup = ({ isOpen, onClose, onSuccess, selectedTenant }) => {
       };
 
       if (selectedTenant?.id) {
-        await axios.put(`/api/api/tenants/${selectedTenant.id}`, payload);
+        await axios.put(`/api/api/tenants/${selectedTenant.id}`, payload, {
+          headers: getAuthHeaders()
+        });
       } else {
-        await axios.post(`/api/api/tenants`, payload);
+        await axios.post(`/api/api/tenants`, payload, {
+          headers: getAuthHeaders()
+        });
       }
 
       onSuccess();

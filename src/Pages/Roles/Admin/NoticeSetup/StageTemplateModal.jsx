@@ -5,6 +5,10 @@ import SaveButton from "../../../ReusableComponents/SaveButton";
 import CancelButton from "../../../ReusableComponents/CancelButton";
 import Select from 'react-select';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const StageTemplateModal = ({ onClose, initialData }) => {
   const [formData, setFormData] = useState({
     caseType: "",
@@ -32,7 +36,9 @@ const StageTemplateModal = ({ onClose, initialData }) => {
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const response = await axios.get("/api/api/templates");
+        const response = await axios.get("/api/api/templates", {
+          headers: getAuthHeaders()
+        });
         const dataArray = response.data.data;
         if (Array.isArray(dataArray)) {
           const options = dataArray.map((template) => ({
@@ -56,7 +62,9 @@ const StageTemplateModal = ({ onClose, initialData }) => {
   useEffect(() => {
     const fetchWorkflowData = async () => {
       try {
-        const response = await axios.get("/api/api/workflowType");
+        const response = await axios.get("/api/api/workflowType", {
+          headers: getAuthHeaders()
+        });
         const workflowTypes = response.data.data;
         if (Array.isArray(workflowTypes)) {
           setWorkflowData(workflowTypes);
@@ -112,10 +120,9 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     };
 
     try {
-      const response = await axios.post(
-        "/api/api/templates/attachedTemplatesList",
-        postData
-      );
+      const response = await axios.post("/api/api/templates/attachTemplate", postData, {
+        headers: getAuthHeaders()
+      });
       console.log("Save response:", response.data);
       alert("Templates attached successfully!");
       onClose();

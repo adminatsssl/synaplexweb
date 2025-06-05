@@ -5,6 +5,10 @@ import JSONBig from "json-bigint";
 import SaveButton from "../../../ReusableComponents/SaveButton";
 import CancelButton from "../../../ReusableComponents/CancelButton";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
   const [formData, setFormData] = useState({
     Name: "",
@@ -69,7 +73,7 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
         `/api/api/borrowers/${selectedBorrower.id}`,
         payload,
         {
-          headers: { "Content-Type": "application/json" },
+          headers: getAuthHeaders()
         }
       );
 
@@ -81,7 +85,7 @@ const AddBorrower = ({ onClose, onSave, selectedBorrower }) => {
     } else {
       // POST request for new
       const response = await axios.post("/api/api/borrowers", payload, {
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders()
       });
 
       if ([200, 201].includes(response.status)) {

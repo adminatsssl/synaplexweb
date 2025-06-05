@@ -11,9 +11,15 @@ export default function CourtSetup() {
   const [courts, setCourts] = useState([]);
   const [selectedCourt, setSelectedCourt] = useState(null); // For Edit
 
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
   const fetchCourts = async () => {
     try {
-      const response = await axios.get("/api/api/courts");
+      const response = await axios.get("/api/api/courts", {
+        headers: getAuthHeaders()
+      });
       const data = response.data?.data || [];
       setCourts(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -41,7 +47,9 @@ const handleEdit = (court) => {
 const handleDelete = async (courtId) => {
   if (!window.confirm('Are you sure you want to delete this court?')) return;
   try {
-    await axios.delete(`/api/api/courts/${courtId}`);
+    await axios.delete(`/api/api/courts/${courtId}`, {
+      headers: getAuthHeaders()
+    });
     fetchCourts();
   } catch (error) {
     console.error('Failed to delete court:', error);

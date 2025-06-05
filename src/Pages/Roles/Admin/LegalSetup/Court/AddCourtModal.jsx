@@ -48,7 +48,9 @@ export default function AddCourtModal({ onClose, onSave, initialData = null }) {
         }
     }, [initialData]);
 
-
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -74,10 +76,14 @@ export default function AddCourtModal({ onClose, onSave, initialData = null }) {
         try {
             if (initialData) {
                 // Edit existing court
-                await axios.put(`/api/api/courts/${initialData.id}`, payload);
+                await axios.put(`/api/api/courts/${initialData.id}`, payload, {
+                    headers: getAuthHeaders()
+                });
             } else {
                 // Create new court
-                await axios.post('/api/api/courts', payload);
+                await axios.post('/api/api/courts', payload, {
+                    headers: getAuthHeaders()
+                });
             }
             onSave();
         } catch (error) {
@@ -85,8 +91,6 @@ export default function AddCourtModal({ onClose, onSave, initialData = null }) {
             alert('An error occurred while saving the court.');
         }
     };
-
-
 
     return (
         <div className="legalsetup-court-modal-overlay">

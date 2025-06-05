@@ -7,6 +7,10 @@ import ReusableGrid from '../../../../ReusableComponents/ReusableGrid';
 import LawGroupPopup from "./LawGroupPopup";
 import './LawGroup.css';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const LawGroup = () => {
   const [lawGroups, setLawGroups] = useState([]);
   const [rawLawGroups, setRawLawGroups] = useState([]);
@@ -19,7 +23,9 @@ const LawGroup = () => {
   const fetchLawGroups = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/api/api/lawgroups");
+      const response = await axios.get("/api/api/lawgroups", {
+        headers: getAuthHeaders()
+      });
       const rawData = response.data.data || [];
 
       const transformedData = rawData.map(group => ({
@@ -63,14 +69,16 @@ const LawGroup = () => {
   };
 
   const openEditPopup = (groupRow) => {
-    const originalGroup = rawLawGroups.find(group => group.id === groupRow.ID);
+    const originalGroup = rawLawGroups.find(group => group.ID === groupRow.ID);
     setSelectedLawGroup(originalGroup);
     setShowPopup(true);
   };
 
   const handleDelete = async (groupId) => {
     try {
-      const response = await axios.delete(`/api/api/lawgroups/${groupId}`);
+      const response = await axios.delete(`/api/api/lawgroups/${groupId}`, {
+        headers: getAuthHeaders()
+      });
       if (response.status === 200) {
         setRefreshTrigger(prev => prev + 1);
       } else {

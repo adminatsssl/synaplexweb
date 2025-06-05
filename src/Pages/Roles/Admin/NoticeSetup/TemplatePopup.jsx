@@ -11,6 +11,10 @@ import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const tabs = ["Plain text", "Email", "PDF", "WhatsApp", "Attachments"];
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const TemplatePopup = ({ onClose, templateData, onSave }) => {
   const [activeTab, setActiveTab] = useState("Plain text");
   const [formData, setFormData] = useState({
@@ -79,10 +83,14 @@ const TemplatePopup = ({ onClose, templateData, onSave }) => {
       let response;
       if (templateData?.id) {
         // Edit existing template
-        response = await axios.put(`/api/api/templates/${templateData.id}`, payload);
+        response = await axios.put(`/api/api/templates/${templateData.id}`, payload, {
+          headers: getAuthHeaders()
+        });
       } else {
         // Create new template
-        response = await axios.post('/api/api/templates', payload);
+        response = await axios.post('/api/api/templates', payload, {
+          headers: getAuthHeaders()
+        });
       }
 
       if (response.data.status === 'SUCCESS') {

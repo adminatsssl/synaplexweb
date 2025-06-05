@@ -43,7 +43,11 @@ const AdminLoans = () => {
   useEffect(() => {
     const fetchLoans = async () => {
       try {
-        const response = await axios.get('/api/api/loans');
+        const response = await axios.get('/api/api/loans', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         if (response.data.status === 'SUCCESS') {
           const formattedData = response.data.data.map((loan) => ({
             ...loan,

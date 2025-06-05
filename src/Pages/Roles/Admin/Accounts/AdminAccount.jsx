@@ -13,8 +13,16 @@ const AdminAccount = () => {
   const [editUserData, setEditUserData] = useState(null);
   const [users, setUsers] = useState([]);
 
+  const getAuthHeaders = () => ({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
+
   useEffect(() => {
-    axios.get('/api/api/users')
+    axios.get(`/api/api/users`, {
+      headers: getAuthHeaders()
+    })
       .then(response => {
         const mappedUsers = response.data.map(user => ({
           id: user.id,

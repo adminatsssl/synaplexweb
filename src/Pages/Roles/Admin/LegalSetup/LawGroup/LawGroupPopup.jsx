@@ -13,7 +13,11 @@ const axiosJson = axios.create({
     } catch {
       return data;
     }
-  }]
+  }],
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
 });
 
 const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {

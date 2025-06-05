@@ -3,26 +3,30 @@ import EditLawyerPopup from "./EditLawyerPopup";
 import IconButton from "../../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import "./EditLawyerPopup.css";
+import axios from "axios";
 
 function LawyerSetup() {
   const [lawyers, setLawyers] = useState([]);
   const [selectedLawyer, setSelectedLawyer] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchLawyers = () => {
-    fetch("/api/api/lawyers")
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        if (data.status === "SUCCESS") {
-          setLawyers(data.data);
-        } else {
-          console.error("API responded with failure:", data.message);
-        }
-      })
-      .catch((err) => console.error("Error fetching lawyers:", err));
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
+  const fetchLawyers = async () => {
+    try {
+      const response = await axios.get("/api/api/lawyers", {
+        headers: getAuthHeaders()
+      });
+      if (response.data.status === "SUCCESS") {
+        setLawyers(response.data.data);
+      } else {
+        console.error("API responded with failure:", response.data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching lawyers:", err);
+    }
   };
 
   useEffect(() => {
@@ -68,6 +72,21 @@ function LawyerSetup() {
       ),
     },
   ];
+
+  const deleteLawyer = async (lawyerId) => {
+    try {
+      const deleteResponse = await axios.delete(`/api/api/lawyers/${lawyerId}`, {
+        headers: getAuthHeaders()
+      });
+      if (deleteResponse.data.status === "SUCCESS") {
+        fetchLawyers();
+      } else {
+        console.error("API responded with failure:", deleteResponse.data.message);
+      }
+    } catch (err) {
+      console.error("Error deleting lawyer:", err);
+    }
+  };
 
   return (
     <div className="p-6">

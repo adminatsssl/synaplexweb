@@ -16,6 +16,7 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
     role: "",
   });
 
+
   useEffect(() => {
     if (userData) {
       setFormData({
@@ -69,10 +70,17 @@ const AdminAccountPopup = ({ onClose, onSave, userData }) => {
       ...(userData ? {} : { password: formData.password }), // only include password on create
     };
 
-    console.log("Sending payload:", payload);
+    // console.log("Sending payload:", payload);
+
+    const getAuthHeaders = () => ({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
 
     try {
-      const response = await axios.post("/api/auth/signup", payload);
+      const response = await axios.post("/api/auth/signup", payload, {
+        headers: getAuthHeaders()
+      });
       onSave(response.data);
       onClose();
     } catch (error) {

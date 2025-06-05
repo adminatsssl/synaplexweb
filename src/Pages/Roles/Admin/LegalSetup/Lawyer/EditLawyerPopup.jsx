@@ -5,6 +5,10 @@ import CancelButton from "../../../../ReusableComponents/CancelButton";
 import SaveButton from "../../../../ReusableComponents/SaveButton";
 import AddButton from "../../../../ReusableComponents/AddButton";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const EditLawyerPopup = ({ isOpen, onClose, onSave, lawyer }) => {
   const [form, setForm] = useState({
     image: null,
@@ -157,7 +161,9 @@ const handleSubmit = async (e) => {
   };
 
   try {
-    const response = await axios.put(`api/api/lawyers/${lawyer?.id}`, dataToSubmit);
+    const response = await axios.put(`api/api/lawyers/${lawyer?.id}`, dataToSubmit, {
+      headers: getAuthHeaders()
+    });
     console.log("Update successful:", response.data);
     if (onSave) onSave(response.data);
     if (onClose) onClose();

@@ -7,6 +7,11 @@ import Layout from "../../../Layout/Layout";
 import AddButton from "../../../ReusableComponents/AddButton";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
+const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const BorrowerOverview = () => {
   const username = localStorage.getItem("username");
   const [borrowers, setBorrowers] = useState([]);
@@ -18,13 +23,15 @@ const BorrowerOverview = () => {
   const fetchBorrowers = () => {
     setLoading(true);
     axios
-      .get("/api/api/borrowers")
+      .get(`/api/api/borrowers`, {
+        headers: getAuthHeaders()
+      })
       .then((response) => {
         const responseData = response.data;
         if (responseData.status === "SUCCESS" && Array.isArray(responseData.data)) {
           // Store the raw data for editing
           setRawBorrowers(responseData.data);
-          
+
           // Transform for display
           const transformedData = responseData.data.map((item) => ({
             ID: item.id,
@@ -56,21 +63,22 @@ const BorrowerOverview = () => {
       });
   };
 
- const handleDelete = async (id) => {
-  try {
-    const response = await fetch(`/api/api/borrowers/${id}`, {
-      method: "DELETE"
-    });
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`/api/api/borrowers/${id}`, {
+        headers: getAuthHeaders()
+      });
+      console.log(response);
 
-    if (response.ok) {
-      fetchBorrowers(); // Refresh the list after deletion
-    } else {
-      console.error("Failed to delete. Status:", response.status);
+      if (response.ok) {
+        fetchBorrowers(); // Refresh the list after deletion
+      } else {
+        console.error("Failed to delete. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error during delete:", error);
     }
-  } catch (error) {
-    console.error("Error during delete:", error);
-  }
-};
+  };
 
 
   useEffect(() => {

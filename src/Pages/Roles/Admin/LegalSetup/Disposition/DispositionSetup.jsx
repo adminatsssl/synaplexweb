@@ -6,6 +6,11 @@ import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import JSONbig from "json-bigint";
 import "./DispositionSetup.css";
 
+const getAuthHeaders = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const DispositionSetup = () => {
   const [dispositions, setDispositions] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
@@ -13,7 +18,9 @@ const DispositionSetup = () => {
 
   const fetchDispositions = async () => {
     try {
-      const res = await fetch("/api/api/dispositions");
+      const res = await fetch("/api/api/dispositions", {
+        headers: getAuthHeaders()
+      });
       const text = await res.text();
       const parsed = JSONbig.parse(text);
 
@@ -37,6 +44,7 @@ const DispositionSetup = () => {
       const stringId = id.toString();
       await fetch(`/api/api/dispositions/${stringId}`, {
         method: "DELETE",
+        headers: getAuthHeaders()
       });
       fetchDispositions();
     } catch (error) {
