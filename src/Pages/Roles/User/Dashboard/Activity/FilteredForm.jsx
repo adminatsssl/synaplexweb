@@ -8,11 +8,16 @@ export default function FilteredForm({ activeTab, activeStage }) {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const navigate = useNavigate();
+  const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
 
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await axios.get("/api/api/cases");
+        const response = await axios.get(`/api/api/cases`, {
+          headers : getAuthHeaders()
+        });
         const caseData = response.data?.data || [];
 
         const transformed = caseData.map((item) => ({
