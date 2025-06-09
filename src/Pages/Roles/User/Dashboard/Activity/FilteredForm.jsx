@@ -56,11 +56,11 @@ export default function FilteredForm({ activeTab, activeStage }) {
         d.stage.trim().toLowerCase() === normalizedStage
     );
 
-    console.log("Filtered:", {
-      activeTab,
-      activeStage,
-      filteredData
-    });
+    // console.log("Filtered:", {
+    //   activeTab,
+    //   activeStage,
+    //   filteredData
+    // });
 
     setFiltered(filteredData);
   }, [activeTab, activeStage, data]);

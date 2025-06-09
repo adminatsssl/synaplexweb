@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Layout from "../../../../Layout/Layout";
 import { FaEye } from "react-icons/fa";
-import { MdMessage } from "react-icons/md";
-import IconButton from "../../../../ReusableComponents/IconButton";
+// import { MdMessage } from "react-icons/md";
+// import IconButton from "../../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
 import "./Report.css";
 
@@ -50,10 +50,10 @@ const ReportNotices = () => {
           <button className="reportnoticebtn1">
             <FaEye />
           </button>
-          <button className="reportnoticebtn1">
+          {/* <button className="reportnoticebtn1">
             <MdMessage />
           </button>
-          <IconButton type="edit" className="reportnoticebtn" />
+          <IconButton type="edit" className="reportnoticebtn" /> */}
         </div>
       ),
     },
