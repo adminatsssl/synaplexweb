@@ -5,7 +5,7 @@ import IconButton from "../../../ReusableComponents/IconButton";
 import AddButton from "../../../ReusableComponents/AddButton";
 import { PiCertificate } from "react-icons/pi";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
-import AddUserCases from "../Cases/UserAddCases";
+import CreateCase from "./CreateCase";
 import LoanPopup from "./LoanPopup"; // Import the separated popup component
 
 const LoanPage = () => {
@@ -233,16 +233,21 @@ const LoanPage = () => {
                 {showLoanCase && (
                     <div className="modal-overlay-usercase">
                         <div className="modal-content-usercase-userrole">
-                            <AddUserCases 
+                            <CreateCase 
                                 onClose={handleCloseLoanCase} 
                                 initialData={{
-                                    loanId: selectedLoan.id, // This should be the numeric ID
+                                    loanId: selectedLoan.id,
                                     loanNumber: selectedLoan.loanNumber,
-                                    borrower: selectedLoan.borrowerName,
+                                    borrower: selectedLoan.borrowerName || selectedLoan.clientName,
                                     loanType: selectedLoan.type,
                                     loanAmount: selectedLoan.totalDueAmount,
                                     defaultDate: selectedLoan.defaultDate,
                                     npaDate: selectedLoan.npaDate,
+                                    borrowerMobile: selectedLoan.borrowerMobile,
+                                    borrowerEmail: selectedLoan.borrowerEmail,
+                                    disbursedAmount: selectedLoan.disbursedAmount,
+                                    emiAmount: selectedLoan.emiAmount,
+                                    interestRate: selectedLoan.annualInterestRate
                                 }}
                             />
                             <button onClick={handleCloseLoanCase} className="close-button-usercases">
