@@ -1,54 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./UserCases.css";
 import { FaSearch } from "react-icons/fa";
 import SaveButton from "../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../ReusableComponents/CancelButton.jsx";
 
-const caseTypes = [
-  "ARBITRATION",
-  "SARFAESI",
-  "CHEQUE_BOUNCE",
-  "DRT",
-  "CIVIL",
-  "IBC_NCLT",
-  "CRIMINAL"
+const loanTypes = [
+  "Personal Loan",
+  "Home Loan",
+  "Debt Consolidation Loan",
+  "Auto Loans",
+  "Student Loan",
+  "Business Loan",
+  "Payday Loan",
+  "Credit Card Loan",
 ];
 
-const courtTypes = [
-  "Court",
-  "DRT",
-  "High Court",
-  "Supreme Court",
-  "NCLT"
+const caseTypes = [
+  "Arbitration",
+  "SARFAESI",
+  "Cheque Bounce",
+  "Debt Recovery Tribunal (DRT)",
+  "Civil Court",
+  "IBC/NCLT",
+  "Criminal Complaints",
 ];
 
 const AddUserCases = ({ initialData = null, onClose }) => {
-  console.log('Initial Data received:', initialData); // Debug log
-
   const [formData, setFormData] = useState({
-    loanId: initialData?.loanId || "",
-    loanNumber: initialData?.loanNumber || "",
-    borrower: initialData?.borrower || "",
-    loanType: initialData?.loanType || "",
-    loanAmount: initialData?.loanAmount || 0,
-    defaultDate: initialData?.defaultDate || "",
-    npaDate: initialData?.npaDate || "", 
-    workflowType: "",
-    courtType: "",
-    hearingDate: "",
+    cnrNo: "",
+    loanId: "",
+    borrower: "",
+    loanType: "",
+    loanAmount: 0,
+    defaultDate: "",
+    npaDate: "",
     autoAssign: false,
     crnNo: "",
+    courtType: "",
+    hearingDate: "",
     status: "Initiated",
-    fiNo: "",
-    fiYear: "",
-    regNo: "",
-    regYear: "",
-    dateOfFiling: ""
+    caseType: "",
+    fiNo: 0,
+    fiYear: 0,
+    regNo: 0,
+    regYear: 0,
+    dateOfFiling: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        cnrNo: "",
+        loanId: initialData.LoanID || "",
+        borrower: initialData.Borrower || "",
+        loanType: initialData.LoanType || "",
+        loanAmount: initialData.LoanAmount || 0,
+        defaultDate: initialData.DefaultDate || "",
+        npaDate: initialData.NPADate || "",
+        autoAssign: false,
+        crnNo: initialData.CrnNo || "",
+        courtType: initialData.Court || "",
+        hearingDate: initialData.HearingDate || "",
+        status: initialData.Status || "Initiated",
+        caseType: initialData.CaseType || "",
+        fiNo: initialData.FiNo || 0,
+        fiYear: initialData.FiYear || 0,
+        regNo: initialData.RegNo || 0,
+        regYear: initialData.RegYear || 0,
+        dateOfFiling: initialData.DateOfFiling || "",
+      });
+    }
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -57,79 +83,128 @@ const AddUserCases = ({ initialData = null, onClose }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+const handleLoanSearch = async () => {
+  if (!formData.loanId) {
+    setMessage("Please enter a Loan ID first.");
+    return;
+  }
 
-  const handleSearch = async () => {
-    // Implement loan search functionality here
-    console.log("Searching for loan:", formData.loanNumber);
-  };
+  setLoading(true);
+  setMessage("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      if (!formData.loanId) {
-        throw new Error("Loan ID is required");
+  try {
+    const response = await axios.get(`/api/api/loans/${formData.loanId}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
+    });
 
-      if (!formData.workflowType) {
-        throw new Error("Case Type is required");
-      }
+    console.log("Loan Data:", response.data);
 
-      if (!formData.hearingDate) {
-        throw new Error("Hearing Date is required");
-      }
+    if (response.data.status === "SUCCESS") {
+      const loanData = response.data.data;
 
-      const payload = {
-        loanId: Number(formData.loanId),
-        workflowType: formData.workflowType,
-        hearingDate: formData.hearingDate ? new Date(formData.hearingDate).toISOString() : null
-      };
+      setFormData((prev) => ({
+        ...prev,
+        borrower: loanData.borrower?.name || "",
+        loanAmount: loanData.loanAmount || 0,
+        loanType: loanData.loanType || "",
+        defaultDate: "", // You can map if your API has this field
+        npaDate: loanData.npaDate || "", // If available
+        // Note: crnNo and status are auto-generated, we will not set them here.
+      }));
 
-
-
-      const response = await axios.post("/api/api/cases", payload, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      
-      console.log('Response:', response);
-
-      if (response.data.status === "SUCCESS") {
-        setMessage("Case created successfully!");
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error details:", error.response?.data || error.message);
-      setMessage(error.response?.data?.message || error.message || "An error occurred while creating the case. Please try again.");
-    } finally {
-      setLoading(false);
+      setMessage("Loan data fetched successfully.");
+    } else {
+      setMessage(response.data.message || "Failed to fetch loan data.");
     }
+
+  } catch (error) {
+    console.error("Error fetching loan:", error.response?.data || error.message);
+    setMessage(error.response?.data?.message || error.message || "An error occurred while fetching loan data.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const handleSave = async () => {
+  setLoading(true);
+  setMessage("");
+
+  try {
+    if (!formData.loanId) {
+      throw new Error("Loan ID is required");
+    }
+
+    if (!formData.caseType) {
+      throw new Error("Case Type is required");
+    }
+
+    if (!formData.hearingDate) {
+      throw new Error("Hearing Date is required");
+    }
+
+    const payload = {
+      loanId: Number(formData.loanId),
+      workflowType: formData.caseType,
+      hearingDate: formData.hearingDate ? new Date(formData.hearingDate).toISOString() : null
+    };
+
+    console.log("Sending payload:", payload);
+
+    const response = await axios.post("/api/api/cases", payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    console.log("Response:", response);
+
+    if (response.data.status === "SUCCESS") {
+      setMessage("Case created successfully!");
+      if (onClose) onClose();
+    } else {
+      setMessage(response.data.message || "Failed to create case.");
+    }
+  } catch (error) {
+    console.error("Error:", error.response?.data || error.message);
+    setMessage(error.response?.data?.message || error.message || "An error occurred while creating the case.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const handleCancel = () => {
+    if (onClose) onClose();
+    setFormData({});
+    setMessage("");
   };
 
   return (
     <div className="addusercase-container">
       <div className="addusercase-header-section">
-        <h2>Create New Case</h2>
+        <h2>{initialData ? "Edit Case" : "Add Case"}</h2>
       </div>
-
-      <div className="addusercase-search-section addusercase-card-SearchC-Case">
-        <h3>Search Case from Ecourt</h3>
-        <div className="addusercase-search-input-container">
-          <input
-            type="text"
-            name="cnrNo"
-            value={formData.cnrNo}
-            placeholder="Enter CNR No"
-            className="addusercase-search-input"
-            disabled
-          />
-          <button className="addusercase-search-button" disabled>
-            <FaSearch />
-          </button>
+      {!initialData && (
+        <div className="addusercase-search-section addusercase-card-SearchC-Case">
+          <h3>Search Case from Ecourt</h3>
+          <div className="addusercase-search-input-container">
+            <input
+              type="text"
+              name="cnrNo"
+              value={formData.cnrNo}
+              onChange={handleChange}
+              placeholder="Enter CNR No"
+              className="addusercase-search-input"
+            />
+            <button className="addusercase-search-button">
+              <FaSearch />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="addusercase-form-sections">
         {/* Loan and Borrower Details */}
@@ -137,35 +212,28 @@ const AddUserCases = ({ initialData = null, onClose }) => {
           <h3>Loan and Borrower Detail</h3>
 
           <div className="addusercase-form-row">
-            <div className="addusercase-form-group-loanId">
-              <div className="addusercase-form-group-loanId-label">
-                <label>Loan Number</label>
-              </div>
-              <div className="addusercase-loanID">
-                <input
-                  type="text"
-                  name="loanNumber"
-                  value={formData.loanNumber}
-                  onChange={handleChange}
-                  placeholder="Enter Loan Number"
-                />
-                <button 
-                  className="addusercase-search-button"
-                  onClick={handleSearch}
-                >
-                  <FaSearch />
-                </button>
-              </div>
-            </div>
+<div className="addusercase-form-group-loanId">
+  <label>Loan ID</label>
+  <input
+    type="text"
+    name="loanId"
+    value={formData.loanId}
+    onChange={handleChange}
+    placeholder="Loan ID"
+  />
+  <button type="button" onClick={handleLoanSearch}>
+    <FaSearch />
+  </button>
+</div>
+
 
             <div className="addusercase-form-group-checkbox">
-              <label className="addusercase-form-group-checkbox-label">Auto Assign</label>
+              <label>Auto Assign</label>
               <input
                 type="checkbox"
                 name="autoAssign"
                 checked={formData.autoAssign}
                 onChange={handleChange}
-                className="addusercase-checkbox"
               />
             </div>
           </div>
@@ -178,23 +246,10 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="borrower"
                 value={formData.borrower}
                 onChange={handleChange}
-                placeholder="Enter Borrower Name"
+                placeholder="Borrower Name"
               />
             </div>
 
-            <div className="addusercase-form-group">
-              <label>Loan Type</label>
-              <input 
-                type="text"
-                name="loanType"
-                value={formData.loanType}
-                onChange={handleChange}
-                placeholder="Enter Loan Type"
-              />
-            </div>
-          </div>
-
-          <div className="addusercase-form-row">
             <div className="addusercase-form-group">
               <label>Loan Amount</label>
               <input
@@ -202,10 +257,28 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="loanAmount"
                 value={formData.loanAmount}
                 onChange={handleChange}
-                placeholder="Enter Loan Amount"
+                placeholder="0.00"
               />
             </div>
 
+            <div className="addusercase-form-group">
+              <label>Loan Type</label>
+              <select
+                name="loanType"
+                value={formData.loanType}
+                onChange={handleChange}
+              >
+                <option value="">Select Loan Type</option>
+                {loanTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="addusercase-form-row">
             <div className="addusercase-form-group">
               <label>Default Date</label>
               <input
@@ -228,86 +301,87 @@ const AddUserCases = ({ initialData = null, onClose }) => {
           </div>
         </div>
 
-        {/* Case Details */}
+        {/* Court and Case Details */}
         <div className="addusercase-form-section addusercase-card">
-          <h3>Case Detail</h3>
+          <h3>Court & Case Detail</h3>
 
-          <div className="addusercase-form-row">
+          <div className="addusercase-form-row2">
+<div className="addusercase-form-group">
+  <label>CRN No</label>
+  <input
+    type="text"
+    name="crnNo"
+    value={formData.crnNo}
+    onChange={handleChange}
+    placeholder="CRN No"
+    disabled // Disable the field
+  />
+</div>
+
+<div className="addusercase-form-group">
+  <label>Status</label>
+  <select
+    name="status"
+    value={formData.status}
+    onChange={handleChange}
+    disabled // Disable the field
+  >
+    <option>Initiated</option>
+    <option>Pending</option>
+    <option>Closed</option>
+  </select>
+</div>
+
+          </div>
+
+          <div className="addusercase-form-row2">
             <div className="addusercase-form-group">
-              <label>CRN No.</label>
+              <label>Court Type</label>
               <input
                 type="text"
-                name="crnNo"
-                value={formData.crnNo}
-                placeholder="Enter CRN No"
-                disabled
-              />
-            </div>
-
-            <div className="addusercase-form-group">
-              <label>Court</label>
-              <select
                 name="courtType"
                 value={formData.courtType}
                 onChange={handleChange}
-              >
-                <option value="">Select Court</option>
-                {courtTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
+                placeholder="Court Type"
+              />
             </div>
 
             <div className="addusercase-form-group">
               <label>Hearing Date</label>
               <input
-                type="datetime-local"
+                type="date"
                 name="hearingDate"
                 value={formData.hearingDate}
                 onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className="addusercase-form-row">
-            <div className="addusercase-form-group">
-              <label>Status</label>
-              <input
-                type="text"
-                value="Initiated"
-                disabled
               />
             </div>
 
             <div className="addusercase-form-group">
               <label>Case Type</label>
               <select
-                name="workflowType"
-                value={formData.workflowType}
+                name="caseType"
+                value={formData.caseType}
                 onChange={handleChange}
-                required
               >
                 <option value="">Select Case Type</option>
                 {caseTypes.map((type) => (
                   <option key={type} value={type}>
-                    {type.replace(/_/g, ' ')}
+                    {type}
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          <div className="addusercase-form-row">
+          <div className="addusercase-form-row2">
             <div className="addusercase-form-group">
-              <label>FI No.</label>
+              <label>FI No</label>
               <input
                 type="number"
                 name="fiNo"
                 value={formData.fiNo}
                 onChange={handleChange}
-                placeholder="Enter FI No"
+                placeholder="FI No"
               />
             </div>
 
@@ -318,31 +392,7 @@ const AddUserCases = ({ initialData = null, onClose }) => {
                 name="fiYear"
                 value={formData.fiYear}
                 onChange={handleChange}
-                placeholder="Enter FI Year"
-              />
-            </div>
-          </div>
-
-          <div className="addusercase-form-row">
-            <div className="addusercase-form-group">
-              <label>Reg No.</label>
-              <input
-                type="number"
-                name="regNo"
-                value={formData.regNo}
-                onChange={handleChange}
-                placeholder="Enter Reg No"
-              />
-            </div>
-
-            <div className="addusercase-form-group">
-              <label>Reg Year</label>
-              <input
-                type="number"
-                name="regYear"
-                value={formData.regYear}
-                onChange={handleChange}
-                placeholder="Enter Reg Year"
+                placeholder="FI Year"
               />
             </div>
 
@@ -356,17 +406,53 @@ const AddUserCases = ({ initialData = null, onClose }) => {
               />
             </div>
           </div>
+
+          <div className="addusercase-form-row2">
+            <div className="addusercase-form-group">
+              <label>Reg No</label>
+              <input
+                type="number"
+                name="regNo"
+                value={formData.regNo}
+                onChange={handleChange}
+                placeholder="Reg No"
+              />
+            </div>
+
+            <div className="addusercase-form-group">
+              <label>Reg Year</label>
+              <input
+                type="number"
+                name="regYear"
+                value={formData.regYear}
+                onChange={handleChange}
+                placeholder="Reg Year"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="addusercase-button-container">
-        <CancelButton onClick={onClose} />
-        <SaveButton onClick={handleSubmit} disabled={loading} />
+      <div className="addusercase-action-buttons">
+        <CancelButton
+          onClick={handleCancel}
+          className="addusercase-cancel-button"
+        />
+        <SaveButton
+          onClick={handleSave}
+          disabled={loading}
+          className="addusercase-save-button"
+          label={loading ? "Saving..." : "Save"}
+        />
       </div>
 
-      {message && <div className="message">{message}</div>}
+      {message && (
+        <div className="addusercase-message-container">{message}</div>
+      )}
     </div>
   );
 };
 
 export default AddUserCases;
+
+
