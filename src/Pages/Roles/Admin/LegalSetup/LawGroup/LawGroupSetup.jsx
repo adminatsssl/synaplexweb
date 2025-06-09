@@ -69,7 +69,7 @@ const LawGroup = () => {
   };
 
   const openEditPopup = (groupRow) => {
-    const originalGroup = rawLawGroups.find(group => group.ID === groupRow.ID);
+    const originalGroup = rawLawGroups.find(group => group.id === groupRow.ID);
     setSelectedLawGroup(originalGroup);
     setShowPopup(true);
   };
@@ -103,7 +103,10 @@ const LawGroup = () => {
     {
       key: "SuccessRate",
       label: "Success Rate",
-      render: (item) => item.SuccessRate?.toFixed(2) ?? "-"
+      render: (item) => {
+        const val = parseFloat(item.SuccessRate);
+        return isNaN(val) ? "-" : val.toFixed(2);
+      }
     },
     {
       key: "actions",

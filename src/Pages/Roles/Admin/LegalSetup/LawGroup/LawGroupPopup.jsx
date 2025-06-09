@@ -1,85 +1,80 @@
-// LawGroupPopup.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import JSONbig from 'json-bigint';
 import './LawGroupPopup.css';
 import SaveButton from "../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../ReusableComponents/CancelButton.jsx";
- 
-const axiosJson = axios.create({
-  transformResponse: [data => {
-    try {
-      return JSONbig.parse(data);
-    } catch {
-      return data;
-    }
-  }],
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  }
-});
- 
+
 const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}` 
+  Authorization: `Bearer ${localStorage.getItem('token')}`
 });
- 
+
 const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
   const [form, setForm] = useState({
     name: '',
     registrationNumber: '',
     year: '',
-    totalMember: '0',
-    ongoingCases: '0',
-    successRate: '0.00',
-    addressLine: '',  
+    totalMember: '',
+    ongoingCases: '',
+    successRate: '',
+    addressLine: '',
     city: '',
     state: '',
     pinCode: '',
     email: '',
     phone: ''
   });
- 
+
   useEffect(() => {
-    if (selectedLawGroup) {
-      setForm({
-        name: selectedLawGroup.name || '',
-        registrationNumber: selectedLawGroup.registrationNumber || '',
-        year: selectedLawGroup.establishmentYear || '',
-        totalMember: selectedLawGroup.totalLawyer?.toString() || '0',
-        ongoingCases: selectedLawGroup.ongoingCases?.toString() || '0',
-        successRate: selectedLawGroup.successRate?.toString() || '0.00',
-        addressLine: selectedLawGroup.address?.addressLine || '',
-        city: selectedLawGroup.address?.city || '',
-        state: selectedLawGroup.address?.state || '',
-        pinCode: selectedLawGroup.address?.pincode || '',
-        email: selectedLawGroup.email || '',
-        phone: selectedLawGroup.phone || ''
-      });
+    const fetchLawGroup = async (id) => {
+      try {
+        const response = await axios.get(`/api/api/lawgroups/${id}`, {
+          headers: getAuthHeaders()
+        });
+
+        const data = response.data.data || response.data; // handles both wrapped and unwrapped responses
+
+        setForm({
+          name: data.name || '',
+          registrationNumber: data.registrationNumber || '',
+          year: data.establishmentYear || '',
+          totalMember: data.totalLawyer?.toString() || '',
+          ongoingCases: data.ongoingCases !== null ? data.ongoingCases.toString() : '',
+          successRate: data.successRate !== null ? data.successRate.toString() : '',
+          addressLine: data.address?.addressLine || '',
+          city: data.address?.city || '',
+          state: data.address?.state || '',
+          pinCode: data.address?.pincode || '',
+          email: data.email || '',
+          phone: data.phone || ''
+        });
+      } catch (error) {
+        console.error("Failed to fetch law group:", error.response?.data || error.message);
+      }
+    };
+
+    if (selectedLawGroup?.id || selectedLawGroup?.ID) {
+      const id = selectedLawGroup.id || selectedLawGroup.ID;
+      fetchLawGroup(id);
     }
   }, [selectedLawGroup]);
- 
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
   };
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
-    if (!form.name || !form.addressLine || !form.city || !form.state || !form.pinCode) {
-      alert("Please complete all required fields, including address.");
-      return;
-    }
- 
+
     const payload = {
       name: form.name,
       registrationNumber: form.registrationNumber,
+      establishmentYear: form.year,
+      totalLawyer: Number(form.totalMember),
+      ongoingCases: form.ongoingCases ? Number(form.ongoingCases) : null,
+      successRate: form.successRate ? parseFloat(form.successRate) : null,
       email: form.email,
       phone: form.phone,
-      establishmentYear: form.year,
-      totalLawyer: form.totalMember,
-      ongoingCases: form.ongoingCases,
-      successRate: form.successRate,
       address: {
         addressLine: form.addressLine,
         city: form.city,
@@ -87,15 +82,15 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
         pincode: form.pinCode
       }
     };
- 
+
     try {
       if (selectedLawGroup?.id || selectedLawGroup?.ID) {
         const id = selectedLawGroup.id || selectedLawGroup.ID;
-        await axiosJson.put(`/api/api/lawgroups/${id}`, payload,{
+        await axios.put(`/api/api/lawgroups/${id}`, payload, {
           headers: getAuthHeaders()
         });
       } else {
-        await axiosJson.post("/api/api/lawgroups", payload,{
+        await axios.post(`/api/api/lawgroups`, payload, {
           headers: getAuthHeaders()
         });
       }
@@ -105,18 +100,18 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
       alert("Failed to submit. Check console for details.");
     }
   };
- 
+
   const handleOverlayClick = (e) => {
     if (e.target.className === 'LawGroup-modal-overlay') {
       onCancel();
     }
   };
- 
+
   return (
     <div className="LawGroup-modal-overlay" onClick={handleOverlayClick}>
       <div className="law-group-modal" onClick={e => e.stopPropagation()}>
         <div className="law-group-header">
-          <h2>Law Group Detail</h2>
+          <h2>{selectedLawGroup?.id ? 'Edit Law Group' : 'Add Law Group'}</h2>
           <button
             type="button"
             className="close-button"
@@ -126,7 +121,7 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
             ×
           </button>
         </div>
- 
+
         <form onSubmit={handleSubmit}>
           <div className="form-section">
             <div className="form-row">
@@ -137,12 +132,11 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                 
                   required
                 />
               </div>
             </div>
- 
+
             <div className="form-row two-columns">
               <div className="form-field">
                 <label>Registration No.</label>
@@ -151,7 +145,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="registrationNumber"
                   value={form.registrationNumber}
                   onChange={handleChange}
-                 
                   required
                 />
               </div>
@@ -162,11 +155,10 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="year"
                   value={form.year}
                   onChange={handleChange}
-                 
                 />
               </div>
             </div>
- 
+
             <div className="form-row three-columns">
               <div className="form-field">
                 <label>Total No. Of Lawyers</label>
@@ -175,18 +167,16 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="totalMember"
                   value={form.totalMember}
                   onChange={handleChange}
-                 
                   min="0"
                 />
               </div>
               <div className="form-field">
-                <label>Success Rate</label>
+                <label>Success Rate (%)</label>
                 <input
                   type="number"
                   name="successRate"
                   value={form.successRate}
                   onChange={handleChange}
-                 
                   min="0"
                   max="100"
                   step="0.01"
@@ -199,13 +189,12 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="ongoingCases"
                   value={form.ongoingCases}
                   onChange={handleChange}
-                 
                   min="0"
                 />
               </div>
             </div>
           </div>
- 
+
           <div className="form-section">
             <h3>Address</h3>
             <div className="form-row">
@@ -220,7 +209,7 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                 />
               </div>
             </div>
- 
+
             <div className="form-row three-columns">
               <div className="form-field">
                 <label>City</label>
@@ -229,7 +218,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="city"
                   value={form.city}
                   onChange={handleChange}
-                 
                   required
                 />
               </div>
@@ -240,7 +228,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="state"
                   value={form.state}
                   onChange={handleChange}
-                 
                   required
                 />
               </div>
@@ -251,23 +238,18 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="pinCode"
                   value={form.pinCode}
                   onChange={handleChange}
-                 
                   required
                 />
               </div>
             </div>
           </div>
- 
+
           <div className="form-section">
             <h3>FPR Details:</h3>
             <div className="form-row three-columns">
               <div className="form-field">
                 <label>FPR Name</label>
-                <input
-                  type="text"
-                  name="fprName"
-                 
-                />
+                <input type="text" name="fprName" value={''} disabled />
               </div>
               <div className="form-field">
                 <label>FPR E-Mail</label>
@@ -276,7 +258,6 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                 
                 />
               </div>
               <div className="form-field">
@@ -286,12 +267,11 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-             
                 />
               </div>
             </div>
           </div>
- 
+
           <div className="form-actions">
             <CancelButton onClick={onCancel} />
             <SaveButton type="submit" />
@@ -301,7 +281,5 @@ const LawGroupPopup = ({ onSuccess, onCancel, selectedLawGroup }) => {
     </div>
   );
 };
- 
+
 export default LawGroupPopup;
- 
- 
