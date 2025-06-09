@@ -67,12 +67,12 @@ const ReportCases = () => {
       disableFilter: true,
       render: (row) => (
         <div className="action-btns">
-          <button className="reportcasesbtn1"><FaHandHoldingDollar /></button>
-          <IconButton
+          {/* <button className="reportcasesbtn1"><FaHandHoldingDollar /></button> */}
+          {/* <IconButton
             type="edit"
             className="reportcasesbtn"
             onClick={() => handleEditClick(row)}
-          />
+          /> */}
         </div>
       ),
     },
