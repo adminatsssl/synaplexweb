@@ -82,9 +82,12 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
         setIsGenerating(true);
         try {
             const selected = templateOptions.find(t => t.id === Number(selectedTemplate));
-            const response = await fetch('/api/notice', {
+            const response = await fetch(`/api/notice`, {
                 method: 'POST',
-                headers: getAuthHeaders(),
+                headers: {
+                    ...getAuthHeaders(),
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     caseId: caseId,
                     pdfBody: selected?.pdfBody || "Default notice content"
