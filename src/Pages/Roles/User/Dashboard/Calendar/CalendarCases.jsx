@@ -37,18 +37,25 @@ function CalendarCases() {
     const fetchEvents = async () => {
       try {
         const response = await fetch(`/api/api/cases/calendar`, {
-          headers : getAuthHeaders()
+          headers: {
+            ...getAuthHeaders(),
+            'Content-Type': 'application/json'
+          }
         });
-        const data = await response.json();
+        const responseData = await response.json();
 
-        // Convert start/end strings to Date objects
-        const formattedEvents = data.map((event) => ({
-          ...event,
-          start: new Date(event.start),
-          end: new Date(event.end),
-        }));
+        if (responseData.status === 'SUCCESS' && responseData.data) {
+          // Convert start/end strings to Date objects
+          const formattedEvents = responseData.data.map((event) => ({
+            ...event,
+            start: new Date(event.start),
+            end: new Date(event.end),
+          }));
 
-        setEvents(formattedEvents);
+          setEvents(formattedEvents);
+        } else {
+          console.error('Failed to fetch calendar events:', responseData.message);
+        }
       } catch (error) {
         console.error('Failed to fetch calendar events:', error);
       }

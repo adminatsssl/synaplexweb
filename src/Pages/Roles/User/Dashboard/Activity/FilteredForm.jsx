@@ -33,7 +33,7 @@ export default function FilteredForm({ activeTab, activeStage }) {
           stage: item.activeStageName?.trim() || "-"
         }));
 
-        console.log("Fetched data:", transformed);
+        // console.log("Fetched data:", transformed);
         setData(transformed);
       } catch (error) {
         console.error("Error fetching case data:", error);
