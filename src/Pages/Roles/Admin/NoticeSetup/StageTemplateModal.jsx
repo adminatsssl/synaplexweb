@@ -9,7 +9,7 @@ const getAuthHeaders = () => ({
   'Authorization': `Bearer ${localStorage.getItem('token')}`
 });
 
-const StageTemplateModal = ({ onClose, initialData }) => {
+const StageTemplateModal = ({ onClose, initialData, onSave }) => {
   const [formData, setFormData] = useState({
     caseType: "",
     stageName: "",
@@ -124,7 +124,8 @@ const StageTemplateModal = ({ onClose, initialData }) => {
         headers: getAuthHeaders()
       });
       console.log("Save response:", response.data);
-      alert("Templates attached successfully!");
+      // alert("Templates attached successfully!");
+      if (onSave) onSave();
       onClose();
     } catch (error) {
       console.error("Error saving template:", error);

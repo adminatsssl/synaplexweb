@@ -94,7 +94,7 @@ const TemplatePopup = ({ onClose, templateData, onSave }) => {
       }
 
       if (response.data.status === 'SUCCESS') {
-        alert(`Template ${templateData?.id ? 'updated' : 'created'} successfully!`);
+        // alert(`Template ${templateData?.id ? 'updated' : 'created'} successfully!`);
         if (onSave) onSave();
         onClose();
       } else {

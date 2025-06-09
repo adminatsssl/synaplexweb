@@ -17,24 +17,24 @@ const StageConfig = () => {
   const [stageData, setStageData] = useState([]);
 
   // Fetch data from API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/api/templates/attachedTemplatesList", {
-          headers: getAuthHeaders()
-        });
-        // Map the API response to the structure expected by your table
-        const mappedData = response.data.map((item) => ({
-          caseType: item.workflowTypeName,
-          name: item.stageName,
-          templateName: item.templateName,
-        }));
-        setStageData(mappedData);
-      } catch (error) {
-        console.error("Error fetching stage data:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/api/api/templates/attachedTemplatesList", {
+        headers: getAuthHeaders()
+      });
+      // Map the API response to the structure expected by your table
+      const mappedData = response.data.map((item) => ({
+        caseType: item.workflowTypeName,
+        name: item.stageName,
+        templateName: item.templateName,
+      }));
+      setStageData(mappedData);
+    } catch (error) {
+      console.error("Error fetching stage data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -91,6 +91,7 @@ const StageConfig = () => {
           <StageTemplateModal
             onClose={handleCloseModal}
             initialData={editingItem}
+            onSave={fetchData}
           />
         )}
       </div>

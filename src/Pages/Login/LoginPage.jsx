@@ -38,16 +38,16 @@ function LoginPage() {
     }
 
     const data = await response.json();
-    console.log('Login successful:', data);
+    // console.log('Login successful:', data);
     const token = data.token;
-    console.log(token);
+    // console.log(token);
 
     // Decode the JWT payload to get the role
     const base64Payload = token.split('.')[1];
     const decodedPayload = JSON.parse(atob(base64Payload));
-    console.log(decodedPayload);
+    // console.log(decodedPayload);
     const role = decodedPayload.role;
-    console.log(role);
+    // console.log(role);
 
 
     localStorage.setItem("token", token);
