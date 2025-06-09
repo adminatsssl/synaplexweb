@@ -120,7 +120,7 @@ const StageTemplateModal = ({ onClose, initialData }) => {
     };
 
     try {
-      const response = await axios.post("/api/api/templates/attachTemplate", postData, {
+      const response = await axios.post("/api/api/templates/attachedTemplatesList", postData, {
         headers: getAuthHeaders()
       });
       console.log("Save response:", response.data);
