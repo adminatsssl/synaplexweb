@@ -72,16 +72,16 @@ const LawyerNotice = () => {
       disableFilter: true,
       render: (row) => (
         <div className="userNotice-actions">
-          <button className="userNoticeBtn1" onClick={() => setShowModal(true)}>
+          {/* <button className="userNoticeBtn1" onClick={() => setShowModal(true)}>
             <FaUser />
-          </button>
+          </button> */}
           <button className="userNoticeBtn1">
             <FaEye />
           </button>
-          <button className="userNoticeBtn1">
+          {/* <button className="userNoticeBtn1">
             <MdMessage />
-          </button>
-          <IconButton type="delete" className="userNoticeBtn" />
+          </button> */}
+          {/* <IconButton type="delete" className="userNoticeBtn" /> */}
         </div>
       ),
     },

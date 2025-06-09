@@ -185,7 +185,7 @@ const LawyerAddCases = ({ initialData = null, onClose }) => {
   return (
     <div className="addusercase-container">
       <div className="addusercase-header-section">
-        <h2 style={{ margin: 0, fontWeight: 600, fontSize: '24px', color: '#222' }}>{initialData ? "Edit Case" : "Add Case"}</h2>
+        <h2 style={{ margin: 0, fontWeight: 600, fontSize: '24px', color: '#ffff' }}>{initialData ? "Edit Case" : "Add Case"}</h2>
       </div>
       {!initialData && (
         <div className="addusercase-card addusercase-card-SearchC-Case">
