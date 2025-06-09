@@ -17,20 +17,20 @@ export function UserMap({ jsonData }) {
             .attr("width", width)
             .attr("height", height);
 
-            const color = d3
-      .scaleThreshold()
-      .domain([1, 5, 10, 20, 50, 100, 250, 500, 1000])
-      .range([
-        "#e3f2fd", // 1–4
-        "#bbdefb", // 5–9
-        "#90caf9", // 10–19
-        "#64b5f6", // 20–49
-        "#42a5f5", // 50–99
-        "#2196f3", // 100–249
-        "#1e88e5", // 250–499
-        "#1565c0", // 500–999
-        "#0d47a1", // 1000+
-      ]);
+        const color = d3
+            .scaleThreshold()
+            .domain([1, 5, 10, 20, 50, 100, 250, 500, 1000])
+            .range([
+                "#e3f2fd", // 1–4
+                "#bbdefb", // 5–9
+                "#90caf9", // 10–19
+                "#64b5f6", // 20–49
+                "#42a5f5", // 50–99
+                "#2196f3", // 100–249
+                "#1e88e5", // 250–499
+                "#1565c0", // 500–999
+                "#0d47a1", // 1000+
+            ]);
 
         d3.json("https://raw.githubusercontent.com/adarshbiradar/maps-geojson/refs/heads/master/india.json")
             .then(india => {
@@ -38,18 +38,37 @@ export function UserMap({ jsonData }) {
 
                 let sampleData = [];
                 try {
-                    sampleData = JSON.parse(jsonData || "[]");
+                    // Log the input data for debugging
+                    console.log("Input jsonData:", jsonData);
+                    
+                    // Handle different possible input formats
+                    if (typeof jsonData === 'string') {
+                        sampleData = JSON.parse(jsonData);
+                    } else if (Array.isArray(jsonData)) {
+                        sampleData = jsonData;
+                    } else if (typeof jsonData === 'object' && jsonData !== null) {
+                        // If it's an object, try to convert it to an array
+                        sampleData = Object.values(jsonData);
+                    }
+
+                    // Validate that sampleData is an array
+                    if (!Array.isArray(sampleData)) {
+                        console.error("Invalid data format: expected an array");
+                        sampleData = [];
+                    }
                 } catch (e) {
-                    console.error("Invalid JSON:", e);
-                    return;
+                    console.error("Error parsing data:", e);
+                    sampleData = [];
                 }
 
                 const dataMap = {};
                 sampleData.forEach(d => {
-                    dataMap[d.state] = {
-                        pendingCount: d.pendingCount || 0,
-                        disposedCount: d.disposedCount || 0
-                    };
+                    if (d && typeof d === 'object') {
+                        dataMap[d.state] = {
+                            pendingCount: d.pendingCount || 0,
+                            disposedCount: d.disposedCount || 0
+                        };
+                    }
                 });
 
                 india.features.forEach(d => {
