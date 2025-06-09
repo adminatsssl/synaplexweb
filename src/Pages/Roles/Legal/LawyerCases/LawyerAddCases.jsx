@@ -83,6 +83,49 @@ const LawyerAddCases = ({ initialData = null, onClose }) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+const handleLoanSearch = async () => {
+  if (!formData.loanId) {
+    setMessage("Please enter a Loan ID first.");
+    return;
+  }
+
+  setLoading(true);
+  setMessage("");
+
+  try {
+    const response = await axios.get(`/api/api/loans/${formData.loanId}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    console.log("Loan Data:", response.data);
+
+    if (response.data.status === "SUCCESS") {
+      const loanData = response.data.data;
+
+      setFormData((prev) => ({
+        ...prev,
+        borrower: loanData.borrower?.name || "",
+        loanAmount: loanData.loanAmount || 0,
+        loanType: loanData.loanType || "",
+        defaultDate: "", // You can map if your API has this field
+        npaDate: loanData.npaDate || "", // If available
+        // Note: crnNo and status are auto-generated, we will not set them here.
+      }));
+
+      setMessage("Loan data fetched successfully.");
+    } else {
+      setMessage(response.data.message || "Failed to fetch loan data.");
+    }
+
+  } catch (error) {
+    console.error("Error fetching loan:", error.response?.data || error.message);
+    setMessage(error.response?.data?.message || error.message || "An error occurred while fetching loan data.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleSave = async () => {
   setLoading(true);
@@ -169,19 +212,20 @@ const LawyerAddCases = ({ initialData = null, onClose }) => {
           <h3>Loan and Borrower Detail</h3>
 
           <div className="addusercase-form-row">
-            <div className="addusercase-form-group-loanId">
-              <label>Loan ID</label>
-              <input
-                type="text"
-                name="loanId"
-                value={formData.loanId}
-                onChange={handleChange}
-                placeholder="Loan ID"
-              />
-              <button type="button">
-                <FaSearch />
-              </button>
-            </div>
+<div className="addusercase-form-group-loanId">
+  <label>Loan ID</label>
+  <input
+    type="text"
+    name="loanId"
+    value={formData.loanId}
+    onChange={handleChange}
+    placeholder="Loan ID"
+  />
+  <button type="button" onClick={handleLoanSearch}>
+    <FaSearch />
+  </button>
+</div>
+
 
             <div className="addusercase-form-group-checkbox">
               <label>Auto Assign</label>
@@ -262,29 +306,32 @@ const LawyerAddCases = ({ initialData = null, onClose }) => {
           <h3>Court & Case Detail</h3>
 
           <div className="addusercase-form-row2">
-            <div className="addusercase-form-group">
-              <label>CRN No</label>
-              <input
-                type="text"
-                name="crnNo"
-                value={formData.crnNo}
-                onChange={handleChange}
-                placeholder="CRN No"
-              />
-            </div>
+<div className="addusercase-form-group">
+  <label>CRN No</label>
+  <input
+    type="text"
+    name="crnNo"
+    value={formData.crnNo}
+    onChange={handleChange}
+    placeholder="CRN No"
+    disabled // Disable the field
+  />
+</div>
 
-            <div className="addusercase-form-group">
-              <label>Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
-                <option>Initiated</option>
-                <option>Pending</option>
-                <option>Closed</option>
-              </select>
-            </div>
+<div className="addusercase-form-group">
+  <label>Status</label>
+  <select
+    name="status"
+    value={formData.status}
+    onChange={handleChange}
+    disabled // Disable the field
+  >
+    <option>Initiated</option>
+    <option>Pending</option>
+    <option>Closed</option>
+  </select>
+</div>
+
           </div>
 
           <div className="addusercase-form-row2">
