@@ -8,11 +8,16 @@ const CaseDetailPage = () => {
   const [caseData, setCaseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const getAuthHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  });
 
   useEffect(() => {
     const fetchCaseDetail = async () => {
       try {
-        const response = await axios.get(`/api/api/cases/${id}`);
+        const response = await axios.get(`/api/api/cases/${id}`,{
+          headers:getAuthHeaders()
+        });
         const item = response.data?.data;
 
         if (item) {

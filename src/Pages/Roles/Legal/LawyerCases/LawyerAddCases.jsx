@@ -85,63 +85,53 @@ const LawyerAddCases = ({ initialData = null, onClose }) => {
   };
 
   const handleSave = async () => {
-    setLoading(true);
-    setMessage("");
+  setLoading(true);
+  setMessage("");
 
-    try {
-      if (!initialData) {
-        // ADD mode
-        const borrowerResponse = await axios.post("/odata/usercases/Borrowers", {
-          Name: formData.borrower,
-        });
-        const borrowerId = borrowerResponse.data.id;
-
-        const loanResponse = await axios.post("/odata/usercases/Loans", {
-          BorrowerId: borrowerId,
-          LoanType: formData.loanType,
-          LoanAmount: parseFloat(formData.loanAmount),
-          DefaultDate: formData.defaultDate,
-          NpaDate: formData.npaDate,
-        });
-        const loanId = loanResponse.data.id;
-
-        const courtResponse = await axios.post("/odata/usercases/Courts", {
-          CourtType: formData.courtType,
-          FiNo: parseInt(formData.fiNo, 10),
-          FiYear: parseInt(formData.fiYear, 10),
-          RegNo: parseInt(formData.regNo, 10),
-          RegYear: parseInt(formData.regYear, 10),
-          HearingDate: formData.hearingDate,
-          DateOfFiling: formData.dateOfFiling,
-        });
-        const courtId = courtResponse.data.id;
-
-        await axios.post("/odata/usercases/LexCases", {
-          LoanId: loanId,
-          CourtId: courtId,
-          Status: formData.status,
-          CaseType: formData.caseType,
-          CrnNo: formData.crnNo,
-        });
-
-        setMessage("Case created successfully!");
-      } else {
-        // EDIT mode
-        await axios.patch(`/odata/usercases/LexCases(${initialData.CaseID})`, {
-          CaseType: formData.caseType,
-          Status: formData.status,
-          CrnNo: formData.crnNo,
-        });
-
-        setMessage("Case updated successfully!");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("An error occurred while saving.");
-    } finally {
-      setLoading(false);
+  try {
+    if (!formData.loanId) {
+      throw new Error("Loan ID is required");
     }
-  };
+
+    if (!formData.caseType) {
+      throw new Error("Case Type is required");
+    }
+
+    if (!formData.hearingDate) {
+      throw new Error("Hearing Date is required");
+    }
+
+    const payload = {
+      loanId: Number(formData.loanId),
+      workflowType: formData.caseType,
+      hearingDate: formData.hearingDate ? new Date(formData.hearingDate).toISOString() : null
+    };
+
+    console.log("Sending payload:", payload);
+
+    const response = await axios.post("/api/api/cases", payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    console.log("Response:", response);
+
+    if (response.data.status === "SUCCESS") {
+      setMessage("Case created successfully!");
+      if (onClose) onClose();
+    } else {
+      setMessage(response.data.message || "Failed to create case.");
+    }
+  } catch (error) {
+    console.error("Error:", error.response?.data || error.message);
+    setMessage(error.response?.data?.message || error.message || "An error occurred while creating the case.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleCancel = () => {
     if (onClose) onClose();

@@ -12,16 +12,13 @@ const LawyerCaseDetailPage = () => {
   const [error, setError] = useState(null);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const getAuthHeaders = () => ({
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
   });
 
   const fetchCaseDetail = useCallback(async () => {
     try {
       const response = await axios.get(`/api/api/cases/${id}`, {
-        // Add cache-busting parameter
-        params: { _t: Date.now() }
-      },{
-        headers: getAuthHeaders()
+        headers: getAuthHeaders(),
       });
       const item = response.data?.data;
 
@@ -42,8 +39,12 @@ const LawyerCaseDetailPage = () => {
         };
 
         // Only update if the data has changed
-        setCaseData(prev => {
-          if (!prev || prev.lastModified !== transformedCase.lastModified || prev.activeStageName !== transformedCase.activeStageName) {
+        setCaseData((prev) => {
+          if (
+            !prev ||
+            prev.lastModified !== transformedCase.lastModified ||
+            prev.activeStageName !== transformedCase.activeStageName
+          ) {
             setLastUpdateTime(Date.now());
             return transformedCase;
           }
@@ -78,7 +79,9 @@ const LawyerCaseDetailPage = () => {
   if (loading) return <p>Loading case details...</p>;
   if (error) return <p>{error}</p>;
 
-  return <LawyerCasesDetail caseData={caseData} lastUpdateTime={lastUpdateTime} />;
+  return (
+    <LawyerCasesDetail caseData={caseData} lastUpdateTime={lastUpdateTime} />
+  );
 };
 
 export default LawyerCaseDetailPage;
