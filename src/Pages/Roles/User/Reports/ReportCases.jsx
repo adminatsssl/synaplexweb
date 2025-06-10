@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Report.css';
-import Layout from "../../../../Layout/Layout";
+
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import EditCasePopup from './EditCasePopup';
-import IconButton from "../../../../ReusableComponents/IconButton";
-import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
+// import IconButton from '../../../ReusableComponents/IconButton';
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 import axios from 'axios';
+import Layout from '../../../Layout/Layout';
 
 const ReportCases = () => {
   const [data, setData] = useState([]);
@@ -67,7 +68,7 @@ const ReportCases = () => {
       disableFilter: true,
       render: (row) => (
         <div className="action-btns">
-          {/* <button className="reportcasesbtn1"><FaHandHoldingDollar /></button> */}
+          <button className="reportcasesbtn1"><FaHandHoldingDollar /></button>
           {/* <IconButton
             type="edit"
             className="reportcasesbtn"

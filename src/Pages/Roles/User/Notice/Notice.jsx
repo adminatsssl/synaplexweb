@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../../../Layout/Layout";
+import Layout from "../../../Layout/Layout";
 import { FaUser, FaEye } from "react-icons/fa";
 import { MdMessage } from "react-icons/md";
 import ResponseModal from "./ResponseModal";
 import "./Notice.css";
-import IconButton from "../../../../ReusableComponents/IconButton";
-import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
+import IconButton from "../../../ReusableComponents/IconButton";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
 const UserNotice = () => {
   const [data, setData] = useState([]);
@@ -76,13 +76,13 @@ const UserNotice = () => {
           <button className="userNoticeBtn1" onClick={() => setShowModal(true)}>
             <FaUser />
           </button>
-          <button className="userNoticeBtn1">
+          {/* <button className="userNoticeBtn1">
             <FaEye />
           </button>
           <button className="userNoticeBtn1">
             <MdMessage />
           </button>
-          <IconButton type="delete" className="userNoticeBtn" />
+          <IconButton type="delete" className="userNoticeBtn" /> */}
         </div>
       ),
     },

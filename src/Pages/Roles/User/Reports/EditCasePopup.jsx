@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./EditCasePopup.css"; // Ensure this file exists
 import { FaSearch } from "react-icons/fa";
-import SaveButton from "../../../../ReusableComponents/SaveButton";
-import CancelButton from "../../../../ReusableComponents/CancelButton";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 
 const EditCasePopup = ({ isOpen, onClose, caseData, onSave }) => {

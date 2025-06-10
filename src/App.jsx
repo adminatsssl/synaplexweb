@@ -13,9 +13,7 @@ import AdminLoans from './Pages/Roles/Admin/ManageData/AdminLoans';
 import AdminNotices from './Pages/Roles/Admin/ManageData/AdminNotices';
 import TenantManager from './Pages/Roles/Admin/Tenant/Tenant';
 import UserCases from './Pages/Roles/User/Cases/UserCases';
-import ReportCases from './Pages/Roles/User/Reports/Reports/ReportCases';
-import ReportNotices from './Pages/Roles/User/Reports/Reports/ReportNotice';
-import UserNotice from './Pages/Roles/User/Reports/Notice/Notice';
+import UserNotice from './Pages/Roles/User/Notice/Notice';
 import Loanpage from './Pages/Roles/User/Loan/LoanPage';
 import LawyerCases from './Pages/Roles/Legal/LawyerCases/LawyerCases';
 import UserInvoiceManagement from './Pages/Roles/User/InvoiceManagement/UserInvoiceManagement';
@@ -28,6 +26,8 @@ import LawyerReportCases from './Pages/Roles/Legal/LawyerReports/LawyerReportCas
 import LawyerReportNotices from './Pages/Roles/Legal/LawyerReports/LawyerReportNotice';
 import CaseDetailPage from './Pages/Roles/User/Cases/CasesDetail/CaseDetailPage';
 import LawyerCaseDetailPage from './Pages/Roles/Legal/LawyerCases/LawyerCasesDetail/LawyerCaseDetailPage';
+import ReportCases from './Pages/Roles/User/Reports/ReportCases';
+import ReportNotices from './Pages/Roles/User/Reports/ReportNotice';
 
 
 function App() {

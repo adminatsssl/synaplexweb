@@ -1,7 +1,7 @@
 import React from "react";
 import "./ResponseModal.css";
-import SaveButton from "../../../../ReusableComponents/SaveButton";
-import CancelButton from "../../../../ReusableComponents/CancelButton";
+import SaveButton from "../../../ReusableComponents/SaveButton";
+import CancelButton from "../../../ReusableComponents/CancelButton";
 
 const ResponseModal = ({ show, onClose }) => {
   if (!show) return null;

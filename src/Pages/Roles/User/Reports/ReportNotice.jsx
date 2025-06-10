@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Layout from "../../../../Layout/Layout";
+import Layout from '../../../Layout/Layout';
 import { FaEye } from "react-icons/fa";
 // import { MdMessage } from "react-icons/md";
 // import IconButton from "../../../../ReusableComponents/IconButton";
-import ReusableGrid from "../../../../ReusableComponents/ReusableGrid";
+import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 import "./Report.css";
 
 const dummyData = [
