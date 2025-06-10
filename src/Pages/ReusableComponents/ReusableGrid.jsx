@@ -19,7 +19,7 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
   };
 
   const filteredData = useMemo(() => {
-    return data.filter((row) =>
+    return [...data].reverse().filter((row) =>
       columns.every((col) => {
         const filterValue = filters[col.key]?.toLowerCase() || "";
         const cellValue = (row[col.key] || "").toString().toLowerCase();
