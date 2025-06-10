@@ -1,8 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AssignCase.css';
 
-const AssignCase = ({ onClose }) => {
-    const [assignType, setAssignType] = useState('Lawyer');
+const AssignCase = ({ onClose, caseId }) => {
+    const [lawyers, setLawyers] = useState([]);
+    const [selectedLawyer, setSelectedLawyer] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [assigning, setAssigning] = useState(false);
+
+    useEffect(() => {
+        const fetchLawyers = async () => {
+            try {
+                const response = await fetch('/api/api/lawyers', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch lawyers');
+                }
+
+                const data = await response.json();
+                setLawyers(data);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchLawyers();
+    }, []);
+
+    const handleSave = async () => {
+        if (!selectedLawyer) {
+            alert('Please select a lawyer');
+            return;
+        }
+
+        setAssigning(true);
+        try {
+            const selectedLawyerData = lawyers.find(lawyer => lawyer.id === selectedLawyer);
+            
+            const response = await fetch('http://localhost:8080/api/cases/assignToLawyer', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    caseId: caseId,
+                    lawyerName: selectedLawyerData.name
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to assign case');
+            }
+
+            // Close the modal on success
+            onClose();
+        } catch (err) {
+            setError(err.message);
+            alert('Failed to assign case: ' + err.message);
+        } finally {
+            setAssigning(false);
+        }
+    };
 
     return (
         <div className="assign-case-modal">
@@ -13,61 +79,37 @@ const AssignCase = ({ onClose }) => {
                 </div>
 
                 <div className="modal-body">
-                    <div className="assignee-section">
-                        <h3>Choose Assignee</h3>
-                        <div className="radio-group">
-                            <div className="radio-item">
-                                <input
-                                    type="radio"
-                                    id="lawyer"
-                                    name="assignType"
-                                    value="Lawyer"
-                                    checked={assignType === 'Lawyer'}
-                                    onChange={(e) => setAssignType(e.target.value)}
-                                />
-                                <label htmlFor="lawyer">Lawyer</label>
-                            </div>
-                            <div className="radio-item">
-                                <input
-                                    type="radio"
-                                    id="lawFirm"
-                                    name="assignType"
-                                    value="Law Firm"
-                                    checked={assignType === 'Law Firm'}
-                                    onChange={(e) => setAssignType(e.target.value)}
-                                />
-                                <label htmlFor="lawFirm">Law Firm</label>
-                            </div>
-                            <div className="radio-item">
-                                <input
-                                    type="radio"
-                                    id="group"
-                                    name="assignType"
-                                    value="Group"
-                                    checked={assignType === 'Group'}
-                                    onChange={(e) => setAssignType(e.target.value)}
-                                />
-                                <label htmlFor="group">Group</label>
-                            </div>
-                        </div>
-                    </div>
-
                     <div className="assign-section">
-                        <label>Assign To {assignType}</label>
-                        <select defaultValue="">
-                            <option value="" disabled>Select {assignType}</option>
-                            <option value="1">John Doe</option>
-                            <option value="2">Jane Smith</option>
-                            <option value="3">Legal Associates</option>
-                        </select>
+                        <label>Assign To Lawyer</label>
+                        {loading ? (
+                            <p>Loading lawyers...</p>
+                        ) : error ? (
+                            <p className="error-message">{error}</p>
+                        ) : (
+                            <select 
+                                value={selectedLawyer}
+                                onChange={(e) => setSelectedLawyer(e.target.value)}
+                            >
+                                <option value="" disabled>Select Lawyer</option>
+                                {lawyers.map((lawyer) => (
+                                    <option key={lawyer.id} value={lawyer.id}>
+                                        {lawyer.name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
                     </div>
 
                     <div className="modal-footer">
                         <button className="cancel-btn" onClick={onClose}>
                             Cancel
                         </button>
-                        <button className="save-btn">
-                            SAVE
+                        <button 
+                            className="save-btn"
+                            onClick={handleSave}
+                            disabled={!selectedLawyer || assigning}
+                        >
+                            {assigning ? 'Assigning...' : 'Assign'}
                         </button>
                     </div>
                 </div>
