@@ -17,7 +17,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
   ];
 
   const getAuthHeaders = () => ({
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
   });
 
   const [templateOptions, setTemplateOptions] = useState([]);
@@ -33,7 +33,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
       try {
         const res = await fetch("/api/api/templates", {
           headers: getAuthHeaders(),
-        });
+        });   
         const data = await res.json();
         if (data.status === "SUCCESS") {
           setTemplateOptions(data.data);

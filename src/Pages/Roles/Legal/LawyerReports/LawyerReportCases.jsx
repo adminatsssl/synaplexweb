@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './LawyerReport.css';
 import Layout from "../../../Layout/Layout";
 import { FaHandHoldingDollar } from "react-icons/fa6";
@@ -6,33 +7,45 @@ import EditCasePopup from './LawyerEditCasePopup';
 import IconButton from "../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
 
-const dummyData = [
-  {
-    cnr: 'CNR001',
-    loanAmount: 50000,
-    caseType: 'Civil',
-    status: 'Open',
-    borrower: 'John Doe',
-    createdDate: '2023-01-15',
-    assignedTo: 'Agent A',
-    court: 'Court 1',
-  },
-  {
-    cnr: 'CNR002',
-    loanAmount: 75000,
-    caseType: 'Criminal',
-    status: 'Closed',
-    borrower: 'Jane Smith',
-    createdDate: '2023-02-10',
-    assignedTo: 'Agent B',
-    court: 'Court 2',
-  }
-];
-
 const LawyerReportCases = () => {
-  const [data, setData] = useState(dummyData);
+  const [cases, setCases] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
+
+  const getAuthHeaders = () => ({
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
+  const fetchCases = async () => {
+    try {
+      const response = await axios.get(`/api/api/cases/legalCases`, {
+        headers: getAuthHeaders()
+      });
+      const caseData = response.data?.data || [];
+
+      const transformed = caseData.map((item) => ({
+        cnr: item.id,
+        loanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
+        caseType: item.workflowType,
+        status: item.status,
+        borrower: item.loan.borrower.name,
+        createdDate: item.loan.startDate,
+        assignedTo: "-", // Update if data available
+        court: item.loan.borrower.address.city || "-",
+      }));
+
+      setCases(transformed);
+    } catch (error) {
+      console.error("Failed to fetch cases:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCases();
+  }, []);
 
   const handleEditClick = (caseItem) => {
     setSelectedCase(caseItem);
@@ -40,7 +53,7 @@ const LawyerReportCases = () => {
   };
 
   const handleSave = (updatedData) => {
-    setData(data.map(item => item.cnr === updatedData.cnr ? updatedData : item));
+    setCases(cases.map(item => item.cnr === updatedData.cnr ? updatedData : item));
   };
 
   const columns = [
@@ -69,18 +82,26 @@ const LawyerReportCases = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <Layout>
+        <div style={{ padding: '20px' }}>Loading cases...</div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div style={{ padding: '20px' }} className="reportCases-container">
         <h2 className="reportCases-title">Report - Case</h2>
 
-        <ReusableGrid columns={columns} data={data} />
+        <ReusableGrid columns={columns} data={cases} />
       </div>
 
       <EditCasePopup
         isOpen={isEditPopupOpen}
         onClose={() => setIsEditPopupOpen(false)}
-        caseData={selectedCase || dummyData[0]}
+        caseData={selectedCase}
         onSave={handleSave}
       />
     </Layout>

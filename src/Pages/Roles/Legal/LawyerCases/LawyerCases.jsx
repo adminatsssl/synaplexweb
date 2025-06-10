@@ -19,37 +19,38 @@ const LawyerCases = () => {
   const navigate = useNavigate();
 
   const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
+
+  const fetchCases = async () => {
+    try {
+      const response = await axios.get(`/api/api/cases/legalCases`, {
+        headers: getAuthHeaders()
+      });
+      const caseData = response.data?.data || [];
+
+      const transformed = caseData.map((item) => ({
+        CaseID: item.id,
+        LoanID: item.loan.loanNumber,
+        CaseType: item.workflowType,
+        Status: item.status,
+        Borrower: item.loan.borrower.name,
+        LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
+        NPADate: item.loan.lastPaymentDate,
+        CreateDate: item.loan.startDate,
+        AssignedTo: "-", // Update if data available
+        Court: item.loan.borrower.address.city || "-",
+      }));
+
+      setCases(transformed);
+    } catch (error) {
+      console.error("Failed to fetch cases:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchCases = async () => {
-      try {
-        const response = await axios.get(`/api/api/cases/legalCases`, {
-          headers : getAuthHeaders()
-        });
-        const caseData = response.data?.data || [];
-
-        const transformed = caseData.map((item) => ({
-          CaseID: item.id,
-          LoanID: item.loan.loanNumber,
-          CaseType: item.workflowType,
-          Status: item.status,
-          Borrower: item.loan.borrower.name,
-          LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
-          NPADate: item.loan.lastPaymentDate,
-          CreateDate: item.loan.startDate,
-          AssignedTo: "-", // Update if data available
-          Court: item.loan.borrower.address.city || "-",
-        }));
-
-        setCases(transformed);
-      } catch (error) {
-        console.error("Failed to fetch cases:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCases();
   }, []);
 
@@ -65,6 +66,8 @@ const LawyerCases = () => {
   const closeModal = () => {
     setShowModal(false);
     setSelectedCase(null);
+    // Refresh cases data after modal is closed
+    fetchCases();
   };
 
   const openModal = () => setShowModal(true);
@@ -139,6 +142,5 @@ const LawyerCases = () => {
     </Layout>
   );
 };
-
 
 export default LawyerCases;
