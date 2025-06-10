@@ -96,7 +96,7 @@ const NoticePreviewModal = ({ isOpen, onClose, caseId }) => {
 
             const data = await response.json();
             if (response.ok) {
-                alert('Notice generated successfully!');
+                // alert('Notice generated successfully!');
                 setNoticeExists(true); // Update state to reflect that notice now exists
             } else {
                 alert('Failed to generate notice: ' + (data.message || 'Unknown error'));

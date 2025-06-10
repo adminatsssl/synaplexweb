@@ -55,17 +55,30 @@ const ChequeBounceContent = ({ caseId, initialActiveStep = 2 }) => {
   useEffect(() => {
     const fetchCaseDetails = async () => {
       try {
-        const response = await axios.get(`/api/api/cases/${caseId}`,{
+        console.log('Fetching case details for caseId:', caseId);
+        const response = await axios.get(`/api/api/cases/${caseId}`, {
           headers: getAuthHeaders()
         });
+        console.log('Case details response:', response.data);
+        
         if (response.data && response.data.data) {
           const { activeStageName } = response.data.data;
+          console.log('Active stage name:', activeStageName);
+          console.log('Stage mapping:', stageNameToStepMap);
+          
           const mappedStep = stageNameToStepMap[activeStageName] || initialActiveStep;
+          console.log('Mapped step:', mappedStep);
+          
           setActiveStep(mappedStep);
           setViewedStep(mappedStep);
         }
       } catch (error) {
         console.error('Error fetching case details:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.response?.status,
+          data: error.response?.data
+        });
       } finally {
         setLoading(false);
       }
