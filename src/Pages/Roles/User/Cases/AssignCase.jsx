@@ -23,10 +23,25 @@ const AssignCase = ({ onClose, caseId }) => {
                 }
 
                 const data = await response.json();
-                setLawyers(data);
+                // Ensure data is an array before setting it
+                if (Array.isArray(data)) {
+                    setLawyers(data);
+                } else if (data && Array.isArray(data.data)) {
+                    // If the API returns { data: [...] }
+                    setLawyers(data.data);
+                } else if (data && typeof data === 'object') {
+                    // If the API returns an object with lawyers
+                    const lawyersArray = Object.values(data);
+                    setLawyers(lawyersArray);
+                } else {
+                    console.error('Unexpected API response format:', data);
+                    setLawyers([]);
+                }
                 setLoading(false);
             } catch (err) {
+                console.error('Error fetching lawyers:', err);
                 setError(err.message);
+                setLawyers([]);
                 setLoading(false);
             }
         };
@@ -42,9 +57,13 @@ const AssignCase = ({ onClose, caseId }) => {
 
         setAssigning(true);
         try {
-            const selectedLawyerData = lawyers.find(lawyer => lawyer.id === selectedLawyer);
+            const selectedLawyerData = lawyers.find(lawyer => lawyer.name === selectedLawyer);
             
-            const response = await fetch('http://localhost:8080/api/cases/assignToLawyer', {
+            if (!selectedLawyerData) {
+                throw new Error('Selected lawyer not found');
+            }
+
+            const response = await fetch('/api/api/cases/assignToLawyer', {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -85,6 +104,8 @@ const AssignCase = ({ onClose, caseId }) => {
                             <p>Loading lawyers...</p>
                         ) : error ? (
                             <p className="error-message">{error}</p>
+                        ) : lawyers.length === 0 ? (
+                            <p>No lawyers available</p>
                         ) : (
                             <select 
                                 value={selectedLawyer}
@@ -92,7 +113,7 @@ const AssignCase = ({ onClose, caseId }) => {
                             >
                                 <option value="" disabled>Select Lawyer</option>
                                 {lawyers.map((lawyer) => (
-                                    <option key={lawyer.id} value={lawyer.id}>
+                                    <option key={lawyer.id || lawyer.name} value={lawyer.name}>
                                         {lawyer.name}
                                     </option>
                                 ))}
