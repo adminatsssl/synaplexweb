@@ -38,18 +38,26 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
             const response = await axios.get(`/api/api/complaintFilingCB/case/${caseId}`,{
                 headers: getAuthHeaders()
             });
-            if (response.data && Object.keys(response.data).length > 0) {
+            console.log("GET Response:", response.data);
+            
+            if (response.data && response.data.status === 'SUCCESS' && response.data.data) {
+                const complaintData = response.data.data;
                 setHasExistingData(true);
                 setFormData({
-                    caseNumber: response.data.caseNumber || '',
-                    complaintDate: response.data.complaintDate || '',
-                    courtName: response.data.courtName || '',
-                    notes: response.data.notes || '',
-                    dispositions: response.data.dispositions || []
+                    caseNumber: complaintData.caseNumber || '',
+                    complaintDate: complaintData.complaintDate || '',
+                    courtName: complaintData.courtName || '',
+                    notes: complaintData.notes || '',
+                    dispositions: complaintData.dispositions || []
                 });
             }
         } catch (error) {
-            console.log('No existing complaint filing data found');
+            console.error('Error fetching complaint filing:', error.response || error);
+            console.error('Error details:', {
+                message: error.message,
+                status: error.response?.status,
+                data: error.response?.data
+            });
         }
     };
 

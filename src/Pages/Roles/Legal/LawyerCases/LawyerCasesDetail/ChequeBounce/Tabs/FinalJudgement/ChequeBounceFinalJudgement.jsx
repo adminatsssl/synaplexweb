@@ -38,18 +38,26 @@ const ChequeBounceFinalJudgement = ({ caseId, onStageComplete }) => {
             const response = await axios.get(`/api/api/finalJudgmentCB/case/${caseId}`,{
                 headers: getAuthHeaders()
             });
-            if (response.data && Object.keys(response.data).length > 0) {
+            console.log("GET Response:", response.data);
+            
+            if (response.data && response.data.status === 'SUCCESS' && response.data.data) {
+                const judgmentData = response.data.data;
                 setHasExistingData(true);
                 setFormData({
-                    judgmentDate: response.data.judgmentDate || '',
-                    judgmentType: response.data.judgmentType || '',
-                    courtOrderDocuments: response.data.courtOrderDocuments || '',
-                    judgmentSummary: response.data.judgmentSummary || '',
-                    dispositions: response.data.dispositions || []
+                    judgmentDate: judgmentData.judgmentDate || '',
+                    judgmentType: judgmentData.judgmentType || '',
+                    courtOrderDocuments: judgmentData.courtOrderDocuments || '',
+                    judgmentSummary: judgmentData.judgmentSummary || '',
+                    dispositions: judgmentData.dispositions || []
                 });
             }
         } catch (error) {
-            console.log('No existing final judgment data found');
+            console.error('Error fetching final judgment:', error.response || error);
+            console.error('Error details:', {
+                message: error.message,
+                status: error.response?.status,
+                data: error.response?.data
+            });
         }
     };
 

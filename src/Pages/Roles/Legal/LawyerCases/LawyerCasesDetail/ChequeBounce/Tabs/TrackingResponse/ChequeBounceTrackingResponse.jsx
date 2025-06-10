@@ -39,17 +39,25 @@ const ChequeBounceTrackingResponse = ({ caseId, onStageComplete }) => {
             const response = await axios.get(`/api/api/tracking15DayResponseCB/case/${caseId}`,{
                 headers: getAuthHeaders()
             });
-            if (response.data && Object.keys(response.data).length > 0) {
+            console.log("GET Response:", response.data);
+            
+            if (response.data && response.data.status === 'SUCCESS' && response.data.data) {
+                const trackingData = response.data.data;
                 setHasExistingData(true);
                 setFormData({
-                    daysRemainingForResponse: response.data.daysRemainingForResponse || '',
-                    isResponseReceived: response.data.isResponseReceived || false,
-                    isResponseOverdue: response.data.isResponseOverdue || false,
-                    dispositions: response.data.dispositions || []
+                    daysRemainingForResponse: trackingData.daysRemainingForResponse || '',
+                    isResponseReceived: trackingData.isResponseReceived || false,
+                    isResponseOverdue: trackingData.isResponseOverdue || false,
+                    dispositions: trackingData.dispositions || []
                 });
             }
         } catch (error) {
-            console.log('No existing tracking response data found');
+            console.error('Error fetching tracking response:', error.response || error);
+            console.error('Error details:', {
+                message: error.message,
+                status: error.response?.status,
+                data: error.response?.data
+            });
         }
     };
 

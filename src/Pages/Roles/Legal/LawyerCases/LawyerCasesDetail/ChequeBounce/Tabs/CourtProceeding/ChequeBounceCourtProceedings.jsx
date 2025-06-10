@@ -38,18 +38,26 @@ const ChequeBounceCourtProceedings = ({ caseId, onStageComplete }) => {
             const response = await axios.get(`/api/api/courtProceedingsCB/case/${caseId}`,{
                 headers: getAuthHeaders()
             });
-            if (response.data && Object.keys(response.data).length > 0) {
+            console.log("GET Response:", response.data);
+            
+            if (response.data && response.data.status === 'SUCCESS' && response.data.data) {
+                const courtData = response.data.data;
                 setHasExistingData(true);
                 setFormData({
-                    hearingDate: response.data.hearingDate || '',
-                    judgeName: response.data.judgeName || '',
-                    supportingEvidence: response.data.supportingEvidence || '',
-                    notes: response.data.notes || '',
-                    dispositions: response.data.dispositions || []
+                    hearingDate: courtData.hearingDate || '',
+                    judgeName: courtData.judgeName || '',
+                    supportingEvidence: courtData.supportingEvidence || '',
+                    notes: courtData.notes || '',
+                    dispositions: courtData.dispositions || []
                 });
             }
         } catch (error) {
-            console.log('No existing court proceedings data found');
+            console.error('Error fetching court proceedings:', error.response || error);
+            console.error('Error details:', {
+                message: error.message,
+                status: error.response?.status,
+                data: error.response?.data
+            });
         }
     };
 
