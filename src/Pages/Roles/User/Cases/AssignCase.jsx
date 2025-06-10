@@ -63,16 +63,18 @@ const AssignCase = ({ onClose, caseId }) => {
                 throw new Error('Selected lawyer not found');
             }
 
+            const requestBody = {
+                caseId: parseInt(caseId), // Ensure caseId is a number
+                lawyerName: selectedLawyerData.name
+            };
+
             const response = await fetch('/api/api/cases/assignToLawyer', {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    caseId: caseId,
-                    lawyerName: selectedLawyerData.name
-                })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {

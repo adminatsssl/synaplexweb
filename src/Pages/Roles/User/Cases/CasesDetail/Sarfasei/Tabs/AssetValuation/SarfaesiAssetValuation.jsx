@@ -9,6 +9,10 @@ import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import './SarfaesiAssetValuation.css';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const SarfaesiAssetValuation = ({ caseID }) => {
   const [auctionDate, setAuctionDate] = useState("");
   const [auctionLocation, setAuctionLocation] = useState("");
@@ -25,7 +29,9 @@ const SarfaesiAssetValuation = ({ caseID }) => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`api/api/assetValuationAuctions/case/${caseID}`);
+        const response = await axios.get(`api/api/assetValuationAuctions/case/${caseID}`, {
+          headers: getAuthHeaders()
+        });
         const data = response.data;
 
         setAuctionDate(data.auctionDate || "");

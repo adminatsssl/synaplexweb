@@ -164,7 +164,7 @@ const UserCases = () => {
         {showAssignModal && (
           <div className="modal-overlay-usercase">
             <div className="modal-content-usercase-userrole">
-              <AssignCase onClose={closeAssignModal} />
+              <AssignCase onClose={closeAssignModal} caseId={selectedCase.CaseID} />
               <button onClick={closeAssignModal} className="close-button-usercases">
                 X
               </button>

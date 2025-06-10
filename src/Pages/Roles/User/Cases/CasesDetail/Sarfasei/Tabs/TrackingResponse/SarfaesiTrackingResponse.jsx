@@ -6,6 +6,10 @@ import './SarfaesiTrackingResponse.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const dispositionColumns = [
   { key: "stage", label: "Disposition Stage" },
   { key: "comment", label: "Comment" },
@@ -23,7 +27,9 @@ const SarfaesiTrackingResponse = () => {
   useEffect(() => {
     const fetchResponseData = async () => {
       try {
-        const res = await axios.get(`/api/api/tracking60DayResponse/case/${id}`);
+        const res = await axios.get(`/api/api/tracking60DayResponse/case/${id}`, {
+          headers: getAuthHeaders()
+        });
         const data = res.data;
 
         setResponseData({

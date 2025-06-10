@@ -5,6 +5,10 @@ import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import './SarfaesiAuctionRecovery.css';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const SarfaesiAuctionRecovery = ({ caseID }) => {
   const [recoveryAmount, setRecoveryAmount] = useState("");
   const [recoveryDate, setRecoveryDate] = useState("");
@@ -23,7 +27,9 @@ const SarfaesiAuctionRecovery = ({ caseID }) => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`api/api/auctionRecovery/case/${caseID}`);
+        const response = await axios.get(`api/api/auctionRecovery/case/${caseID}`, {
+          headers: getAuthHeaders()
+        });
         const data = response.data;
 
         setRecoveryAmount(data.recoveryAmount ?? "");

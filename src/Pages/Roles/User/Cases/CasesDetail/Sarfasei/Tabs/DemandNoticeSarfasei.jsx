@@ -11,6 +11,10 @@ import emailIcon from '../../../../../../../assets/icons/email.png';
 import smsIcon from '../../../../../../../assets/icons/sms.png';
 import mailboxIcon from '../../../../../../../assets/icons/mailbox.png';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const DemandNoticeSarfasei = () => {
     const { id: caseId } = useParams(); // this is caseId from URL
     const [noticeData, setNoticeData] = useState({
@@ -29,7 +33,9 @@ const DemandNoticeSarfasei = () => {
 
     const fetchNoticeData = async () => {
         try {
-            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`);
+            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`, {
+                headers: getAuthHeaders()
+            });
             const data = response.data;
 
             // Ensure response's caseId matches route caseId

@@ -5,6 +5,10 @@ import CancelButton from "../../../../../../../ReusableComponents/CancelButton.j
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
 import './SarfaesiPossessionNotice.css';
 
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
+
 const dispositionColumns = [
   { key: "stage", label: "Disposition Stage" },
   { key: "comment", label: "Comment" },
@@ -24,7 +28,9 @@ const SarfaesiPossessionNotice = () => {
   useEffect(() => {
     const fetchPossessionData = async () => {
       try {
-        const res = await fetch(`/api/api/possessionNotice/case/${id}`);
+        const res = await fetch(`/api/api/possessionNotice/case/${id}`, {
+          headers: getAuthHeaders()
+        });
         const data = await res.json();
         setFormData({
           noticeSentDate: data.noticeSentDate,
