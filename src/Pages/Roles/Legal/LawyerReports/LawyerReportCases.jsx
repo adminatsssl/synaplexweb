@@ -6,6 +6,8 @@ import { FaHandHoldingDollar } from "react-icons/fa6";
 import EditCasePopup from './LawyerEditCasePopup';
 import IconButton from "../../../ReusableComponents/IconButton";
 import ReusableGrid from "../../../ReusableComponents/ReusableGrid";
+// import * as XLSX from "xlsx";
+// import { saveAs } from "file-saver";
 
 const LawyerReportCases = () => {
   const [cases, setCases] = useState([]);
@@ -26,13 +28,15 @@ const LawyerReportCases = () => {
 
       const transformed = caseData.map((item) => ({
         cnr: item.id,
-        loanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
+        loanAmount: item.loan?.loanAmount
+          ? `₹${item.loan.loanAmount.toLocaleString()}`
+          : "-",
         caseType: item.workflowType,
         status: item.status,
         borrower: item.loan.borrower.name,
         createdDate: item.loan.startDate,
         assignedTo: "-", // Update if data available
-        court: item.loan.borrower.address.city || "-",
+        court: item.loan?.borrower?.address?.city || "-",
       }));
 
       setCases(transformed);
@@ -82,6 +86,28 @@ const LawyerReportCases = () => {
     },
   ];
 
+  // const exportToExcel = () => {
+  // const exportData = cases.map(({ cnr, loanAmount, caseType, status, borrower, createdDate, assignedTo, court }) => ({
+  //   "CNR No.": cnr,
+  //   "Loan Amount": loanAmount,
+  //   "Case Type": caseType,
+  //   "Status": status,
+  //   "Borrower": borrower,
+  //   "Created Date": createdDate,
+  //   "Assigned To": assignedTo,
+  //   "Court": court
+  // }));
+
+//   const worksheet = XLSX.utils.json_to_sheet(exportData);
+//   const workbook = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(workbook, worksheet, "Cases");
+
+//   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+//   const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+//   saveAs(data, "LegalCasesReport.xlsx");
+// };
+
+
   if (loading) {
     return (
       <Layout>
@@ -94,6 +120,9 @@ const LawyerReportCases = () => {
     <Layout>
       <div style={{ padding: '20px' }} className="reportCases-container">
         <h2 className="reportCases-title">Report - Case</h2>
+        {/* <button className="download-excel-btn" onClick={exportToExcel}>
+  Download Excel
+</button> */}
 
         <ReusableGrid columns={columns} data={cases} />
       </div>

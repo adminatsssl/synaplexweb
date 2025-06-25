@@ -8,35 +8,45 @@ export default function FilteredForm({ activeTab, activeStage }) {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const navigate = useNavigate();
+
   const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  });
 
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await axios.get(`/api/api/cases`, {
-          headers : getAuthHeaders()
+        const response = await axios.get(`api/api/cases/ActivityDeatils`, {
+          headers: getAuthHeaders(),
         });
-        const caseData = response.data?.data || [];
+        console.log("Res", response)
 
-        const transformed = caseData.map((item) => ({
-          CaseID: item.id,
-          cnr: item.cnrnumber || "-",
-          createdDate: item.createdAt ? item.createdAt.split("T")[0] : "-",
-          status: item.status || "-",
-          borrower: item.loan?.borrower?.name || "-",
-          court: item.loan?.borrower?.address?.city || "-",
-          hearingDate: item.hearingDate ? item.hearingDate.split("T")[0] : "-",
-          lawyer: "-", // Placeholder
-          tab: item.workflowType?.toUpperCase()?.trim() || "-",
-          stage: item.activeStageName?.trim() || "-"
-        }));
+        const workflowGroups = response.data || [];
+        console.log(workflowGroups)
 
-        // console.log("Fetched data:", transformed);
+        // Flatten and transform case data
+        const transformed = workflowGroups.flatMap((group) =>
+          group.cases.map((item) => ({
+            CaseID: item.id,
+            cnr: item.cnrNumber || "-",
+            createdDate: item.createdDate
+              ? item.hearingDate.split(" ")[0]
+              : "-",
+            status: item.status || "-",
+            borrower: item.borrower || "-",
+            court: item.court || "-",
+            hearingDate: item.hearingDate
+              ? item.hearingDate.split(" ")[0]
+              : "-",
+            lawyer: item.lawyer || "-",
+            tab: group.workflowType?.toUpperCase()?.trim() || "-",
+            stage: item.activeStageName?.trim() || "-",
+          }))
+        );
+
         setData(transformed);
       } catch (error) {
-        console.error("Error fetching case data:", error);
+        console.error("Error fetching workflow case data:", error);
       }
     };
 
@@ -48,19 +58,12 @@ export default function FilteredForm({ activeTab, activeStage }) {
 
     const normalizedStage = activeStage.trim().toLowerCase();
     const normalizedTab = activeTab.trim().toUpperCase();
-    
 
     const filteredData = data.filter(
       (d) =>
         d.tab === normalizedTab &&
         d.stage.trim().toLowerCase() === normalizedStage
     );
-
-    // console.log("Filtered:", {
-    //   activeTab,
-    //   activeStage,
-    //   filteredData
-    // });
 
     setFiltered(filteredData);
   }, [activeTab, activeStage, data]);
@@ -78,7 +81,7 @@ export default function FilteredForm({ activeTab, activeStage }) {
     { key: "borrower", label: "Borrower" },
     { key: "court", label: "Court" },
     { key: "hearingDate", label: "Hearing Date" },
-    { key: "lawyer", label: "Lawyer" }
+    { key: "lawyer", label: "Lawyer" },
   ];
 
   return (

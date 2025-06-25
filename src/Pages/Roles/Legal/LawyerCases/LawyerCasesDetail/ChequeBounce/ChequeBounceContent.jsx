@@ -27,7 +27,7 @@ const stageNameToStepMap = {
   "Tracking 15-Day Response": 3,
   "Complaint Filing": 4,
   "Court Proceedings": 5,
-  "Final Judgment": 6,
+  "Final Judgement": 6,
   "Closure": 7
 };
 

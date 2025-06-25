@@ -8,7 +8,7 @@ import CancelButton from "../../../ReusableComponents/CancelButton.jsx";
 const caseTypes = [
   "ARBITRATION",
   "SARFAESI",
-  "CHEQUE_BOUNCE",
+  "CHEQUE BOUNCE",
   "DRT",
   "CIVIL",
   "IBC_NCLT",

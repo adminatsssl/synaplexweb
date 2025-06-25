@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReusableCaseStage from "../ReusableCaseStage";
 import './ChequeBounceContent.css';
 import ChequeBounceDemandNotice from "./Tabs/DemandNotice/ChequeBounceDemandNotice";
@@ -9,7 +9,6 @@ import ChequeBounceFinalJudgement from "./Tabs/FinalJudgement/ChequeBounceFinalJ
 import CaseDetailClose from "../Sarfasei/Tabs/Close/CaseDetailClose";
 import CaseHistoryAccordion from "../CaseHistory.jsx";
 
-
 const steps = [
   { label: "Initiation" },
   { label: "Demand Notice Generation" },
@@ -19,6 +18,17 @@ const steps = [
   { label: "Final Judgment" },
   { label: "Closure" },
 ];
+
+const stageToStepMap = {
+  "Initiation": 1,
+  "Demand Notice Generation": 2,
+  "Tracking 15-Day Response": 3,
+  "Complaint Filing": 4,
+  "Court Proceedings": 5,
+  "Final Judgement": 6,
+  "Closure": 7
+};
+
 
 const dummyData = [
   {
@@ -32,39 +42,63 @@ const dummyData = [
   },
 ];
 
-const ChequeBounceContent = () => {
-  const [activeStep, setActiveStep] = useState(2); 
+const ChequeBounceContent = ({ caseId, activeStageName, initialActiveStep  }) => {
+  const [activeStep, setActiveStep] = useState(initialActiveStep);
+  const [viewedStep, setViewedStep] = useState(initialActiveStep);
+
+  useEffect(() => {
+      if (activeStageName) {
+        const step = stageToStepMap[activeStageName] || 2;
+        setActiveStep(step);
+        setViewedStep(step);
+      }
+    }, [activeStageName]);
 
   const handleStepClick = (stepNum) => {
-    setActiveStep(stepNum);
-    // console.log("Clicked step:", stepNum);
+    if (stepNum <= activeStep && stepNum !== 1) {
+      setViewedStep(stepNum);
+    }
+  };
+
+  const handleStageComplete = () => {
+    if (activeStep < steps.length) {
+      const nextStep = activeStep + 1;
+      setActiveStep(nextStep);
+      setViewedStep(nextStep);
+    }
+  };
+
+  const getDisabledSteps = () => {
+    const disabledSteps = [1];
+    for (let i = activeStep + 1; i <= steps.length; i++) {
+      disabledSteps.push(i);
+    }
+    return disabledSteps;
   };
 
   return (
     <div className="ChequeBounce-content-container-topbar">
       <div className="ChequeBounce-content-container">
         <h4>CASE PROGRESS</h4>
-      <div className="ChequeBounce-resuable-content">
-        <ReusableCaseStage
-          steps={steps}
-          activeStep={activeStep}
-          onStepClick={handleStepClick}
-        />
+        <div className="ChequeBounce-resuable-content">
+          <ReusableCaseStage
+            steps={steps}
+            activeStep={activeStep}
+            viewedStep={viewedStep}
+            onStepClick={handleStepClick}
+            disabledSteps={getDisabledSteps()}
+          />
+        </div>
+
+        {viewedStep === 2 && <ChequeBounceDemandNotice onStageComplete={handleStageComplete} />}
+        {viewedStep === 3 && <ChequeBounceTrackingResponse onStageComplete={handleStageComplete} />}
+        {viewedStep === 4 && <ChequeBounceComplaintFilling onStageComplete={handleStageComplete} />}
+        {viewedStep === 5 && <ChequeBounceCourtProceedings onStageComplete={handleStageComplete} />}
+        {viewedStep === 6 && <ChequeBounceFinalJudgement onStageComplete={handleStageComplete} />}
+        {viewedStep === 7 && <CaseDetailClose onStageComplete={handleStageComplete} />}
       </div>
 
-      {/* Conditionally render the DemandNoticeSarfasei component */}
-      {activeStep === 2 && <ChequeBounceDemandNotice />}
-      {activeStep === 3 && <ChequeBounceTrackingResponse />}
-      {activeStep === 4 && <ChequeBounceComplaintFilling />}
-      {activeStep === 5 && <ChequeBounceCourtProceedings />}
-      {activeStep === 6 && <ChequeBounceFinalJudgement />}
-      {activeStep === 7 && <CaseDetailClose />}
-
-      </div>
-      <>
       <CaseHistoryAccordion data={dummyData} />
-      </>
-
     </div>
   );
 };

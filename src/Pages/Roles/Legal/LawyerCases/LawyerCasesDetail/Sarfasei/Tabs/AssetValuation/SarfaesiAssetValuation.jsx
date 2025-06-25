@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { IoLogoWhatsapp } from "react-icons/io";
-import { IoMdMail } from "react-icons/io";
-import { FaSms } from "react-icons/fa";
-import { GiMailbox } from "react-icons/gi";
-import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx"; 
+import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DispositionModal';
+import DispositionAssetValuationSarfaesi from './DispositionAssetValuationSarfaesi.jsx';
 import './SarfaesiAssetValuation.css';
 import axios from 'axios';
 
@@ -18,12 +14,13 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
         auctionDate: '',
         auctionLocation: '',
         auctionValuation: '',
-        caseId: caseId
+        caseId: caseId,
+        dispositions: []
     });
     const [dispositions, setDispositions] = useState([]);
     const getAuthHeaders = () => ({
         'Authorization': `Bearer ${localStorage.getItem('token')}`
-      });
+    });
 
     useEffect(() => {
         fetchAssetValuation();
@@ -74,15 +71,24 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
         }
 
         try {
+
             const payload = {
-                ...formData,
-                dispositions
+                auctionDate: formData.auctionDate ? new Date(formData.auctionDate).toISOString() : null,
+                auctionLocation: formData.auctionLocation || null,
+                auctionValuation: formData.auctionValuation ? parseFloat(formData.auctionValuation) : null,
+                caseId: caseId,
+                dispositions: dispositions.map(d => ({
+                    name: d.name,
+                    description: d.description
+                }))
             };
+            console.log("Posting payload:", JSON.stringify(payload, null, 2));
+
             await axios.post('/api/api/assetValuationAuctions', payload, {
                 headers: getAuthHeaders()
             });
             setIsDataExists(true);
-            
+
             if (onStageComplete) {
                 onStageComplete();
             }
@@ -95,7 +101,7 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
         if (isDataExists) return;
         setIsDispositionModalOpen(true);
     };
-    
+
     const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
     const dispositionColumns = [
@@ -103,7 +109,7 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
         { key: "description", label: "Description" }
     ];
 
-    return(
+    return (
         <div className='assetValuation-Sarfasei-container'>
             <div className='assetValuation-Sarfasei-topcontent-container'>
                 <div className='assetValuation-Sarfasei-topcontent-heading'>
@@ -114,8 +120,8 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
                         <div className="Sarfasei-assetValuation-form-row">
                             <div className="Sarfasei-assetValuation-form-group">
                                 <label>Auction Date</label>
-                                <input 
-                                    type="date" 
+                                <input
+                                    type="date"
                                     name="auctionDate"
                                     value={formData.auctionDate}
                                     onChange={handleInputChange}
@@ -125,7 +131,7 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
                             </div>
                             <div className="Sarfasei-assetValuation-form-group">
                                 <label>Auction Location</label>
-                                <input 
+                                <input
                                     type='text'
                                     name="auctionLocation"
                                     value={formData.auctionLocation}
@@ -136,7 +142,7 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
                         </div>
                         <div className="Sarfasei-assetValuation-form-group">
                             <label>Auction Valuation</label>
-                            <input 
+                            <input
                                 type='number'
                                 name="auctionValuation"
                                 value={formData.auctionValuation}
@@ -158,15 +164,15 @@ const SarfaesiAssetValuation = ({ caseId, onStageComplete }) => {
                 </div>
             </div>
 
-            <DispositionModal 
+            <DispositionAssetValuationSarfaesi
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}
             />
 
             <div className='assetValuation-Sarfasei-Bottom-btn'>
-                <CancelButton/>
-                <SaveButton 
+                <CancelButton />
+                <SaveButton
                     label={isDataExists ? 'Next' : 'Save & Next'}
                     onClick={handleSubmit}
                 />

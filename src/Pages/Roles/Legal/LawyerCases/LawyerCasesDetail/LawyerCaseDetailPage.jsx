@@ -30,12 +30,16 @@ const LawyerCaseDetailPage = () => {
           activeStageName: item.activeStageName,
           Status: item.status,
           Borrower: item.loan.borrower.name,
-          LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
-          NPADate: item.loan.lastPaymentDate,
-          CreateDate: item.loan.startDate,
-          AssignedTo: "-", // Update when available
-          Court: item.loan.borrower.address.city || "-",
-          lastModified: item.lastModified || Date.now(), // Track last modification
+          LoanAmount: item.loan?.loanAmount
+            ? `₹${item.loan.loanAmount.toLocaleString()}`
+            : "-",
+          NPADate: item.loan?.lastPaymentDate || "-",
+          CreateDate: item.loan?.startDate || "-",
+          AssignedTo: item.createdBy, // Update if data available
+          Court: item.loan?.borrower?.address?.city || "-",
+          LoanType:item.loanType || "-",
+          Tenure: item.loanTenure || "-",
+          AnnualInterestRate:item.loan.interestRate,
         };
 
         // Only update if the data has changed

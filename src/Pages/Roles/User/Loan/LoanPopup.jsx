@@ -5,85 +5,94 @@ import SaveButton from "../../../ReusableComponents/SaveButton";
 import "./LoanPage.css";
 
 const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
-  const [newLoanDetails, setNewLoanDetails] = useState({
-    ...initialData,
-    id: initialData?.id || null  // Track the auto-generated ID
-  });
-  const [popupSearchQuery, setPopupSearchQuery] = useState("");
-  const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+    const [newLoanDetails, setNewLoanDetails] = useState({
+        ...initialData,
+        id: initialData?.id || null  // Track the auto-generated ID
+    });
+    const [popupSearchQuery, setPopupSearchQuery] = useState("");
+    const getAuthHeaders = () => ({
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewLoanDetails((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handlePopupSearchChange = (e) => {
-    setPopupSearchQuery(e.target.value);
-  };
-
-  const handleSave = async () => {
-    // Map form fields to API structure
-    const payload = {
-      loanNumber: newLoanDetails.loanNumber,
-      loanType: newLoanDetails.loanType,
-      loanAmount: parseFloat(newLoanDetails.totalDueAmount) || 0,
-      disbursedAmount: parseFloat(newLoanDetails.disbursedAmount) || 0,
-      interestRate: parseFloat(newLoanDetails.annualInterestRate) || 0,
-      loanTenure: parseInt(newLoanDetails.tenure) || 0,
-      startDate: newLoanDetails.lastPaidDate,
-      endDate: newLoanDetails.defaultDate,
-      emisPending: parseInt(newLoanDetails.numberOfEmisPending) || 0,
-      repaymentFrequency: "NA",
-      emiAmount: parseFloat(newLoanDetails.emiAmount) || 0,
-      status: "NA",
-      securityType: "NA",
-      assetDetails: "NA",
-      lastPaymentDate: newLoanDetails.lastPaidDate,
-      nextDueDate: newLoanDetails.npaDate,
-      borrower: {
-        name: newLoanDetails.borrowerName,
-        contactNumber: newLoanDetails.borrowerMobile,
-        email: newLoanDetails.borrowerEmail,
-        creditScore: 750.5,
-        monthlyIncome: 65000.0,
-        jobTitle: "NA",
-        address: {
-          city: "NA",
-          state: "NA",
-          pincode: "NA",
-          addressLine: "NA"
-        }
-      }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewLoanDetails((prev) => ({ ...prev, [name]: value }));
     };
 
-    try {
-      let response;
-      if (editingLoanId) {
-        // Edit: PUT request
-        response = await axios.put(`/api/api/loans/${editingLoanId}`, payload, {
-            headers : getAuthHeaders()
-        });
-      } else {
-        // New: POST request
-        response = await axios.post("/api/api/loans", payload, {
-            headers : getAuthHeaders()
-        });
-      }
+    const handlePopupSearchChange = (e) => {
+        setPopupSearchQuery(e.target.value);
+    };
 
-      if (response.data.status === "SUCCESS") {
-        // Pass the response data back to parent
-        onSave(response.data.data);
-        onClose();
-      } else {
-        alert(response.data.message || "Failed to save the loan. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error saving loan:", error);
-      alert(error.response?.data?.message || "Failed to save the loan. Please try again.");
-    }
-  };
+    const formatDate = (date) =>
+        date ? new Date(date).toISOString().split("T")[0] : null;
+
+    const handleSave = async () => {
+        // Map form fields to API structure
+        const payload = {
+            loanNumber: newLoanDetails.loanNumber,
+            loanType: newLoanDetails.loanType,
+            clientName: newLoanDetails.clientName, // ✅ was missing
+            loanAmount: parseFloat(newLoanDetails.totalDueAmount) || 0,
+            disbursedAmount: parseFloat(newLoanDetails.disbursedAmount) || 0,
+            interestRate: parseFloat(newLoanDetails.annualInterestRate) || 0,
+            loanTenure: parseInt(newLoanDetails.tenure) || 0,
+            startDate: formatDate(newLoanDetails.lastPaidDate),
+            endDate: formatDate(newLoanDetails.defaultDate),
+            emisPending: parseInt(newLoanDetails.numberOfEmisPending) || 0,
+            repaymentFrequency: "Monthly", // ✅ fix from "NA"
+            emiAmount: parseFloat(newLoanDetails.emiAmount) || 0,
+            status: "Active", // ✅ fix from "NA"
+            securityType: "Unsecured", // ✅ fix from "NA"
+            assetDetails: "None", // ✅ fix from "NA"
+            lastPaidAmount: parseFloat(newLoanDetails.lastPaidAmount) || 0, // ✅ added
+            lastPaymentDate: formatDate(newLoanDetails.lastPaidDate),
+            outstandingAmount: parseFloat(newLoanDetails.outstandingAmount) || 0, // ✅ added
+            totalDueAmount: parseFloat(newLoanDetails.totalDueAmount) || 0, // ✅ explicitly added again
+            interestCharge: parseFloat(newLoanDetails.interestCharge) || 0, // ✅ added
+            nextDueDate: formatDate(newLoanDetails.npaDate),
+            npaDate: formatDate(newLoanDetails.npaDate),
+            borrower: {
+                name: newLoanDetails.borrowerName,
+                contactNumber: newLoanDetails.borrowerMobile,
+                email: newLoanDetails.borrowerEmail,
+                creditScore: parseFloat(newLoanDetails.creditScore) || 0,
+                monthlyIncome: parseFloat(newLoanDetails.monthlyIncome) || 0,
+                jobTitle: newLoanDetails.jobTitle || "",
+                address: {
+                    city: newLoanDetails.borrowerCity || "",
+                    state: newLoanDetails.borrowerState || "",
+                    pincode: newLoanDetails.borrowerPincode || "",
+                    addressLine: newLoanDetails.borrowerAddressLine || ""
+                }
+            }
+        };
+
+        try {
+            let response;
+            if (editingLoanId) {
+                // Edit: PUT request
+                response = await axios.put(`/api/api/loans/${editingLoanId}`, payload, {
+                    headers: getAuthHeaders()
+                });
+            } else {
+                // New: POST request
+                response = await axios.post("/api/api/loans", payload, {
+                    headers: getAuthHeaders()
+                });
+            }
+
+            if (response.data.status === "SUCCESS") {
+                // Pass the response data back to parent
+                onSave(response.data.data);
+                onClose();
+            } else {
+                alert(response.data.message || "Failed to save the loan. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error saving loan:", error);
+            alert(error.response?.data?.message || "Failed to save the loan. Please try again.");
+        }
+    };
 
     return (
         <div className="lawyer-modal">
@@ -278,9 +287,9 @@ const LoanPopup = ({ editingLoanId, onClose, onSave, initialData }) => {
                 </div>
 
                 <div className="lawyer-footer">
-          <CancelButton label="Cancel" onClick={onClose} />
-          <SaveButton label={editingLoanId ? "Update" : "Save"} onClick={handleSave} />
-        </div>
+                    <CancelButton label="Cancel" onClick={onClose} />
+                    <SaveButton label={editingLoanId ? "Update" : "Save"} onClick={handleSave} />
+                </div>
             </div>
         </div>
     );

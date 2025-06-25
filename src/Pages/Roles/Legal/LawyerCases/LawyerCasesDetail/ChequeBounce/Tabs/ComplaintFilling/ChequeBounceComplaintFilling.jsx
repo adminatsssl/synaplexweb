@@ -3,7 +3,7 @@ import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DemandNotice/DispositionModal';
+import DispositionComplaintFillingCB from '../DemandNotice/DispositionModal';
 import './ChequeBounceComplaintFilling.css';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -30,16 +30,16 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
     }, [caseId]);
 
     const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
 
     const fetchExistingData = async () => {
         try {
-            const response = await axios.get(`/api/api/complaintFilingCB/case/${caseId}`,{
+            const response = await axios.get(`/api/api/complaintFilingCB/case/${caseId}`, {
                 headers: getAuthHeaders()
             });
             console.log("GET Response:", response.data);
-            
+
             if (response.data && response.data.status === 'SUCCESS' && response.data.data) {
                 const complaintData = response.data.data;
                 setHasExistingData(true);
@@ -93,16 +93,31 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
         try {
             setLoading(true);
             const payload = {
-                ...formData,
+                caseNumber: formData.caseNumber || undefined,
+                complaintDate: formData.complaintDate || undefined, 
+                courtName: formData.courtName || undefined,
+                notes: formData.notes || undefined,
+                dispositions:
+                    formData.dispositions.length > 0
+                        ? formData.dispositions.map((d) => ({
+                            name: d.name,
+                            description: d.description
+                        }))
+                        : undefined,
                 caseId: caseId
             };
 
-            console.log("Payload : ", payload);
-            await axios.post('/api/api/complaintFilingCB', payload,{
-                headers: getAuthHeaders()
+            console.log("Payload : ", JSON.stringify(payload, null, 2));
+
+            await axios.post('/api/api/complaintFilingCB', payload, {
+                headers: {
+                    ...getAuthHeaders(),
+                    'Content-Type': 'application/json'
+                }
             });
+
             setHasExistingData(true);
-            
+
             if (onStageComplete) {
                 onStageComplete();
             }
@@ -115,7 +130,7 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
 
     const dispositionColumns = [
         { key: "name", label: "Disposition Stage" },
-        { key: "description", label: "Comment" }
+        { key: "description", label: "Comment" },
     ];
 
     return (
@@ -130,8 +145,8 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
                             <div className="chequeBounce-complaintFilling-form-row-content">
                                 <div className="chequeBounce-complaintFilling-form-group">
                                     <label>Case Number</label>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         className={`possessionnotice-input ${hasExistingData ? 'readonly-field' : ''}`}
                                         name="caseNumber"
                                         value={formData.caseNumber}
@@ -142,8 +157,8 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
                                 </div>
                                 <div className="chequeBounce-complaintFilling-form-group">
                                     <label>Court Name</label>
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         className={`possessionnotice-input ${hasExistingData ? 'readonly-field' : ''}`}
                                         name="courtName"
                                         value={formData.courtName}
@@ -156,7 +171,7 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
                             <div className="chequeBounce-complaintFilling-form-row-content">
                                 <div className="chequeBounce-complaintFilling-form-group">
                                     <label>Complaint Date</label>
-                                    <input 
+                                    <input
                                         type='date'
                                         className={`possessionnotice-input ${hasExistingData ? 'readonly-field' : ''}`}
                                         name="complaintDate"
@@ -168,7 +183,7 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
                                 </div>
                                 <div className="chequeBounce-complaintFilling-form-group">
                                     <label>Notes</label>
-                                    <textarea 
+                                    <textarea
                                         className={`chequeBounce-complaintFilling-textarea ${hasExistingData ? 'readonly-field' : ''}`}
                                         rows="3"
                                         name="notes"
@@ -187,9 +202,9 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
             <div className='chequeBounce-complaintFilling-middle-content'>
                 <div className='chequeBounce-complaintFilling-middle-content-heading'>
                     <h5>Disposition Summary</h5>
-                    <AddButton 
-                        text="Add" 
-                        onClick={openDispositionModal} 
+                    <AddButton
+                        text="Add"
+                        onClick={openDispositionModal}
                         disabled={hasExistingData}
                         style={hasExistingData ? { opacity: 0.7 } : {}}
                     />
@@ -201,14 +216,14 @@ const ChequeBounceComplaintFilling = ({ caseId, onStageComplete }) => {
 
             <div className='chequeBounce-complaintFilling-Bottom-btn'>
                 <CancelButton />
-                <SaveButton 
-                    label={hasExistingData ? 'Next' : 'Save & Next'} 
+                <SaveButton
+                    label={hasExistingData ? 'Next' : 'Save & Next'}
                     onClick={handleSaveAndNext}
                     disabled={loading || (!hasExistingData && (!formData.caseNumber || !formData.complaintDate || !formData.courtName))}
                 />
             </div>
 
-            <DispositionModal 
+            <DispositionComplaintFillingCB
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}

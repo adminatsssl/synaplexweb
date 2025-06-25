@@ -5,9 +5,15 @@ import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx";
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx";
 import NoticePreviewModal from "./NoticePreviewModal";
-import DispositionModal from "./DispositionModal";
+import DispositionModalCB from "./DispositionModal";
 import PropTypes from "prop-types";
 import axios from "axios";
+
+//Import Icon Files
+
+import LawyerGDNEmailCB from "./LawyerGenerateDemandNoticeCB/LawyerGDNEmailCB.jsx";
+import LawyerGDNWhatsappCB from "./LawyerGenerateDemandNoticeCB/LawyerGDNWhatsappCB.jsx";
+import LawyerGDNSMSCB from "./LawyerGenerateDemandNoticeCB/LawyerGDNSMSCB.jsx";
 
 // Import icons
 import whatsappIcon from "../../../../../../../../assets/icons/whatsapp.png";
@@ -25,6 +31,9 @@ const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
   const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
   const [hasExistingData, setHasExistingData] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+  const [showSmsPopup, setShowSmsPopup] = useState(false);
   const [formData, setFormData] = useState({
     noticeDeadline: "",
     noticeSentDate: "",
@@ -37,10 +46,10 @@ const ChequeBounceDemandNotice = ({ caseId, onStageComplete }) => {
     fetchExistingData();
   }, [caseId]);
 
-const getAuthHeaders = () => ({
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-  "Content-Type": "application/json",
-});
+  const getAuthHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "application/json",
+  });
 
 
   const fetchExistingData = async () => {
@@ -52,7 +61,7 @@ const getAuthHeaders = () => ({
         }
       );
       console.log("GET Response:", response.data);
-      
+
       if (response.data && response.data.status === 'SUCCESS' && response.data.data) {
         const noticeData = response.data.data;
         setHasExistingData(true);
@@ -113,12 +122,12 @@ const getAuthHeaders = () => ({
       };
       console.log("Sending POST request with payload:", payload);
       console.log("Headers:", getAuthHeaders());
-      
+
       const response = await axios.post("/api/api/demandnoticeCB", payload, {
         headers: getAuthHeaders(),
       });
       console.log("POST Response:", response.data);
-      
+
       setHasExistingData(true);
 
       if (onStageComplete) {
@@ -137,8 +146,8 @@ const getAuthHeaders = () => ({
   };
 
   const dispositionColumns = [
-    { key: "stage", label: "Disposition Stage" },
-    { key: "comment", label: "Comment" },
+    { key: "name", label: "Disposition Stage" },
+    { key: "description", label: "Comment" },
   ];
 
   return (
@@ -158,9 +167,8 @@ const getAuthHeaders = () => ({
                   <label>Notice Deadline</label>
                   <input
                     type="date"
-                    className={`notice-input ${
-                      hasExistingData ? "readonly-field" : ""
-                    }`}
+                    className={`notice-input ${hasExistingData ? "readonly-field" : ""
+                      }`}
                     name="noticeDeadline"
                     value={formData.noticeDeadline}
                     onChange={handleInputChange}
@@ -176,9 +184,8 @@ const getAuthHeaders = () => ({
                   <label>Notice Sent Date</label>
                   <input
                     type="date"
-                    className={`notice-input ${
-                      hasExistingData ? "readonly-field" : ""
-                    }`}
+                    className={`notice-input ${hasExistingData ? "readonly-field" : ""
+                      }`}
                     name="noticeSentDate"
                     value={formData.noticeSentDate}
                     onChange={handleInputChange}
@@ -196,9 +203,8 @@ const getAuthHeaders = () => ({
                 <div className="chequeBounce-demandNotice-form-group">
                   <label>Notice Type</label>
                   <select
-                    className={`notice-input ${
-                      hasExistingData ? "readonly-field" : ""
-                    }`}
+                    className={`notice-input ${hasExistingData ? "readonly-field" : ""
+                      }`}
                     name="noticeType"
                     value={formData.noticeType}
                     onChange={handleInputChange}
@@ -215,9 +221,8 @@ const getAuthHeaders = () => ({
                 <div className="chequeBounce-demandNotice-form-group">
                   <label>Comment</label>
                   <textarea
-                    className={`chequeBounce-demandNotice-textarea ${
-                      hasExistingData ? "readonly-field" : ""
-                    }`}
+                    className={`chequeBounce-demandNotice-textarea ${hasExistingData ? "readonly-field" : ""
+                      }`}
                     rows="3"
                     name="comment"
                     value={formData.comment}
@@ -248,19 +253,11 @@ const getAuthHeaders = () => ({
             <h4>View Generated Notice</h4>
             <div className="chequeBounce-demandNotice-topcontent-rightside-icon">
               <div className="chequeBounce-demandNotice-icon">
-                <img
-                  src={emailIcon}
-                  alt="Email"
-                  className="custom-icon email-icon"
-                />
-                <img
-                  src={whatsappIcon}
-                  alt="WhatsApp"
-                  className="custom-icon whatsapp-icon"
-                />
+                <img src={emailIcon} alt="Email" className="custom-icon email-icon" onClick={() => setIsEmailModalOpen(true)} style={{ cursor: 'pointer' }} />
+                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" onClick={() => setIsWhatsappModalOpen(true)} style={{ cursor: 'pointer' }} />
               </div>
               <div className="chequeBounce-demandNotice-icon">
-                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" />
+                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" onClick={() => setShowSmsPopup(true)} style={{ cursor: 'pointer' }} />
                 <img
                   src={mailboxIcon}
                   alt="Physical Mail"
@@ -308,12 +305,16 @@ const getAuthHeaders = () => ({
         onClose={closeModal}
         caseId={caseId}
       />
-      <DispositionModal
+      <DispositionModalCB
         isOpen={isDispositionModalOpen}
         onClose={closeDispositionModal}
         onSave={handleSaveDisposition}
         disabled={hasExistingData}
       />
+
+      <LawyerGDNEmailCB open={isEmailModalOpen} onClose={() => setIsEmailModalOpen(false)} />
+      <LawyerGDNWhatsappCB open={isWhatsappModalOpen} onClose={() => setIsWhatsappModalOpen(false)} />
+      {showSmsPopup && <LawyerGDNSMSCB onClose={() => setShowSmsPopup(false)} />}
     </div>
   );
 };

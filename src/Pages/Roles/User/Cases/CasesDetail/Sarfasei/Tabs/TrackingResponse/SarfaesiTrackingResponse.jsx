@@ -25,28 +25,34 @@ const SarfaesiTrackingResponse = () => {
   });
 
   useEffect(() => {
-    const fetchResponseData = async () => {
-      try {
-        const res = await axios.get(`/api/api/tracking60DayResponse/case/${id}`, {
-          headers: getAuthHeaders()
-        });
-        const data = res.data;
+  const fetchResponseData = async () => {
+    try {
+      const res = await axios.get(`/api/api/tracking60DayResponse/case/${id}`, {
+        headers: getAuthHeaders()
+      });
+      const data = res.data;
 
-        setResponseData({
-          daysRemainingForResponse: data.daysRemainingForResponse,
-          isResponseReceived: data.isResponseReceived,
-          isResponseOverdue: data.isResponseOverdue,
-          dispositions: data.dispositions || []
-        });
-      } catch (error) {
-        console.error("Error fetching tracking response data:", error);
-      }
-    };
+      // Map API's dispositions to match grid expectations
+      const mappedDispositions = (data.dispositions || []).map(d => ({
+        stage: d.name,
+        comment: d.description
+      }));
 
-    if (id) {
-      fetchResponseData();
+      setResponseData({
+        daysRemainingForResponse: data.daysRemainingForResponse?.toString() || '',
+        isResponseReceived: data.isResponseReceived,
+        isResponseOverdue: data.isResponseOverdue,
+        dispositions: mappedDispositions
+      });
+    } catch (error) {
+      console.error("Error fetching tracking response data:", error);
     }
-  }, [id]);
+  };
+
+  if (id) {
+    fetchResponseData();
+  }
+}, [id]);
 
   return (
     <div className="sarfaesi-tracking-response-container">

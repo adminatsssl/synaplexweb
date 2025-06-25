@@ -19,28 +19,30 @@ const UserCases = () => {
 
   const navigate = useNavigate();
   const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
 
   useEffect(() => {
     const fetchCases = async () => {
       try {
         const response = await axios.get(`/api/api/cases`, {
-          headers : getAuthHeaders()
+          headers: getAuthHeaders()
         });
         const caseData = response.data?.data || [];
 
         const transformed = caseData.map((item) => ({
           CaseID: item.id,
-          LoanID: item.loan.loanNumber,
-          CaseType: item.workflowType,
-          Status: item.status,
-          Borrower: item.loan.borrower.name,
-          LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
-          NPADate: item.loan.lastPaymentDate,
-          CreateDate: item.loan.startDate,
+          LoanID: item.loan?.loanNumber || "-",
+          CaseType: item.workflowType || "-",
+          Status: item.status || "-",
+          Borrower: item.loan?.borrower?.name || "-",
+          LoanAmount: item.loan?.loanAmount
+            ? `₹${item.loan.loanAmount.toLocaleString()}`
+            : "-",
+          NPADate: item.loan?.lastPaymentDate || "-",
+          CreateDate: item.loan?.startDate || "-",
           AssignedTo: "-", // Update if data available
-          Court: item.loan.borrower.address.city || "-",
+          Court: item.loan?.borrower?.address?.city || "-",
         }));
 
         setCases(transformed);

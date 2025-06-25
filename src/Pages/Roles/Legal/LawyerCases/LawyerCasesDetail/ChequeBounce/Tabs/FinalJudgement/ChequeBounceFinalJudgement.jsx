@@ -4,7 +4,7 @@ import './ChequeBounceFinalJudgement.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DemandNotice/DispositionModal';
+import DispositionFinalJudgementCB from '../DemandNotice/DispositionModal';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
@@ -93,7 +93,17 @@ const ChequeBounceFinalJudgement = ({ caseId, onStageComplete }) => {
         try {
             setLoading(true);
             const payload = {
-                ...formData,
+                judgmentDate: formData.judgmentDate,
+                judgmentType: formData.judgmentType,
+                courtOrderDocuments: formData.courtOrderDocuments,
+                judgmentSummary: formData.judgmentSummary,
+                dispositions:
+                    formData.dispositions.length > 0
+                        ? formData.dispositions.map((d) => ({
+                            name: d.name,
+                            description: d.description
+                        }))
+                        : undefined,
                 caseId: caseId
             };
 
@@ -114,9 +124,9 @@ const ChequeBounceFinalJudgement = ({ caseId, onStageComplete }) => {
     };
 
     const dispositionColumns = [
-        { key: "name", label: "Disposition Stage" },
-        { key: "description", label: "Comment" }
-    ];
+    { key: "name", label: "Disposition Stage" },
+    { key: "description", label: "Comment" },
+  ];
 
     return (
         <div className='chequeBounce-finalJudgement-container'>
@@ -209,7 +219,7 @@ const ChequeBounceFinalJudgement = ({ caseId, onStageComplete }) => {
                 />
             </div>
 
-            <DispositionModal 
+            <DispositionFinalJudgementCB 
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}

@@ -10,8 +10,8 @@ const getAuthHeaders = () => ({
 });
 
 const dispositionColumns = [
-  { key: "stage", label: "Disposition Stage" },
-  { key: "comment", label: "Comment" },
+  { key: "name", label: "Disposition Stage" },      // corresponds to `name` in JSON
+  { key: "description", label: "Comment" },         // corresponds to `description` in JSON
 ];
 
 const SarfaesiPossessionNotice = () => {

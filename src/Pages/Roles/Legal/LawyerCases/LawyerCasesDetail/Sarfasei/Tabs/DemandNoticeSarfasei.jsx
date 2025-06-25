@@ -9,6 +9,12 @@ import AddButton from "../../../../../../ReusableComponents/AddButton.jsx";
 import DispositionModal from "./DispositionModal";
 import axios from "axios";
 import PropTypes from "prop-types";
+import UploadDocsDemandNoticeSarfaesi from "./UploadDocsDemandNoticeSarfaesi.jsx";
+
+// icons component
+import LawyerGDNEmail from "./LawyerGenerateDemandNoticeSarfaesi/LawyerGDNEmail.jsx";
+import LawyerGDNSMS from "./LawyerGenerateDemandNoticeSarfaesi/LawyerGDNSMS.jsx";
+import LawyerGDNWhatsapp from "./LawyerGenerateDemandNoticeSarfaesi/LawyerGDNWhatsapp.jsx";
 
 // Import icons
 
@@ -24,7 +30,12 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+  const [showSmsPopup, setShowSmsPopup] = useState(false);
   const [isDispositionModalOpen, setIsDispositionModalOpen] = useState(false);
+  const [isUploadDocsModalOpen, setIsUploadDocsModalOpen] = useState(false);
+  const [uploadedDocuments, setUploadedDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasExistingData, setHasExistingData] = useState(false);
   const [noticeData, setNoticeData] = useState({
@@ -77,6 +88,8 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
   const closeModal = () => setIsModalOpen(false);
   const openDispositionModal = () => setIsDispositionModalOpen(true);
   const closeDispositionModal = () => setIsDispositionModalOpen(false);
+  const openUploadDocsModal = () => setIsUploadDocsModalOpen(true);
+  const closeUploadDocsModal = () => setIsUploadDocsModalOpen(false);
 
   const handleSaveDisposition = (dispositionData) => {
     setNoticeData((prev) => ({
@@ -102,9 +115,17 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
     try {
       setLoading(true);
       const payload = {
-        ...noticeData,
+        noticeDeadline: new Date(noticeData.noticeDeadline).toISOString(),
+        noticeSentDate: new Date(noticeData.noticeSentDate).toISOString(),
+        noticeType: noticeData.noticeType,
+        remarks: noticeData.remarks,
+        dispositions: noticeData.dispositions.map(d => ({
+          name: d.name,
+          description: d.description
+        })),
         caseId: caseId,
       };
+      // console.log("Posting payload:", JSON.stringify(payload, null, 2));
 
       await axios.post("/api/api/demandNotice", payload, {
         headers: getAuthHeaders(),
@@ -126,9 +147,16 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
     { key: "description", label: "Comment" },
   ];
 
-  const documentData = [
-    { name: "Aadhar", createdDate: "Hello world", uploadedBy: "Hello world" },
-  ];
+  const handleSaveDocument = (newDoc) => {
+    setUploadedDocuments(prev => [...prev, newDoc]);
+    closeUploadDocsModal();
+  };
+
+  const documentData = uploadedDocuments.map((doc, index) => ({
+    name: doc.docName,
+    createdDate: new Date().toLocaleDateString(), // or backend-provided if available
+    uploadedBy: "You", // Replace with actual user if available
+  }));
 
   const documentColumns = [
     { key: "name", label: "Document Name" },
@@ -215,19 +243,12 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
             <h4>View Generated Notice</h4>
             <div className="demandNotice-Sarfasei-topcontent-rightside-icon">
               <div className="demandNotice-Sarfasei-icon">
-                <img
-                  src={emailIcon}
-                  alt="Email"
-                  className="custom-icon email-icon"
-                />
-                <img
-                  src={whatsappIcon}
-                  alt="WhatsApp"
-                  className="custom-icon whatsapp-icon"
-                />
+                <img src={emailIcon} alt="Email" className="custom-icon email-icon" onClick={() => setIsEmailModalOpen(true)} style={{ cursor: 'pointer' }} />
+                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" onClick={() => setIsWhatsappModalOpen(true)} style={{ cursor: 'pointer' }} />
+
               </div>
               <div className="demandNotice-Sarfasei-icon">
-                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" />
+                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" onClick={() => setShowSmsPopup(true)} style={{ cursor: 'pointer' }} />
                 <img
                   src={mailboxIcon}
                   alt="Physical Mail"
@@ -259,7 +280,7 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
       <div className="demandNotice-Sarfasei-Bottom-content">
         <div className="demandNotice-Sarfasei-Bottom-content-heading">
           <h5>Uploaded Documents</h5>
-          <AddButton text="Add" onClick={""} disabled={hasExistingData} />
+          <AddButton text="Add" onClick={openUploadDocsModal} disabled={hasExistingData} />
         </div>
         <div className="demandNotice-Sarfasei-Bottom-content-formdata">
           <ReusableGrid columns={documentColumns} data={documentData} />
@@ -286,7 +307,17 @@ const DemandNoticeSarfasei = ({ caseId, onStageComplete }) => {
         onSave={handleSaveDisposition}
         disabled={hasExistingData}
       />
+      <UploadDocsDemandNoticeSarfaesi
+        isOpen={isUploadDocsModalOpen}
+        onClose={closeUploadDocsModal}
+        onSave={handleSaveDocument}
+      />
+
+      <LawyerGDNEmail open={isEmailModalOpen} onClose={() => setIsEmailModalOpen(false)} />
+      <LawyerGDNWhatsapp open={isWhatsappModalOpen} onClose={() => setIsWhatsappModalOpen(false)} />
+      {showSmsPopup && <LawyerGDNSMS onClose={() => setShowSmsPopup(false)} />}
     </div>
+
   );
 };
 

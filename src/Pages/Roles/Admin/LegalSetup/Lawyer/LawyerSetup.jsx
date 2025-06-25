@@ -19,6 +19,7 @@ function LawyerSetup() {
       const response = await axios.get("/api/api/lawyers", {
         headers: getAuthHeaders()
       });
+      console.log("data",response)
       if (response.data.status === "SUCCESS") {
         setLawyers(response.data.data);
       } else {

@@ -2,62 +2,76 @@
 import React, { useState, useEffect } from "react";
 import "./FilteredForm.css";
 import ReusableGrid from "../../../../ReusableComponents/ReusableGrid.jsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function FilteredForm({ activeTab, selectedStage }) {
+export default function FilteredForm({ activeTab, activeStage }) {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const navigate = useNavigate();
+
+  const getAuthHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  });
 
   useEffect(() => {
-    // Mock data to simulate fetch
-    const mock = [
-        {
-          cnr: "CNR123",
-          createdDate: "2024-05-01",
-          status: "Open",
-          borrower: "John Doe",
-          court: "Delhi Court",
-          hearingDate: "2024-06-10",
-          lawyer: "Amit",
-          tab: "SARFASEI",
-          stage: "Demand Notice Generation - Section 13(2)"
-        },
-        {
-          cnr: "CNR999",
-          createdDate: "2024-05-05",
-          status: "Closed",
-          borrower: "Jane Smith",
-          court: "Mumbai Court",
-          hearingDate: "2024-07-01",
-          lawyer: "Priya",
-          tab: "Cheque Bounce",
-          stage: "Tracking 60 Day Response - Section 138(c)"
-        },
-        {
-          cnr: "CNR456",
-          createdDate: "2024-05-10",
-          status: "Open",
-          borrower: "Ravi Kumar",
-          court: "Chennai Court",
-          hearingDate: "2024-06-20",
-          lawyer: "Suman",
-          tab: "SARFASEI",
-          stage: "Possession Notice - Section 13(4)"  // 👈 This matches the selected stage
-        }
-      ];
-      
+    const fetchCases = async () => {
+      try {
+        const response = await axios.get(`api/api/cases/ActivityDeatils`, {
+          headers: getAuthHeaders(),
+        });
 
-    setData(mock);
+        const workflowGroups = response.data || [];
+
+        // Flatten and transform case data
+         const transformed = workflowGroups.flatMap((group) =>
+          group.cases.map((item) => ({
+            CaseID: item.id,
+            cnr: item.cnrNumber || "-",
+            createdDate: item.createdDate
+              ? item.hearingDate.split(" ")[0]
+              : "-",
+            status: item.status || "-",
+            borrower: item.borrower || "-",
+            court: item.court || "-",
+            hearingDate: item.hearingDate
+              ? item.hearingDate.split(" ")[0]
+              : "-",
+            lawyer: item.lawyer || "-",
+            tab: group.workflowType?.toUpperCase()?.trim() || "-",
+            stage: item.activeStageName?.trim() || "-",
+          }))
+        );
+
+        setData(transformed);
+      } catch (error) {
+        console.error("Error fetching workflow case data:", error);
+      }
+    };
+
+    fetchCases();
   }, []);
 
   useEffect(() => {
-    if (!activeTab || !selectedStage) return;
+    if (!activeTab || !activeStage) return;
 
-    const tabStageFiltered = data.filter(
-      (d) => d.tab === activeTab && d.stage === selectedStage.label
+    const normalizedStage = activeStage.trim().toLowerCase();
+    const normalizedTab = activeTab.trim().toUpperCase();
+
+    const filteredData = data.filter(
+      (d) =>
+        d.tab === normalizedTab &&
+        d.stage.trim().toLowerCase() === normalizedStage
     );
 
-    setFiltered(tabStageFiltered);
-  }, [activeTab, selectedStage, data]);
+    setFiltered(filteredData);
+  }, [activeTab, activeStage, data]);
+
+  const handleRowClick = (row) => {
+    if (row?.CaseID) {
+      navigate(`/lawyercase/${row.CaseID}`);
+    }
+  };
 
   const columns = [
     { key: "cnr", label: "CNR No." },
@@ -66,17 +80,20 @@ export default function FilteredForm({ activeTab, selectedStage }) {
     { key: "borrower", label: "Borrower" },
     { key: "court", label: "Court" },
     { key: "hearingDate", label: "Hearing Date" },
-    { key: "lawyer", label: "Lawyer" }
+    { key: "lawyer", label: "Lawyer" },
   ];
 
   return (
     <div className="activity-form-wrapper">
-      <ReusableGrid 
-        columns={columns} 
-        data={selectedStage?.count > 0 ? filtered : []} 
-      />
+      {filtered.length === 0 ? (
+        <div className="no-data-msg">No cases found for selected stage.</div>
+      ) : (
+        <ReusableGrid
+          columns={columns}
+          data={filtered}
+          onRowClick={handleRowClick}
+        />
+      )}
     </div>
   );
-  
-  
 }

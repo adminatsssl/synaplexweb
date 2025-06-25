@@ -1,79 +1,126 @@
-import React from 'react';
-import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
-import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
-import './ChequeBounceComplaintFilling.css'
+import './ChequeBounceComplaintFilling.css';
 
-const dispositionData = [
-        { stage: "Stage 1", comment: "Hello world" },
-    ];
+const getAuthHeaders = () => ({
+  'Authorization': `Bearer ${localStorage.getItem('token')}`
+});
 
-    const dispositionColumns = [
-        { key: "stage", label: "Disposition Stage" },
-        { key: "comment", label: "Comment" },
-    ];
+const ChequeBounceComplaintFilling = () => {
+  const { id: caseId } = useParams();
 
-const ChequeBounceComplaintFilling = ()=>{
-    return(
-        <div className='chequeBounce-complaintFilling-container'>
+  const [complaintData, setComplaintData] = useState({
+    caseNumber: '',
+    courtName: '',
+    complaintDate: '',
+    notes: ''
+  });
 
-            <div className='chequeBounce-complaintFilling-topcontent-container'>
-                <div className='chequeBounce-complaintFilling-topcontent-heading'>
-                    <h5>Complaint Filing</h5>
-                </div>
-                <div className='chequeBounce-complaintFilling-topcontent'>
+  const [dispositionData, setDispositionData] = useState([]);
 
-                    <div className='chequeBounce-complaintFilling-topcontent-leftside'>
-                        <div className="chequeBounce-complaintFilling-form-row">
-                            <div className="chequeBounce-complaintFilling-form-row-content">
-                                <div className="chequeBounce-complaintFilling-form-group">
-                                <label>Case Number</label>
-                                <input type="text" className="possessionnotice-input" />
-                            </div>
-                            <div className="chequeBounce-complaintFilling-form-group">
-                                <label>Court Name</label>
-                                <input type="text" className="possessionnotice-input" />
-                            </div>
+  useEffect(() => {
+    if (caseId) {
+      fetchComplaintData();
+    }
+  }, [caseId]);
 
-                            </div>
-                            <div className="chequeBounce-complaintFilling-form-row-content">
-                                <div className="chequeBounce-complaintFilling-form-group">
-                               <label>Complaint Date</label>
-                            <input type='date'></input>
-                            </div>
-                            <div className="chequeBounce-complaintFilling-form-group">
-                            <label>Notes</label>
-                            <textarea className="chequeBounce-complaintFilling-textarea" rows="3"></textarea>
-                        </div>
+  const fetchComplaintData = async () => {
+    try {
+      const response = await axios.get(`/api/api/complaintFilingCB/case/${caseId}`, {
+        headers: getAuthHeaders()
+      });
 
-                            </div>
-                            
-                            
-                        </div>
-                        
-                    </div>
+      console.log("full response",response)
 
+      const data = response.data.data;
 
-                </div>
-            </div>
+      setComplaintData({
+        caseNumber: data.caseNumber || '',
+        courtName: data.courtName || '',
+        complaintDate: data.complaintDate || '',
+        notes: data.notes || ''
+      });
 
-            <div className='chequeBounce-complaintFilling-middle-content'>
-                <div className='chequeBounce-complaintFilling-middle-content-heading'>
-                    <h5>Disposition Summary</h5>
-                </div>
-                <div className='chequeBounce-complaintFilling-middle-content-formdata'>
-                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
-                </div>
-            </div>
+      setDispositionData(data.dispositions || []);
+      console.log("Complaint Filing Case ID:", caseId);
 
-            <div className='chequeBounce-complaintFilling-Bottom-btn'>
-                <CancelButton/>
-                <SaveButton label='Save & Next'/>
+    } catch (error) {
+      console.error("Error fetching complaint filing data:", error);
+    }
+  };
 
-            </div>
+  const dispositionColumns = [
+  { key: "name", label: "Disposition Stage" },
+  { key: "description", label: "Comment" },
+];
 
+  return (
+    <div className='chequeBounce-complaintFilling-container'>
+      <div className='chequeBounce-complaintFilling-topcontent-container'>
+        <div className='chequeBounce-complaintFilling-topcontent-heading'>
+          <h5>Complaint Filing</h5>
         </div>
-    );
+        <div className='chequeBounce-complaintFilling-topcontent'>
+          <div className='chequeBounce-complaintFilling-topcontent-leftside'>
+            <div className="chequeBounce-complaintFilling-form-row">
+              <div className="chequeBounce-complaintFilling-form-row-content">
+                <div className="chequeBounce-complaintFilling-form-group">
+                  <label>Case Number</label>
+                  <input
+                    type="text"
+                    disabled
+                    className="possessionnotice-input"
+                    value={complaintData.caseNumber}
+                  />
+                </div>
+                <div className="chequeBounce-complaintFilling-form-group">
+                  <label>Court Name</label>
+                  <input
+                    type="text"
+                    disabled
+                    className="possessionnotice-input"
+                    value={complaintData.courtName}
+                  />
+                </div>
+              </div>
+
+              <div className="chequeBounce-complaintFilling-form-row-content">
+                <div className="chequeBounce-complaintFilling-form-group">
+                  <label>Complaint Date</label>
+                  <input
+                    type='date'
+                    disabled
+                    value={complaintData.complaintDate}
+                  />
+                </div>
+                <div className="chequeBounce-complaintFilling-form-group">
+                  <label>Notes</label>
+                  <textarea
+                    className="chequeBounce-complaintFilling-textarea"
+                    disabled
+                    rows="3"
+                    value={complaintData.notes}
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className='chequeBounce-complaintFilling-middle-content'>
+        <div className='chequeBounce-complaintFilling-middle-content-heading'>
+          <h5>Disposition Summary</h5>
+        </div>
+        <div className='chequeBounce-complaintFilling-middle-content-formdata'>
+          <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+        </div>
+      </div>
+
+    </div>
+  );
 };
 
 export default ChequeBounceComplaintFilling;

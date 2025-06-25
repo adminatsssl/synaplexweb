@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
-import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx";
-import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import './SarfaesiAuctionRecovery.css';
+import { useParams } from "react-router-dom";
 
+// ✅ Utility to fetch auth headers
 const getAuthHeaders = () => ({
   'Authorization': `Bearer ${localStorage.getItem('token')}`
 });
 
-const SarfaesiAuctionRecovery = ({ caseID }) => {
+const SarfaesiAuctionRecovery = () => {
+  // ✅ FIXED: Call useParams as a function to extract caseId from URL
+  const { id: caseId } = useParams();
+
   const [recoveryAmount, setRecoveryAmount] = useState("");
   const [recoveryDate, setRecoveryDate] = useState("");
   const [recoveryStatus, setRecoveryStatus] = useState("");
@@ -18,32 +21,32 @@ const SarfaesiAuctionRecovery = ({ caseID }) => {
   const [dispositionData, setDispositionData] = useState([]);
 
   const dispositionColumns = [
-    { key: "stage", label: "Disposition Stage" },
-    { key: "comment", label: "Comment" },
+    { key: "name", label: "Disposition Stage" },      // correct keys
+    { key: "description", label: "Comment" },
   ];
 
   useEffect(() => {
-    if (!caseID) return;
+    if (!caseId) return;
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(`api/api/auctionRecovery/case/${caseID}`, {
+        // ✅ API call with caseId in the URL
+        const response = await axios.get(`/api/api/auctionRecovery/case/${caseId}`, {
           headers: getAuthHeaders()
         });
+
         const data = response.data;
 
+        // ✅ Populate fields safely using nullish coalescing
         setRecoveryAmount(data.recoveryAmount ?? "");
         setRecoveryDate(data.recoveryDate ?? "");
         setRecoveryStatus(data.recoveryStatus ?? "");
         setRecoveryMode(data.recoveryMode ?? "");
         setRemark(data.remark ?? "");
 
+        // ✅ Map disposition data if it's an array
         if (Array.isArray(data.dispositions)) {
-          const mappedDispositions = data.dispositions.map((disp, idx) => ({
-            stage: disp.stage || `Stage ${idx + 1}`,
-            comment: disp.comment || "",
-          }));
-          setDispositionData(mappedDispositions);
+          setDispositionData(data.dispositions); // ✅ directly use the API data
         } else {
           setDispositionData([]);
         }
@@ -53,7 +56,7 @@ const SarfaesiAuctionRecovery = ({ caseID }) => {
     };
 
     fetchData();
-  }, [caseID]);
+  }, [caseId]); // ✅ Refetch if caseId changes
 
   return (
     <div className="sarfaesi-auctionRecovery-container">
@@ -67,22 +70,20 @@ const SarfaesiAuctionRecovery = ({ caseID }) => {
             <div className='sarfaesi-auctionRecovery-input-container'>
               <div className='sarfaesi-auctionRecovery-input'>
                 <label>Recovery Amount</label>
-                <input 
-                  type='text' 
-                  placeholder='0.00' 
-                  value={recoveryAmount} 
+                <input
+                  type='text'
+                  placeholder='0.00'
+                  value={recoveryAmount}
                   disabled
-                  onChange={e => setRecoveryAmount(e.target.value)} 
                 />
               </div>
               <div className='sarfaesi-auctionRecovery-input'>
                 <label>Recovery Date</label>
-                <input 
-                  type='date' 
-                  placeholder='mm/dd/yyyy' 
+                <input
+                  type='date'
+                  placeholder='mm/dd/yyyy'
                   value={recoveryDate}
                   disabled
-                  onChange={e => setRecoveryDate(e.target.value)} 
                 />
               </div>
             </div>
@@ -90,33 +91,30 @@ const SarfaesiAuctionRecovery = ({ caseID }) => {
             <div className="sarfaesi-auctionRecovery-input-container">
               <div className='sarfaesi-auctionRecovery-input'>
                 <label>Recovery Status</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Enter recovery status"
-                  value={recoveryStatus} 
+                  value={recoveryStatus}
                   disabled
-                  onChange={e => setRecoveryStatus(e.target.value)} 
                 />
               </div>
 
               <div className='sarfaesi-auctionRecovery-input'>
                 <label>Recovery Mode</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Enter recovery mode"
                   disabled
-                  value={recoveryMode} 
-                  onChange={e => setRecoveryMode(e.target.value)} 
+                  value={recoveryMode}
                 />
               </div>
             </div>
 
             <div>
               <label>Remark</label>
-              <textarea 
-                value={remark} 
+              <textarea
+                value={remark}
                 disabled
-                onChange={e => setRemark(e.target.value)} 
               />
             </div>
           </div>
@@ -132,10 +130,6 @@ const SarfaesiAuctionRecovery = ({ caseID }) => {
         </div>
       </div>
 
-      <div className='sarfaesi-auctionRecovery-Bottom-btn'>
-        <CancelButton />
-        <SaveButton label='Save & Next' />
-      </div>
     </div>
   );
 };

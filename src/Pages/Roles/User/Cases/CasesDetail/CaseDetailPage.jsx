@@ -15,8 +15,8 @@ const CaseDetailPage = () => {
   useEffect(() => {
     const fetchCaseDetail = async () => {
       try {
-        const response = await axios.get(`/api/api/cases/${id}`,{
-          headers:getAuthHeaders()
+        const response = await axios.get(`/api/api/cases/${id}`, {
+          headers: getAuthHeaders()
         });
         const item = response.data?.data;
 
@@ -27,11 +27,17 @@ const CaseDetailPage = () => {
             CaseType: item.workflowType,
             Status: item.status,
             Borrower: item.loan.borrower.name,
-            LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
-            NPADate: item.loan.lastPaymentDate,
-            CreateDate: item.loan.startDate,
-            AssignedTo: "-", // Update when available
-            Court: item.loan.borrower.address.city || "-",
+            LoanAmount: item.loan?.loanAmount
+              ? `₹${item.loan.loanAmount.toLocaleString()}`
+              : "-",
+            NPADate: item.loan?.lastPaymentDate || "-",
+            CreateDate: item.loan?.startDate || "-",
+            AssignedTo: "-", // Update if data available
+            Court: item.loan?.borrower?.address?.city || "-",
+            activeStageName: item.activeStageName,
+            LoanType: item.loanType || "-",
+            Tenure: item.loanTenure || "-",
+            AnnualInterestRate:item.loan.interestRate || "-",
           };
           setCaseData(transformedCase);
         } else {

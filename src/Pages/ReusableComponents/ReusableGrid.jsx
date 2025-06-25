@@ -1,10 +1,14 @@
 import React, { useState, useMemo } from "react";
 import "./Styles/ReusableGrid.css";
 
-const ReusableGrid = ({ columns, data, onRowClick }) => {
+const ReusableGrid = ({ columns, data, onRowClick, onPageChange, page, totalPages }) => {
   const [filters, setFilters] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 15;
+  const [internalPage, setInternalPage] = useState(1);
+  const internalRecordsPerPage = 10;
+
+  const isExternalPagination = typeof onPageChange === "function";
+  const currentPage = isExternalPagination ? page + 1 : internalPage;
+  
 
   const [columnWidths, setColumnWidths] = useState(
     columns.reduce((acc, col) => {
@@ -15,7 +19,7 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-    setCurrentPage(1);
+    setInternalPage(1);
   };
 
   const filteredData = useMemo(() => {
@@ -28,15 +32,27 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
     );
   }, [filters, data, columns]);
 
-  const totalRecords = filteredData.length;
-  const totalPages = Math.ceil(totalRecords / recordsPerPage);
-  const currentData = filteredData.slice(
-    (currentPage - 1) * recordsPerPage,
-    currentPage * recordsPerPage
-  );
+  const totalPageCount = isExternalPagination
+    ? totalPages
+    : Math.ceil(filteredData.length / internalRecordsPerPage);
+  const recordsPerPage = isExternalPagination
+    ? data.length
+    : internalRecordsPerPage;
 
-  const goToPage = (page) => {
-    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  const paginatedData = useMemo(() => {
+    if (isExternalPagination) return data;
+    return filteredData.slice(
+      (currentPage - 1) * recordsPerPage,
+      currentPage * recordsPerPage
+    );
+  }, [filteredData, data, currentPage, recordsPerPage, isExternalPagination]);
+
+  const goToPage = (pageNum) => {
+    if (isExternalPagination) {
+      onPageChange(pageNum - 1); // backend is 0-indexed
+    } else {
+      setInternalPage(Math.max(1, Math.min(pageNum, totalPageCount)));
+    }
   };
 
   // Resizing Logic
@@ -103,24 +119,24 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
           </tr>
         </thead>
         <tbody>
-  {currentData.map((row, index) => (
-    <tr key={index} onClick={() => onRowClick?.(row)}>
-      {columns.map((col) => {
-        const isExpanded = columnWidths[col.key] > 150; // Adjust this as needed
-        return (
-          <td
-            key={col.key}
-            style={{ width: columnWidths[col.key] }}
-            className={isExpanded ? "show-full-content" : ""}
-            title={row[col.key]} // Optional hover tooltip
-          >
-            {col.render ? col.render(row) : row[col.key]}
-          </td>
-        );
-      })}
-    </tr>
-  ))}
-</tbody>
+          {paginatedData.map((row, index) => (
+            <tr key={index} onClick={() => onRowClick?.(row)}>
+              {columns.map((col) => {
+                const isExpanded = columnWidths[col.key] > 150;
+                return (
+                  <td
+                    key={col.key}
+                    style={{ width: columnWidths[col.key] }}
+                    className={isExpanded ? "show-full-content" : ""}
+                    title={row[col.key]}
+                  >
+                    {col.render ? col.render(row) : row[col.key]}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
       </table>
 
       {/* Pagination Controls */}
@@ -128,17 +144,32 @@ const ReusableGrid = ({ columns, data, onRowClick }) => {
         <button onClick={() => goToPage(1)} disabled={currentPage === 1}>
           &#xab;
         </button>
-        <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+        <button
+          onClick={() => goToPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
           &#x2039;
         </button>
+
         <span>
-          {Math.min((currentPage - 1) * recordsPerPage + 1, totalRecords)} to{" "}
-          {Math.min(currentPage * recordsPerPage, totalRecords)} of {totalRecords}
+          {isExternalPagination
+            ? `Page ${currentPage} of ${totalPageCount}`
+            : `${Math.min((currentPage - 1) * recordsPerPage + 1, filteredData.length)} to ${Math.min(
+                currentPage * recordsPerPage,
+                filteredData.length
+              )} of ${filteredData.length}`}
         </span>
-        <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+
+        <button
+          onClick={() => goToPage(currentPage + 1)}
+          disabled={currentPage === totalPageCount}
+        >
           &#x203a;
         </button>
-        <button onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>
+        <button
+          onClick={() => goToPage(totalPageCount)}
+          disabled={currentPage === totalPageCount}
+        >
           &#xbb;
         </button>
       </div>

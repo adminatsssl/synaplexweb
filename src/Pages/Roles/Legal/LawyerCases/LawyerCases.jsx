@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import LawyerAddCases from "./LawyerAddCases.jsx";
@@ -35,11 +35,13 @@ const LawyerCases = () => {
         CaseType: item.workflowType,
         Status: item.status,
         Borrower: item.loan.borrower.name,
-        LoanAmount: `₹${item.loan.loanAmount.toLocaleString()}`,
-        NPADate: item.loan.lastPaymentDate,
-        CreateDate: item.loan.startDate,
+        LoanAmount: item.loan?.loanAmount
+          ? `₹${item.loan.loanAmount.toLocaleString()}`
+          : "-",
+        NPADate: item.loan?.lastPaymentDate || "-",
+        CreateDate: item.loan?.startDate || "-",
         AssignedTo: "-", // Update if data available
-        Court: item.loan.borrower.address.city || "-",
+        Court: item.loan?.borrower?.address?.city || "-",
       }));
 
       setCases(transformed);
@@ -89,7 +91,7 @@ const LawyerCases = () => {
       disableFilter: true,
       render: (row) => (
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          
+
           <IconButton
             type="edit"
             onClick={(e) => {

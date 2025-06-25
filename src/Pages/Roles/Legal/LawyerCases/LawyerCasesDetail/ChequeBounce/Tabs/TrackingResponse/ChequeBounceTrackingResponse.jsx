@@ -4,7 +4,7 @@ import './ChequeBounceTrackingResponse.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DemandNotice/DispositionModal';
+import DispositionTrackingResponseCB from '../DemandNotice/DispositionModal';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
@@ -122,9 +122,9 @@ const ChequeBounceTrackingResponse = ({ caseId, onStageComplete }) => {
     };
 
     const dispositionColumns = [
-        { key: "name", label: "Disposition Stage" },
-        { key: "description", label: "Comment" }
-    ];
+    { key: "name", label: "Disposition Stage" },
+    { key: "description", label: "Comment" },
+  ];
 
     return (
         <div className="chequeBounce-trackingResponse-container">
@@ -227,7 +227,7 @@ const ChequeBounceTrackingResponse = ({ caseId, onStageComplete }) => {
                 />
             </div>
 
-            <DispositionModal 
+            <DispositionTrackingResponseCB 
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}

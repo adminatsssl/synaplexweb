@@ -3,7 +3,7 @@ import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import ReusableGrid from "../../../../../../../ReusableComponents/ReusableGrid.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DispositionModal';
+import DispositionPossessionNoticeSarfaesi from './DispositionPossessionNoticeSarfaesi.jsx';
 import './SarfaesiPossessionNotice.css'
 import axios from 'axios';
 
@@ -26,10 +26,10 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
     }, [caseId]);
     const getAuthHeaders = () => ({
         'Authorization': `Bearer ${localStorage.getItem('token')}`
-      });
+    });
     const fetchPossessionNotice = async () => {
         try {
-            const response = await axios.get(`/api/api/possessionNotice/case/${caseId}`,{
+            const response = await axios.get(`/api/api/possessionNotice/case/${caseId}`, {
                 headers: getAuthHeaders()
             });
             const data = response.data;
@@ -74,15 +74,26 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
         }
 
         try {
+
             const payload = {
-                ...formData,
-                dispositions
+                noticeSentDate: formData.noticeSentDate ? new Date(formData.noticeSentDate).toISOString() : null,
+                possessionDate: formData.possessionDate ? new Date(formData.possessionDate).toISOString() : null,
+                noticeType: formData.noticeType,
+                assetDetails: formData.assetDetails || null,
+                remarks: formData.remarks || null,
+                caseId: caseId,
+                dispositions: dispositions.map(d => ({
+                    name: d.name,
+                    description: d.description
+                }))
             };
+            // console.log("Posting payload:", JSON.stringify(payload, null, 2));
+
             await axios.post('/api/api/possessionNotice', payload, {
                 headers: getAuthHeaders()
             });
             setIsDataExists(true);
-            
+
             if (onStageComplete) {
                 onStageComplete();
             }
@@ -95,7 +106,7 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
         if (isDataExists) return;
         setIsDispositionModalOpen(true);
     };
-    
+
     const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
     const dispositionColumns = [
@@ -103,7 +114,7 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
         { key: "description", label: "Description" }
     ];
 
-    return(
+    return (
         <div className='possessionNotice-Sarfasei-container'>
             <div className='possessionNotice-Sarfasei-topcontent-container'>
                 <div className='possessionNotice-Sarfasei-topcontent-heading'>
@@ -114,8 +125,8 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                         <div className="Sarfasei-possessionnotice-form-row">
                             <div className="Sarfasei-possessionnotice-form-group">
                                 <label>Notice Sent Date</label>
-                                <input 
-                                    type="date" 
+                                <input
+                                    type="date"
                                     name="noticeSentDate"
                                     value={formData.noticeSentDate}
                                     onChange={handleInputChange}
@@ -125,8 +136,8 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                             </div>
                             <div className="Sarfasei-possessionnotice-form-group">
                                 <label>Possession Date</label>
-                                <input 
-                                    type="date" 
+                                <input
+                                    type="date"
                                     name="possessionDate"
                                     value={formData.possessionDate}
                                     onChange={handleInputChange}
@@ -136,7 +147,7 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                             </div>
                             <div className="Sarfasei-possessionnotice-form-group">
                                 <label>Notice Type</label>
-                                <select 
+                                <select
                                     name="noticeType"
                                     value={formData.noticeType}
                                     onChange={handleInputChange}
@@ -151,7 +162,7 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                         </div>
                         <div>
                             <label>Asset Details</label>
-                            <input 
+                            <input
                                 type='text'
                                 name="assetDetails"
                                 value={formData.assetDetails}
@@ -161,8 +172,8 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                         </div>
                         <div className="Sarfasei-possessionnotice-form-group">
                             <label>Remarks</label>
-                            <textarea 
-                                className="Sarfaesi-possessionnotice-textarea" 
+                            <textarea
+                                className="Sarfaesi-possessionnotice-textarea"
                                 rows="3"
                                 name="remarks"
                                 value={formData.remarks}
@@ -184,15 +195,15 @@ const SarfaesiPossessionNotice = ({ caseId, onStageComplete }) => {
                 </div>
             </div>
 
-            <DispositionModal 
+            <DispositionPossessionNoticeSarfaesi
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}
             />
 
             <div className='possessionNotice-Sarfasei-Bottom-btn'>
-                <CancelButton/>
-                <SaveButton 
+                <CancelButton />
+                <SaveButton
                     label={isDataExists ? 'Next' : 'Save & Next'}
                     onClick={handleSubmit}
                 />

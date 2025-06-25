@@ -6,6 +6,8 @@ import './CaseDetail.css';
 import ArbitrationContent from "./Arbitration/ArbitrationContent.jsx";
 import SarfaseiContent from "./Sarfasei/SarfaesiContent.jsx";
 import ChequeBounceContent from "./ChequeBounce/ChequeBounceContent.jsx";
+import LawyerDRTContent from "./DRT/LawyerDRTContent.jsx";
+import LawyerCriminalComplaintContent from "./CriminalComplaint/LawyerCriminalComplaintContent.jsx";
 
 // Map stage names to step numbers
 const stageToStepMap = {
@@ -121,8 +123,8 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
 
                     <div className="case-detailpage-borrowerContainer-content">
                         <p>CNR No.<br /><strong>{caseData.LoanID}</strong></p>
-                        <p>File No.<br /><strong>{caseData.CaseType}</strong> </p>
-                        <p>Case Type<br /><strong>{caseData.LoanAmount}</strong> </p>
+                        <p>File No.<br /><strong>{caseData.CaseID}</strong> </p>
+                        <p>Case Type<br /><strong>{caseData.CaseType}</strong> </p>
                         <p>Stage<br />
                             <strong className={stageUpdated ? "stage-update-highlight" : ""}>
                                 {caseData.activeStageName}
@@ -130,8 +132,8 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
                             </strong>
                         </p>
                         <p>Associated Court<br /><strong> {caseData.Court}</strong> </p>
-                        <p>Created On<br /><strong>{caseData.AssignedTo}</strong> </p>
-                        <p>Created By<br /><strong>{caseData.Court}</strong> </p>
+                        <p>Created By<br /><strong>{caseData.AssignedTo}</strong> </p>
+                        <p>Created On<br /><strong>{caseData.CreateDate}</strong> </p>
                         <p>Last Update<br /><strong>{caseData.CreateDate}</strong></p>
                     </div>
                 </div>
@@ -144,33 +146,55 @@ const LawyerCasesDetail = ({ caseData, lastUpdateTime }) => {
                     <div className="case-detailpage-loanContainer-content">
                         <p>Loan ID<br /><strong>{caseData.LoanID}</strong></p>
                         <p>Amount<br /><strong>{caseData.LoanAmount}</strong> </p>
-                        <p>Tenure<br /><strong>{caseData.CaseType}</strong> </p>
-                        <p>Annual Interest Rate<br /><strong>20</strong> </p>
-                        <p>Loan Type<br /><strong>Personal Loan</strong> </p>
+                        <p>Tenure<br /><strong>{caseData.Tenure}</strong> </p>
+                        <p>Annual Interest Rate<br /><strong>{caseData.AnnualInterestRate}</strong> </p>
+                        <p>Loan Type<br /><strong>{caseData.LoanType}</strong> </p>
                         <p>Default Date<br /><strong>{caseData.CreateDate}</strong></p>
                         <p>NPA Date<br /><strong>{caseData.NPADate}</strong> </p>
                     </div>
                 </div>
 
                 <div className="Sarfasei-container">
+
+                    {/* SARFAESI */}
                     {caseData.CaseType?.toLowerCase().replace(/_/g, ' ') === "cheque bounce" && 
                         <ChequeBounceContent 
                             caseId={caseId} 
                             initialActiveStep={activeStepNumber}
                         />
                     }
+
+                    {/* CHEQUE BOUNCE */}
                     {caseData.CaseType?.toLowerCase() === "sarfaesi" && 
                         <SarfaseiContent 
                             caseId={caseId} 
                             initialActiveStep={activeStepNumber}
                         />
                     }
+
+                    {/* ARBITRATION */}
                     {caseData.CaseType?.toLowerCase() === "arbitration" && 
                         <ArbitrationContent 
                             caseId={caseId} 
                             initialActiveStep={activeStepNumber}
                         />
                     }
+
+                    {/* DRT */}
+                    {/* {caseData.CaseType?.toLowerCase() === "drt" && 
+                        <LawyerDRTContent 
+                            caseId={caseId} 
+                            initialActiveStep={activeStepNumber}
+                        />
+                    } */}
+
+                    {/* CRIMINAL COMPLAINT */}
+                    {/* {caseData.CaseType?.toLowerCase() === "criminal complaint" && 
+                        <LawyerCriminalComplaintContent 
+                            caseId={caseId} 
+                            initialActiveStep={activeStepNumber}
+                        />
+                    } */}
                 </div>
             </div>
         </Layout>

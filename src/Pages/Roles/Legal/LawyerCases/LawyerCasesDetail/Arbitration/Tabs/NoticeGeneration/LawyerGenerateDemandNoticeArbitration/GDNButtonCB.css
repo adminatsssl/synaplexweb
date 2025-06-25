@@ -1,0 +1,273 @@
+.content-disable{
+  pointer-events: none;  /* Prevents all mouse interactions */  
+  cursor: not-allowed;   /* Optional: shows disabled cursor */
+}
+
+
+
+/**************************** EMAIL ****************************/
+
+.GDNEmail-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.GDNEmail-modal {
+  background: #fff;
+  border-radius: 6px;
+  width: 70vw;
+  max-width: 900px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.GDNEmail-modal-header {
+  background: #0366b0;
+  color: #fff;
+  padding: 18px 24px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.GDNEmail-close-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.GDNEmail-modal-content {
+  padding: 32px 40px 40px 40px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.GDNEmail-modal-row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.GDNEmail-label {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.GDNEmail-value {
+  font-weight: 400;
+  margin-right: 32px;
+}
+
+.GDNEmail-divider {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 18px 0 24px 0;
+}
+
+.GDNEmail-notice-label {
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.GDNEmail-notice-text {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+
+/*******************************  WHATSAPP   *************************/
+
+.GDNWhatsapp-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.GDNWhatsapp-modal {
+  background: #fff;
+  border-radius: 6px;
+  width: 70vw;
+  max-width: 900px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.GDNWhatsapp-header {
+  background: #0366b0;
+  color: #fff;
+  padding: 18px 24px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.GDNWhatsapp-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.GDNWhatsapp-content {
+  padding: 32px 40px 40px 40px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.GDNWhatsapp-meta {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.GDNWhatsapp-label {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.GDNWhatsapp-value {
+  font-weight: 400;
+  margin-right: 32px;
+}
+
+.GDNWhatsapp-divider {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 18px 0 24px 0;
+}
+
+.GDNWhatsapp-section-label {
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.GDNWhatsapp-template {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+/*********************************** SMS *********************************/
+
+.GDNSMS-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.GDNSMS-modal {
+  background: #fff;
+  border-radius: 6px;
+  width: 70vw;
+  max-width: 900px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.GDNSMS-header {
+  background: #0366b0;
+  color: #fff;
+  padding: 18px 24px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.GDNSMS-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.GDNSMS-section {
+  padding: 32px 40px 0 40px;
+  font-size: 16px;
+  color: #222;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.GDNSMS-label {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.GDNSMS-value {
+  font-weight: 400;
+  margin-right: 32px;
+}
+
+.GDNSMS-divider {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 18px 0 24px 0;
+}
+
+.GDNSMS-template-label {
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.GDNSMS-template-text {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 24px;
+  white-space: pre-line;
+}
+
+/* Add font-family to all relevant modal classes for consistency */
+.GDNEmail-modal,
+.GDNWhatsapp-modal,
+.GDNSMS-modal {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Also ensure overlay and content areas use the same font-family if needed */
+.GDNEmail-modal-content,
+.GDNWhatsapp-content,
+.GDNSMS-section {
+  font-family: 'Open Sans', sans-serif;
+}

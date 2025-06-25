@@ -137,28 +137,32 @@ const handleSubmit = async (e) => {
 
   // Validate required fields here if needed
 
+  const isAddressValid = form.city && form.state && form.pinCode;
+
   const dataToSubmit = {
-    name: form.name,
-    licenseNo: form.licenseNo || null,
-    qualification: form.qualification || null,
-    successRate: form.successRate !== "" ? `${parseFloat(form.successRate)}` : null,
-    rating: form.rating !== "" ? `${parseFloat(form.rating)}` : null,
-    email: form.email,
-    primaryNo: form.primaryMobile,
-    secondaryNo: form.secondaryMobile || null,
-    specialization: form.specialization,
-    totalExperience: form.experience,
-    courts: form.court ? [form.court] : [],
-    lawFirms: form.lawFirm ? [form.lawFirm] : [],
-    lawGroups: form.lawGroup ? [form.lawGroup] : [],
-    address: {
-      city: form.city,
-      state: form.state,
-      pincode: form.pinCode,
-      addressLine: form.addressLine || null,
-    },
-    profilePic: form.imagePreview || null, // send base64 string here
-  };
+  name: form.name,
+  licenseNo: form.licenseNo || null,
+  qualification: form.qualification || null,
+  successRate: form.successRate !== "" ? `${parseFloat(form.successRate)}` : null,
+  rating: form.rating !== "" ? `${parseFloat(form.rating)}` : null,
+  email: form.email,
+  primaryNo: form.primaryMobile,
+  secondaryNo: form.secondaryMobile || null,
+  specialization: form.specialization,
+  totalExperience: form.experience,
+  courts: form.court ? [form.court] : [],
+  lawFirms: form.lawFirm ? [form.lawFirm] : [],
+  lawGroups: form.lawGroup ? [form.lawGroup] : [],
+  address: isAddressValid
+    ? {
+        city: form.city,
+        state: form.state,
+        pincode: form.pinCode,
+        addressLine: form.addressLine || null,
+      }
+    : null,
+  profilePic: form.imagePreview || null,
+};
 
   try {
     const response = await axios.put(`api/api/lawyers/${lawyer?.id}`, dataToSubmit, {

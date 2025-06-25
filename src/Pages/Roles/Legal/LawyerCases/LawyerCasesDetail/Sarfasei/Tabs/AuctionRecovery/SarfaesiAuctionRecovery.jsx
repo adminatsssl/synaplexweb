@@ -3,7 +3,7 @@ import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx";
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DispositionModal';
+import DispositionAuctionRecoverySarfaesi from './DispositionAuctionRecoverySarfaesi.jsx';
 import './SarfaesiAuctionRecovery.css'
 import axios from 'axios';
 
@@ -16,12 +16,13 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
         recoveryStatus: 'Pending',
         recoveryMode: 'Direct transfer',
         remark: '',
-        caseId: caseId
+        caseId: caseId,
+        dispositions: []
     });
     const [dispositions, setDispositions] = useState([]);
     const getAuthHeaders = () => ({
         'Authorization': `Bearer ${localStorage.getItem('token')}`
-      });
+    });
 
     useEffect(() => {
         fetchAuctionRecovery();
@@ -29,7 +30,7 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
 
     const fetchAuctionRecovery = async () => {
         try {
-            const response = await axios.get(`/api/api/auctionRecovery/case/${caseId}`,{
+            const response = await axios.get(`/api/api/auctionRecovery/case/${caseId}`, {
                 headers: getAuthHeaders()
             });
             const data = response.data;
@@ -74,15 +75,27 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
         }
 
         try {
+
+
             const payload = {
-                ...formData,
-                dispositions
+                recoveryAmount: formData.recoveryAmount,
+                recoveryDate: formData.recoveryDate ,
+                recoveryStatus: formData.recoveryStatus,
+                recoveryMode: formData.recoveryMode,
+                remark: formData.remark,
+                caseId: caseId,
+                dispositions: dispositions.map(d => ({
+                    name: d.name,
+                    description: d.description
+                }))
             };
-            await axios.post('/api/api/auctionRecovery', payload,{
+
+
+            await axios.post('/api/api/auctionRecovery', payload, {
                 headers: getAuthHeaders()
             });
             setIsDataExists(true);
-            
+
             if (onStageComplete) {
                 onStageComplete();
             }
@@ -95,7 +108,7 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
         if (isDataExists) return;
         setIsDispositionModalOpen(true);
     };
-    
+
     const closeDispositionModal = () => setIsDispositionModalOpen(false);
 
     const dispositionColumns = [
@@ -115,8 +128,8 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
                         <div className='sarfaesi-auctionRecovery-input-container'>
                             <div className='sarfaesi-auctionRecovery-input'>
                                 <label>Recovery Amount</label>
-                                <input 
-                                    type='number' 
+                                <input
+                                    type='number'
                                     name="recoveryAmount"
                                     value={formData.recoveryAmount}
                                     onChange={handleInputChange}
@@ -126,8 +139,8 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
                             </div>
                             <div className='sarfaesi-auctionRecovery-input'>
                                 <label>Recovery Date</label>
-                                <input 
-                                    type='date' 
+                                <input
+                                    type='date'
                                     name="recoveryDate"
                                     value={formData.recoveryDate}
                                     onChange={handleInputChange}
@@ -187,7 +200,7 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
                 </div>
             </div>
 
-            <DispositionModal 
+            <DispositionAuctionRecoverySarfaesi
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}
@@ -195,7 +208,7 @@ const SarfaesiAuctionRecovery = ({ caseId, onStageComplete }) => {
 
             <div className='sarfaesi-auctionRecovery-Bottom-btn'>
                 <CancelButton />
-                <SaveButton 
+                <SaveButton
                     label={isDataExists ? 'Next' : 'Save & Next'}
                     onClick={handleSubmit}
                 />

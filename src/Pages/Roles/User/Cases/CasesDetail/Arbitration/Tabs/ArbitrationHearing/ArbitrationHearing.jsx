@@ -1,12 +1,21 @@
 import React from 'react';
 import './ArbitrationHearing.css';
-import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
-import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
+import ReusableGrid from '../../../../../../../ReusableComponents/ReusableGrid';
 
 
 const ArbitrationHearing = () => {
   
 
+    const dispositionColumns = [
+        { key: "name", label: "Disposition Stage" },
+        { key: "description", label: "Comment" },
+    ];
+
+    const dispositionData = [
+        {name: "initial data", label: "comment"}
+    ]
+
+    
     return (
         <div className='Arbitrator-Hearing-container'>
 
@@ -42,10 +51,13 @@ const ArbitrationHearing = () => {
                 </div>
             </div>
 
-            <div className='Arbitrator-Hearing-Bottom-btn'>
-                <CancelButton />
-                <SaveButton label='Save & Next' />
-
+            <div className='arbitration-demandNotice-middle-content'>
+                <div className='arbitration-demandNotice-middle-content-heading'>
+                    <h5>Disposition Summary</h5>
+                </div>
+                <div className='arbitration-demandNotice-middle-content-formdata'>
+                    <ReusableGrid columns={dispositionColumns} data={dispositionData} />
+                </div>
             </div>
 
         </div>

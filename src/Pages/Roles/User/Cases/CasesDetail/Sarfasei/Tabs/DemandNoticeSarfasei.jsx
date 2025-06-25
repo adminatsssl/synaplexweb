@@ -3,13 +3,14 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ReusableGrid from "../../../../../../ReusableComponents/ReusableGrid.jsx";
 import './DemandNoticeSarfaesi.css';
-import SaveButton from "../../../../../../ReusableComponents/SaveButton.jsx";
-import CancelButton from "../../../../../../ReusableComponents/CancelButton.jsx";
 
 import whatsappIcon from '../../../../../../../assets/icons/whatsapp.png';
 import emailIcon from '../../../../../../../assets/icons/email.png';
 import smsIcon from '../../../../../../../assets/icons/sms.png';
 import mailboxIcon from '../../../../../../../assets/icons/mailbox.png';
+import GDNEmail from './GenerateDemandNoticeButtons/GDNEmail.jsx'
+import GDNWhatsapp from './GenerateDemandNoticeButtons/GDNWhatsapp.jsx';
+import GDNSMS from './GenerateDemandNoticeButtons/GDNSMS.jsx';
 
 const getAuthHeaders = () => ({
   'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -17,6 +18,9 @@ const getAuthHeaders = () => ({
 
 const DemandNoticeSarfasei = () => {
     const { id: caseId } = useParams(); // this is caseId from URL
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [isWhatsappModalOpen, setIsWhatsappModalOpen] = useState(false);
+    const [showSmsPopup, setShowSmsPopup] = useState(false);
     const [noticeData, setNoticeData] = useState({
         noticeDeadline: '',
         noticeSentDate: '',
@@ -32,30 +36,34 @@ const DemandNoticeSarfasei = () => {
     }, [caseId]);
 
     const fetchNoticeData = async () => {
-        try {
-            const response = await axios.get(`/api/api/demandNotice/case/${caseId}`, {
-                headers: getAuthHeaders()
-            });
-            const data = response.data;
+    try {
+        const response = await axios.get(`/api/api/demandNotice/case/${caseId}`, {
+            headers: getAuthHeaders()
+        });
+        const data = response.data;
 
-            // Ensure response's caseId matches route caseId
-            if (data.caseId?.toString() !== caseId.toString()) {
-                console.warn("Mismatched caseId in response!");
-                return;
-            }
+        // if (data.caseId?.toString() !== caseId.toString()) {
+        //     console.warn("Mismatched caseId in response!");
+        //     return;
+        // }
 
-            setNoticeData({
-                noticeDeadline: data.noticeDeadline || '',
-                noticeSentDate: data.noticeSentDate || '',
-                noticeType: data.noticeType || '',
-                remarks: data.remarks || '',
-                dispositions: data.dispositions || []
-            });
-        } catch (error) {
-            console.error('Error fetching demand notice data:', error);
-        }
-    };
+        // Map dispositions to expected format
+        const mappedDispositions = (data.dispositions || []).map(d => ({
+            stage: d.name,
+            comment: d.description
+        }));
 
+        setNoticeData({
+            noticeDeadline: data.noticeDeadline || '',
+            noticeSentDate: data.noticeSentDate || '',
+            noticeType: data.noticeType || '',
+            remarks: data.remarks || '',
+            dispositions: mappedDispositions
+        });
+    } catch (error) {
+        console.error('Error fetching demand notice data:', error);
+    }
+};
     const dispositionColumns = [
         { key: "stage", label: "Disposition Stage" },
         { key: "comment", label: "Comment" },
@@ -127,11 +135,11 @@ const DemandNoticeSarfasei = () => {
                         <h4>View Generated Notice</h4>
                         <div className='demandNotice-Sarfasei-topcontent-rightside-icon'>
                             <div className='demandNotice-Sarfasei-icon'>
-                                <img src={emailIcon} alt="Email" className="custom-icon email-icon" />
-                                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" />
+                                <img src={emailIcon} alt="Email" className="custom-icon email-icon" onClick={() => setIsEmailModalOpen(true)} style={{ cursor: 'pointer' }} />
+                                <img src={whatsappIcon} alt="WhatsApp" className="custom-icon whatsapp-icon" onClick={() => setIsWhatsappModalOpen(true)} style={{ cursor: 'pointer' }} />
                             </div>
                             <div className='demandNotice-Sarfasei-icon'>
-                                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" />
+                                <img src={smsIcon} alt="SMS" className="custom-icon sms-icon" onClick={() => setShowSmsPopup(true)} style={{ cursor: 'pointer' }} />
                                 <img src={mailboxIcon} alt="Physical Mail" className="custom-icon physical-mail-icon" />
                             </div>
                         </div>
@@ -157,11 +165,13 @@ const DemandNoticeSarfasei = () => {
                 </div>
             </div>
 
-            {/* <div className='demandNotice-Sarfasei-Bottom-btn'>
-                <CancelButton />
-                <SaveButton label='Save & Next' />
-            </div> */}
+
+            <GDNEmail open={isEmailModalOpen} onClose={() => setIsEmailModalOpen(false)} />
+            <GDNWhatsapp open={isWhatsappModalOpen} onClose={() => setIsWhatsappModalOpen(false)} />
+                {showSmsPopup && <GDNSMS onClose={() => setShowSmsPopup(false)} />}
+
         </div>
+        
     );
 };
 

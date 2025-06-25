@@ -5,7 +5,7 @@ import './SarfaesiTrackingResponse.css';
 import SaveButton from "../../../../../../../ReusableComponents/SaveButton.jsx"
 import CancelButton from "../../../../../../../ReusableComponents/CancelButton.jsx"
 import AddButton from "../../../../../../../ReusableComponents/AddButton.jsx"
-import DispositionModal from '../DispositionModal';
+import DispositionTrackingResponseSarfaesi from './DispositionTrackingResponseSarfaesi.jsx';
 import axios from 'axios';
 
 const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
@@ -66,11 +66,16 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
         }));
     };
 
-    const handleSaveDisposition = (dispositionData) => {
-        if (isDataExists) return;
-        setDispositions(prev => [...prev, dispositionData]);
-        closeDispositionModal();
-    };
+   const handleSaveDisposition = (dispositionData) => {
+  if (isDataExists) return;
+
+  setDispositions(prev => {
+    const alreadyExists = prev.some(item => item.id === dispositionData.id);
+    return alreadyExists ? prev : [...prev, dispositionData];
+  });
+
+  closeDispositionModal();
+};
 
     const handleSubmit = async () => {
         if (isDataExists) {
@@ -200,7 +205,7 @@ const SarfaesiTrackingResponse = ({ caseId, onStageComplete }) => {
                 </div>
             </div>
 
-            <DispositionModal 
+            <DispositionTrackingResponseSarfaesi 
                 isOpen={isDispositionModalOpen}
                 onClose={closeDispositionModal}
                 onSave={handleSaveDisposition}

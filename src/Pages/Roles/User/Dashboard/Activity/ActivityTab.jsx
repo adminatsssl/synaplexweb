@@ -10,13 +10,13 @@ export default function ActivityCaseTabs() {
 
   const [tabs, setTabs] = useState([
     { name: "SARFAESI", count: 0 },
-    { name: "CHEQUE_BOUNCE", count: 0 },
+    { name: "CHEQUE BOUNCE", count: 0 },
     { name: "ARBITRATION", count: 0 }
   ]);
 
   const [stageMap, setStageMap] = useState({
     SARFAESI: [],
-    CHEQUE_BOUNCE: [],
+    "CHEQUE BOUNCE": [],
     ARBITRATION: []
   });
 
@@ -30,7 +30,7 @@ export default function ActivityCaseTabs() {
       "Auction & Recovery",
       "Closure"
     ],
-    CHEQUE_BOUNCE: [
+    "CHEQUE BOUNCE": [
       "Initiation",
       "Demand Notice Generation",
       "Tracking 15-Day Response",
@@ -50,62 +50,84 @@ export default function ActivityCaseTabs() {
     ]
   };
   const getAuthHeaders = () => ({
-  'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  });
 
   useEffect(() => {
-    const fetchCases = async () => {
-      try {
-        const response = await axios.get(`/api/api/cases`, {
-          headers : getAuthHeaders()
-        });
-        const caseData = response.data?.data || [];
+  const fetchCases = async () => {
+    try {
+      const response = await axios.get(`api/api/cases/ActivityDeatils`, {
+        headers: getAuthHeaders()
+      });
+      console.log("Resp",response)
 
-        const counts = {
-          SARFAESI: 0,
-          CHEQUE_BOUNCE: 0,
-          ARBITRATION: 0
-        };
+      const workflowGroups = response.data || [];
+      console.log(workflowGroups)
 
-        const stages = {
-          SARFAESI: {},
-          CHEQUE_BOUNCE: {},
-          ARBITRATION: {}
-        };
+      const counts = {
+        SARFAESI: 0,
+        "CHEQUE BOUNCE": 0,
+        ARBITRATION: 0
+      };
 
-        // Count logic
-        caseData.forEach((c) => {
-          const type = c.workflowType?.toUpperCase();
-          const stage = c.activeStageName?.trim();
+      const stages = {
+        SARFAESI: {},
+        "CHEQUE BOUNCE": {},
+        ARBITRATION: {}
+      };
 
-          if (type && stage) {
-            counts[type] = (counts[type] || 0) + 1;
-            stages[type][stage] = (stages[type][stage] || 0) + 1;
-          }
-        });
+      workflowGroups.forEach((group) => {
+        const type = group.workflowType?.toUpperCase()?.trim();
+        const workflowCount = parseInt(group.workflowCount) || 0;
 
-        const formattedStageMap = {};
-        Object.keys(staticStages).forEach((type) => {
-          formattedStageMap[type] = staticStages[type].map((stageLabel) => ({
-            label: stageLabel,
-            count: stages[type]?.[stageLabel] || 0
-          }));
-        });
+        if (type && counts.hasOwnProperty(type)) {
+          // Set total count for tab
+          counts[type] = workflowCount;
 
-        // Update state
-        setTabs([
-          { name: "SARFAESI", count: counts.SARFAESI },
-          { name: "CHEQUE_BOUNCE", count: counts.CHEQUE_BOUNCE },
-          { name: "ARBITRATION", count: counts.ARBITRATION }
-        ]);
-        setStageMap(formattedStageMap);
-      } catch (error) {
-        console.error("Failed to fetch case data:", error);
-      }
-    };
+          // Iterate through nested cases
+          group.cases?.forEach((caseItem) => {
+            const rawStage = caseItem.activeStageName;
 
-    fetchCases();
-  }, []);
+            const matchedStage =
+              rawStage &&
+              staticStages[type]?.find(
+                (s) => s.trim().toLowerCase() === rawStage.trim().toLowerCase()
+              );
+
+            if (matchedStage) {
+              stages[type][matchedStage] = (stages[type][matchedStage] || 0) + 1;
+            } else if (rawStage && rawStage.trim() !== "") {
+              console.warn(`⚠️ Unmatched stage for ${type}: "${rawStage}"`);
+            }
+          });
+        }
+      });
+
+      // Format the stage map for UI
+      const formattedStageMap = {};
+      Object.keys(staticStages).forEach((type) => {
+        formattedStageMap[type] = staticStages[type].map((stageLabel) => ({
+          label: stageLabel,
+          count: stages[type]?.[stageLabel] || 0
+        }));
+      });
+
+      // Update React state
+      setTabs([
+        { name: "SARFAESI", count: counts.SARFAESI },
+        { name: "CHEQUE BOUNCE", count: counts["CHEQUE BOUNCE"] },
+        { name: "ARBITRATION", count: counts.ARBITRATION }
+      ]);
+      setStageMap(formattedStageMap);
+    } catch (error) {
+      console.error("Failed to fetch workflow cases:", error);
+    }
+  };
+
+  fetchCases();
+}, []);
+
+
 
   useEffect(() => {
     const defaultStage = stageMap[activeTab]?.[1] || null;

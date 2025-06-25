@@ -1,0 +1,140 @@
+.upload-docs-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 56, 120, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.upload-docs-modal {
+  background: #fff;
+  border-radius: 2px;
+  width: 600px;
+  max-width: 95vw;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+  border: 1px solid #b3c6e0;
+  padding: 0;
+  position: relative;
+}
+
+.upload-docs-header {
+  background: #005ca9;
+  color: #fff;
+  padding: 18px 28px 12px 28px;
+  border-radius: 2px 2px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.upload-docs-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.upload-docs-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.upload-docs-body {
+  padding: 24px 28px 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.upload-docs-label {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+.upload-docs-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #b3c6e0;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.upload-docs-file-section {
+  margin-top: 10px;
+}
+
+.upload-docs-file-label {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.upload-docs-file-box {
+  border: 2px dashed #1976d2;
+  border-radius: 8px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #f8fbff;
+  min-height: 60px;
+}
+
+.upload-docs-file-input {
+  font-size: 1rem;
+}
+
+.upload-docs-file-name {
+  color: #1976d2;
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+.upload-docs-footer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: 24px 28px 18px 28px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 18px;
+}
+
+.upload-docs-cancel {
+  background: #fff;
+  color: #1976d2;
+  border: 2px solid #1976d2;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  padding: 10px 38px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.upload-docs-cancel:hover {
+  background: #f0f7ff;
+}
+
+.upload-docs-save {
+  background: #005ca9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.3rem;
+  padding: 10px 38px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.upload-docs-save:hover {
+  background: #1976d2;
+}
